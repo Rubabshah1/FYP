@@ -81,7 +81,7 @@ Below are concise descriptions, attributes and methods for the main classes/serv
 \section{Data Design}
 
 \subsection{Entities, PK/FK and Cardinalities (summary)}
-\begin{itemize}[leftmargin=*]
+\begin{itemize}
   \item \textbf{User (1) -- (0..n) Session} : A user can have many sessions.
   \item \textbf{Session (1) -- (0..n) Message} : A session has many messages.
   \item \textbf{Session (1) -- (0..1) Ticket} : A session may create a ticket.
@@ -332,7 +332,7 @@ sources = extract_sources(answer, docs)
   \item Notify agent queue (domain-based).
   \item Lock session for human takeover.
   \item Agent replies via Dashboard; ChatEngine relays reply.
-  \item Agent may update KB & resolve ticket.
+  \item Agent may update KB \& resolve ticket.
 \end{enumerate}
 
 \subsection{Session Management \& Context Windowing}
@@ -386,7 +386,7 @@ Example interaction flow:
 \end{enumerate}
 
 \section{Additional Implementation Notes \& Trade-offs}
-\begin{itemize}[leftmargin=*]
+\begin{itemize}
   \item \textbf{LLM choice:} Local LLaMA2 (privacy, cost) vs hosted OpenAI (language capability). For Urdu/Roman Urdu, RAG may compensate for smaller LLMs.
   \item \textbf{Vector store:} Elastic vector index or FAISS/Milvus; real-time stock requires streaming updates to metadata or direct DB queries.
   \item \textbf{Multilingual support:} Roman Urdu normalization tables, data augmentation.
@@ -395,7 +395,7 @@ Example interaction flow:
 \end{itemize}
 
 \section{Deliverables Usable in Implementation}
-\begin{itemize}[leftmargin=*]
+\begin{itemize}
   \item PlantUML file (above) — drop-in to generate UML diagram.
   \item SQL DDL (above) — base schema for Postgres.
   \item Pseudocode for pipelines — can be translated into FastAPI + background workers.
@@ -403,7 +403,7 @@ Example interaction flow:
 \end{itemize}
 
 \section{Risks and Mitigations}
-\begin{itemize}[leftmargin=*]
+\begin{itemize}
   \item \textbf{Outdated KB:} show last\_updated timestamps; explicit sources; escalate to humans.
   \item \textbf{Roman Urdu variability:} curated normalization and data augmentation.
   \item \textbf{WhatsApp 24-hour window:} use pre-approved templates; agents respect window.
