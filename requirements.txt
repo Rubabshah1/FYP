@@ -1,0 +1,46 @@
+# ============================================================================
+# ALKHIDMAT RAG SYSTEM - REQUIREMENTS
+# ============================================================================
+
+# Core Dependencies
+requests>=2.31.0
+numpy>=1.24.0
+pickle5>=0.0.12; python_version < '3.8'
+
+# Google Drive API
+google-api-python-client>=2.100.0
+google-auth>=2.23.0
+google-auth-httplib2>=0.1.1
+google-auth-oauthlib>=1.1.0
+
+# Vector Database
+faiss-cpu>=1.7.4
+# For GPU support, use: faiss-gpu>=1.7.4
+
+# NLP & Embeddings
+sentence-transformers>=2.2.2
+transformers>=4.35.0
+torch>=2.0.0
+# For CPU-only: torch>=2.0.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
+
+# Text Processing
+langchain>=0.0.350
+langchain-community>=0.0.1
+
+# Additional ML Dependencies
+huggingface-hub>=0.19.0
+tokenizers>=0.15.0
+safetensors>=0.4.0
+
+# Utilities
+tqdm>=4.66.0
+regex>=2023.10.3
+filelock>=3.13.0
+
+# Optional: For better performance
+accelerate>=0.25.0
+bitsandbytes>=0.41.0
+
+# Optional: For progress bars and logging
+rich>=13.7.0
+colorama>=0.4.6

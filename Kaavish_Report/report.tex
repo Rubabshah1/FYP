@@ -5,7 +5,7 @@
 \documentclass[12pt,twosided]{report}
 
 \usepackage[titletoc]{appendix} % for adding appendix to TOC
-\usepackage{biblatex}  % reference management
+\usepackage{biblatex} % reference management
 \usepackage{geometry}  % better margins and margin control
 \usepackage{graphicx}  % to include figures
 \usepackage{hyperref}  % internal and external links
@@ -108,7 +108,13 @@
 % \end{appendices}
 
 % % Print the bibliography with a ToC entry and titled, "References".
-\printbibliography[heading=bibintoc,title={References}]
+\clearpage
+\chapter*{References}
+\addcontentsline{toc}{chapter}{References}
+% \bibliographystyle{plain}  % or unsrt, ieeetr, abbrv, etc.
+% \bibliography{references}   % your .bib file
+
+
 
 \end{document}
 

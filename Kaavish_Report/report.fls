@@ -319,6 +319,10 @@ INPUT .\chapters\sds.tex
 INPUT .\chapters\sds.tex
 INPUT .\chapters\sds.tex
 INPUT chapters\sds.tex
+INPUT .\chapters\high_level_architecture.drawio (1).png
+INPUT .\chapters\high_level_architecture.drawio (1).png
+INPUT .\chapters\high_level_architecture.drawio (1).png
+INPUT .\chapters\high_level_architecture.drawio (1).png
 INPUT .\chapters\UML.png
 INPUT .\chapters\UML.png
 INPUT .\chapters\UML.png
@@ -326,17 +330,17 @@ INPUT .\chapters\UML.png
 INPUT .\chapters\UML.png
 INPUT .\chapters\UML.png
 INPUT .\chapters\UML.png
+INPUT C:\Users\samah\MikTex\tex\latex\base\omscmr.fd
+INPUT C:\Users\samah\MikTex\tex\latex\base\omscmr.fd
+INPUT C:\Users\samah\MikTex\tex\latex\base\omscmr.fd
+INPUT .\chapters\db_fyp.png
+INPUT .\chapters\db_fyp.png
+INPUT .\chapters\db_fyp.png
+INPUT .\chapters\db_fyp.png
+INPUT .\chapters\db_fyp.png
+INPUT .\chapters\db_fyp.png
+INPUT .\chapters\db_fyp.png
 INPUT C:\Users\samah\MikTex\fonts\tfm\public\cm\cmtt12.tfm
-INPUT C:\Users\samah\MikTex\tex\latex\base\omscmr.fd
-INPUT C:\Users\samah\MikTex\tex\latex\base\omscmr.fd
-INPUT C:\Users\samah\MikTex\tex\latex\base\omscmr.fd
-INPUT C:\Users\samah\MikTex\tex\latex\listings\lstlang1.sty
-INPUT C:\Users\samah\MikTex\tex\latex\listings\lstlang1.sty
-INPUT C:\Users\samah\MikTex\tex\latex\listings\lstlang1.sty
-INPUT C:\Users\samah\MikTex\fonts\tfm\jknappen\ec\tcti1200.tfm
-INPUT C:\Users\samah\MikTex\tex\latex\base\omlcmr.fd
-INPUT C:\Users\samah\MikTex\tex\latex\base\omlcmr.fd
-INPUT C:\Users\samah\MikTex\tex\latex\base\omlcmr.fd
 INPUT report.aux
 INPUT .\titlepage.aux
 INPUT .\titlepage.aux
@@ -345,8 +349,6 @@ INPUT .\report.out
 INPUT .\report.out
 INPUT report.run.xml
 OUTPUT report.run.xml
-INPUT C:\Users\samah\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcti1200.pk
-INPUT C:\Users\samah\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcti1200.pk
 INPUT C:\Users\samah\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1200.pk
 INPUT C:\Users\samah\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm1200.pk
 INPUT C:\Users\samah\AppData\Local\MiKTeX\fonts\pk\ljfour\jknappen\ec\dpi600\tcrm0800.pk
