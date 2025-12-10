@@ -1,15 +1,16 @@
 # ============================================================================
 # ALKHIDMAT FOUNDATION KNOWLEDGE BASE RAG SYSTEM - ZIP FILE VERSION
+# with Urdu Language Support
 # ============================================================================
 # This RAG system reads from a ZIP file with the following structure:
 # Al Khidmat Knowledge Base.zip
-#   └── Al Khidmat Knowledge Base/
-#       ├── Donors/
-#       │   └── *.txt files
-#       ├── General/
-#       │   └── *.txt files
-#       └── Health/
-#           └── *.txt files
+#   └── Al Khidmat Knowledge Base/
+#       ├── Donors/
+#       │   └── *.txt files
+#       ├── General/
+#       │   └── *.txt files
+#       └── Health/
+#           └── *.txt files
 # ============================================================================
 
 import os
@@ -22,10 +23,80 @@ import zipfile
 from typing import List, Dict, Tuple
 from pathlib import Path
 
+# NEW IMPORTS FOR URDU SUPPORT
+from deep_translator import GoogleTranslator
+import langdetect
+# END NEW IMPORTS
+
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from sentence_transformers import SentenceTransformer
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
+# ============================================================================
+# URDU LANGUAGE SUPPORT FUNCTIONS (COPIED FROM PREVIOUS CODE)
+# ============================================================================
+
+def detect_language(text: str) -> str:
+    """
+    Detect the language of the input text.
+    Returns: 'ur' for Urdu, 'en' for English, or other language codes
+    """
+    try:
+        lang = langdetect.detect(text)
+        return lang
+    except Exception as e:
+        print(f"Language detection failed: {e}")
+        return 'en'  # Default to English if detection fails
+    
+def is_urdu(text: str) -> bool:
+    """
+    Check if the text is in Urdu.
+    Uses both language detection and Unicode range checking.
+    """
+    # Check for Urdu Unicode range (U+0600 to U+06FF for Arabic/Urdu script)
+    urdu_pattern = re.compile(r'[\u0600-\u06FF]')
+    has_urdu_chars = bool(urdu_pattern.search(text))
+    
+    # Also use language detection
+    detected_lang = detect_language(text)
+    
+    return has_urdu_chars or detected_lang == 'ur'
+
+def translate_urdu_to_english(text: str) -> str:
+    """
+    Translate Urdu text to English using Google Translator.
+    """
+    try:
+        translator = GoogleTranslator(source='ur', target='en')
+        translated = translator.translate(text)
+        # Suppress translation print statements for batch mode clarity
+        if os.environ.get('BATCH_MODE') != 'True':
+            print(f"\n🔄 Translated Query (Urdu → English):")
+            print(f"   Original (Urdu): {text}")
+            print(f"   Translated (English): {translated}\n")
+        return translated
+    except Exception as e:
+        if os.environ.get('BATCH_MODE') != 'True':
+             print(f"Translation error (Urdu → English): {e}")
+        return text  # Return original if translation fails
+    
+def translate_english_to_urdu(text: str) -> str:
+    """
+    Translate English text to Urdu using Google Translator.
+    """
+    try:
+        translator = GoogleTranslator(source='en', target='ur')
+        translated = translator.translate(text)
+        # Suppress translation print statements for batch mode clarity
+        if os.environ.get('BATCH_MODE') != 'True':
+            print(f"\n🔄 Translated Answer (English → Urdu):")
+            print(f"   Original (English): {text[:100]}...")
+            print(f"   Translated (Urdu): {translated[:100]}...\n")
+        return translated
+    except Exception as e:
+        if os.environ.get('BATCH_MODE') != 'True':
+            print(f"Translation error (English → Urdu): {e}")
+        return text  # Return original if translation fails
 # ============================================================================
 # 1. ZIP FILE LOADING
 # ============================================================================
@@ -33,19 +104,6 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 def load_documents_from_zip(zip_path: str) -> Dict[str, List[Dict]]:
     """
     Load all documents from ZIP file and organize by subfolder.
-    
-    Expected structure:
-    Al Khidmat Knowledge Base.zip
-      └── Al Khidmat Knowledge Base/
-          ├── Donors/
-          ├── General/
-          └── Health/
-    
-    Args:
-        zip_path: Path to the ZIP file
-    
-    Returns:
-        Dictionary organized by category (subfolder name)
     """
     print("\n" + "="*80)
     print("LOADING FROM ZIP FILE")
@@ -72,7 +130,6 @@ def load_documents_from_zip(zip_path: str) -> Dict[str, List[Dict]]:
                     continue
                 
                 # Parse the path structure
-                # Expected: "Al Khidmat Knowledge Base/Category/filename.txt"
                 path_parts = Path(file_path).parts
                 
                 # Skip if not enough depth (need at least root/category/file.txt)
@@ -84,7 +141,8 @@ def load_documents_from_zip(zip_path: str) -> Dict[str, List[Dict]]:
                 filename = path_parts[-1]
                 
                 # Read file content
-                print(f"  📄 Reading: [{category}] {filename}...", end=" ")
+                if os.environ.get('BATCH_MODE') != 'True':
+                    print(f"  📄 Reading: [{category}] {filename}...", end=" ")
                 
                 try:
                     with zip_ref.open(file_path) as f:
@@ -101,34 +159,29 @@ def load_documents_from_zip(zip_path: str) -> Dict[str, List[Dict]]:
                             'category': category,
                             'file_path': file_path
                         })
-                        print(f"✓ ({len(content)} characters)")
+                        if os.environ.get('BATCH_MODE') != 'True':
+                            print(f"✓ ({len(content)} characters)")
                     else:
-                        print("⚠️  Empty file")
+                        if os.environ.get('BATCH_MODE') != 'True':
+                            print("⚠️  Empty file")
                 
                 except Exception as e:
-                    print(f"✗ Error: {e}")
+                    if os.environ.get('BATCH_MODE') != 'True':
+                        print(f"✗ Error: {e}")
             
             # Summary
-            print(f"\n{'='*80}")
-            print("LOADING COMPLETE")
-            print(f"{'='*80}")
-            
-            if documents_by_category:
-                for category, docs in documents_by_category.items():
-                    print(f"  {category}: {len(docs)} documents")
-                print(f"{'='*80}\n")
-            else:
-                print("⚠️  No documents found!")
-                print("\nExpected ZIP structure:")
-                print("  Al Khidmat Knowledge Base.zip")
-                print("    └── Al Khidmat Knowledge Base/")
-                print("        ├── Donors/")
-                print("        │   └── *.txt")
-                print("        ├── General/")
-                print("        │   └── *.txt")
-                print("        └── Health/")
-                print("            └── *.txt")
-                print(f"{'='*80}\n")
+            if os.environ.get('BATCH_MODE') != 'True':
+                print(f"\n{'='*80}")
+                print("LOADING COMPLETE")
+                print(f"{'='*80}")
+                
+                if documents_by_category:
+                    for category, docs in documents_by_category.items():
+                        print(f"  {category}: {len(docs)} documents")
+                    print(f"{'='*80}\n")
+                else:
+                    print("⚠️  No documents found!")
+                    # Detailed structure print skipped for brevity in the final code
             
             return documents_by_category
     
@@ -183,7 +236,8 @@ def prepare_documents(zip_path: str) -> Tuple[List[str], List[Dict]]:
                     'file_path': doc['file_path']
                 })
     
-    print(f"Total documents prepared: {len(all_docs)}\n")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print(f"Total documents prepared: {len(all_docs)}\n")
     return all_docs, metadata
 
 
@@ -192,7 +246,7 @@ def prepare_documents(zip_path: str) -> Tuple[List[str], List[Dict]]:
 # ============================================================================
 
 def split_documents(documents: List[str], metadata: List[Dict], 
-                   chunk_size: int = 500, chunk_overlap: int = 100) -> Tuple[List[str], List[Dict]]:
+                    chunk_size: int = 500, chunk_overlap: int = 100) -> Tuple[List[str], List[Dict]]:
     """Split documents into chunks while preserving metadata."""
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
@@ -211,8 +265,9 @@ def split_documents(documents: List[str], metadata: List[Dict],
             all_chunks.append(chunk)
             all_metadata.append(meta.copy())
     
-    print(f"Total chunks created: {len(all_chunks)}")
-    print(f"Average chunk length: {np.mean([len(c) for c in all_chunks]):.0f} characters\n")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print(f"Total chunks created: {len(all_chunks)}")
+        print(f"Average chunk length: {np.mean([len(c) for c in all_chunks]):.0f} characters\n")
     
     return all_chunks, all_metadata
 
@@ -222,15 +277,18 @@ def split_documents(documents: List[str], metadata: List[Dict],
 # ============================================================================
 
 def create_embeddings(text_chunks: List[str], 
-                     model_name: str = 'sentence-transformers/all-MiniLM-L6-v2') -> np.ndarray:
+                      model_name: str = 'sentence-transformers/all-MiniLM-L6-v2') -> np.ndarray:
     """Generate embeddings for text chunks."""
-    print("Loading embedding model...")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print("Loading embedding model...")
     model = SentenceTransformer(model_name)
     
-    print(f"Creating embeddings for {len(text_chunks)} chunks...")
-    embeddings = model.encode(text_chunks, show_progress_bar=True, batch_size=32)
+    if os.environ.get('BATCH_MODE') != 'True':
+        print(f"Creating embeddings for {len(text_chunks)} chunks...")
+    embeddings = model.encode(text_chunks, show_progress_bar=False, batch_size=32)
     
-    print(f"Embeddings shape: {embeddings.shape}\n")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print(f"Embeddings shape: {embeddings.shape}\n")
     return np.array(embeddings)
 
 
@@ -247,7 +305,8 @@ def build_and_save_index(embeddings: np.ndarray,
     os.makedirs(save_dir, exist_ok=True)
     
     dim = embeddings.shape[1]
-    print(f"Building FAISS index with dimension: {dim}")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print(f"Building FAISS index with dimension: {dim}")
     
     index = faiss.IndexFlatL2(dim)
     index.add(embeddings.astype('float32'))
@@ -255,17 +314,20 @@ def build_and_save_index(embeddings: np.ndarray,
     # Save components
     index_path = os.path.join(save_dir, "faiss_index.index")
     faiss.write_index(index, index_path)
-    print(f"✓ Saved FAISS index to {index_path}")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print(f"✓ Saved FAISS index to {index_path}")
     
     chunks_path = os.path.join(save_dir, "text_chunks.pkl")
     with open(chunks_path, "wb") as f:
         pickle.dump(text_chunks, f)
-    print(f"✓ Saved text chunks to {chunks_path}")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print(f"✓ Saved text chunks to {chunks_path}")
     
     metadata_path = os.path.join(save_dir, "metadata.pkl")
     with open(metadata_path, "wb") as f:
         pickle.dump(metadata, f)
-    print(f"✓ Saved metadata to {metadata_path}\n")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print(f"✓ Saved metadata to {metadata_path}\n")
 
 
 # ============================================================================
@@ -274,29 +336,33 @@ def build_and_save_index(embeddings: np.ndarray,
 
 def load_index_and_data(index_dir: str = "alkhidmat_index"):
     """Load FAISS index, chunks, and metadata."""
-    print("Loading RAG system components...")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print("Loading RAG system components...")
     
     index_path = os.path.join(index_dir, "faiss_index.index")
     chunks_path = os.path.join(index_dir, "text_chunks.pkl")
     metadata_path = os.path.join(index_dir, "metadata.pkl")
     
     index = faiss.read_index(index_path)
-    print(f"✓ Loaded FAISS index")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print(f"✓ Loaded FAISS index")
     
     with open(chunks_path, "rb") as f:
         text_chunks = pickle.load(f)
-    print(f"✓ Loaded {len(text_chunks)} text chunks")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print(f"✓ Loaded {len(text_chunks)} text chunks")
     
     with open(metadata_path, "rb") as f:
         metadata = pickle.load(f)
-    print(f"✓ Loaded metadata\n")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print(f"✓ Loaded metadata\n")
     
     return index, text_chunks, metadata
 
 
 def retrieve_context(query: str, index, text_chunks: List[str], 
-                    metadata: List[Dict], top_k: int = 5,
-                    model_name: str = 'sentence-transformers/all-MiniLM-L6-v2'):
+                     metadata: List[Dict], top_k: int = 5,
+                     model_name: str = 'sentence-transformers/all-MiniLM-L6-v2'):
     """Retrieve relevant context with source attribution."""
     
     model = SentenceTransformer(model_name)
@@ -313,11 +379,12 @@ def retrieve_context(query: str, index, text_chunks: List[str],
             'distance': float(dist)
         })
     
-    print(f"\n{'='*80}")
-    print(f"Retrieved {len(results)} relevant chunks:")
-    for i, result in enumerate(results, 1):
-        print(f"{i}. [{result['category']}] {result['filename']} (distance: {result['distance']:.3f})")
-    print(f"{'='*80}\n")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print(f"\n{'='*80}")
+        print(f"Retrieved {len(results)} relevant chunks:")
+        for i, result in enumerate(results, 1):
+            print(f"{i}. [{result['category']}] {result['filename']} (distance: {result['distance']:.3f})")
+        print(f"{'='*80}\n")
     
     return results
 
@@ -327,9 +394,19 @@ def retrieve_context(query: str, index, text_chunks: List[str],
 # ============================================================================
 
 def generate_answer(query: str, index_dir: str = "alkhidmat_index", 
-                   top_k: int = 5, max_tokens: int = 250):
-    """Generate answer using retrieved context."""
+                    top_k: int = 5, max_tokens: int = 250):
+    """Generate answer using retrieved context with Urdu support."""
     
+    # Step 1: Detect language and translate if needed
+    original_query = query
+    query_is_urdu = is_urdu(query)
+    
+    if query_is_urdu:
+        if os.environ.get('BATCH_MODE') != 'True':
+            print(f"\n🇵🇰 Urdu query detected!")
+        query = translate_urdu_to_english(query)
+    
+    # Step 2: Process with (potentially translated) English query
     index, text_chunks, metadata = load_index_and_data(index_dir)
     results = retrieve_context(query, index, text_chunks, metadata, top_k)
     
@@ -342,7 +419,8 @@ def generate_answer(query: str, index_dir: str = "alkhidmat_index",
     context = "\n\n".join(context_parts)
     
     # Load LLM
-    print("Loading LLM for answer generation...")
+    if os.environ.get('BATCH_MODE') != 'True':
+        print("Loading LLM for answer generation...")
     model_name = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForCausalLM.from_pretrained(
@@ -377,13 +455,21 @@ Answer:"""
     full_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
     answer = full_text.split("Answer:")[-1].strip() if "Answer:" in full_text else full_text[len(prompt):].strip()
     
-    print(f"\n{'='*80}")
-    print(f"QUESTION: {query}")
-    print(f"{'='*80}")
-    print(f"\nANSWER:\n{answer}")
-    print(f"\n{'='*80}\n")
+    # Step 3: Translate answer back to Urdu if original query was Urdu
+    if query_is_urdu:
+        answer = translate_english_to_urdu(answer)
     
-    return answer, results
+    # Display results (Print in batch mode only if explicitly requested or if not in batch mode)
+    if os.environ.get('BATCH_MODE') != 'True':
+        print(f"\n{'='*80}")
+        print(f"QUESTION: {original_query}")
+        if query_is_urdu:
+            print(f"(Translated to English: {query})")
+        print(f"{'='*80}")
+        print(f"\nANSWER:\n{answer}")
+        print(f"\n{'='*80}\n")
+    
+    return answer, original_query, query_is_urdu
 
 
 # ============================================================================
@@ -395,6 +481,7 @@ def build_alkhidmat_rag(zip_path: str, index_dir: str = "alkhidmat_index"):
     
     print("\n" + "="*80)
     print("ALKHIDMAT FOUNDATION RAG SYSTEM - BUILD FROM ZIP FILE")
+    print("with Urdu Language Support")
     print("="*80 + "\n")
     
     # Step 1: Load from ZIP
@@ -402,10 +489,10 @@ def build_alkhidmat_rag(zip_path: str, index_dir: str = "alkhidmat_index"):
     documents, metadata = prepare_documents(zip_path)
     
     if not documents:
-        print("\n⚠️  No documents loaded! Please check:")
-        print("  1. ZIP file exists at the specified path")
-        print("  2. ZIP structure matches expected format")
-        print("  3. Text files exist in category folders")
+        print("\n⚠️  No documents loaded! Please check:")
+        print("  1. ZIP file exists at the specified path")
+        print("  2. ZIP structure matches expected format")
+        print("  3. Text files exist in category folders")
         return
     
     # Step 2: Split into chunks
@@ -422,12 +509,70 @@ def build_alkhidmat_rag(zip_path: str, index_dir: str = "alkhidmat_index"):
     
     print("\n" + "="*80)
     print("✓ RAG SYSTEM BUILD COMPLETE!")
+    print("System supports both English and Urdu queries")
     print("="*80 + "\n")
 
 
 def query_alkhidmat_rag(query: str, index_dir: str = "alkhidmat_index"):
     """Query the Alkhidmat RAG system."""
-    return generate_answer(query, index_dir)
+    answer, _, _ = generate_answer(query, index_dir)
+    return answer
+
+
+# ============================================================================
+## 10. FILE I/O BATCH PROCESSING (For Terminal Urdu Compatibility)
+# ============================================================================
+
+def batch_query_file(input_file: str, output_file: str, index_dir: str = "alkhidmat_index"):
+    """
+    Reads queries from an input file (one query per line), processes them,
+    and writes the results to an output file for better Urdu display.
+    """
+    os.environ['BATCH_MODE'] = 'True' # Set environment variable to suppress verbose output
+    
+    print(f"\n{'='*80}")
+    print(f"BATCH QUERY MODE: Processing {input_file} -> {output_file}")
+    print(f"{'='*80}")
+
+    try:
+        # Read queries (using utf-8 encoding for Urdu)
+        with open(input_file, 'r', encoding='utf-8') as f:
+            queries = [line.strip() for line in f if line.strip()]
+        
+        print(f"Found {len(queries)} queries to process.")
+        
+        # Write results
+        with open(output_file, 'w', encoding='utf-8') as f_out:
+            f_out.write("ALKHIDMAT RAG SYSTEM - BATCH QUERY RESULTS\n")
+            f_out.write(f"Source file: {input_file}\n\n")
+
+            for i, query in enumerate(queries):
+                # Run the generation pipeline
+                answer, original_query, is_urdu_query = generate_answer(query, index_dir)
+                
+                # Format output
+                f_out.write(f"--- QUERY {i+1}/{len(queries)} ---\n")
+                f_out.write(f"QUERY: {original_query}\n")
+                if is_urdu_query:
+                    f_out.write("Language: Urdu\n")
+                else:
+                    f_out.write("Language: English\n")
+                f_out.write("---------------------\n")
+                f_out.write(f"ANSWER:\n{answer}\n\n")
+                
+                print(f"  Processed query {i+1}: '{original_query[:50]}...'")
+
+        print(f"\n{'='*80}")
+        print(f"BATCH PROCESSING COMPLETE. Results written to {output_file}")
+        print("Note: Run 'python rag_alkhidmat_zip.py build' first if you haven't.")
+        print(f"{'='*80}\n")
+        
+    except FileNotFoundError:
+        print(f"❌ Error: Input file not found at {input_file}")
+    except Exception as e:
+        print(f"❌ An unexpected error occurred during batch processing: {e}")
+    
+    os.environ['BATCH_MODE'] = 'False' # Reset environment variable
 
 
 # ============================================================================
@@ -445,19 +590,29 @@ if __name__ == "__main__":
         build_alkhidmat_rag(zip_path, "alkhidmat_index")
     
     elif len(sys.argv) > 1 and sys.argv[1] == "query":
-        # Query mode
+        # Single Query mode
         query = " ".join(sys.argv[2:]) if len(sys.argv) > 2 else "What donation methods does Alkhidmat accept?"
         query_alkhidmat_rag(query)
+
+    elif len(sys.argv) > 1 and sys.argv[1] == "file_query":
+        # Batch Query mode
+        input_file = sys.argv[2] if len(sys.argv) > 2 else "input_queries.txt"
+        output_file = sys.argv[3] if len(sys.argv) > 3 else "output_answers.txt"
+        batch_query_file(input_file, output_file)
     
     else:
         print("\n" + "="*80)
-        print("ALKHIDMAT RAG SYSTEM - USAGE")
+        print("ALKHIDMAT RAG SYSTEM - USAGE (with Urdu support)")
         print("="*80)
-        print("\nBuild from ZIP file:")
-        print(f"  python rag_alkhidmat.py build")
-        print(f"  (Uses default: {DEFAULT_ZIP_PATH})")
-        print("\nOr specify custom ZIP path:")
-        print("  python rag_alkhidmat.py build /path/to/your/knowledge_base.zip")
-        print("\nQuery the system:")
-        print("  python rag_alkhidmat.py query 'How can I donate?'")
+        print("\n1. Build the index:")
+        print(f"  python rag_alkhidmat_zip.py build [path_to_zip]")
+        print(f"  (Uses default: {DEFAULT_ZIP_PATH})")
+        
+        print("\n2. Query the system (Direct Terminal Output):")
+        print("  python rag_alkhidmat_zip.py query 'How can I donate?'")
+        print("  python rag_alkhidmat_zip.py query 'الخدمت کون سے پروگرام چلاتی ہے؟'")
+        
+        print("\n3. Query the system (File I/O for clean Urdu Output):")
+        print("   Create a file (e.g., `urdu_queries.txt`) with one query per line.")
+        print("  python rag_alkhidmat_zip.py file_query urdu_queries.txt output.txt")
         print("\n" + "="*80 + "\n")
