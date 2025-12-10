@@ -22,6 +22,70 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 
+# Translation libraries
+from deep_translator import GoogleTranslator
+import langdetect
+
+
+# ============================================================================
+# URDU LANGUAGE SUPPORT FUNCTIONS
+# ============================================================================
+
+def detect_language(text: str) -> str:
+    """
+    Detect the language of the input text.
+    Returns: 'ur' for Urdu, 'en' for English, or other language codes
+    """
+    try:
+        lang = langdetect.detect(text)
+        return lang
+    except Exception as e:
+        print(f"Language detection failed: {e}")
+        return 'en'  # Default to English if detection fails
+    
+def is_urdu(text: str) -> bool:
+    """
+    Check if the text is in Urdu.
+    Uses both language detection and Unicode range checking.
+    """
+    # Check for Urdu Unicode range (U+0600 to U+06FF for Arabic/Urdu script)
+    urdu_pattern = re.compile(r'[\u0600-\u06FF]')
+    has_urdu_chars = bool(urdu_pattern.search(text))
+    
+    # Also use language detection
+    detected_lang = detect_language(text)
+    
+    return has_urdu_chars or detected_lang == 'ur'
+
+def translate_urdu_to_english(text: str) -> str:
+    """
+    Translate Urdu text to English using Google Translator.
+    """
+    try:
+        translator = GoogleTranslator(source='ur', target='en')
+        translated = translator.translate(text)
+        print(f"\n🔄 Translated Query (Urdu → English):")
+        print(f"   Original (Urdu): {text}")
+        print(f"   Translated (English): {translated}\n")
+        return translated
+    except Exception as e:
+        print(f"Translation error (Urdu → English): {e}")
+        return text  # Return original if translation fails
+    
+def translate_english_to_urdu(text: str) -> str:
+    """
+    Translate English text to Urdu using Google Translator.
+    """
+    try:
+        translator = GoogleTranslator(source='en', target='ur')
+        translated = translator.translate(text)
+        print(f"\n🔄 Translated Answer (English → Urdu):")
+        print(f"   Original (English): {text[:100]}...")
+        print(f"   Translated (Urdu): {translated[:100]}...\n")
+        return translated
+    except Exception as e:
+        print(f"Translation error (English → Urdu): {e}")
+        return text  # Return original if translation fails
 # ============================================================================
 # 1. GOOGLE DRIVE FOLDER LOADING (Public Access)
 # ============================================================================
@@ -488,8 +552,19 @@ def retrieve_context(query: str, index, text_chunks: List[str],
 
 def generate_answer(query: str, index_dir: str = "alkhidmat_index", 
                    top_k: int = 5, max_tokens: int = 250):
-    """Generate answer using retrieved context."""
+    """Generate answer using retrieved context with Urdu support."""
     
+    # ========== NEW CODE STARTS HERE ==========
+    # Step 1: Detect language and translate if needed
+    original_query = query
+    query_is_urdu = is_urdu(query)
+    
+    if query_is_urdu:
+        print(f"\n🇵🇰 Urdu query detected!")
+        query = translate_urdu_to_english(query)
+    # ========== NEW CODE ENDS HERE ==========
+    
+    # Step 2: Process with English query (existing pipeline - NO CHANGES)
     index, text_chunks, metadata = load_index_and_data(index_dir)
     results = retrieve_context(query, index, text_chunks, metadata, top_k)
     
@@ -537,15 +612,24 @@ Answer:"""
     full_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
     answer = full_text.split("Answer:")[-1].strip() if "Answer:" in full_text else full_text[len(prompt):].strip()
     
+    # ========== NEW CODE STARTS HERE ==========
+    # Step 3: Translate answer back to Urdu if original query was Urdu
+    if query_is_urdu:
+        answer = translate_english_to_urdu(answer)
+    # ========== NEW CODE ENDS HERE ==========
+    
+    # ========== MODIFIED DISPLAY CODE ==========
+    # Display results
     print(f"\n{'='*80}")
-    print(f"QUESTION: {query}")
+    print(f"QUESTION: {original_query}")
+    if query_is_urdu:
+        print(f"(Translated to English: {query})")
     print(f"{'='*80}")
     print(f"\nANSWER:\n{answer}")
     print(f"\n{'='*80}\n")
+    # ========== END OF MODIFIED DISPLAY ==========
     
     return answer, results
-
-
 # ============================================================================
 # 8. MAIN PIPELINE
 # ============================================================================
@@ -555,6 +639,7 @@ def build_alkhidmat_rag(main_folder_url: str, index_dir: str = "alkhidmat_index"
     
     print("\n" + "="*80)
     print("ALKHIDMAT FOUNDATION RAG SYSTEM - BUILD FROM GOOGLE DRIVE")
+    print("with Urdu Language Support")
     print("="*80 + "\n")
     
     # Step 1: Load from Drive
@@ -582,6 +667,7 @@ def build_alkhidmat_rag(main_folder_url: str, index_dir: str = "alkhidmat_index"
     
     print("\n" + "="*80)
     print("✓ RAG SYSTEM BUILD COMPLETE!")
+    print("System supports both English and Urdu queries")
     print("="*80 + "\n")
 
 
@@ -611,7 +697,7 @@ if __name__ == "__main__":
     
     else:
         print("\n" + "="*80)
-        print("ALKHIDMAT RAG SYSTEM - USAGE")
+        print("ALKHIDMAT RAG SYSTEM - USAGE (with urdu support)")
         print("="*80)
         print("\nBuild from your main Google Drive folder:")
         print(f"  python rag_alkhidmat.py build {MAIN_FOLDER_URL}")
