@@ -32,10 +32,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from sentence_transformers import SentenceTransformer
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-# ============================================================================
-# URDU LANGUAGE SUPPORT FUNCTIONS (COPIED FROM PREVIOUS CODE)
-# ============================================================================
-
 def detect_language(text: str) -> str:
     """
     Detect the language of the input text.

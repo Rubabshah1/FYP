@@ -48,3 +48,15 @@ bitsandbytes>=0.41.0
 # Optional: For progress bars and logging
 rich>=13.7.0
 colorama>=0.4.6
+
+# Environment Variables
+python-dotenv>=1.0.0
+
+# Database (Supabase)
+supabase>=2.3.0
+
+# LLM (Local)
+gpt4all>=2.0.0
+
+# Text Splitting (Newer LangChain versions split this out)
+langchain-text-splitters>=0.0.1
