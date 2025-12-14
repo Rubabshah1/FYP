@@ -12,7 +12,7 @@ import uuid
 from datetime import datetime
 
 # Import your RAG system
-from RAG_supabase_client import generate_answer, get_supabase_client
+from RAG_supabase import generate_answer, get_supabase_client
 
 app = FastAPI(title="Alkhidmat Chat API")
 
