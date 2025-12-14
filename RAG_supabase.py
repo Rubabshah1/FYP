@@ -261,7 +261,7 @@ def save_chunks_to_supabase(chunks: List[str], metadata: List[Dict], embeddings:
             "category": meta.get("category"),
             "filename": meta.get("filename"),
             "file_path": meta.get("file_path"),
-            "doc_domain": None,  # You can set this based on category
+            "doc_domain": meta.get("category"),
             "embedding": emb_list
         })
     
