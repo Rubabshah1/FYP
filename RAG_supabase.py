@@ -414,6 +414,26 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
     
     return results, sources
 
+def sanitize_chunk_text(text: str) -> str:
+    """
+    Remove existing Q/A labels and short FAQ blocks from a chunk so the LLM
+    doesn't copy them into the answer.
+    """
+    # Remove common question/answer labels
+    text = re.sub(r'(?mi)^\s*(user\s+question|question|q:)\s*[:\-–]?\s*.*$', '', text)
+    text = re.sub(r'(?mi)^\s*(answer|a:)\s*[:\-–]?\s*.*$', '', text)
+
+    # Remove blocks that look like Q/A pairs (Q: ... A: ...), two or more occurrences
+    text = re.sub(r'(?is)(?:^|\n)\s*q[:\.\-\)]\s*.*?\n\s*a[:\.\-\)]\s*.*?(?:\n|$)', '', text)
+
+    # Remove short placeholders like "[insert email address]" or "click here"
+    text = re.sub(r'\[insert .*?\]', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'click here', '', text, flags=re.IGNORECASE)
+
+    # Collapse many newlines and trim
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    return text.strip()
+
 # ============ LLM ============
 _GPT_MODEL = None
 
@@ -424,12 +444,33 @@ def load_llm(model_filename: str = LLM_MODEL_FILENAME):
         _GPT_MODEL = GPT4All(model_filename, model_path=".", allow_download=False)
     return _GPT_MODEL
 
-def llm_generate(prompt: str, max_tokens: int = 400) -> str:
+def llm_generate(prompt: str, max_tokens: int = 400, stop_tokens: list = None) -> str:
+    """Generate with guarded params. If the underlying model supports stop tokens, pass them."""
     model = load_llm()
-    resp = model.generate(prompt=prompt, max_tokens=max_tokens)
+
+    # Conservative generation settings reduce the chance of extra appended Q/A
+    generation_kwargs = dict(
+        prompt=prompt,
+        max_tokens=max_tokens,
+        temp=0.2,         # lower temp for deterministic outputs
+        top_p=0.9,
+        repeat_penalty=1.2
+    )
+
+    # Many GPT4All wrappers accept 'stop' but if not, this will be ignored by the wrapper
+    if stop_tokens:
+        generation_kwargs['stop'] = stop_tokens
+
+    try:
+        resp = model.generate(**generation_kwargs)
+    except TypeError:
+        # fallback for wrapper that doesn't support kwargs
+        resp = model.generate(prompt, max_tokens=max_tokens)
+
     if isinstance(resp, (list, tuple)) and len(resp) > 0:
         return str(resp[0]).strip()
     return str(resp).strip()
+
 
 # ============ Answer Generation ============
 def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400, 
@@ -447,19 +488,29 @@ def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400,
         return no_answer, query, is_urdu, sources
     
     # Build context
+        # Build context - sanitize each chunk to avoid copying Q/A style artifacts
     context_parts = []
-    for i, r in enumerate(results, 1):
+    for r in results:
         chunk_text = r["text"]
-        
+
+        # Sanitize chunk to remove embedded Q/A or "User question" labels
+        chunk_text = sanitize_chunk_text(chunk_text)
+
         if is_urdu:
             try:
                 chunk_text = translate_english_to_urdu(chunk_text)
             except Exception:
                 pass
-        
-        context_parts.append(f"[Context {i}]\n{chunk_text}")
-    
+
+        if chunk_text:
+            # Optionally truncate very long chunks to keep prompt small
+            MAX_CHUNK_CHARS = 1200
+            if len(chunk_text) > MAX_CHUNK_CHARS:
+                chunk_text = chunk_text[:MAX_CHUNK_CHARS].rsplit('\n', 1)[0] + "\n\n[truncated]"
+            context_parts.append(chunk_text)
+
     context = "\n\n".join(context_parts)
+
     
     # Build query-aware prompt
     if is_urdu:
@@ -485,7 +536,7 @@ def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400,
 جواب (صرف اردو میں، ماخذ شامل نہ کریں):
 """
     else:
-        base_instruction = "You are a helpful assistant for Alkhidmat Foundation Pakistan."
+        base_instruction = "You are a helpful customer support agent for Alkhidmat Foundation Pakistan."
         
         if query_info['wants_list']:
             format_instruction = "Provide a clear answer in bullet point format."
@@ -497,21 +548,81 @@ def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400,
             format_instruction = "Provide a clear, complete answer. Include all relevant details from the context."
         
         prompt = f"""{base_instruction}
+
 {format_instruction}
 
-Use ONLY the information from the provided context. If the answer is not in the context, say "I don't know".
+Important instructions:
+- Use ONLY the information provided below.
+- Return ONLY the direct answer to the user's question.
+- DO NOT include any additional 'User question:', 'Question:', 'Answer:' lines, headings, or extra Q/A pairs.
+- DO NOT copy the context verbatim or print verbatim Q/A excerpts.
+- If the information is not present, reply exactly: "I don't have that information."
+- Output exactly one answer and nothing else (no extra labels, no summaries).
 
-Context:
+Negative example (not allowed):
+User question: What is X?
+Answer: ...
+User question: What is Y?
+Answer: ...
+
+Information:
 {context}
 
-Question: {query}
+User question: {query}
 
-Answer (do not include source citations in the answer):
+Answer (ONLY the final answer, no labels):
 """
-    
-    answer = llm_generate(prompt, max_tokens=max_tokens)
-    
+    answer = llm_generate(prompt, max_tokens=max_tokens, stop_tokens=["\nUser question:", "\nQuestion:", "\nUser question"])
+    # Post-process to remove any remaining artifacts 
+    answer = clean_llm_response(answer)
     return answer, query, is_urdu, sources
+
+def clean_llm_response(text: str) -> str:
+    """Clean up LLM output to remove unwanted artifacts and cut off extra Q/A blocks."""
+    if not text:
+        return text
+
+    # Normalize whitespace
+    text = text.replace('\r\n', '\n')
+
+    # Remove references to context numbers and meta lines
+    text = re.sub(r'\[?Context \d+\]?', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'based on Context \d+', '', text, flags=re.IGNORECASE)
+    text = re.sub(r'as per (?:the )?context', '', text, flags=re.IGNORECASE)
+
+    # Remove explicit "User question:" / "Question:" / "Answer:" lines and anything that follows:
+    # If the model appended additional Q/A sections, truncate the answer at the first occurrence
+    cutoff_patterns = [r'\nUser question\s*:', r'\nQuestion\s*:', r'\nUser question', r'\nQuestion', r'\nAnswer\s*:']
+    earliest = len(text)
+    for pat in cutoff_patterns:
+        m = re.search(pat, text, flags=re.IGNORECASE)
+        if m:
+            earliest = min(earliest, m.start())
+
+    if earliest < len(text):
+        text = text[:earliest].strip()
+
+    # Remove leftover labels inline (rare)
+    text = re.sub(r'(?mi)^(user question|question|answer)\s*[:\-–]\s*', '', text)
+
+    # Remove repetitive identical lines
+    lines = text.split('\n')
+    seen = set()
+    out_lines = []
+    for line in lines:
+        s = line.strip()
+        if not s:
+            out_lines.append('')
+            continue
+        if s.lower() in seen:
+            continue
+        seen.add(s.lower())
+        out_lines.append(line)
+    text = '\n'.join(out_lines)
+
+    # Final trim
+    text = re.sub(r'\n{3,}', '\n\n', text).strip()
+    return text
 
 # ============ CLI Functions ============
 def query_alkhidmat_rag(query: str, category: str = None):
