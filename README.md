@@ -9,3 +9,5 @@ pip install -r requirements.txt --extra-index-url https://download.pytorch.org/w
 ```
 Literature review
 https://docs.google.com/document/d/10z9Gnw25w7gN_Anj4ITdmSic1zdSyWOAnEbx52THtEw/edit?usp=sharing
+
+rag lit rev: https://docs.google.com/document/d/1SzWvL0Rj1IjQTViIihLP06kh3rGxI09UANCHIo0LhI8/edit?usp=sharing
