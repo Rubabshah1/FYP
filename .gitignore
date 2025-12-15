@@ -1,2 +1,5 @@
 .env
 Llama-3.2-3B-Instruct-Q4_K_M.gguf
+__pycache__/
+*.pyc
+alkhidmat_index/
