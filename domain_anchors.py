@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # domain_anchors.py
 
 DOMAIN_ANCHOR_QUERIES = {
@@ -101,7 +100,8 @@ DOMAIN_ANCHOR_QUERIES = {
         "Give me alkhidmat's Chairman information",
         "what are alkhidmat's Latest news and updates",
     ]
-=======
+}
+#=======
 # domain_anchors.py
 
 DOMAIN_ANCHOR_QUERIES = {
@@ -204,5 +204,5 @@ DOMAIN_ANCHOR_QUERIES = {
         "Give me alkhidmat's Chairman information",
         "what are alkhidmat's Latest news and updates",
     ]
->>>>>>> 8bb6c76c3f054d00dfc988f04aaf36e81d976142
+
 }

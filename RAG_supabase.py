@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 ALKHIDMAT RAG SYSTEM - SUPABASE CLIENT EDITION
-Uses Supabase Python client (REST API) instead of direct PostgreSQL connection
+WITH DOMAIN CLASSIFICATION & CONFIDENCE SCORING
+Uses Supabase Python client (REST API) and Llama-cpp-python
 """
 
 from dotenv import load_dotenv
@@ -15,14 +16,18 @@ from pathlib import Path
 from typing import List, Dict, Tuple, Any
 import uuid
 
+import gc
+
 import numpy as np
 import zipfile
+from scipy.stats import entropy
+from sklearn.metrics.pairwise import cosine_similarity
 
 # Embeddings
 from sentence_transformers import SentenceTransformer
 
-# LLM (GPT4All)
-from gpt4all import GPT4All
+# LLM (Llama CPP)
+from llama_cpp import Llama
 
 # Supabase Client
 from supabase import create_client, Client
@@ -34,10 +39,12 @@ import langdetect
 # text splitter
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
+# Import domain anchors
+from domain_anchors import DOMAIN_ANCHOR_QUERIES
+
 # ============ SUPABASE CONFIG ============
-# Get these from: Supabase Dashboard → Settings → API
-SUPABASE_URL = os.environ.get("SUPABASE_URL")  # https://xxxxx.supabase.co
-SUPABASE_KEY = os.environ.get("SUPABASE_ANON_KEY")  # Your anon/service_role key
+SUPABASE_URL = os.environ.get("SUPABASE_URL") 
+SUPABASE_KEY = os.environ.get("SUPABASE_ANON_KEY") 
 
 EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-base"
 LLM_MODEL_FILENAME = os.environ.get("GPT4ALL_MODEL", "Llama-3.2-3B-Instruct-Q4_K_M.gguf")
@@ -50,6 +57,212 @@ EMBEDDING_DIM = 768
 # Retrieval parameters
 RELEVANCE_THRESHOLD = 0.7
 
+# ============================================================================
+# DOMAIN CLASSIFICATION CLASS (FROM ORIGINAL RAG)
+# ============================================================================
+
+class DomainClassifier:
+    """
+    Classifies queries into domains using embedding similarity with anchor queries.
+    Uses pre-computed domain centroids from representative queries.
+    """
+    
+    _domain_embeddings_cache = None
+    _embedding_model = None
+    
+    @staticmethod
+    def initialize_domain_embeddings(model_name: str = 'sentence-transformers/all-MiniLM-L6-v2'):
+        """
+        Pre-compute embeddings for all anchor queries and create domain centroids.
+        This is called once during initialization.
+        """
+        if DomainClassifier._domain_embeddings_cache is not None:
+            return
+        
+        if os.environ.get('BATCH_MODE') != 'True':
+            print("\n🔄 Initializing domain embeddings from anchor queries...")
+        
+        model = SentenceTransformer(model_name)
+        DomainClassifier._embedding_model = model
+        
+        domain_embeddings = {}
+        
+        for domain, queries in DOMAIN_ANCHOR_QUERIES.items():
+            embeddings = model.encode(queries, show_progress_bar=False)
+            centroid = np.mean(embeddings, axis=0)
+            domain_embeddings[domain] = centroid
+            
+            if os.environ.get('BATCH_MODE') != 'True':
+                print(f"  ✓ {domain}: {len(queries)} anchor queries → centroid computed")
+        
+        DomainClassifier._domain_embeddings_cache = domain_embeddings
+        
+        if os.environ.get('BATCH_MODE') != 'True':
+            print("✅ Domain embeddings initialized!\n")
+    
+    @staticmethod
+    def classify_domain(query: str) -> Dict[str, any]:
+        """
+        Classify query using embedding similarity to domain centroids.
+        """
+        if DomainClassifier._domain_embeddings_cache is None:
+            DomainClassifier.initialize_domain_embeddings()
+        
+        query_embedding = DomainClassifier._embedding_model.encode([query])[0]
+        
+        similarities = {}
+        for domain, centroid in DomainClassifier._domain_embeddings_cache.items():
+            query_reshaped = query_embedding.reshape(1, -1)
+            centroid_reshaped = centroid.reshape(1, -1)
+            similarity = cosine_similarity(query_reshaped, centroid_reshaped)[0][0]
+            similarities[domain] = float(similarity)
+        
+        winning_domain = max(similarities, key=similarities.get)
+        confidence = similarities[winning_domain]
+        
+        return {
+            'domain': winning_domain,
+            'confidence': confidence,
+            'all_scores': similarities
+        }
+    
+    @staticmethod
+    def get_domain_emoji(domain: str) -> str:
+        """Get emoji representation for domain."""
+        emoji_map = {
+            'donation': '💰',
+            'healthcare': '🏥',
+            'general': '📋'
+        }
+        return emoji_map.get(domain, '📋')
+
+# ============================================================================
+# CONFIDENCE SCORING CLASS (FROM ORIGINAL RAG)
+# ============================================================================
+
+class ConfidenceScorer:
+    """
+    Implements multiple confidence scoring methods:
+    1. Token-level log probabilities (Average, Perplexity)
+    2. Entropy-based scoring
+    3. Retrieval confidence (semantic similarity)
+    """
+    
+    @staticmethod
+    def calculate_perplexity(log_probs: List[float]) -> float:
+        """Calculate perplexity from log probabilities."""
+        if not log_probs:
+            return float('inf')
+        
+        avg_log_prob = np.mean(log_probs)
+        perplexity = np.exp(-avg_log_prob)
+        alpha = 0.1
+        return float(np.exp(-alpha * (perplexity - 1)))
+    
+    @staticmethod
+    def calculate_average_token_confidence(log_probs: List[float]) -> float:
+        """Calculate average token log-probability."""
+        if not log_probs:
+            return 0.0
+        
+        probs = [np.exp(lp) for lp in log_probs]
+        return np.mean(probs)
+    
+    @staticmethod
+    def calculate_entropy_confidence(token_probs_distributions: List[np.ndarray]) -> float:
+        """Calculate entropy-based confidence."""
+        if not token_probs_distributions:
+            return float('inf')
+        
+        entropies = []
+        for prob_dist in token_probs_distributions:
+            if len(prob_dist) > 0:
+                ent = entropy(prob_dist)
+                entropies.append(ent)
+        
+        if not entropies:
+            return float('inf')
+        
+        max_entropy = max(entropies)
+        confidence = 1 - min(max_entropy / 10.0, 1.0)
+        return confidence
+    
+    @staticmethod
+    def calculate_top_k_weighted_confidence(log_probs: List[float], k: int = 5) -> float:
+        """Weighted confidence score using top k% tokens."""
+        if not log_probs or len(log_probs) < 5:
+            return np.mean([np.exp(lp) for lp in log_probs]) if log_probs else 0.0
+        
+        probs = [np.exp(lp) for lp in log_probs]
+        sorted_probs = sorted(probs, reverse=True)
+        top_k_probs = sorted_probs[:k]
+        
+        joint_top_k = np.prod(top_k_probs) ** (1/k)
+        joint_all = np.prod(probs) ** (1/len(probs))
+        
+        weighted_score = 0.7 * joint_top_k + 0.3 * joint_all
+        return weighted_score
+    
+    @staticmethod
+    def calculate_retrieval_confidence(
+        query_embedding: np.ndarray, 
+        doc_embeddings: List[np.ndarray], 
+        top_k: int = 5
+    ) -> float:
+        """Calculate confidence based on cosine similarity between query and documents."""
+        if not doc_embeddings:
+            return 0.0
+        
+        cosine_similarities = []
+        for doc_emb in doc_embeddings[:top_k]:
+            query_reshaped = query_embedding.reshape(1, -1)
+            doc_reshaped = doc_emb.reshape(1, -1)
+            cos_sim = cosine_similarity(query_reshaped, doc_reshaped)[0][0]
+            cosine_similarities.append(cos_sim)
+        
+        return float(np.mean(cosine_similarities))
+    
+    @staticmethod
+    def calculate_combined_confidence(
+        log_probs: List[float],
+        retrieval_confidence: float,
+        token_probs_distributions: List[np.ndarray] = None
+    ) -> Dict[str, float]:
+        """Calculate all confidence metrics and return a comprehensive score."""
+        scores = {}
+        scores['retrieval_confidence'] = retrieval_confidence 
+        
+        if log_probs:
+            scores['avg_token_confidence'] = ConfidenceScorer.calculate_average_token_confidence(log_probs)
+            scores['perplexity'] = ConfidenceScorer.calculate_perplexity(log_probs)
+            scores['weighted_top_k'] = ConfidenceScorer.calculate_top_k_weighted_confidence(log_probs)
+        
+        if token_probs_distributions:
+            scores['entropy_confidence'] = ConfidenceScorer.calculate_entropy_confidence(token_probs_distributions)
+        
+        # Combined score (weighted average)
+        combined = 0.0
+        weight_sum = 0.0
+        
+        if 'retrieval_confidence' in scores:
+            combined += 0.5 * scores['retrieval_confidence']
+            weight_sum += 0.5
+        
+        if 'avg_token_confidence' in scores:
+            combined += 0.25 * scores['avg_token_confidence']
+            weight_sum += 0.25
+        
+        if 'weighted_top_k' in scores:
+            combined += 0.25 * scores['weighted_top_k']
+            weight_sum += 0.25
+        
+        if weight_sum > 0:
+            scores['combined_confidence'] = combined / weight_sum
+        else:
+            scores['combined_confidence'] = 0.0
+        
+        return scores
+
 # ============ Supabase Client ============
 _SUPABASE_CLIENT = None
 
@@ -61,7 +274,7 @@ def get_supabase_client() -> Client:
         if not SUPABASE_URL or not SUPABASE_KEY:
             raise ValueError(
                 "SUPABASE_URL and SUPABASE_ANON_KEY must be set in .env file\n"
-                "Get these from: Supabase Dashboard → Settings → API"
+                "Get these from: Supabase Dashboard -> Settings -> API"
             )
         
         print(f"Connecting to Supabase: {SUPABASE_URL}")
@@ -73,16 +286,12 @@ def test_connection():
     """Test Supabase connection"""
     try:
         supabase = get_supabase_client()
-        
-        # Try to query documents table
         result = supabase.table("documents").select("doc_id").limit(1).execute()
         
         print("✅ Connected to Supabase successfully!")
         print(f"   URL: {SUPABASE_URL}")
         
-        # Check if pgvector extension is enabled by trying to query
         try:
-            # This will fail if pgvector is not enabled
             result = supabase.rpc('match_documents_simple', {
                 'query_embedding': [0.0] * 768,
                 'match_count': 1
@@ -98,10 +307,6 @@ def test_connection():
         
     except Exception as e:
         print(f"❌ Connection failed: {e}")
-        print("\nMake sure you have:")
-        print("1. Set SUPABASE_URL in .env")
-        print("2. Set SUPABASE_ANON_KEY in .env")
-        print("3. Run the SQL schema setup in Supabase SQL Editor")
         return False
 
 # ============ Language Detection ============
@@ -248,7 +453,6 @@ def save_chunks_to_supabase(chunks: List[str], metadata: List[Dict], embeddings:
     
     print("Saving to Supabase...")
     
-    # Prepare data
     rows = []
     for i, chunk in enumerate(chunks):
         meta = metadata[i]
@@ -265,7 +469,6 @@ def save_chunks_to_supabase(chunks: List[str], metadata: List[Dict], embeddings:
             "embedding": emb_list
         })
     
-    # Insert in batches (Supabase has limits on request size)
     batch_size = 100
     total_inserted = 0
     
@@ -277,7 +480,6 @@ def save_chunks_to_supabase(chunks: List[str], metadata: List[Dict], embeddings:
             print(f"   Inserted batch {i//batch_size + 1}: {len(batch)} chunks")
         except Exception as e:
             print(f"   ⚠️  Error inserting batch {i//batch_size + 1}: {e}")
-            # Try one by one if batch fails
             for row in batch:
                 try:
                     supabase.table("documents").insert(row).execute()
@@ -292,7 +494,6 @@ def clear_documents_table():
     supabase = get_supabase_client()
     
     try:
-        # Delete all documents
         result = supabase.table("documents").delete().neq("doc_id", "00000000-0000-0000-0000-000000000000").execute()
         print("✅ Cleared all documents from Supabase")
     except Exception as e:
@@ -305,7 +506,6 @@ def build_alkhidmat_rag(zip_path: str, clear_existing: bool = False):
     print("BUILDING ALKHIDMAT RAG SYSTEM")
     print("="*80)
     
-    # Test connection
     if not test_connection():
         print("❌ Cannot connect to Supabase. Aborting.")
         return
@@ -329,16 +529,19 @@ def build_alkhidmat_rag(zip_path: str, clear_existing: bool = False):
     print("\nBUILD: Saving to Supabase...")
     save_chunks_to_supabase(chunks, chunk_meta, embeddings)
     
+    print("\nBUILD: Initializing domain classification...")
+    DomainClassifier.initialize_domain_embeddings()
+    
     print("\n" + "="*80)
     print("✅ BUILD COMPLETE!")
     print("="*80)
 
-# ============ Retrieval ============
+# ============ Retrieval (ENHANCED WITH EMBEDDINGS) ============
 def retrieve_from_supabase(query: str, top_k: int = 5, 
-                           filter_category: str = None) -> Tuple[List[Dict], List[Dict]]:
-    """Retrieve similar documents from Supabase using RPC function"""
-    
-    # Create query embedding
+                           filter_category: str = None) -> Tuple[List[Dict], np.ndarray, List[np.ndarray]]:
+    """
+    FIXED: Now properly extracts embeddings from Supabase for confidence scoring
+    """
     embedder = get_embedder()
     query_prefixed = f"query: {query}"
     query_embedding = embedder.encode([query_prefixed], normalize_embeddings=True)[0]
@@ -346,7 +549,6 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
     supabase = get_supabase_client()
     
     try:
-        # Call the RPC function for vector similarity search
         params = {
             'query_embedding': query_embedding.tolist(),
             'match_threshold': RELEVANCE_THRESHOLD,
@@ -356,15 +558,31 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
         if filter_category:
             params['filter_category'] = filter_category
         
+        # First, get the matches using RPC
         result = supabase.rpc('match_documents', params).execute()
-        
         rows = result.data
         
+        # FIXED: Now fetch full documents WITH embeddings using doc_ids
+        if rows:
+            doc_ids = [row['doc_id'] for row in rows]
+            
+            # Fetch full documents including embeddings
+            full_docs_result = supabase.table("documents").select(
+                "doc_id, chunk_text, category, filename, file_path, chunk_index, embedding"
+            ).in_("doc_id", doc_ids).execute()
+            
+            # Create a mapping for easy lookup
+            doc_map = {doc['doc_id']: doc for doc in full_docs_result.data}
+            
+            # Merge embedding data back into rows
+            for row in rows:
+                if row['doc_id'] in doc_map:
+                    row['embedding'] = doc_map[row['doc_id']]['embedding']
+        
     except Exception as e:
-        # Fallback: manual similarity search if RPC function doesn't exist
         print(f"⚠️  RPC function not available, using fallback method: {e}")
         
-        # Get all documents (not ideal for large datasets)
+        # Fallback: manual similarity calculation
         result = supabase.table("documents").select(
             "doc_id, chunk_text, category, filename, file_path, chunk_index, embedding"
         ).execute()
@@ -372,7 +590,6 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
         rows = []
         for row in result.data:
             if row['embedding']:
-                # Calculate cosine similarity manually
                 doc_emb = np.array(row['embedding'])
                 similarity = float(np.dot(query_embedding, doc_emb))
                 
@@ -380,11 +597,10 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
                     row['similarity'] = similarity
                     rows.append(row)
         
-        # Sort by similarity and take top_k
         rows = sorted(rows, key=lambda x: x['similarity'], reverse=True)[:top_k]
     
     results = []
-    sources = []
+    doc_embeddings = []
     
     for row in rows:
         results.append({
@@ -396,123 +612,161 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
             "similarity": float(row.get('similarity', 0))
         })
         
-        sources.append({
-            "doc_id": str(row['doc_id']),
-            "category": row['category'],
-            "filename": row['filename'],
-            "file_path": row['file_path'],
-            "similarity": float(row.get('similarity', 0))
-        })
+        # FIXED: Properly extract and convert embedding
+        if 'embedding' in row and row['embedding'] is not None:
+            try:
+                # Handle different embedding formats
+                if isinstance(row['embedding'], str):
+                    # If it's a string representation, try to parse it
+                    import ast
+                    embedding_data = ast.literal_eval(row['embedding'])
+                    doc_embeddings.append(np.array(embedding_data, dtype=np.float32))
+                elif isinstance(row['embedding'], list):
+                    # If it's already a list
+                    doc_embeddings.append(np.array(row['embedding'], dtype=np.float32))
+                elif isinstance(row['embedding'], np.ndarray):
+                    # If it's already a numpy array
+                    doc_embeddings.append(row['embedding'].astype(np.float32))
+                else:
+                    print(f"⚠️  Unexpected embedding type: {type(row['embedding'])}")
+            except Exception as e:
+                print(f"⚠️  Error parsing embedding: {e}")
+                continue
     
-    # Print retrieval info
     print("\n" + "="*80)
     print("RETRIEVAL FROM SUPABASE")
     print(f"Retrieved {len(results)} relevant chunks (threshold: {RELEVANCE_THRESHOLD}):")
-    for i, s in enumerate(sources, 1):
-        print(f"{i}. [{s['category']}] {s['filename']} (similarity: {s['similarity']:.3f})")
+    for i, r in enumerate(results, 1):
+        print(f"{i}. [{r['category']}] {r['filename']} (similarity: {r['similarity']:.3f})")
+    print(f"📊 Document embeddings extracted: {len(doc_embeddings)}/{len(results)}")
     print("="*80 + "\n")
     
-    return results, sources
+    return results, query_embedding, doc_embeddings
 
 def sanitize_chunk_text(text: str) -> str:
-    """
-    Remove existing Q/A labels and short FAQ blocks from a chunk so the LLM
-    doesn't copy them into the answer.
-    """
-    # Remove common question/answer labels
+    """Remove existing Q/A labels from chunks"""
     text = re.sub(r'(?mi)^\s*(user\s+question|question|q:)\s*[:\-–]?\s*.*$', '', text)
     text = re.sub(r'(?mi)^\s*(answer|a:)\s*[:\-–]?\s*.*$', '', text)
-
-    # Remove blocks that look like Q/A pairs (Q: ... A: ...), two or more occurrences
     text = re.sub(r'(?is)(?:^|\n)\s*q[:\.\-\)]\s*.*?\n\s*a[:\.\-\)]\s*.*?(?:\n|$)', '', text)
-
-    # Remove short placeholders like "[insert email address]" or "click here"
     text = re.sub(r'\[insert .*?\]', '', text, flags=re.IGNORECASE)
     text = re.sub(r'click here', '', text, flags=re.IGNORECASE)
-
-    # Collapse many newlines and trim
     text = re.sub(r'\n{3,}', '\n\n', text)
     return text.strip()
 
-# ============ LLM ============
-_GPT_MODEL = None
+# ============ LLM (Llama CPP) ============
+_LLM_MODEL = None
 
 def load_llm(model_filename: str = LLM_MODEL_FILENAME):
-    global _GPT_MODEL
-    if _GPT_MODEL is None:
-        print("Loading local LLM:", model_filename)
-        _GPT_MODEL = GPT4All(model_filename, model_path=".", allow_download=False)
-    return _GPT_MODEL
+    global _LLM_MODEL
+    if _LLM_MODEL is None:
+        print("Loading local LLM via llama-cpp:", model_filename)
+        
+        if not os.path.exists(model_filename):
+            print(f"❌ Error: Model file not found at {model_filename}")
+            raise FileNotFoundError(f"Model file missing: {model_filename}")
 
-def llm_generate(prompt: str, max_tokens: int = 400, stop_tokens: list = None) -> str:
-    """Generate with guarded params. If the underlying model supports stop tokens, pass them."""
+        _LLM_MODEL = Llama(
+            model_path=model_filename,
+            n_ctx=4096,           
+            n_gpu_layers=0,
+            verbose=False,
+            logits_all=True  # FIXED: Enable logits for log probability extraction
+        )
+    return _LLM_MODEL
+
+def llm_generate(prompt: str, max_tokens: int = 400, stop_tokens: list = None) -> Tuple[str, List[float], List[np.ndarray]]:
+    """
+    MEMORY-OPTIMIZED: Generation with garbage collection
+    """
     model = load_llm()
-
-    # Conservative generation settings reduce the chance of extra appended Q/A
-    generation_kwargs = dict(
-        prompt=prompt,
-        max_tokens=max_tokens,
-        temp=0.2,         # lower temp for deterministic outputs
-        top_p=0.9,
-        repeat_penalty=1.2
-    )
-
-    # Many GPT4All wrappers accept 'stop' but if not, this will be ignored by the wrapper
-    if stop_tokens:
-        generation_kwargs['stop'] = stop_tokens
+    
+    # Force garbage collection before generation
+    gc.collect()
 
     try:
-        resp = model.generate(**generation_kwargs)
-    except TypeError:
-        # fallback for wrapper that doesn't support kwargs
-        resp = model.generate(prompt, max_tokens=max_tokens)
-
-    if isinstance(resp, (list, tuple)) and len(resp) > 0:
-        return str(resp[0]).strip()
-    return str(resp).strip()
-
-
-# ============ Answer Generation ============
+        output = model(
+            prompt,
+            max_tokens=max_tokens,
+            temperature=0.2,
+            top_p=0.9,
+            repeat_penalty=1.2,
+            stop=stop_tokens or [],
+            echo=False,
+            logprobs=5
+        )
+        
+        text = output['choices'][0]['text'].strip()
+        
+        # Extract log probabilities if available
+        log_probs = []
+        token_probs_distributions = []
+        
+        if 'logprobs' in output['choices'][0] and output['choices'][0]['logprobs']:
+            logprobs_data = output['choices'][0]['logprobs']
+            
+            if 'token_logprobs' in logprobs_data and logprobs_data['token_logprobs']:
+                log_probs = [lp for lp in logprobs_data['token_logprobs'] if lp is not None]
+            
+            if 'top_logprobs' in logprobs_data and logprobs_data['top_logprobs']:
+                for token_dict in logprobs_data['top_logprobs']:
+                    if token_dict:
+                        logprobs_list = list(token_dict.values())
+                        probs = np.exp(logprobs_list)
+                        probs = probs / np.sum(probs)
+                        token_probs_distributions.append(probs)
+        
+        # Cleanup after generation
+        gc.collect()
+        
+        return text, log_probs, token_probs_distributions
+        
+    except Exception as e:
+        print(f"LLM Generation Error: {e}")
+        gc.collect()  # Cleanup even on error
+        return "Error generating response.", [], []
+    
+# ============ Answer Generation (ENHANCED) ============
 def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400, 
-                   filter_category: str = None):
-    """Query-aware answer generation"""
+                    filter_category: str = None):
+    """
+    ENHANCED: Now includes domain classification and confidence scoring
+    """
     query_info = analyze_query(query)
     is_urdu = query_info['is_urdu']
+    original_query = query
     
-    # Retrieve from Supabase
-    results, sources = retrieve_from_supabase(query, top_k=top_k, 
-                                             filter_category=filter_category)
+    # CLASSIFY DOMAIN (NEW)
+    domain_classification = DomainClassifier.classify_domain(query)
+    
+    # Retrieve with embeddings (ENHANCED)
+    results, query_embedding, doc_embeddings = retrieve_from_supabase(
+        query, top_k=top_k, filter_category=filter_category
+    )
     
     if not results:
         no_answer = "معاف کیجیے، میں اس سوال کا جواب دینے کے لیے متعلقہ معلومات نہیں ڈھونڈ سکا۔" if is_urdu else "I apologize, but I couldn't find relevant information to answer this question."
-        return no_answer, query, is_urdu, sources
+        return no_answer, query, is_urdu, [], {}, domain_classification
     
     # Build context
-        # Build context - sanitize each chunk to avoid copying Q/A style artifacts
     context_parts = []
     for r in results:
-        chunk_text = r["text"]
-
-        # Sanitize chunk to remove embedded Q/A or "User question" labels
-        chunk_text = sanitize_chunk_text(chunk_text)
-
+        chunk_text = sanitize_chunk_text(r["text"])
+        
         if is_urdu:
             try:
                 chunk_text = translate_english_to_urdu(chunk_text)
             except Exception:
                 pass
-
+        
         if chunk_text:
-            # Optionally truncate very long chunks to keep prompt small
             MAX_CHUNK_CHARS = 1200
             if len(chunk_text) > MAX_CHUNK_CHARS:
                 chunk_text = chunk_text[:MAX_CHUNK_CHARS].rsplit('\n', 1)[0] + "\n\n[truncated]"
             context_parts.append(chunk_text)
-
-    context = "\n\n".join(context_parts)
-
     
-    # Build query-aware prompt
+    context = "\n\n".join(context_parts)
+    
+    # Build prompt
     if is_urdu:
         base_instruction = "آپ الخدمت فاؤنڈیشن پاکستان کے لیے ایک مددگار اسسٹنٹ ہیں۔"
         
@@ -559,12 +813,6 @@ Important instructions:
 - If the information is not present, reply exactly: "I don't have that information."
 - Output exactly one answer and nothing else (no extra labels, no summaries).
 
-Negative example (not allowed):
-User question: What is X?
-Answer: ...
-User question: What is Y?
-Answer: ...
-
 Information:
 {context}
 
@@ -572,26 +820,52 @@ User question: {query}
 
 Answer (ONLY the final answer, no labels):
 """
-    answer = llm_generate(prompt, max_tokens=max_tokens, stop_tokens=["\nUser question:", "\nQuestion:", "\nUser question"])
-    # Post-process to remove any remaining artifacts 
+    
+    # Generate with confidence data (ENHANCED)
+    answer, log_probs, token_probs_distributions = llm_generate(
+        prompt, max_tokens=max_tokens, stop_tokens=["\nUser question:", "\nQuestion:", "\nUser question"]
+    )
+    
+    # Clean response
     answer = clean_llm_response(answer)
-    return answer, query, is_urdu, sources
+    
+    # CALCULATE CONFIDENCE SCORES (NEW)
+    retrieval_conf = ConfidenceScorer.calculate_retrieval_confidence(
+        query_embedding=query_embedding,
+        doc_embeddings=doc_embeddings,
+        top_k=top_k
+    )
+    
+    confidence_scores = ConfidenceScorer.calculate_combined_confidence(
+        log_probs=log_probs,
+        retrieval_confidence=retrieval_conf,
+        token_probs_distributions=token_probs_distributions
+    )
+    
+    # Translate answer back to Urdu if needed
+    if is_urdu:
+        answer = translate_english_to_urdu(answer)
+    
+    # Create sources list
+    sources = [{
+        "category": r['category'],
+        "filename": r['filename'],
+        "file_path": r['file_path'],
+        "similarity": r['similarity']
+    } for r in results]
+    
+    return answer, original_query, is_urdu, sources, confidence_scores, domain_classification
 
 def clean_llm_response(text: str) -> str:
-    """Clean up LLM output to remove unwanted artifacts and cut off extra Q/A blocks."""
+    """Clean up LLM output to remove unwanted artifacts"""
     if not text:
         return text
 
-    # Normalize whitespace
     text = text.replace('\r\n', '\n')
-
-    # Remove references to context numbers and meta lines
     text = re.sub(r'\[?Context \d+\]?', '', text, flags=re.IGNORECASE)
     text = re.sub(r'based on Context \d+', '', text, flags=re.IGNORECASE)
     text = re.sub(r'as per (?:the )?context', '', text, flags=re.IGNORECASE)
 
-    # Remove explicit "User question:" / "Question:" / "Answer:" lines and anything that follows:
-    # If the model appended additional Q/A sections, truncate the answer at the first occurrence
     cutoff_patterns = [r'\nUser question\s*:', r'\nQuestion\s*:', r'\nUser question', r'\nQuestion', r'\nAnswer\s*:']
     earliest = len(text)
     for pat in cutoff_patterns:
@@ -602,10 +876,8 @@ def clean_llm_response(text: str) -> str:
     if earliest < len(text):
         text = text[:earliest].strip()
 
-    # Remove leftover labels inline (rare)
     text = re.sub(r'(?mi)^(user question|question|answer)\s*[:\-–]\s*', '', text)
 
-    # Remove repetitive identical lines
     lines = text.split('\n')
     seen = set()
     out_lines = []
@@ -620,20 +892,62 @@ def clean_llm_response(text: str) -> str:
         out_lines.append(line)
     text = '\n'.join(out_lines)
 
-    # Final trim
     text = re.sub(r'\n{3,}', '\n\n', text).strip()
     return text
 
-# ============ CLI Functions ============
+# ============ CLI Functions (ENHANCED) ============
 def query_alkhidmat_rag(query: str, category: str = None):
-    answer, _, _, sources = generate_answer(query, filter_category=category)
+    """ENHANCED: Now displays domain classification and confidence scores"""
+    answer, original_query, is_urdu, sources, confidence_scores, domain_classification = generate_answer(
+        query, filter_category=category
+    )
+    
     print("\n" + "="*80)
-    print("QUESTION:", query)
+    print("QUESTION:", original_query)
+    if is_urdu:
+        print("(Urdu query detected)")
     if category:
         print("CATEGORY FILTER:", category)
     print("="*80)
-    print("ANSWER:\n", answer)
+    
+    # Display domain classification (NEW)
+    domain_emoji = DomainClassifier.get_domain_emoji(domain_classification['domain'])
+    print(f"\n{domain_emoji} DOMAIN CLASSIFICATION:")
+    print(f"{'-'*80}")
+    print(f"  Classified Domain: {domain_classification['domain'].upper()}")
+    print(f"  Classification Confidence: {domain_classification['confidence']:.2%}")
+    print(f"\n  Similarity Scores:")
+    for domain, score in domain_classification['all_scores'].items():
+        emoji = DomainClassifier.get_domain_emoji(domain)
+        bar = '█' * int(score * 50)
+        print(f"    {emoji} {domain:12s}: {score:.4f} {bar}")
+    print(f"{'-'*80}")
+    
+    print("\nANSWER:")
+    print(answer)
+    
+    # Display confidence scores (NEW)
     print("\n" + "="*80)
+    print("CONFIDENCE SCORES:")
+    print("="*80)
+    print(f"  Combined Confidence:        {confidence_scores.get('combined_confidence', 0):.4f} ⭐")
+    print(f"  ├─ Retrieval Confidence:    {confidence_scores.get('retrieval_confidence', 0):.4f}")
+    print(f"  ├─ Avg Token Confidence:    {confidence_scores.get('avg_token_confidence', 0):.4f}")
+    print(f"  ├─ Weighted Top-K:          {confidence_scores.get('weighted_top_k', 0):.4f}")
+    print(f"  ├─ Perplexity:              {confidence_scores.get('perplexity', 0):.4f}")
+    print(f"  └─ Entropy Confidence:      {confidence_scores.get('entropy_confidence', 0):.4f}")
+    print("="*80)
+    
+    # Interpretation (NEW)
+    combined = confidence_scores.get('combined_confidence', 0)
+    if combined >= 0.7:
+        print("✅ High confidence - Answer is likely reliable")
+    elif combined >= 0.5:
+        print("⚠️  Moderate confidence - Answer may need verification")
+    else:
+        print("❌ Low confidence - Answer should be verified from sources")
+    
+    print("\n" + "="*80 + "\n")
     return answer
 
 def show_statistics():
@@ -645,11 +959,9 @@ def show_statistics():
     print("="*80)
     
     try:
-        # Get total count
         result = supabase.table("documents").select("doc_id", count="exact").execute()
         print(f"\nTotal chunks: {result.count}")
         
-        # Get by category
         result = supabase.table("documents").select("category").execute()
         categories = {}
         for row in result.data:
@@ -663,52 +975,80 @@ def show_statistics():
     except Exception as e:
         print(f"Error getting statistics: {e}")
 
-# ============ Batch Processing ============
+# ============ Batch Processing (ENHANCED) ============
 def batch_query_file(input_file: str, output_file: str):
-    """
-    Reads queries from an input file (one query per line), processes them
-    via Supabase/LLM, and writes results to an output file.
-    """
+    """ENHANCED: Now includes domain classification and confidence scores in output"""
+    os.environ['BATCH_MODE'] = 'True'
+    
     print(f"\n{'='*80}")
     print(f"BATCH QUERY MODE: Processing {input_file} -> {output_file}")
     print(f"{'='*80}")
 
     try:
-        # Read queries (using utf-8 encoding for Urdu)
         with open(input_file, 'r', encoding='utf-8') as f:
             queries = [line.strip() for line in f if line.strip()]
         
         print(f"Found {len(queries)} queries to process.")
         
-        # Write results
         with open(output_file, 'w', encoding='utf-8') as f_out:
             f_out.write("ALKHIDMAT RAG (SUPABASE) - BATCH QUERY RESULTS\n")
+            f_out.write("WITH DOMAIN CLASSIFICATION & CONFIDENCE SCORING\n")
             f_out.write(f"Source file: {input_file}\n")
             f_out.write(f"Date: {time.strftime('%Y-%m-%d %H:%M:%S')}\n\n")
 
             for i, query in enumerate(queries):
                 print(f"Processing {i+1}/{len(queries)}: '{query[:40]}...'")
                 
-                # Run the generation pipeline
-                # Note: your generate_answer returns 4 values
-                answer, original_query, is_urdu_query, sources = generate_answer(query)
+                # Generate with enhanced features
+                answer, original_query, is_urdu_query, sources, confidence_scores, domain_classification = generate_answer(query)
                 
-                # Format output to file
-                f_out.write(f"--- QUERY {i+1}/{len(queries)} ---\n")
+                f_out.write(f"{'='*80}\n")
+                f_out.write(f"QUERY {i+1}/{len(queries)}\n")
+                f_out.write(f"{'='*80}\n")
                 f_out.write(f"QUERY: {original_query}\n")
-                f_out.write(f"LANGUAGE: {'Urdu' if is_urdu_query else 'English'}\n")
-                f_out.write("-" * 20 + "\n")
+                f_out.write(f"LANGUAGE: {'Urdu' if is_urdu_query else 'English'}\n\n")
+                
+                # Write domain classification (NEW)
+                domain_emoji = DomainClassifier.get_domain_emoji(domain_classification['domain'])
+                f_out.write(f"{domain_emoji} DOMAIN CLASSIFICATION:\n")
+                f_out.write(f"{'-'*80}\n")
+                f_out.write(f"Classified Domain: {domain_classification['domain'].upper()}\n")
+                f_out.write(f"Classification Confidence: {domain_classification['confidence']:.2%}\n")
+                f_out.write(f"Similarity Scores:\n")
+                for domain, score in domain_classification['all_scores'].items():
+                    f_out.write(f"  - {domain}: {score:.4f}\n")
+                f_out.write(f"\n")
+                
                 f_out.write(f"ANSWER:\n{answer}\n\n")
                 
-                # Write sources used
-                f_out.write("SOURCES USED:\n")
+                # Write confidence scores (NEW)
+                f_out.write(f"CONFIDENCE SCORES:\n")
+                f_out.write(f"{'-'*80}\n")
+                f_out.write(f"Combined Confidence:        {confidence_scores.get('combined_confidence', 0):.4f} ⭐\n")
+                f_out.write(f"├─ Retrieval Confidence:    {confidence_scores.get('retrieval_confidence', 0):.4f}\n")
+                f_out.write(f"├─ Avg Token Confidence:    {confidence_scores.get('avg_token_confidence', 0):.4f}\n")
+                f_out.write(f"├─ Weighted Top-K:          {confidence_scores.get('weighted_top_k', 0):.4f}\n")
+                f_out.write(f"├─ Perplexity:              {confidence_scores.get('perplexity', 0):.4f}\n")
+                f_out.write(f"└─ Entropy Confidence:      {confidence_scores.get('entropy_confidence', 0):.4f}\n\n")
+                
+                combined = confidence_scores.get('combined_confidence', 0)
+                if combined >= 0.7:
+                    f_out.write("✅ High confidence - Answer is likely reliable\n")
+                elif combined >= 0.5:
+                    f_out.write("⚠️  Moderate confidence - Answer may need verification\n")
+                else:
+                    f_out.write("❌ Low confidence - Answer should be verified from sources\n")
+                
+                f_out.write(f"\nSOURCES USED:\n")
                 if sources:
                     for s in sources:
                         f_out.write(f" - [{s['category']}] {s['filename']} (Sim: {s['similarity']:.3f})\n")
                 else:
                     f_out.write(" - No relevant documents found.\n")
                 
-                f_out.write("\n" + "="*40 + "\n\n")
+                f_out.write(f"\n{'='*40}\n\n")
+                
+                print(f"  ✓ Domain: {domain_classification['domain']} | Confidence: {confidence_scores.get('combined_confidence', 0):.2f}")
 
         print(f"\n{'='*80}")
         print(f"✅ BATCH PROCESSING COMPLETE. Results written to {output_file}")
@@ -718,10 +1058,25 @@ def batch_query_file(input_file: str, output_file: str):
         print(f"❌ Error: Input file not found at {input_file}")
     except Exception as e:
         print(f"❌ An unexpected error occurred during batch processing: {e}")
+    finally:
+        os.environ['BATCH_MODE'] = 'False'
 
 # ============ Main ============
 if __name__ == "__main__":
     import sys
+    import atexit
+    
+    # Add cleanup handler for LLM
+    def cleanup_llm():
+        global _LLM_MODEL
+        if _LLM_MODEL is not None:
+            try:
+                _LLM_MODEL = None
+            except:
+                pass
+    
+    atexit.register(cleanup_llm)
+    
     DEFAULT_ZIP = "Al Khidmat Knowledge Base.zip"
     
     if len(sys.argv) > 1 and sys.argv[1] == "test":
@@ -737,7 +1092,6 @@ if __name__ == "__main__":
         query_alkhidmat_rag(q)
 
     elif len(sys.argv) > 1 and sys.argv[1] == "file_query":
-        # Batch Query mode
         input_file = sys.argv[2] if len(sys.argv) > 2 else "input_queries.txt"
         output_file = sys.argv[3] if len(sys.argv) > 3 else "output_answers.txt"
         batch_query_file(input_file, output_file)
@@ -746,22 +1100,23 @@ if __name__ == "__main__":
         show_statistics()
         
     else:
-        print("\n" + "="*60)
-        print("ALKHIDMAT RAG SYSTEM (SUPABASE EDITION)")
-        print("="*60)
+        print("\n" + "="*80)
+        print("ALKHIDMAT RAG SYSTEM (SUPABASE + LLAMA-CPP)")
+        print("WITH DOMAIN CLASSIFICATION & CONFIDENCE SCORING")
+        print("="*80)
         print("\nUSAGE:")
         print("1. Test Connection:")
-        print("   python RAG_supabase_client.py test")
+        print("   python RAG_supabase_enhanced.py test")
         
         print("\n2. Build Index (Upload to Supabase):")
-        print("   python RAG_supabase_client.py build [zip_path] [--clear]")
+        print("   python RAG_supabase_enhanced.py build [zip_path] [--clear]")
         
         print("\n3. Single Query (Terminal):")
-        print("   python RAG_supabase_client.py query 'your question'")
+        print("   python RAG_supabase_enhanced.py query 'your question'")
         
-        print("\n4. Batch Query (File I/O for Urdu):")
-        print("   python RAG_supabase_client.py file_query input.txt output.txt")
+        print("\n4. Batch Query (File I/O):")
+        print("   python RAG_supabase_enhanced.py file_query input.txt output.txt")
         
         print("\n5. View Stats:")
-        print("   python RAG_supabase_client.py stats")
-        print("\n" + "="*60)
+        print("   python RAG_supabase_enhanced.py stats")
+        print("\n" + "="*80)
