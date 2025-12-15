@@ -12,6 +12,7 @@ import os
 import re
 import json
 import time
+import sys
 from pathlib import Path
 from typing import List, Dict, Tuple, Any
 import uuid
@@ -71,10 +72,10 @@ class DomainClassifier:
     _embedding_model = None
     
     @staticmethod
-    def initialize_domain_embeddings(model_name: str = 'sentence-transformers/all-MiniLM-L6-v2'):
+    def initialize_domain_embeddings(model_name: str = None):
         """
         Pre-compute embeddings for all anchor queries and create domain centroids.
-        This is called once during initialization.
+        OPTIMIZED: Reuses main embedding model instead of loading a separate one.
         """
         if DomainClassifier._domain_embeddings_cache is not None:
             return
@@ -82,13 +83,20 @@ class DomainClassifier:
         if os.environ.get('BATCH_MODE') != 'True':
             print("\n🔄 Initializing domain embeddings from anchor queries...")
         
-        model = SentenceTransformer(model_name)
+        # OPTIMIZATION: Reuse the main embedding model instead of loading a new one
+        # This saves ~1-2 seconds on first query
+        # Get the embedder function from the module namespace (avoid circular import)
+        import sys
+        current_module = sys.modules[__name__]
+        model = current_module.get_embedder()  # Reuse main embedding model
         DomainClassifier._embedding_model = model
         
         domain_embeddings = {}
         
         for domain, queries in DOMAIN_ANCHOR_QUERIES.items():
-            embeddings = model.encode(queries, show_progress_bar=False)
+            # Use the same prefix format as query encoding for consistency
+            prefixed_queries = [f"query: {q}" for q in queries]
+            embeddings = model.encode(prefixed_queries, show_progress_bar=False, normalize_embeddings=True)
             centroid = np.mean(embeddings, axis=0)
             domain_embeddings[domain] = centroid
             
@@ -104,11 +112,14 @@ class DomainClassifier:
     def classify_domain(query: str) -> Dict[str, any]:
         """
         Classify query using embedding similarity to domain centroids.
+        OPTIMIZED: Reuses main embedding model.
         """
         if DomainClassifier._domain_embeddings_cache is None:
             DomainClassifier.initialize_domain_embeddings()
         
-        query_embedding = DomainClassifier._embedding_model.encode([query])[0]
+        # Use same prefix format as query encoding for consistency
+        query_prefixed = f"query: {query}"
+        query_embedding = DomainClassifier._embedding_model.encode([query_prefixed], normalize_embeddings=True)[0]
         
         similarities = {}
         for domain, centroid in DomainClassifier._domain_embeddings_cache.items():
@@ -327,10 +338,28 @@ def translate_urdu_to_english(text: str) -> str:
     except Exception:
         return text
 
-def translate_english_to_urdu(text: str) -> str:
+def translate_english_to_urdu(text: str, timeout: int = 10) -> str:
+    """
+    Translate English text to Urdu with timeout protection.
+    Returns original text if translation fails or times out.
+    Uses concurrent.futures for cross-platform timeout support.
+    """
     try:
-        return GoogleTranslator(source='en', target='ur').translate(text)
-    except Exception:
+        from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
+        
+        def _translate():
+            return GoogleTranslator(source='en', target='ur').translate(text)
+        
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(_translate)
+            try:
+                result = future.result(timeout=timeout)
+                return result if result else text
+            except FutureTimeoutError:
+                print(f"[WARNING] Translation timed out after {timeout}s. Returning original text.", flush=True)
+                return text
+    except Exception as e:
+        print(f"[WARNING] Translation failed: {e}. Returning original text.", flush=True)
         return text
 
 # ============ Query Analysis ============
@@ -542,13 +571,16 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
     """
     FIXED: Now properly extracts embeddings from Supabase for confidence scoring
     """
+    embed_start = time.time()
     embedder = get_embedder()
     query_prefixed = f"query: {query}"
     query_embedding = embedder.encode([query_prefixed], normalize_embeddings=True)[0]
+    print(f"[TIMING] Query embedding: {time.time() - embed_start:.2f}s", flush=True)
     
     supabase = get_supabase_client()
     
     try:
+        rpc_start = time.time()
         params = {
             'query_embedding': query_embedding.tolist(),
             'match_threshold': RELEVANCE_THRESHOLD,
@@ -561,14 +593,18 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
         # First, get the matches using RPC
         result = supabase.rpc('match_documents', params).execute()
         rows = result.data
+        print(f"[TIMING] Supabase RPC call: {time.time() - rpc_start:.2f}s", flush=True)
         
-        # FIXED: Now fetch full documents WITH embeddings using doc_ids
+        # OPTIMIZED: Only fetch embeddings if we have results
+        # The RPC already returns similarity and text, so we only need embeddings for confidence scoring
         if rows:
+            fetch_start = time.time()
             doc_ids = [row['doc_id'] for row in rows]
             
-            # Fetch full documents including embeddings
+            # OPTIMIZATION: Only fetch embeddings, not full documents (we already have text from RPC)
+            # This reduces data transfer and speeds up the query
             full_docs_result = supabase.table("documents").select(
-                "doc_id, chunk_text, category, filename, file_path, chunk_index, embedding"
+                "doc_id, embedding"  # Only fetch what we need
             ).in_("doc_id", doc_ids).execute()
             
             # Create a mapping for easy lookup
@@ -578,6 +614,7 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
             for row in rows:
                 if row['doc_id'] in doc_map:
                     row['embedding'] = doc_map[row['doc_id']]['embedding']
+            print(f"[TIMING] Fetch embeddings: {time.time() - fetch_start:.2f}s", flush=True)
         
     except Exception as e:
         print(f"⚠️  RPC function not available, using fallback method: {e}")
@@ -633,13 +670,14 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
                 print(f"⚠️  Error parsing embedding: {e}")
                 continue
     
-    print("\n" + "="*80)
-    print("RETRIEVAL FROM SUPABASE")
-    print(f"Retrieved {len(results)} relevant chunks (threshold: {RELEVANCE_THRESHOLD}):")
+    print("\n" + "="*80, flush=True)
+    print("RETRIEVAL FROM SUPABASE", flush=True)
+    print(f"Retrieved {len(results)} relevant chunks (threshold: {RELEVANCE_THRESHOLD}):", flush=True)
     for i, r in enumerate(results, 1):
-        print(f"{i}. [{r['category']}] {r['filename']} (similarity: {r['similarity']:.3f})")
-    print(f"📊 Document embeddings extracted: {len(doc_embeddings)}/{len(results)}")
-    print("="*80 + "\n")
+        print(f"{i}. [{r['category']}] {r['filename']} (similarity: {r['similarity']:.3f})", flush=True)
+    print(f"📊 Document embeddings extracted: {len(doc_embeddings)}/{len(results)}", flush=True)
+    print("="*80 + "\n", flush=True)
+    sys.stdout.flush()  # Force flush
     
     return results, query_embedding, doc_embeddings
 
@@ -731,17 +769,29 @@ def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400,
     """
     ENHANCED: Now includes domain classification and confidence scoring
     """
+    start_time = time.time()
+    print(f"[RAG] Processing query: {query[:50]}...", flush=True)
+    sys.stdout.flush()
+    
     query_info = analyze_query(query)
     is_urdu = query_info['is_urdu']
     original_query = query
     
-    # CLASSIFY DOMAIN (NEW)
+    # CLASSIFY DOMAIN (OPTIMIZED: Reuses embedding model)
+    domain_start = time.time()
+    print(f"[RAG] Classifying domain...", flush=True)
+    sys.stdout.flush()
     domain_classification = DomainClassifier.classify_domain(query)
+    print(f"[TIMING] Domain classification: {time.time() - domain_start:.2f}s", flush=True)
     
     # Retrieve with embeddings (ENHANCED)
+    retrieval_start = time.time()
+    print(f"[RAG] Retrieving from Supabase (top_k={top_k})...", flush=True)
+    sys.stdout.flush()
     results, query_embedding, doc_embeddings = retrieve_from_supabase(
         query, top_k=top_k, filter_category=filter_category
     )
+    print(f"[TIMING] Retrieval: {time.time() - retrieval_start:.2f}s", flush=True)
     
     if not results:
         no_answer = "معاف کیجیے، میں اس سوال کا جواب دینے کے لیے متعلقہ معلومات نہیں ڈھونڈ سکا۔" if is_urdu else "I apologize, but I couldn't find relevant information to answer this question."
@@ -822,14 +872,22 @@ Answer (ONLY the final answer, no labels):
 """
     
     # Generate with confidence data (ENHANCED)
+    llm_start = time.time()
+    print(f"[RAG] Generating answer with LLM...", flush=True)
+    sys.stdout.flush()
     answer, log_probs, token_probs_distributions = llm_generate(
         prompt, max_tokens=max_tokens, stop_tokens=["\nUser question:", "\nQuestion:", "\nUser question"]
     )
+    print(f"[TIMING] LLM generation: {time.time() - llm_start:.2f}s", flush=True)
     
     # Clean response
+    print(f"[RAG] Cleaning response...", flush=True)
+    sys.stdout.flush()
     answer = clean_llm_response(answer)
     
-    # CALCULATE CONFIDENCE SCORES (NEW)
+    # CALCULATE CONFIDENCE SCORES
+    print(f"[RAG] Calculating confidence scores...", flush=True)
+    sys.stdout.flush()
     retrieval_conf = ConfidenceScorer.calculate_retrieval_confidence(
         query_embedding=query_embedding,
         doc_embeddings=doc_embeddings,
@@ -842,9 +900,47 @@ Answer (ONLY the final answer, no labels):
         token_probs_distributions=token_probs_distributions
     )
     
+    # Print confidence scores
+    print("\n" + "="*80, flush=True)
+    print("CONFIDENCE SCORES:", flush=True)
+    print("="*80, flush=True)
+    combined_conf = confidence_scores.get('combined_confidence', 0) if isinstance(confidence_scores, dict) else 0
+    retrieval_conf_val = confidence_scores.get('retrieval_confidence', 0) if isinstance(confidence_scores, dict) else 0
+    avg_token_conf = confidence_scores.get('avg_token_confidence', 0) if isinstance(confidence_scores, dict) else 0
+    weighted_top_k = confidence_scores.get('weighted_top_k', 0) if isinstance(confidence_scores, dict) else 0
+    perplexity = confidence_scores.get('perplexity', 0) if isinstance(confidence_scores, dict) else 0
+    entropy_conf = confidence_scores.get('entropy_confidence', 0) if isinstance(confidence_scores, dict) else 0
+    
+    print(f"  Combined Confidence:        {combined_conf:.4f} ⭐", flush=True)
+    print(f"  ├─ Retrieval Confidence:    {retrieval_conf_val:.4f}", flush=True)
+    print(f"  ├─ Avg Token Confidence:    {avg_token_conf:.4f}", flush=True)
+    print(f"  ├─ Weighted Top-K:          {weighted_top_k:.4f}", flush=True)
+    print(f"  ├─ Perplexity:              {perplexity:.4f}", flush=True)
+    print(f"  └─ Entropy Confidence:      {entropy_conf:.4f}", flush=True)
+    print("="*80, flush=True)
+    
+    # Interpretation
+    if combined_conf >= 0.7:
+        print("✅ High confidence - Answer is likely reliable", flush=True)
+    elif combined_conf >= 0.5:
+        print("⚠️  Moderate confidence - Answer may need verification", flush=True)
+    else:
+        print("❌ Low confidence - Answer should be verified from sources", flush=True)
+    print("="*80 + "\n", flush=True)
+    sys.stdout.flush()
+    
     # Translate answer back to Urdu if needed
     if is_urdu:
-        answer = translate_english_to_urdu(answer)
+        translation_start = time.time()
+        print(f"[RAG] Translating answer to Urdu...", flush=True)
+        sys.stdout.flush()
+        try:
+            answer = translate_english_to_urdu(answer, timeout=15)  # 15 second timeout
+            print(f"[TIMING] Translation: {time.time() - translation_start:.2f}s", flush=True)
+        except Exception as e:
+            print(f"[WARNING] Translation failed: {e}. Using English answer.", flush=True)
+            # Keep the English answer if translation fails
+            print(f"[TIMING] Translation (failed): {time.time() - translation_start:.2f}s", flush=True)
     
     # Create sources list
     sources = [{
@@ -853,6 +949,11 @@ Answer (ONLY the final answer, no labels):
         "file_path": r['file_path'],
         "similarity": r['similarity']
     } for r in results]
+    
+    total_time = time.time() - start_time
+    print(f"[RAG] Answer generated successfully (length: {len(answer)} chars)", flush=True)
+    print(f"[TIMING] Total time: {total_time:.2f}s", flush=True)
+    sys.stdout.flush()
     
     return answer, original_query, is_urdu, sources, confidence_scores, domain_classification
 
