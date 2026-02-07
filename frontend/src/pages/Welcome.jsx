@@ -98,8 +98,8 @@ function Welcome({ onSelectUserType }) {
         <div className="text-center mt-12">
           <p className="text-sm text-gray-500">
             Need help? Contact support at{' '}
-            <a href="mailto:support@alkhidmat.org" className="text-blue-600 hover:text-blue-800">
-              support@alkhidmat.org
+            <a href="mailto:info@alkhidmat.org" className="text-blue-600 hover:text-blue-800">
+              info@alkhidmat.org
             </a>
           </p>
           </div>

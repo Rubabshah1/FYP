@@ -41,7 +41,7 @@ def init_supabase():
     """Initialize Supabase client. Returns True if successful, False otherwise."""
     try:
         if not SUPABASE_URL or not SUPABASE_KEY:
-            print("⚠️  WARNING: SUPABASE_URL and SUPABASE_KEY are not set.")
+            print("  WARNING: SUPABASE_URL and SUPABASE_KEY are not set.")
             print("   The application will fail when trying to access the database.")
             print("   Please set these environment variables:")
             print("   export SUPABASE_URL='https://xxxxx.supabase.co'")
@@ -49,10 +49,10 @@ def init_supabase():
             print("   Or create a .env file with these variables.")
             return False
         get_supabase_client()
-        print("✅ Supabase client initialized successfully")
+        print(" Supabase client initialized successfully")
         return True
     except Exception as e:
-        print(f"❌ Failed to initialize Supabase client: {e}")
+        print(f" Failed to initialize Supabase client: {e}")
         print("   Please check your Supabase credentials and try again.")
         return False
 

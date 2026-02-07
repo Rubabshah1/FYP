@@ -1,0 +1,190 @@
+[
+    {
+      "id": "Q01",
+      "question": "How can I donate to Alkhidmat Foundation for Gaza?",
+      "expected_answer": "You can donate via Meezan Bank account 02140100861151, by calling the cash pick-up number 0800-44448, in-person at Collection Centers, or online using debit/credit cards through their website alkhidmat.org/donate."
+    },
+    {
+      "id": "Q02",
+      "question": "Is Alkhidmat Foundation tax-exempt in Pakistan?",
+      "expected_answer": "Yes, Alkhidmat Foundation Pakistan is tax-exempt under FBR Act 2(36)c."
+    },
+    {
+      "id": "Q03",
+      "question": "Where is the head office of Alkhidmat Foundation located?",
+      "expected_answer": "The head office of Alkhidmat Foundation is located at 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan."
+    },
+    {
+      "id": "Q04",
+      "question": "How can I contact Alkhidmat Foundation for more information?",
+      "expected_answer": "You can contact them by phone at +92 42 3802 0222 or by email at info@alkhidmat.org."
+    },
+    {
+      "id": "Q05",
+      "question": "How can I get a donation receipt from Alkhidmat Foundation?",
+      "expected_answer": "You can get a donation receipt by sharing your transaction slip via WhatsApp at +923000776016."
+    },
+    {
+      "id": "Q06",
+      "question": "What online donation methods are available?",
+      "expected_answer": "You can donate online via debit/credit card on the website, online banking, bank transfer, JazzCash, EasyPaisa, or home collection."
+    },
+    {
+      "id": "Q07",
+      "question": "Can I donate internationally to Alkhidmat Foundation?",
+      "expected_answer": "Yes, you can donate from anywhere in the world using debit/credit cards through the Alkhidmat Foundation website."
+    },
+    {
+      "id": "Q08",
+      "question": "What emergency appeals does Alkhidmat Foundation currently have?",
+      "expected_answer": "Alkhidmat Foundation currently runs emergency appeals including Bano Qabil and the Palestine Emergency Appeal."
+    },
+    {
+      "id": "Q09",
+      "question": "What are the main focus areas of Alkhidmat Foundation?",
+      "expected_answer": "Alkhidmat Foundation focuses on humanitarian services including health, education, disaster relief, women philanthropy, and social welfare programs since 1990."
+    },
+    {
+      "id": "Q10",
+      "question": "How can I make a donation in-person?",
+      "expected_answer": "You can make an in-person donation at any of Alkhidmat Foundation's Collection Centers or directly at their head office in Lahore."
+    }
+    ,
+    {
+      "id": "Q11",
+      "question": "How can I donate to Alkhidmat Foundation for Palestine?",
+      "expected_answer": "For general donations, you can use Meezan Bank account 02140100861151 (IBAN: PK35MEZN0002140100861151). For Zakat, use Meezan Bank account 02140101095120 (IBAN: PK94MEZN0002140101095120). Both accounts are at Branch R1 Johar Town, Lahore, SWIFT code MEZNPKKA. You can also donate for Palestine through the same channels or via the Alkhidmat Foundation donation website."
+    },
+    {
+      "id": "Q12",
+      "question": "How can I donate to Alkhidmat Foundation from home?",
+      "expected_answer": "You can donate through cheques or bank drafts made out in favour of 'Alkhidmat Foundation Pakistan'. To have them picked up from your home, call 0800 44 44 8 or 0304 111 4 222 and a representative will collect them."
+    },
+    {
+      "id": "Q13",
+      "question": "Can I send my donation cheque by courier to Alkhidmat Foundation?",
+      "expected_answer": "Yes, you can send your cheque or bank draft by courier to Alkhidmat Complex, 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan."
+    },
+    {
+      "id": "Q14",
+      "question": "How can I make a general USD donation to Alkhidmat Foundation?",
+      "expected_answer": "For general USD donations, you can use Makramah Bank account 1994426252333135802 (IBAN: PK32SUMB9944293330135802) or Meezan Bank account 0100643642 (IBAN: PK40MEZN0002010100643642). Both banks are in Lahore, Pakistan with SWIFT codes SUMBPKKA and MEZNPKKA respectively."
+    },
+    {
+      "id": "Q15",
+      "question": "How can I donate Zakat in USD for Orphan/Aghosh, Community Services, or Bano Qabil?",
+      "expected_answer": "For USD Zakat donations, use Meezan Bank account 0100643642 (IBAN: PK40MEZN0002010100643642). You can donate for Orphan/Aghosh, Community Services, or Bano Qabil through this account. SWIFT code: MEZNPKKA."
+    },
+    {
+      "id": "Q16",
+      "question": "How can I donate USD for specific programs like Wash, Health, Education, Rebuild Palestine, or Alkhidmat Islamic Microfinance?",
+      "expected_answer": "For USD donations to these programs, use Makramah Bank account 1994426252333135802 (IBAN: PK32SUMB9944293330135802) or Meezan Bank account 0100643642 (IBAN: PK40MEZN0002010100643642). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan)."
+    },
+    {
+      "id": "Q17",
+      "question": "How can I make a general GBP donation to Alkhidmat Foundation?",
+      "expected_answer": "For general GBP donations, you can use Makramah Bank account 1994426253402135802 (IBAN: PK02SUMB994434020135802) or Meezan Bank account 0100644437 (IBAN: PK12MEZN0002010100644437). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan)."
+    },
+    {
+      "id": "Q18",
+      "question": "How can I donate GBP Zakat for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water?",
+      "expected_answer": "For GBP Zakat donations, use Meezan Bank account 0100644437 (IBAN: PK12MEZN0002010100644437) for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water programs. SWIFT code: MEZNPKKA."
+    },
+    {
+      "id": "Q19",
+      "question": "How can I donate GBP for specific programs like Health Collection, Education, Rebuild Palestine, or Alkhidmat Islamic Microfinance?",
+      "expected_answer": "For GBP donations to these programs, you can use Makramah Bank account 1994426253402135802 (IBAN: PK02SUMB994434020135802) or Meezan Bank account 0100644437 (IBAN: PK12MEZN0002010100644437). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan)."
+    },
+    {
+      "id": "Q20",
+      "question": "How can I make a general EURO donation to Alkhidmat Foundation?",
+      "expected_answer": "For general EURO donations, use Makramah Bank account 1994426254974135802 (IBAN: PK90SUMB9944319740135802) or Meezan Bank account 0100644443 (IBAN: PK44MEZN0002010100644443). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan)."
+    },
+    {
+      "id": "Q21",
+      "question": "How can I donate EURO Zakat for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water?",
+      "expected_answer": "For EURO Zakat donations, use Meezan Bank account 0100644437 (IBAN: PK44MEZN0002010100644443) for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water. SWIFT code: MEZNPKKA."
+    },
+    {
+      "id": "Q22",
+      "question": "How can I donate EURO for specific programs like Health Collection, Education, Rebuild Palestine, or Alkhidmat Islamic Microfinance?",
+      "expected_answer": "For EURO donations to these programs, use Makramah Bank account 1994426254974135802 (IBAN: PK90SUMB9944319740135802) or Meezan Bank account 0100644437 (IBAN: PK44MEZN0002010100644443). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan)."
+    },
+    {
+      "id": "Q23",
+      "question": "Do all international donations require SWIFT codes for bank transfers?",
+      "expected_answer": "Yes, all international donations in USD, GBP, or EURO require using the SWIFT code of the respective bank: SUMBPKKA for Makramah Bank and MEZNPKKA for Meezan Bank."
+    },
+    {
+      "id": "Q24",
+      "question": "How can I make a general PKR donation to Alkhidmat Foundation?",
+      "expected_answer": "For general PKR donations, you can use Bank of Punjab (Taqwa Islamic Banking) account 5310067845100016 (IBAN: PK19BPUN5310067845100016, SWIFT: BPUNPKKA) or other banks as listed on the Alkhidmat website."
+    },
+    {
+      "id": "Q25",
+      "question": "How can I donate PKR Zakat for Orphan Care, Community Services, or Bano Qabil?",
+      "expected_answer": "For PKR Zakat donations, you can use Meezan Bank account 0101098699, Bank Alfalah account 5527005002305295, Bank of Punjab account 5470067845100026, or Habib Metropolitan Bank account 6998129314714109745. SWIFT codes and IBANs are provided by each bank."
+    },
+    {
+      "id": "Q26",
+      "question": "How can I donate PKR for specific programs like Disaster Management, Health, Education, WASH, or Alkhidmat Islamic Microfinance?",
+      "expected_answer": "For PKR donations to these programs, use Soneri Bank account 20001287371 (Disaster Management), MCB Islamic Bank account 0651000583520002 or 0651000583520004 (Health/WASH), National Bank account 2132003312806715 (Education), Bank of Punjab account 5470067845100015, or Habib Metropolitan Bank account 6998129314714109745 (Alkhidmat Islamic Microfinance). SWIFT codes and IBANs are provided for each bank."
+    },
+    {
+      "id": "Q27",
+      "question": "Which bank accounts can I use to donate PKR Zakat for Health or Education programs?",
+      "expected_answer": "For PKR Zakat donations for Health, use MCB Islamic Bank account 0651000583520002. For Education, use National Bank of Pakistan account 2132003312806715 or Bank Islami Pakistan Limited account 0205215724660136. SWIFT codes and IBANs are provided for each."
+    },
+    {
+      "id": "Q28",
+      "question": "How can I donate PKR for Community Services in Alkhidmat Foundation?",
+      "expected_answer": "For PKR donations to Community Services, use Meezan Bank account 0101034665 or Bank Alfalah account 55275001586959. SWIFT codes: MEZNPKKA and ALFHPKKA527."
+    },
+    {
+      "id": "Q29",
+      "question": "Which accounts are used for Bano Qabil PKR donations and Zakat?",
+      "expected_answer": "For PKR donations to Bano Qabil, use Bank of Punjab account 5470067845100026 (Zakat) or Habib Metropolitan Bank account 6998129314714109745 (Donation). SWIFT codes: BPUNPKKA and MPBLPKKA."
+    },
+    {
+      "id": "Q30",
+      "question": "How can I donate PKR for WASH programs?",
+      "expected_answer": "For PKR donations to WASH, use MCB Islamic Bank account 0651000583520004. SWIFT code: MUCBPKKA."
+    },
+    {
+      "id": "Q31",
+      "question": "How can I donate PKR to Alkhidmat Islamic Microfinance programs?",
+      "expected_answer": "For PKR donations to Alkhidmat Islamic Microfinance, use Bank of Punjab account 5470067845100015 or Habib Metropolitan Bank account 6998129314714109745. SWIFT codes: BPUNPKKA and MPBLPKKA."
+    },
+    {
+      "id": "Q32",
+      "question": "Which account should I use for Tameer-e-Watan PKR donations?",
+      "expected_answer": "For Tameer-e-Watan PKR donations, use Meezan Bank account 0100644443. SWIFT code: MEZNPKKA."
+    },
+    {
+      "id": "Q33",
+      "question": "How can I donate PKR Zakat specifically for Orphan Care?",
+      "expected_answer": "For PKR Zakat for Orphan Care, use Meezan Bank account 0101098699 or Bank Alfalah account 5527005002305295. SWIFT codes: MEZNPKKA and ALFHPKKA."
+    },
+    {
+      "id": "Q34",
+      "question": "Who is the President of Alkhidmat Foundation Pakistan and what are his roles?",
+      "expected_answer": "Prof. Dr. Hafeez ur Rahman is the President of Alkhidmat Foundation Pakistan. He is also the Convener of Alkhidmat Global Committee and responsible for AHF Coordination."
+    },
+    {
+      "id": "Q35",
+      "question": "Who are the Vice Presidents of Alkhidmat Foundation Pakistan?",
+      "expected_answer": "The Vice Presidents of Alkhidmat Foundation Pakistan include Mr. M. Abdus Shakoor, Syed Ihsan Ullah Waqas, Dr. M. Mushtaq Ahmed Mangat, Mr. Aijaz Ullah Khan, Mr. Zikrullah Mujahid, Air Marshal (R) Farooq Habib, Mr. Abrar Ahmed Maggu, and A.M. (R) Arshad Mahmood Malik, Ms. Saima Shabbir."
+    },
+    {
+      "id": "Q36",
+      "question": "Who holds key administrative positions like Secretary General and Chief Executive Officers in Alkhidmat Foundation?",
+      "expected_answer": "Key administrative positions include Mr. Syed Waqas Jafri as Secretary General AKFP, Mr. Mirza Munawar Hussain as Secretary Finance AKFP, and Chief Executive Officers such as Mr. Shahid Iqbal (Bano Qabil Pakistan), Mr. Khubaib Bilal (AKFP), and Mr. Sufyan Ahmad Khan (AHF)."
+    },
+    {
+      "id": "Q37",
+      "question": "Who manages the Women Wing and Finance of Alkhidmat Foundation Pakistan?",
+      "expected_answer": "Ms. Samia Salman is the General Secretary of Women Wing Pakistan, and Mr. Ateeque Rasheed is the Group Chief Financial Officer."
+    }
+    
+  ]
+  

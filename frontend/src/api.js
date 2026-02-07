@@ -87,7 +87,16 @@ async function createChat() {
   });
   const data = await res.json();
   if (!res.ok) return Promise.reject({ status: res.status, data });
-  return data; // { session_id, db_session_id, user_id }
+  return data; // { session_id, db_session_id, user_id, chat_history }
+}
+
+async function getChatHistory(sessionId) {
+  const res = await fetch(`${BASE_URL}/chats/${sessionId}/history`, {
+    headers: getAuthHeaders()
+  });
+  const data = await res.json();
+  if (!res.ok) return Promise.reject({ status: res.status, data });
+  return data; // { session_id, messages }
 }
 
 async function sendChatMessage(sessionId, message) {
@@ -227,7 +236,7 @@ export default {
   // Authentication
   sendOTP, verifyOTP, agentLogin, adminLogin,
   // Chat
-  createChat, sendChatMessage,
+  createChat, sendChatMessage, getChatHistory,
   // Tickets
   createTicket, listTickets, getTicket, assignTicket, getTicketChat, sendAgentMessage, resolveTicket,
   // Admin
