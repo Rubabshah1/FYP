@@ -15,20 +15,23 @@ Environment variables:
 import asyncio
 import os
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Any, Dict, List
 from datetime import datetime
+import numpy as np
 
-from fastapi import FastAPI, HTTPException, Query, Depends, Header
+from fastapi import FastAPI, HTTPException, Query, Depends, Header, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import json
 
 from supabase_client import init_supabase
 from db_operations import (
     create_user, get_user_by_phone, get_user_by_id, generate_otp, verify_otp,
     create_session, get_session, update_session_activity,
-    create_query, create_response, create_ticket, get_ticket, list_tickets,
+    create_query, update_query_domain, create_response, create_ticket, get_ticket, list_tickets,
     assign_ticket, resolve_ticket, authenticate_agent, authenticate_admin,
-    get_ticket_analytics, get_agent, get_admin
+    get_ticket_analytics, get_agent, get_admin,
+    get_user_chat_history, get_session_chat_history
 )
 
 # Import RAG_supabase module
@@ -49,6 +52,109 @@ user_sessions: dict = {}  # {session_token: {"user_id": user_id, "db_session_id"
 agent_sessions: dict = {}  # {token: agent_id}
 admin_sessions: dict = {}  # {token: admin_id}
 
+# ============================================================================
+# HELPER FUNCTIONS
+# ============================================================================
+
+def convert_numpy_types(obj: Any) -> Any:
+    """Recursively convert numpy types to native Python types for JSON serialization."""
+    if isinstance(obj, (np.integer, np.floating)):
+        return obj.item()  # Convert numpy scalar to Python native type
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()  # Convert numpy array to list
+    elif isinstance(obj, dict):
+        return {key: convert_numpy_types(value) for key, value in obj.items()}
+    elif isinstance(obj, (list, tuple)):
+        return [convert_numpy_types(item) for item in obj]
+    else:
+        return obj
+
+# ============================================================================
+# WEBSOCKET CONNECTION MANAGER
+# ============================================================================
+
+class ConnectionManager:
+    def __init__(self):
+        # {session_id: [websocket1, websocket2, ...]} for users
+        # {agent_id: [websocket1, websocket2, ...]} for agents
+        self.user_connections: dict = {}
+        self.agent_connections: dict = {}
+    
+    async def connect_user(self, websocket: WebSocket, session_id: str):
+        await websocket.accept()
+        if session_id not in self.user_connections:
+            self.user_connections[session_id] = []
+        self.user_connections[session_id].append(websocket)
+        print(f"[WS] User connected: {session_id} (total: {len(self.user_connections[session_id])})")
+    
+    def disconnect_user(self, websocket: WebSocket, session_id: str):
+        if session_id in self.user_connections:
+            if websocket in self.user_connections[session_id]:
+                self.user_connections[session_id].remove(websocket)
+            if len(self.user_connections[session_id]) == 0:
+                del self.user_connections[session_id]
+        print(f"[WS] User disconnected: {session_id}")
+    
+    async def send_to_user(self, session_id: str, message: dict):
+        if session_id in self.user_connections:
+            disconnected = []
+            for websocket in self.user_connections[session_id]:
+                try:
+                    await websocket.send_json(message)
+                except Exception as e:
+                    print(f"[WS] Error sending to user {session_id}: {e}")
+                    disconnected.append(websocket)
+            
+            # Remove disconnected websockets
+            for ws in disconnected:
+                self.user_connections[session_id].remove(ws)
+    
+    async def connect_agent(self, websocket: WebSocket, agent_id: str):
+        await websocket.accept()
+        if agent_id not in self.agent_connections:
+            self.agent_connections[agent_id] = []
+        self.agent_connections[agent_id].append(websocket)
+        print(f"[WS] Agent connected: {agent_id} (total: {len(self.agent_connections[agent_id])})")
+    
+    def disconnect_agent(self, websocket: WebSocket, agent_id: str):
+        if agent_id in self.agent_connections:
+            if websocket in self.agent_connections[agent_id]:
+                self.agent_connections[agent_id].remove(websocket)
+            if len(self.agent_connections[agent_id]) == 0:
+                del self.agent_connections[agent_id]
+        print(f"[WS] Agent disconnected: {agent_id}")
+    
+    async def send_to_agent(self, agent_id: str, message: dict):
+        if agent_id in self.agent_connections:
+            disconnected = []
+            for websocket in self.agent_connections[agent_id]:
+                try:
+                    await websocket.send_json(message)
+                except Exception as e:
+                    print(f"[WS] Error sending to agent {agent_id}: {e}")
+                    disconnected.append(websocket)
+            
+            # Remove disconnected websockets
+            for ws in disconnected:
+                self.agent_connections[agent_id].remove(ws)
+    
+    async def broadcast_ticket_update(self, ticket_id: str, update_type: str, data: dict):
+        """Broadcast ticket updates to all connected agents"""
+        message = {
+            "type": "ticket_update",
+            "ticket_id": ticket_id,
+            "update_type": update_type,
+            "data": data
+        }
+        # Broadcast to all agents
+        for agent_id, connections in list(self.agent_connections.items()):
+            for websocket in connections:
+                try:
+                    await websocket.send_json(message)
+                except Exception as e:
+                    print(f"[WS] Error broadcasting to agent {agent_id}: {e}")
+
+manager = ConnectionManager()
 
 # ============================================================================
 # REQUEST MODELS
@@ -144,17 +250,17 @@ def _ensure_index_exists():
                 print(f"✓ Knowledge base found in Supabase ({doc_count} documents). Skipping rebuild.")
                 return
         else:
-            print("⚠️  Supabase client not initialized. Skipping knowledge base check.")
+            print("  Supabase client not initialized. Skipping knowledge base check.")
             return
     except Exception as e:
-        print(f"⚠️  Could not check Supabase documents: {e}")
+        print(f"  Could not check Supabase documents: {e}")
         print("   The server will start, but RAG queries may fail if the knowledge base is not built.")
         return
     
     # No documents found, need to build
-    print(f"⚠️  Knowledge base not found in Supabase. Building now...")
+    print(f" Knowledge base not found in Supabase. Building now...")
     if not Path(ZIP_PATH).exists():
-        print(f"❌ Error: ZIP file not found at {ZIP_PATH}")
+        print(f" Error: ZIP file not found at {ZIP_PATH}")
         print("   Please set ALKHIDMAT_ZIP_PATH environment variable or place the ZIP file in the expected location.")
         print("   The server will start, but RAG queries will fail until the knowledge base is built.")
         return
@@ -164,7 +270,7 @@ def _ensure_index_exists():
         rag_module.build_alkhidmat_rag(ZIP_PATH, clear_existing=False)
         print(f"✓ Knowledge base built successfully in Supabase")
     except Exception as e:
-        print(f"❌ Error building knowledge base: {e}")
+        print(f" Error building knowledge base: {e}")
         print("   The server will start, but RAG queries may fail until the knowledge base is built.")
 
 
@@ -182,7 +288,7 @@ async def _startup():
         DomainClassifier.initialize_domain_embeddings()
         print("[STARTUP] ✓ Domain embeddings ready", flush=True)
     except Exception as e:
-        print(f"[STARTUP] ⚠️  Could not pre-initialize domain embeddings: {e}", flush=True)
+        print(f"[STARTUP]   Could not pre-initialize domain embeddings: {e}", flush=True)
     
     # Pre-load embedding model to avoid delay on first query
     print("[STARTUP] Pre-loading embedding model...", flush=True)
@@ -191,7 +297,7 @@ async def _startup():
         get_embedder()
         print("[STARTUP] ✓ Embedding model ready", flush=True)
     except Exception as e:
-        print(f"[STARTUP] ⚠️  Could not pre-load embedding model: {e}", flush=True)
+        print(f"[STARTUP]   Could not pre-load embedding model: {e}", flush=True)
 
 
 @app.get("/health")
@@ -223,7 +329,7 @@ async def verify_otp_endpoint(req: OTPVerifyRequest):
     if not user:
         user = create_user(req.phone_number)
     
-    # Create session
+    # Create new session for this login
     session = create_session(user["id"])
     db_session_id = str(session["session_id"])
     
@@ -237,13 +343,17 @@ async def verify_otp_endpoint(req: OTPVerifyRequest):
         "db_session_id": session["session_id"]
     }
     
+    # Get all chat history for this user (across all sessions) - WhatsApp-like behavior
+    chat_history = get_user_chat_history(user["id"])
+    
     return {
         "session_id": session_token,  # This is now the database session_id (UUID)
         "user_id": str(user["id"]),
         "session": {
             "session_id": str(session["session_id"]),
             "started_at": session.get("started_at") or None
-        }
+        },
+        "chat_history": chat_history  # Include all previous messages
     }
 
 
@@ -350,7 +460,7 @@ def resolve_session_id(session_id: str) -> Tuple[Optional[str], Optional[str]]:
 
 @app.post("/chats")
 async def create_chat(session_token: Optional[str] = Header(None, alias="X-Session-ID")):
-    """Create a new chat session."""
+    """Create a new chat session and return chat history."""
     if not session_token:
         raise HTTPException(status_code=401, detail="Please login first. Session token required in X-Session-ID header.")
     
@@ -364,10 +474,38 @@ async def create_chat(session_token: Optional[str] = Header(None, alias="X-Sessi
     if not db_session:
         raise HTTPException(status_code=404, detail="Session not found")
     
+    user_id = db_session["user_id"]
+    
+    # Get all chat history for this user (across all sessions)
+    chat_history = get_user_chat_history(user_id)
+    
     return {
         "session_id": session_token,  # Return the token that was sent (could be UUID or old format)
         "db_session_id": str(db_session_id),
-        "user_id": str(db_session["user_id"])
+        "user_id": str(user_id),
+        "chat_history": chat_history  # Include all previous messages
+    }
+
+
+@app.get("/chats/{session_id}/history")
+async def get_chat_history(
+    session_id: str,
+    session_token: Optional[str] = Header(None, alias="X-Session-ID")
+):
+    """Get chat history for a session."""
+    session_to_resolve = session_token or session_id
+    
+    db_session_id, error_msg = resolve_session_id(session_to_resolve)
+    
+    if not db_session_id:
+        raise HTTPException(status_code=401, detail=error_msg or "Invalid or expired session. Please login again.")
+    
+    # Get chat history for this specific session
+    chat_history = get_session_chat_history(db_session_id)
+    
+    return {
+        "session_id": str(db_session_id),
+        "messages": chat_history
     }
 
 
@@ -398,18 +536,36 @@ async def chat(
     # Update session activity
     update_session_activity(db_session_id)
     
-    # Create query record
-    create_query(db_session_id, req.message)
+    # Create query record (domain will be updated after RAG processing)
+    query_record = create_query(db_session_id, req.message)
+    query_id = query_record["query_id"] if query_record else None
     
     # Check if user message requests human agent
     def is_human_agent_request(message: str) -> bool:
         """Detect if user message requests to connect with human agent."""
-        message_lower = message.lower().strip()
-        keywords = [
+        if not message:
+            return False
+        
+        # Clean message: remove trailing punctuation and normalize
+        message_clean = message.lower().strip()
+        # Remove trailing punctuation (., !, ?, ...)
+        while message_clean and message_clean[-1] in '.,!?…':
+            message_clean = message_clean[:-1].strip()
+        
+        # Core keywords that indicate agent request
+        core_keywords = [
             "connect me with human",
             "connect me with agent",
             "connect with human",
             "connect with agent",
+            "connect me to agent",
+            "connect me to human",
+            "connect to human",
+            "connect to agent",
+        ]
+        
+        # Additional keywords
+        keywords = core_keywords + [
             "human agent",
             "talk to human",
             "talk to agent",
@@ -432,8 +588,14 @@ async def chat(
             "let me speak to",
             "i need to talk to",
             "i need to speak to",
-            "connect to human",
-            "connect to agent",
+            "i want to connect with agent",
+            "i want to connect with human",
+            "i need to connect with agent",
+            "i need to connect with human",
+            "want to talk to agent",
+            "want to talk to human",
+            "want to speak to agent",
+            "want to speak to human",
             # Urdu keywords
             "human se baat",
             "agent se baat",
@@ -441,7 +603,31 @@ async def chat(
             "human ko connect",
             "agent ko connect",
         ]
-        return any(keyword in message_lower for keyword in keywords)
+        
+        # Check for matches
+        matched = any(keyword in message_clean for keyword in keywords)
+        
+        # Also check if message starts with common patterns (more lenient)
+        if not matched:
+            starts_with_patterns = [
+                "connect",
+                "i want",
+                "i need",
+                "can i",
+                "let me",
+            ]
+            contains_agent_keywords = ["agent", "human", "representative", "support"]
+            
+            if any(message_clean.startswith(pattern) for pattern in starts_with_patterns):
+                if any(keyword in message_clean for keyword in contains_agent_keywords):
+                    matched = True
+        
+        if matched:
+            print(f"[HUMAN-AGENT-DETECTION] ✅ Detected human agent request in message: '{message}' (cleaned: '{message_clean}')")
+        else:
+            print(f"[HUMAN-AGENT-DETECTION] ❌ No match for message: '{message}' (cleaned: '{message_clean}')")
+        
+        return matched
     
     try:
         # Check if user has an active ticket for this session
@@ -462,42 +648,86 @@ async def chat(
         
         # Check if user explicitly requested human agent
         user_requested_agent = is_human_agent_request(req.message)
+        print(f"[HUMAN-AGENT-CHECK] user_requested_agent={user_requested_agent}, has_active_ticket={has_active_ticket}")
         
-        # If user requested agent, create ticket immediately (before RAG processing)
-        if user_requested_agent and not has_active_ticket:
-            print(f"[HUMAN-AGENT-REQUEST] User requested human agent: '{req.message}'")
+        # If user requested agent, route immediately WITHOUT RAG processing
+        if user_requested_agent:
+            print(f"[HUMAN-AGENT-REQUEST] User requested human agent: '{req.message}' - Routing immediately, skipping RAG")
+            
+            # If there's already an active ticket, just inform user they're already connected
+            if has_active_ticket:
+                print(f"[HUMAN-AGENT-REQUEST] User already has active ticket - informing them")
+                return {
+                    "answer": "You are already connected with a human agent. They will respond shortly.",
+                    "sources": [],
+                    "agent_chat": True,
+                    "response_id": None,
+                    "confidence": 1.0,
+                    "ticket_id": None
+                }
+            
+            # Set domain to "general" for agent connection requests
+            # This ensures tickets are routed to general domain agents
+            query_domain = "general"
+            print(f"[HUMAN-AGENT-REQUEST] Setting domain to 'general' for agent connection request")
+            
+            # Update query with general domain
+            if query_id:
+                update_query_domain(query_id, query_domain)
+                print(f"[QUERY-DOMAIN] Updated query {query_id} with domain: {query_domain}")
+            
             # Create a placeholder response for the ticket
             placeholder_response = create_response(
                 db_session_id,
                 f"User requested to chat with human agent: {req.message}",
                 confidence=1.0,  # High confidence since it's an explicit request
-                domain=None
+                domain=query_domain
             )
-            # Create ticket immediately
-            ticket = create_ticket(placeholder_response["response_id"], domain=None)
+            # Create ticket immediately with domain for better routing
+            ticket = create_ticket(placeholder_response["response_id"], domain=query_domain)
             if ticket:
                 ticket_id = str(ticket.get("ticket_id"))
                 agent_assigned = ticket.get("agent_id")
                 status = ticket.get("status")
-                print(f"[HUMAN-AGENT-REQUEST] Created ticket {ticket_id} (status: {status})")
+                print(f"[HUMAN-AGENT-REQUEST] Created ticket {ticket_id} (status: {status}, domain: {query_domain})")
                 if agent_assigned:
                     print(f"[HUMAN-AGENT-REQUEST] Auto-assigned to agent {agent_assigned}")
                 
-                # Return early with agent chat response
+                # Return early with agent chat response - DO NOT PROCESS WITH RAG
                 return {
-                    "answer": "Your request has been sent to our support team. An agent will be with you shortly. Please wait for their response.",
+                    "answer": "I am connecting you with a human agent. They will respond shortly.",
                     "sources": [],
                     "agent_chat": True,
                     "response_id": str(placeholder_response["response_id"]),
                     "confidence": 1.0,
                     "ticket_id": ticket_id
                 }
+            else:
+                # If ticket creation failed, still return agent routing message
+                print(f"[HUMAN-AGENT-REQUEST] WARNING: Ticket creation failed, but user requested agent")
+                return {
+                    "answer": "I am connecting you with a human agent. They will respond shortly.",
+                    "sources": [],
+                    "agent_chat": True,
+                    "response_id": str(placeholder_response["response_id"]),
+                    "confidence": 1.0,
+                    "ticket_id": None
+                }
         
-        # Process with RAG
-        # generate_answer returns (answer, query, is_urdu, sources, confidence_scores, domain_classification)
-        answer, _, is_urdu, sources, confidence_scores, domain_classification = await asyncio.to_thread(
-            rag_module.generate_answer, req.message, top_k=5, filter_category=None
-        )
+        # Process with RAG (use Self-RAG if enabled)
+        use_selfrag = getattr(rag_module, 'SELFRAG_ENABLE', False)
+        if use_selfrag:
+            # generate_answer_selfrag returns (answer, original_query, input_lang, sources, confidence_scores, domain_classification, selfrag_metrics)
+            result = await asyncio.to_thread(
+                rag_module.generate_answer_selfrag, req.message, top_k=5, filter_category=None
+            )
+            answer, _, input_lang, sources, confidence_scores, domain_classification, selfrag_metrics = result
+            is_urdu = (input_lang == "ur" or input_lang == "roman_ur")
+        else:
+            # generate_answer returns (answer, query, is_urdu, sources, confidence_scores, domain_classification)
+            answer, _, is_urdu, sources, confidence_scores, domain_classification = await asyncio.to_thread(
+                rag_module.generate_answer, req.message, top_k=5, filter_category=None
+            )
         
         # Use confidence from RAG module (combined confidence score)
         confidence = None
@@ -512,6 +742,10 @@ async def chat(
             similarities = [s.get("similarity", 0.0) for s in sources if s.get("similarity") is not None]
             if similarities:
                 confidence = sum(similarities) / len(similarities)
+        
+        # Convert confidence to native Python float if it's a numpy type
+        if confidence is not None:
+            confidence = convert_numpy_types(confidence)
         
         # Use domain classification from RAG module
         query_domain = None
@@ -529,6 +763,15 @@ async def chat(
             if sources[0].get("category"):
                 query_domain = sources[0].get("category")
         
+        # Log domain classification for debugging
+        print(f"[DOMAIN-CLASSIFICATION] Domain classification result: {domain_classification}")
+        print(f"[DOMAIN-CLASSIFICATION] Extracted domain: '{query_domain}'")
+        
+        # Update query record with domain if it was determined
+        if query_id and query_domain:
+            update_query_domain(query_id, query_domain)
+            print(f"[QUERY-DOMAIN] Updated query {query_id} with domain: {query_domain}")
+        
         # Create response record with confidence
         response = create_response(
             db_session_id, 
@@ -539,9 +782,10 @@ async def chat(
         
         # Auto-create ticket if confidence is below threshold (0.5-0.6)
         # Note: user_requested_agent is already handled above with early return
-        CONFIDENCE_THRESHOLD = 0.55  # Configurable threshold
+        CONFIDENCE_THRESHOLD = 0.70  # Configurable threshold
         ticket_created = False
         ticket_id = None
+        final_answer = answer  # Default to original answer
         
         # Create ticket if confidence is low (user-requested agent already handled above)
         should_create_ticket = (
@@ -559,15 +803,44 @@ async def chat(
                 print(f"[AUTO-TICKET] Created ticket {ticket_id} for low confidence response (confidence: {confidence:.3f}, domain: {query_domain}, status: {status})")
                 if agent_assigned:
                     print(f"[AUTO-TICKET] Auto-assigned to agent {agent_assigned}")
+                
+                # Broadcast ticket creation to agents via WebSocket
+                try:
+                    await manager.broadcast_ticket_update(ticket_id, "created", {
+                        "ticket_id": ticket_id,
+                        "status": status,
+                        "agent_id": str(agent_assigned) if agent_assigned else None,
+                        "domain": query_domain
+                    })
+                except Exception as e:
+                    print(f"[WS] Error broadcasting ticket creation: {e}")
+                
+                # Replace answer with routing message when confidence is low
+                # Translate to Urdu if the user's query was in Urdu
+                routing_message_en = "I don't have enough information to answer this. I am routing you to a human agent."
+                if is_urdu:
+                    try:
+                        # Import translation function from RAG module
+                        from RAG_supabase import translate_english_to_urdu
+                        final_answer = translate_english_to_urdu(routing_message_en)
+                    except Exception as e:
+                        print(f"[WARNING] Failed to translate routing message to Urdu: {e}")
+                        final_answer = routing_message_en
+                else:
+                    final_answer = routing_message_en
         
-        return {
-            "answer": answer,
-            "sources": sources,
+        # Prepare response and convert all numpy types to native Python types
+        response_data = {
+            "answer": final_answer,
+            "sources": sources if not should_create_ticket else [],  # Don't show sources when routing to agent
             "agent_chat": ticket_created,  # True if ticket was created
             "response_id": str(response["response_id"]),
             "confidence": confidence,
             "ticket_id": ticket_id if ticket_created else None
         }
+        
+        # Convert all numpy types in the response for JSON serialization
+        return convert_numpy_types(response_data)
     except FileNotFoundError as e:
         print(f"[ERROR] FileNotFoundError in chat endpoint: {e}")
         import traceback
@@ -719,6 +992,17 @@ async def assign_ticket_endpoint(
     """Assign a ticket to the current agent."""
     if not assign_ticket(ticket_id, agent["agent_id"]):
         raise HTTPException(status_code=404, detail="Ticket not found")
+    
+    # Broadcast ticket assignment to all agents
+    try:
+        await manager.broadcast_ticket_update(ticket_id, "assigned", {
+            "ticket_id": ticket_id,
+            "status": "in_progress",
+            "agent_id": str(agent["agent_id"])
+        })
+    except Exception as e:
+        print(f"[WS] Error broadcasting ticket assignment: {e}")
+    
     return {"status": "assigned", "ticket_id": ticket_id, "agent_id": str(agent["agent_id"])}
 
 
@@ -730,6 +1014,16 @@ async def resolve_ticket_endpoint(
     """Mark a ticket as resolved."""
     if not resolve_ticket(ticket_id):
         raise HTTPException(status_code=404, detail="Ticket not found")
+    
+    # Broadcast ticket resolution to all agents
+    try:
+        await manager.broadcast_ticket_update(ticket_id, "resolved", {
+            "ticket_id": ticket_id,
+            "status": "resolved"
+        })
+    except Exception as e:
+        print(f"[WS] Error broadcasting ticket resolution: {e}")
+    
     return {"status": "resolved", "ticket_id": ticket_id}
 
 
@@ -760,9 +1054,63 @@ async def admin_list_tickets(
 
 @app.post("/tickets/{ticket_id}/message")
 async def send_agent_message(ticket_id: str, req: MessageRequest, agent: dict = Depends(get_current_agent)):
-    """Send a message in agent chat (legacy endpoint)."""
-    # TODO: Implement message storage in database
-    return {"status": "sent", "ticket_id": ticket_id}
+    """Send a message in agent chat. Stores message in database."""
+    from supabase_client import get_supabase_client
+    
+    # Get ticket to find the session
+    ticket = get_ticket(ticket_id)
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    
+    # Get session ID from ticket response
+    response = ticket.get("response")
+    if not response:
+        raise HTTPException(status_code=404, detail="Response not found for this ticket")
+    
+    # Handle both dict and list response formats
+    if isinstance(response, dict):
+        session_id = response.get("session_id")
+    elif isinstance(response, list) and len(response) > 0:
+        session_id = response[0].get("session_id")
+    else:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    if not session_id:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    # Store agent message as a response in the database
+    # Agent messages are stored as responses with sender='agent'
+    agent_response = create_response(
+        session_id,
+        req.message,
+        confidence=1.0,  # Agent messages have high confidence
+        domain=None  # Domain already set on ticket
+    )
+    
+    print(f"[AGENT-MESSAGE] Agent {agent.get('agent_id')} sent message to ticket {ticket_id}, stored as response {agent_response.get('response_id')}")
+    
+    # Broadcast message to user via WebSocket
+    try:
+        await manager.send_to_user(str(session_id), {
+            "type": "new_message",
+            "message": {
+                "role": "agent",
+                "sender": "agent",
+                "content": req.message,
+                "timestamp": datetime.now().isoformat(),
+                "response_id": str(agent_response.get("response_id"))
+            }
+        })
+        print(f"[WS] Broadcasted agent message to user session {session_id}")
+    except Exception as e:
+        print(f"[WS] Error broadcasting agent message: {e}")
+    
+    return {
+        "status": "sent",
+        "ticket_id": ticket_id,
+        "response_id": str(agent_response.get("response_id")),
+        "message": req.message
+    }
 
 
 @app.get("/tickets/{ticket_id}/chat")
@@ -787,6 +1135,13 @@ async def get_agent_chat_endpoint(ticket_id: str, agent: dict = Depends(get_curr
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
     
+    # Get ticket's initial response_id to identify RAG vs agent messages
+    ticket_response_id = None
+    if isinstance(ticket.get("response"), dict):
+        ticket_response_id = ticket.get("response").get("response_id")
+    elif isinstance(ticket.get("response"), list) and len(ticket.get("response")) > 0:
+        ticket_response_id = ticket.get("response")[0].get("response_id")
+    
     # Get queries and responses for the session
     supabase = get_supabase_client()
     queries_result = supabase.table("queries").select("*").eq("session_id", session_id).order("timestamp").execute()
@@ -798,9 +1153,38 @@ async def get_agent_chat_endpoint(ticket_id: str, agent: dict = Depends(get_curr
     # Combine queries and responses chronologically
     all_items = []
     for q in queries:
-        all_items.append({"type": "query", "content": q.get("content"), "timestamp": q.get("timestamp"), "sender": "user"})
+        all_items.append({
+            "type": "query",
+            "role": "user",
+            "sender": "user",
+            "content": q.get("content"),
+            "timestamp": q.get("timestamp"),
+            "query_id": str(q.get("query_id"))
+        })
+    
     for r in responses:
-        all_items.append({"type": "response", "content": r.get("content"), "timestamp": r.get("timestamp"), "sender": "agent"})
+        response_id = str(r.get("response_id"))
+        # Identify if this is the ticket's initial RAG response or an agent message
+        # Agent messages are responses created after ticket creation with confidence=1.0
+        # and are NOT the ticket's initial response
+        is_agent_message = (
+            ticket_response_id and 
+            response_id != str(ticket_response_id) and 
+            r.get("confidence") == 1.0
+        )
+        
+        sender = "agent" if is_agent_message else "assistant"
+        
+        all_items.append({
+            "type": "response",
+            "role": "assistant" if sender == "assistant" else "agent",
+            "sender": sender,
+            "content": r.get("content"),
+            "timestamp": r.get("timestamp"),
+            "response_id": response_id,
+            "confidence": r.get("confidence"),
+            "domain": r.get("domain")
+        })
     
     all_items.sort(key=lambda x: x.get("timestamp", ""))
     
@@ -808,3 +1192,63 @@ async def get_agent_chat_endpoint(ticket_id: str, agent: dict = Depends(get_curr
         "ticket_id": ticket_id,
         "messages": all_items
     }
+
+
+# ============================================================================
+# WEBSOCKET ENDPOINTS
+# ============================================================================
+
+@app.websocket("/ws/user/{session_id}")
+async def websocket_user_endpoint(websocket: WebSocket, session_id: str):
+    """WebSocket endpoint for user chat - receives real-time agent messages"""
+    # Verify session
+    db_session_id, error_msg = resolve_session_id(session_id)
+    if not db_session_id:
+        await websocket.close(code=1008, reason="Invalid session")
+        return
+    
+    await manager.connect_user(websocket, str(db_session_id))
+    
+    try:
+        while True:
+            # Keep connection alive and handle any incoming messages
+            data = await websocket.receive_text()
+            try:
+                message = json.loads(data)
+                if message.get("type") == "ping":
+                    await websocket.send_json({"type": "pong"})
+            except json.JSONDecodeError:
+                pass
+    except WebSocketDisconnect:
+        manager.disconnect_user(websocket, str(db_session_id))
+    except Exception as e:
+        print(f"[WS] Error in user websocket: {e}")
+        manager.disconnect_user(websocket, str(db_session_id))
+
+
+@app.websocket("/ws/agent/{agent_token}")
+async def websocket_agent_endpoint(websocket: WebSocket, agent_token: str):
+    """WebSocket endpoint for agent dashboard - receives real-time ticket updates"""
+    # Verify agent token
+    if agent_token not in agent_sessions:
+        await websocket.close(code=1008, reason="Invalid agent token")
+        return
+    
+    agent_id = agent_sessions[agent_token]
+    await manager.connect_agent(websocket, str(agent_id))
+    
+    try:
+        while True:
+            # Keep connection alive and handle any incoming messages
+            data = await websocket.receive_text()
+            try:
+                message = json.loads(data)
+                if message.get("type") == "ping":
+                    await websocket.send_json({"type": "pong"})
+            except json.JSONDecodeError:
+                pass
+    except WebSocketDisconnect:
+        manager.disconnect_agent(websocket, str(agent_id))
+    except Exception as e:
+        print(f"[WS] Error in agent websocket: {e}")
+        manager.disconnect_agent(websocket, str(agent_id))

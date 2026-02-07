@@ -1,37 +1,111 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import api from '@/api';
 import logo from '@/assets/images/alkhidmat.png';
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
+} from 'recharts';
+
+const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
 function AdminDashboard() {
   const [analytics, setAnalytics] = useState(null);
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('all'); // all, active, in_progress, resolved
-  const loadingRef = useRef(false); // Prevent concurrent requests
+  const [filter, setFilter] = useState('all');
+  const [timeRange, setTimeRange] = useState('daily'); // daily, monthly, yearly
+  const loadingRef = useRef(false);
+
+  // Check authentication on mount
+  useEffect(() => {
+    const adminToken = localStorage.getItem('admin_token');
+    if (!adminToken) {
+      console.error('No admin token found. Redirecting to login...');
+      window.location.hash = '#/admin/login';
+      return;
+    }
+  }, []);
 
   const loadData = useCallback(async () => {
-    if (loadingRef.current) return; // Skip if already loading
+    if (loadingRef.current) return;
     loadingRef.current = true;
     try {
+      const adminToken = localStorage.getItem('admin_token');
+      if (!adminToken) {
+        console.error('No admin token found');
+        window.location.hash = '#/admin/login';
+        return;
+      }
+
       const [analyticsData, ticketsData] = await Promise.all([
         api.getAnalytics(),
         api.adminListTickets(filter === 'all' ? null : filter)
       ]);
-      setAnalytics(analyticsData);
-      setTickets(ticketsData.tickets || []);
+      
+      console.log('[AdminDashboard] Analytics data received:', analyticsData);
+      console.log('[AdminDashboard] Tickets data received:', ticketsData);
+      
+      // Ensure analytics data has required fields
+      if (analyticsData) {
+        setAnalytics(analyticsData);
+      } else {
+        console.warn('[AdminDashboard] No analytics data received');
+        setAnalytics({
+          total_queries: 0,
+          total_rag_answered: 0,
+          total_human_answered: 0,
+          total_tickets: 0,
+          active_tickets: 0,
+          in_progress_tickets: 0,
+          resolved_tickets: 0,
+          queries_over_time: { daily: [], monthly: [], yearly: [] },
+          rag_vs_human: { rag_responses: 0, human_responses: 0, rag_percentage: 0, human_percentage: 0 }
+        });
+      }
+      setTickets(ticketsData?.tickets || []);
     } catch (err) {
       console.error('Failed to load data:', err);
+      console.error('Error details:', err.data || err.message);
+      // If 401, redirect to login
+      if (err.status === 401) {
+        localStorage.removeItem('admin_token');
+        localStorage.removeItem('admin_id');
+        window.location.hash = '#/admin/login';
+      } else {
+        // Set empty analytics on error
+        setAnalytics({
+          total_queries: 0,
+          total_rag_answered: 0,
+          total_human_answered: 0,
+          total_tickets: 0,
+          active_tickets: 0,
+          in_progress_tickets: 0,
+          resolved_tickets: 0,
+          queries_over_time: { daily: [], monthly: [], yearly: [] },
+          rag_vs_human: { rag_responses: 0, human_responses: 0, rag_percentage: 0, human_percentage: 0 }
+        });
+      }
     } finally {
       setLoading(false);
       loadingRef.current = false;
     }
   }, [filter]);
 
+  // Load data only once on mount and when filter changes
   useEffect(() => {
     loadData();
-    const interval = setInterval(loadData, 15000); // Reduced to 15 seconds (was 10)
-    return () => clearInterval(interval);
   }, [loadData]);
 
   function formatTime(seconds) {
@@ -50,13 +124,60 @@ function AdminDashboard() {
     window.location.reload();
   }
 
+  // Get time-based data based on selected range
+  function getTimeData() {
+    if (!analytics?.queries_over_time) return [];
+    const data = analytics.queries_over_time[timeRange] || [];
+    return data;
+  }
+
+  // Prepare RAG vs Human pie chart data
+  function getRagVsHumanData() {
+    if (!analytics?.rag_vs_human) return [];
+    return [
+      { name: 'RAG Answered', value: analytics.rag_vs_human.rag_responses || 0 },
+      { name: 'Human Answered', value: analytics.rag_vs_human.human_responses || 0 }
+    ];
+  }
+
+  // Check if admin is authenticated
+  useEffect(() => {
+    const adminToken = localStorage.getItem('admin_token');
+    if (!adminToken) {
+      console.warn('No admin token found. Redirecting to login...');
+      window.location.hash = '#/admin/login';
+    }
+  }, []);
+
   if (loading && !analytics) {
+    const adminToken = localStorage.getItem('admin_token');
+    if (!adminToken) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-gray-500 mb-4">Not authenticated. Redirecting to login...</div>
+            <button
+              onClick={() => {
+                window.location.hash = '#/admin/login';
+                window.location.reload();
+              }}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Go to Login
+            </button>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-gray-500">Loading...</div>
       </div>
     );
   }
+
+  const timeData = getTimeData();
+  const ragVsHumanData = getRagVsHumanData();
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -99,20 +220,133 @@ function AdminDashboard() {
         {analytics && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div className="bg-white rounded-lg shadow p-6">
-              <div className="text-sm text-gray-500 mb-1">Total Tickets</div>
-              <div className="text-3xl font-bold text-gray-800">{analytics.total_tickets}</div>
+              <div className="text-sm text-gray-500 mb-1">Total Queries</div>
+              <div className="text-3xl font-bold text-gray-800">{analytics.total_queries || 0}</div>
             </div>
             <div className="bg-white rounded-lg shadow p-6">
+              <div className="text-sm text-gray-500 mb-1">RAG Answered</div>
+              <div className="text-3xl font-bold text-blue-600">{analytics.total_rag_answered || 0}</div>
+              <div className="text-xs text-gray-500 mt-1">
+                {analytics.rag_vs_human?.rag_percentage || 0}% of total
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="text-sm text-gray-500 mb-1">Human Answered</div>
+              <div className="text-3xl font-bold text-green-600">{analytics.total_human_answered || 0}</div>
+              <div className="text-xs text-gray-500 mt-1">
+                {analytics.rag_vs_human?.human_percentage || 0}% of total
+              </div>
+            </div>
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="text-sm text-gray-500 mb-1">Total Tickets</div>
+              <div className="text-3xl font-bold text-gray-800">{analytics.total_tickets || 0}</div>
+            </div>
+          </div>
+        )}
+
+        {/* Charts Section */}
+        {analytics && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Queries Over Time Chart */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-800">Queries Over Time</h2>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setTimeRange('daily')}
+                    className={`px-3 py-1 text-sm rounded ${
+                      timeRange === 'daily' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'
+                    }`}
+                  >
+                    Daily
+                  </button>
+                  <button
+                    onClick={() => setTimeRange('monthly')}
+                    className={`px-3 py-1 text-sm rounded ${
+                      timeRange === 'monthly' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'
+                    }`}
+                  >
+                    Monthly
+                  </button>
+                  <button
+                    onClick={() => setTimeRange('yearly')}
+                    className={`px-3 py-1 text-sm rounded ${
+                      timeRange === 'yearly' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'
+                    }`}
+                  >
+                    Yearly
+                  </button>
+                </div>
+              </div>
+              {timeData.length > 0 ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={timeData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis 
+                      dataKey={timeRange === 'daily' ? 'date' : timeRange === 'monthly' ? 'month' : 'year'}
+                      tick={{ fontSize: 12 }}
+                    />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="total" stroke="#3B82F6" strokeWidth={2} name="Total Queries" />
+                    <Line type="monotone" dataKey="rag" stroke="#10B981" strokeWidth={2} name="RAG Answered" />
+                    <Line type="monotone" dataKey="human" stroke="#F59E0B" strokeWidth={2} name="Human Answered" />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-[300px] flex items-center justify-center text-gray-500">
+                  No data available
+                </div>
+              )}
+            </div>
+
+            {/* RAG vs Human Pie Chart */}
+            <div className="bg-white rounded-lg shadow p-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">RAG vs Human Agent</h2>
+              {ragVsHumanData.length > 0 && ragVsHumanData.some(d => d.value > 0) ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={ragVsHumanData}
+                      cx="50%"
+                      cy="50%"
+                      labelLine={false}
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(1)}%`}
+                      outerRadius={100}
+                      fill="#8884d8"
+                      dataKey="value"
+                    >
+                      {ragVsHumanData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-[300px] flex items-center justify-center text-gray-500">
+                  No data available
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Additional Stats */}
+        {analytics && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="bg-white rounded-lg shadow p-6">
               <div className="text-sm text-gray-500 mb-1">Active Tickets</div>
-              <div className="text-3xl font-bold text-yellow-600">{analytics.active_tickets}</div>
+              <div className="text-3xl font-bold text-yellow-600">{analytics.active_tickets || 0}</div>
             </div>
             <div className="bg-white rounded-lg shadow p-6">
               <div className="text-sm text-gray-500 mb-1">In Progress</div>
-              <div className="text-3xl font-bold text-blue-600">{analytics.in_progress_tickets}</div>
+              <div className="text-3xl font-bold text-blue-600">{analytics.in_progress_tickets || 0}</div>
             </div>
             <div className="bg-white rounded-lg shadow p-6">
               <div className="text-sm text-gray-500 mb-1">Resolved</div>
-              <div className="text-3xl font-bold text-green-600">{analytics.resolved_tickets}</div>
+              <div className="text-3xl font-bold text-green-600">{analytics.resolved_tickets || 0}</div>
             </div>
           </div>
         )}
@@ -127,6 +361,14 @@ function AdminDashboard() {
               </span>
               <span className="text-gray-500">Average Resolution Time</span>
             </div>
+            {analytics.rag_vs_human?.avg_rag_confidence && (
+              <div className="mt-4">
+                <span className="text-gray-500">Average RAG Confidence: </span>
+                <span className="text-lg font-semibold text-gray-800">
+                  {(analytics.rag_vs_human.avg_rag_confidence * 100).toFixed(1)}%
+                </span>
+              </div>
+            )}
           </div>
         )}
 
@@ -134,7 +376,19 @@ function AdminDashboard() {
         <div className="bg-white rounded-lg shadow">
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-gray-800">All Tickets</h2>
+              <div className="flex items-center gap-4">
+                <h2 className="text-xl font-semibold text-gray-800">All Tickets</h2>
+                <button
+                  onClick={() => loadData()}
+                  className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center gap-1"
+                  title="Refresh data"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  Refresh
+                </button>
+              </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setFilter('all')}
@@ -286,4 +540,3 @@ function AdminDashboard() {
 }
 
 export default AdminDashboard;
-

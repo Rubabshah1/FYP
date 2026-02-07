@@ -36,6 +36,10 @@ function UserLogin({ onLoginSuccess, onBack }) {
       // Store session
       localStorage.setItem('user_session_id', response.session_id);
       localStorage.setItem('user_id', response.user_id);
+      // Store chat history if available (for loading in Chatbot component)
+      if (response.chat_history) {
+        localStorage.setItem('user_chat_history', JSON.stringify(response.chat_history));
+      }
       onLoginSuccess(response);
     } catch (err) {
       setError(err.data?.detail || 'Invalid OTP');

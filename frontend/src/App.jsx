@@ -101,38 +101,25 @@ function App() {
         setView(null);
         window.location.hash = '';
       }} />;
-  }
-  function handleBackToWelcome() {
-    localStorage.removeItem('user_session_id');
-    localStorage.removeItem('user_id');
-    setIsAuthenticated(prev => ({ ...prev, user: false }));
-    setShowWelcome(true);
-    setView(null);
-    window.location.hash = '';
-  }
+    }
+    
+    function handleBackToWelcome() {
+      localStorage.removeItem('user_session_id');
+      localStorage.removeItem('user_id');
+      setIsAuthenticated(prev => ({ ...prev, user: false }));
+      setShowWelcome(true);
+      setView(null);
+      window.location.hash = '';
+    }
 
-  return (
-    <div className='flex flex-col min-h-full w-full max-w-3xl mx-auto px-4'>
-      <header className='sticky top-0 shrink-0 z-20 bg-white'>
-        <div className='flex flex-col h-full w-full gap-1 pt-4 pb-2'>
-          <div className='flex items-center justify-between'>
-            <div>
-              <a href='https://alkhidmat.org/donate?gad_source=1&gad_campaignid=19934168848&gclid=Cj0KCQiAuvTJBhCwARIsAL6DemiCjrKt8zDbFhWNbbhSpuEA02jjO3y3GQHNrb9xgQeiwKqE9IQVK8waAqZ-EALw_wcB' target='_blank'>
-                <img src={logo} className='w-32' alt='logo' />
-              </a>
-            </div>
-            <button
-              onClick={handleBackToWelcome}
-              className='text-sm text-gray-600 hover:text-gray-800 font-medium'
-            >
-              ← Back to Welcome
-            </button>
-          </div>
+    return (
+      <div className='flex flex-col h-screen w-full max-w-3xl mx-auto bg-white'>
+        {/* Chat area - full height with WhatsApp-style header inside Chatbot */}
+        <div className='flex-1 overflow-hidden'>
+          <Chatbot />
         </div>
-      </header>
-      <Chatbot />
-    </div>
-  );
+      </div>
+    );
   }
 
   // Agent view - requires login
