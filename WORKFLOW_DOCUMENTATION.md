@@ -641,13 +641,20 @@ The system now includes an **Agentic AI architecture** that regulates vector DB 
 - **Benefits**: Eliminates 30-60% of unnecessary embedding operations
 
 **2. Retriever Agent** (`RetrieverAgent`)
-- **Purpose**: Retrieves documents with automatic retry and query reformulation
+- **Purpose**: Retrieves documents with automatic retry, query reformulation, and general domain fallback
 - **Features**:
   - Checks average relevance after initial retrieval
+  - **General domain fallback**: If not enough relevant docs (< 2 docs with similarity ≥ 0.6 OR avg relevance < 0.6):
+    - Automatically retrieves from general domain
+    - Combines results (domain-specific prioritized, then general)
+    - Deduplicates by file_path + chunk_index
   - If relevance < threshold → Reformulates query automatically
   - Retries retrieval with reformulated query (max 2 attempts)
   - Uses embedding cache for reformulated queries
-- **Benefits**: Reduces missing-context hallucinations by improving retrieval quality
+- **Benefits**: 
+  - Reduces missing-context hallucinations by improving retrieval quality
+  - Better coverage: Finds relevant information even when domain-specific search is insufficient
+  - Improved answers: More context from general documents when needed
 
 **3. Evidence Coverage Agent** (`EvidenceCoverageAgent`)
 - **Purpose**: Verifies claim-by-claim that answers are supported by evidence
@@ -659,12 +666,19 @@ The system now includes an **Agentic AI architecture** that regulates vector DB 
 - **Features**:
   - **Compound Claim Splitting**: Breaks down complex sentences like "X provides A, B, and C" into separate claims
   - **Multi-Document Support**: Allows claims to be supported by information across multiple documents
-  - **Summary Mode**: Relaxes strictness for general/about/introduction queries (70% threshold vs 80%)
+  - **Summary Mode**: Relaxes strictness for general/about/introduction queries (50% threshold vs 40% for normal)
   - **Smart Subject Inference**: Automatically adds subject to split claims for grammatical correctness
+  - **Lenient Thresholds**: Reduced false rejections while still filtering unsupported claims
+    - Normal mode: 40% coverage threshold (was 60%)
+    - Summary mode: 30% coverage threshold (was 50%)
+    - Overall coverage: 40% for normal, 50% for summary (was 70%)
+  - **Partial Credit**: Claims with 30%+ keyword overlap get partial support (0.4 confidence)
+  - **Default Confidence**: Increased from 0.5 to 0.6 when unclear
 - **Benefits**: 
   - Prevents hallucinations like "Alkhidmat also offers X, Y, Z" when only X is documented
   - Handles multi-document summaries correctly (e.g., "About us" queries spanning multiple sources)
   - More accurate for overview/summary queries that naturally synthesize information
+  - Significantly reduced false rejections while still filtering completely unsupported claims
 
 **4. Conversation Memory Agent** (`ConversationMemoryAgent`)
 - **Purpose**: Manages conversation state for follow-up queries
@@ -697,8 +711,9 @@ Embedding Cache Check
    └─ Cache Miss → Generate & cache embedding
         ↓
 Retriever Agent
-   ├─ Initial Retrieval
+   ├─ Initial Retrieval (domain-specific)
    ├─ Relevance Check
+   ├─ Not Enough Relevant Docs? → Fallback to General Domain → Combine Results
    ├─ Low Relevance? → Reformulate Query → Retry Retrieval
    └─ High Relevance → Continue
         ↓
@@ -1804,27 +1819,42 @@ VITE_API_URL=http://localhost:8000
 ### Evidence Coverage Agent Enhancements (2024)
 - **Fixed**: Compound claim splitting - Now properly splits sentences like "X provides A, B, and C" into atomic claims
 - **Fixed**: Multi-document support - Claims can now be supported by information across multiple documents
-- **Added**: Summary mode - Relaxes strictness (70% threshold) for general/about/introduction queries
+- **Added**: Summary mode - Relaxes strictness (50% threshold) for general/about/introduction queries
 - **Added**: Smart subject inference - Automatically adds subject to split claims for grammatical correctness
+- **Enhanced**: More lenient thresholds to reduce false rejections
+  - Normal mode: 40% coverage threshold (was 60%)
+  - Summary mode: 30% coverage threshold (was 50%)
+  - Overall coverage: 40% for normal, 50% for summary (was 70%)
+  - Partial credit: Claims with 30%+ keyword overlap get partial support (0.4 confidence)
+  - Default confidence: Increased from 0.5 to 0.6 when unclear
 - **Benefits**: 
   - Correctly handles multi-document summaries (e.g., "What is Alkhidmat Foundation?")
   - Prevents false rejections of valid overview answers
   - More accurate claim-by-claim verification for complex answers
+  - Significantly reduced false rejections while still filtering unsupported claims
 
 ### Incremental Knowledge Base Updates (2024)
 - **Added**: Incremental document addition - Only processes new documents when updating KB
 - **Added**: Document existence checking - Checks if document already exists before processing
 - **Added**: Single file addition - `add_single_file_incremental()` for adding individual documents
 - **Added**: ZIP incremental mode - `add_documents_from_zip_incremental()` processes only new docs from ZIP
+- **Added**: Optimized document loading - Checks existence BEFORE extracting text (saves PDF/DOCX processing time)
+- **Added**: Weekly KB update check - Only checks for new documents once per week instead of every startup
+  - Uses timestamp file (`.kb_last_check.json`) to track last check
+  - Checks every 7 days automatically
+  - Significantly faster server startup times
 - **Benefits**:
   - **Massive time savings**: Only creates embeddings for new documents (not entire KB)
   - **Cost efficient**: Reduces compute costs for KB updates
   - **Faster updates**: KB can be updated in seconds/minutes instead of hours
   - **Automatic deduplication**: Skips existing documents automatically
+  - **Faster startup**: No document scanning on most server restarts (weekly schedule)
+  - **Optimized extraction**: Skips expensive PDF/DOCX text extraction for existing documents
 - **Usage**:
   - Default mode: `build_alkhidmat_rag(zip_path, incremental=True)` - Only adds new docs
   - Full rebuild: `build_alkhidmat_rag(zip_path, clear_existing=True)` - Rebuilds everything
   - Single file: `add_single_file_incremental(file_path, content, category)` - Add one document
+  - Weekly check: Automatic on server startup (only if 7+ days since last check)
 
 ### Multi-Format Document Support (2024)
 - **Added**: PDF support - Extracts text from PDF files using PyPDF2
@@ -1842,9 +1872,32 @@ VITE_API_URL=http://localhost:8000
   - `PyPDF2>=3.0.0` for PDF processing
   - `python-docx>=1.1.0` for DOCX processing
 - **Note**: Files are processed from ZIP archives, maintaining the same folder structure (Category/filename.ext)
+- **macOS Metadata Filtering**: Automatically skips `__MACOSX` directories and `._` files (resource forks)
+
+### Domain-Specific Retrieval with General Domain Fallback (2024)
+- **Added**: Automatic fallback to general domain when domain-specific queries don't find enough relevant documents
+- **How it works**:
+  1. Initial retrieval from domain-specific category (e.g., "donation", "healthcare")
+  2. Relevance check: Evaluates if results meet quality thresholds:
+     - At least 2 documents with similarity ≥ 0.6
+     - Average relevance ≥ 0.6
+  3. Fallback trigger: If thresholds aren't met and query is domain-specific:
+     - Automatically retrieves from general domain
+     - Combines results (domain-specific prioritized, then general)
+     - Deduplicates by file_path + chunk_index
+     - Sorts by similarity and limits to top_k
+  4. Edge case handling: If no results found initially → checks general domain
+- **Benefits**:
+  - **Better coverage**: Finds relevant information even when domain-specific search is insufficient
+  - **Improved answers**: More context from general documents when needed
+  - **Smart prioritization**: Domain-specific results ranked higher in combined results
+  - **No duplicates**: Automatic deduplication prevents redundant chunks
+- **Configuration**:
+  - `MIN_RELEVANT_DOCS = 2` - Minimum number of relevant documents needed
+  - `MIN_AVG_RELEVANCE = 0.6` - Minimum average relevance threshold
 
 ---
 
 **Last Updated**: December 2024
-**Version**: 2.0 (with Self-RAG and Enhanced Multilingual Support)
+**Version**: 2.1 (with Weekly KB Updates, General Domain Fallback, and Lenient Evidence Coverage)
 
