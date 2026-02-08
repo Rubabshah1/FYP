@@ -6,3 +6,8 @@ alkhidmat_index/
 env.txt
 venv/
 venvpython/
+.DS_Store
+Al Khidmat Knowledge Base/
+
+# KB update check timestamp (local state)
+.kb_last_check.json

@@ -14,9 +14,10 @@ Environment variables:
 
 import asyncio
 import os
+import json
 from pathlib import Path
 from typing import Optional, Tuple, Any, Dict, List
-from datetime import datetime
+from datetime import datetime, timedelta
 import numpy as np
 
 from fastapi import FastAPI, HTTPException, Query, Depends, Header, WebSocket, WebSocketDisconnect
@@ -235,9 +236,55 @@ def get_current_admin(token: str = Header(..., alias="X-Admin-Token")):
 # STARTUP
 # ============================================================================
 
+def _should_check_for_updates() -> bool:
+    """
+    Check if it's time to check for KB updates (weekly basis).
+    Returns True if a week has passed since last check, False otherwise.
+    """
+    timestamp_file = Path(".kb_last_check.json")
+    check_interval_days = 7  # Weekly check
+    
+    if not timestamp_file.exists():
+        # First time - create timestamp file and return True
+        timestamp_file.write_text(json.dumps({
+            "last_check": datetime.now().isoformat()
+        }))
+        return True
+    
+    try:
+        data = json.loads(timestamp_file.read_text())
+        last_check_str = data.get("last_check")
+        if not last_check_str:
+            return True
+        
+        last_check = datetime.fromisoformat(last_check_str)
+        days_since_check = (datetime.now() - last_check).days
+        
+        if days_since_check >= check_interval_days:
+            # Update timestamp
+            timestamp_file.write_text(json.dumps({
+                "last_check": datetime.now().isoformat()
+            }))
+            return True
+        else:
+            days_remaining = check_interval_days - days_since_check
+            print(f"  KB update check skipped (last checked {days_since_check} day(s) ago, next check in {days_remaining} day(s))")
+            return False
+    except Exception as e:
+        print(f"  ⚠️ Error reading KB check timestamp: {e}")
+        # On error, allow check to proceed
+        return True
+
 def _ensure_index_exists():
-    """Check if knowledge base exists in Supabase, build if missing."""
+    """Check if knowledge base exists in Supabase, build if missing, update incrementally if exists."""
     from supabase_client import get_supabase_client
+    
+    # Check if ZIP file exists
+    if not Path(ZIP_PATH).exists():
+        print(f"  ZIP file not found at {ZIP_PATH}")
+        print("   Please set ALKHIDMAT_ZIP_PATH environment variable or place the ZIP file in the expected location.")
+        print("   The server will start, but RAG queries will fail until the knowledge base is built.")
+        return
     
     try:
         # Check if documents exist in Supabase
@@ -247,7 +294,25 @@ def _ensure_index_exists():
             doc_count = result.count if hasattr(result, 'count') else len(result.data) if result.data else 0
             
             if doc_count > 0:
-                print(f"✓ Knowledge base found in Supabase ({doc_count} documents). Skipping rebuild.")
+                print(f"✓ Knowledge base found in Supabase ({doc_count} documents).")
+                
+                # Only check for updates on a weekly basis
+                if _should_check_for_updates():
+                    print(f"  Checking for new documents in ZIP file (weekly check)...")
+                    # Run incremental update to add any new documents
+                    try:
+                        stats = rag_module.add_documents_from_zip_incremental(ZIP_PATH, reindex_existing=False)
+                        if stats["added"] > 0:
+                            print(f"✓ Added {stats['added']} new document(s) to knowledge base")
+                        if stats["skipped"] > 0:
+                            print(f"  Skipped {stats['skipped']} existing document(s)")
+                        if stats["failed"] > 0:
+                            print(f"⚠️ Failed to add {stats['failed']} document(s)")
+                    except Exception as e:
+                        print(f"⚠️ Error during incremental update: {e}")
+                        print("   Knowledge base exists, but new documents may not have been added.")
+                else:
+                    print(f"  KB update check skipped (weekly schedule)")
                 return
         else:
             print("  Supabase client not initialized. Skipping knowledge base check.")
@@ -257,21 +322,20 @@ def _ensure_index_exists():
         print("   The server will start, but RAG queries may fail if the knowledge base is not built.")
         return
     
-    # No documents found, need to build
-    print(f" Knowledge base not found in Supabase. Building now...")
-    if not Path(ZIP_PATH).exists():
-        print(f" Error: ZIP file not found at {ZIP_PATH}")
-        print("   Please set ALKHIDMAT_ZIP_PATH environment variable or place the ZIP file in the expected location.")
-        print("   The server will start, but RAG queries will fail until the knowledge base is built.")
-        return
-    
+    # No documents found, need to build from scratch
+    print(f"  Knowledge base not found in Supabase. Building now...")
     try:
-        # RAG_supabase.build_alkhidmat_rag takes (zip_path, clear_existing=False)
-        rag_module.build_alkhidmat_rag(ZIP_PATH, clear_existing=False)
+        # Build from scratch (not incremental since there's nothing to increment)
+        rag_module.build_alkhidmat_rag(ZIP_PATH, clear_existing=False, incremental=False)
         print(f"✓ Knowledge base built successfully in Supabase")
+        # Update timestamp after initial build
+        timestamp_file = Path(".kb_last_check.json")
+        timestamp_file.write_text(json.dumps({
+            "last_check": datetime.now().isoformat()
+        }))
     except Exception as e:
-        print(f" Error building knowledge base: {e}")
-        print("   The server will start, but RAG queries may fail until the knowledge base is built.")
+        print(f"  Error building knowledge base: {e}")
+        print("   The server will start, but RAG queries will fail until the knowledge base is built.")
 
 
 @app.on_event("startup")
@@ -718,8 +782,9 @@ async def chat(
         use_selfrag = getattr(rag_module, 'SELFRAG_ENABLE', False)
         if use_selfrag:
             # generate_answer_selfrag returns (answer, original_query, input_lang, sources, confidence_scores, domain_classification, selfrag_metrics)
+            # Pass session_id for conversation memory
             result = await asyncio.to_thread(
-                rag_module.generate_answer_selfrag, req.message, top_k=5, filter_category=None
+                rag_module.generate_answer_selfrag, req.message, top_k=5, filter_category=None, session_id=str(db_session_id)
             )
             answer, _, input_lang, sources, confidence_scores, domain_classification, selfrag_metrics = result
             is_urdu = (input_lang == "ur" or input_lang == "roman_ur")
@@ -1046,6 +1111,40 @@ async def admin_list_tickets(
     """List all tickets (for admin)."""
     tickets = list_tickets(status=status)
     return {"tickets": tickets}
+
+
+@app.post("/admin/kb/update")
+async def update_knowledge_base(
+    reindex_existing: bool = Query(False, description="Re-index existing documents"),
+    admin: dict = Depends(get_current_admin)
+):
+    """
+    Manually trigger incremental knowledge base update.
+    Processes new documents from the ZIP file.
+    """
+    if not Path(ZIP_PATH).exists():
+        raise HTTPException(
+            status_code=404,
+            detail=f"ZIP file not found at {ZIP_PATH}. Set ALKHIDMAT_ZIP_PATH environment variable."
+        )
+    
+    try:
+        stats = await asyncio.to_thread(
+            rag_module.add_documents_from_zip_incremental,
+            ZIP_PATH,
+            reindex_existing=reindex_existing
+        )
+        
+        return {
+            "status": "success",
+            "message": "Knowledge base update completed",
+            "stats": stats
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error updating knowledge base: {str(e)}"
+        )
 
 
 # ============================================================================
