@@ -87,6 +87,12 @@ rich>=13.7.0
 colorama>=0.4.6
 
 # ============================================================================
+# OCR (IMAGE → TEXT)
+# ============================================================================
+pillow>=10.2.0         # for image handling
+pytesseract>=0.3.12    # Tesseract OCR wrapper
+
+# ============================================================================
 # LEGACY/UNUSED (Kept for compatibility, but not actively used)
 # ============================================================================
 # Vector Database (Not used - using Supabase instead)
