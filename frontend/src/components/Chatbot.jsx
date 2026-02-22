@@ -193,106 +193,244 @@ function Chatbot() {
     }
   }
 
-  async function submitNewMessage() {
-    const trimmedMessage = newMessage.trim();
-    if (!trimmedMessage || isLoading || !sessionId) return;
+  // async function submitNewMessage() {
+  //   const trimmedMessage = newMessage.trim();
+  //   if (!trimmedMessage || isLoading || !sessionId) return;
 
-    // Clear input immediately for better UX
+  //   // Clear input immediately for better UX
+  //   setNewMessage('');
+    
+  //   // Create unique IDs for tracking messages
+  //   const userMessageId = `user-${Date.now()}-${Math.random()}`;
+  //   const assistantMessageId = `assistant-${Date.now()}-${Math.random()}`;
+    
+  //   // Add user message immediately (optimistic update)
+  //   const userMessage = { 
+  //     id: userMessageId,
+  //     role: 'user', 
+  //     content: trimmedMessage, 
+  //     timestamp: new Date().toISOString() 
+  //   };
+    
+  //   // Add loading assistant message immediately
+  //   const loadingAssistantMessage = { 
+  //     id: assistantMessageId,
+  //     role: 'assistant', 
+  //     content: '', 
+  //     sources: [], 
+  //     loading: true, 
+  //     timestamp: new Date().toISOString() 
+  //   };
+    
+  //   // Add both messages at once
+  //   setMessages(draft => [...draft, userMessage, loadingAssistantMessage]);
+
+  //   try {
+  //     const { answer = '', sources = [], agent_chat = false, ticket_id } = await api.sendChatMessage(sessionId, trimmedMessage);
+      
+  //     if (agent_chat) {
+  //       setIsAgentChat(true);
+  //       if (ticket_id) {
+  //         setTicketId(ticket_id);
+  //       }
+  //     }
+      
+  //     // Update the assistant message by ID (more reliable than index)
+  //     setMessages(draft => {
+  //       const assistantIndex = draft.findIndex(msg => msg.id === assistantMessageId);
+  //       if (assistantIndex !== -1) {
+  //         draft[assistantIndex].content = answer;
+  //         draft[assistantIndex].sources = sources || [];
+  //         draft[assistantIndex].loading = false;
+  //         draft[assistantIndex].error = false;
+  //         draft[assistantIndex].timestamp = new Date().toISOString();
+  //         // Ensure role is correct
+  //         draft[assistantIndex].role = 'assistant';
+  //       }
+  //     });
+      
+  //     // Update message count after sending
+  //     setMessages(current => {
+  //       lastMessageCountRef.current = current.length;
+  //       return current;
+  //     });
+  //   } catch (err) {
+  //     console.log('Chat error:', err);
+      
+  //     // Handle 401 Unauthorized - session expired or invalid
+  //     if (err.status === 401) {
+  //       // Clear old session
+  //       localStorage.removeItem('user_session_id');
+  //       localStorage.removeItem('user_id');
+  //       setSessionId(null);
+        
+  //       // Show error message
+  //       setMessages(draft => {
+  //         const assistantIndex = draft.findIndex(msg => msg.id === assistantMessageId);
+  //         if (assistantIndex !== -1) {
+  //           draft[assistantIndex].loading = false;
+  //           draft[assistantIndex].error = true;
+  //           draft[assistantIndex].content = err.data?.detail || 'Session expired. Please login again.';
+  //           draft[assistantIndex].role = 'assistant';
+  //         }
+  //       });
+        
+  //       // Optionally redirect to login page after a delay
+  //       setTimeout(() => {
+  //         window.location.hash = '#/user';
+  //         window.location.reload();
+  //       }, 2000);
+  //     } else {
+  //       setMessages(draft => {
+  //         const assistantIndex = draft.findIndex(msg => msg.id === assistantMessageId);
+  //         if (assistantIndex !== -1) {
+  //           draft[assistantIndex].loading = false;
+  //           draft[assistantIndex].error = true;
+  //           draft[assistantIndex].content = 'Failed to get response. Please try again.';
+  //           draft[assistantIndex].role = 'assistant';
+  //         }
+  //       });
+  //     }
+  //   }
+  // }
+// replace submit new message , new
+async function submitNewMessage(messageOrFormData) {
+  // Detect if it's FormData or plain string
+  const isFormData = messageOrFormData instanceof FormData;
+  
+  let trimmedMessage;
+  if (isFormData) {
+    trimmedMessage = messageOrFormData.get('message')?.trim() || '';
+  } else {
+    trimmedMessage = messageOrFormData?.trim() || '';
+  }
+  
+  console.log('📤 submitNewMessage:', { isFormData, trimmedMessage, hasImage: isFormData && messageOrFormData.get('image') !== null });
+  
+  // Validation
+  if (!trimmedMessage && !isFormData) {
+    console.log('❌ Empty message');
+    return;
+  }
+  if (isLoading || !sessionId) {
+    console.log('❌ Cannot send:', { isLoading, sessionId });
+    return;
+  }
+
+  // Clear input immediately for better UX (only for text-only)
+  if (!isFormData) {
     setNewMessage('');
-    
-    // Create unique IDs for tracking messages
-    const userMessageId = `user-${Date.now()}-${Math.random()}`;
-    const assistantMessageId = `assistant-${Date.now()}-${Math.random()}`;
-    
-    // Add user message immediately (optimistic update)
-    const userMessage = { 
-      id: userMessageId,
-      role: 'user', 
-      content: trimmedMessage, 
-      timestamp: new Date().toISOString() 
-    };
-    
-    // Add loading assistant message immediately
-    const loadingAssistantMessage = { 
-      id: assistantMessageId,
-      role: 'assistant', 
-      content: '', 
-      sources: [], 
-      loading: true, 
-      timestamp: new Date().toISOString() 
-    };
-    
-    // Add both messages at once
-    setMessages(draft => [...draft, userMessage, loadingAssistantMessage]);
+  }
+  
+  // Create unique IDs for tracking messages
+  const userMessageId = `user-${Date.now()}-${Math.random()}`;
+  const assistantMessageId = `assistant-${Date.now()}-${Math.random()}`;
+  
+  // Determine user message content
+  const hasImage = isFormData && messageOrFormData.get('image') !== null;
+  const userContent = trimmedMessage || (hasImage ? '[Image]' : '');
+  
+  console.log('💬 User message:', userContent);
+  
+  // Add user message immediately (optimistic update)
+  const userMessage = { 
+    id: userMessageId,
+    role: 'user', 
+    content: userContent, 
+    timestamp: new Date().toISOString() 
+  };
+  
+  // Add loading assistant message immediately
+  const loadingAssistantMessage = { 
+    id: assistantMessageId,
+    role: 'assistant', 
+    content: '', 
+    sources: [], 
+    loading: true, 
+    timestamp: new Date().toISOString() 
+  };
+  
+  // Add both messages at once
+  setMessages(draft => [...draft, userMessage, loadingAssistantMessage]);
 
-    try {
-      const { answer = '', sources = [], agent_chat = false, ticket_id } = await api.sendChatMessage(sessionId, trimmedMessage);
-      
-      if (agent_chat) {
-        setIsAgentChat(true);
-        if (ticket_id) {
-          setTicketId(ticket_id);
-        }
+  try {
+    let responseData;
+    
+    // ✅ Use appropriate API function based on input type
+    if (isFormData) {
+      console.log('🖼️ Sending with image via sendChatMessageWithImage');
+      responseData = await api.sendChatMessageWithImage(sessionId, messageOrFormData);
+    } else {
+      console.log('📝 Sending text-only via sendChatMessage');
+      responseData = await api.sendChatMessage(sessionId, trimmedMessage);
+    }
+    
+    console.log('✅ Response received:', responseData);
+    
+    const { answer = '', sources = [], agent_chat = false, ticket_id } = responseData;
+    
+    if (agent_chat) {
+      setIsAgentChat(true);
+      if (ticket_id) {
+        setTicketId(ticket_id);
       }
+    }
+    
+    // Update the assistant message by ID (more reliable than index)
+    setMessages(draft => {
+      const assistantIndex = draft.findIndex(msg => msg.id === assistantMessageId);
+      if (assistantIndex !== -1) {
+        draft[assistantIndex].content = answer;
+        draft[assistantIndex].sources = sources || [];
+        draft[assistantIndex].loading = false;
+        draft[assistantIndex].error = false;
+        draft[assistantIndex].timestamp = new Date().toISOString();
+        draft[assistantIndex].role = 'assistant';
+      }
+    });
+    
+    // Update message count after sending
+    setMessages(current => {
+      lastMessageCountRef.current = current.length;
+      return current;
+    });
+    
+  } catch (err) {
+    console.error('❌ Chat error:', err);
+    
+    // Handle 401 Unauthorized - session expired or invalid
+    if (err.status === 401) {
+      localStorage.removeItem('user_session_id');
+      localStorage.removeItem('user_id');
+      setSessionId(null);
       
-      // Update the assistant message by ID (more reliable than index)
       setMessages(draft => {
         const assistantIndex = draft.findIndex(msg => msg.id === assistantMessageId);
         if (assistantIndex !== -1) {
-          draft[assistantIndex].content = answer;
-          draft[assistantIndex].sources = sources || [];
           draft[assistantIndex].loading = false;
-          draft[assistantIndex].error = false;
-          draft[assistantIndex].timestamp = new Date().toISOString();
-          // Ensure role is correct
+          draft[assistantIndex].error = true;
+          draft[assistantIndex].content = err.data?.detail || 'Session expired. Please login again.';
           draft[assistantIndex].role = 'assistant';
         }
       });
       
-      // Update message count after sending
-      setMessages(current => {
-        lastMessageCountRef.current = current.length;
-        return current;
+      setTimeout(() => {
+        window.location.hash = '#/user';
+        window.location.reload();
+      }, 2000);
+    } else {
+      setMessages(draft => {
+        const assistantIndex = draft.findIndex(msg => msg.id === assistantMessageId);
+        if (assistantIndex !== -1) {
+          draft[assistantIndex].loading = false;
+          draft[assistantIndex].error = true;
+          draft[assistantIndex].content = 'Failed to get response. Please try again.';
+          draft[assistantIndex].role = 'assistant';
+        }
       });
-    } catch (err) {
-      console.log('Chat error:', err);
-      
-      // Handle 401 Unauthorized - session expired or invalid
-      if (err.status === 401) {
-        // Clear old session
-        localStorage.removeItem('user_session_id');
-        localStorage.removeItem('user_id');
-        setSessionId(null);
-        
-        // Show error message
-        setMessages(draft => {
-          const assistantIndex = draft.findIndex(msg => msg.id === assistantMessageId);
-          if (assistantIndex !== -1) {
-            draft[assistantIndex].loading = false;
-            draft[assistantIndex].error = true;
-            draft[assistantIndex].content = err.data?.detail || 'Session expired. Please login again.';
-            draft[assistantIndex].role = 'assistant';
-          }
-        });
-        
-        // Optionally redirect to login page after a delay
-        setTimeout(() => {
-          window.location.hash = '#/user';
-          window.location.reload();
-        }, 2000);
-      } else {
-        setMessages(draft => {
-          const assistantIndex = draft.findIndex(msg => msg.id === assistantMessageId);
-          if (assistantIndex !== -1) {
-            draft[assistantIndex].loading = false;
-            draft[assistantIndex].error = true;
-            draft[assistantIndex].content = 'Failed to get response. Please try again.';
-            draft[assistantIndex].role = 'assistant';
-          }
-        });
-      }
     }
   }
+}
 
   async function requestHumanAgent() {
     if (!sessionId) {
