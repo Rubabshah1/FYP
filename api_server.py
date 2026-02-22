@@ -20,6 +20,10 @@ from typing import Optional, Tuple, Any, Dict, List
 from datetime import datetime, timedelta
 import numpy as np
 
+# img processing imports 
+from fastapi import File, Form, UploadFile
+from ocr_utils import extract_text_from_image
+
 from fastapi import FastAPI, HTTPException, Query, Depends, Header, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -573,12 +577,22 @@ async def get_chat_history(
     }
 
 
+# @app.post("/chats/{session_id}")
+# async def chat(
+#     session_id: str, 
+#     req: ChatRequest,
+#     session_token: Optional[str] = Header(None, alias="X-Session-ID")
+# ):
+
+# refined for image processing 
 @app.post("/chats/{session_id}")
 async def chat(
-    session_id: str, 
-    req: ChatRequest,
+    session_id: str,
+    message: str = Form(""),
+    image: UploadFile | None = File(None),
     session_token: Optional[str] = Header(None, alias="X-Session-ID")
 ):
+
     """Process chat message with RAG."""
     # Prefer X-Session-ID header if provided, otherwise use URL parameter
     session_to_resolve = session_token or session_id
@@ -600,8 +614,23 @@ async def chat(
     # Update session activity
     update_session_activity(db_session_id)
     
+    # add image_processing step
+    final_message = message.strip()
+    print(f"[IMAGE-DEBUG] User text: '{message}'")
+    print(f"[IMAGE-DEBUG] Image provided: {image is not None}")
+    if image:
+        image_bytes = await image.read()
+        ocr_text = extract_text_from_image(image_bytes)
+        print(f"[IMAGE-DEBUG] OCR result length: {len(ocr_text)} chars")
+        if ocr_text:
+            final_message += (
+                "\n\nText detected in attached image:\n"
+                + ocr_text
+            )
+
+    
     # Create query record (domain will be updated after RAG processing)
-    query_record = create_query(db_session_id, req.message)
+    query_record = create_query(db_session_id, final_message)
     query_id = query_record["query_id"] if query_record else None
     
     # Check if user message requests human agent
@@ -711,12 +740,12 @@ async def chat(
             has_active_ticket = len(active_tickets.data) > 0 if active_tickets.data else False
         
         # Check if user explicitly requested human agent
-        user_requested_agent = is_human_agent_request(req.message)
+        user_requested_agent = is_human_agent_request(final_message)
         print(f"[HUMAN-AGENT-CHECK] user_requested_agent={user_requested_agent}, has_active_ticket={has_active_ticket}")
         
         # If user requested agent, route immediately WITHOUT RAG processing
         if user_requested_agent:
-            print(f"[HUMAN-AGENT-REQUEST] User requested human agent: '{req.message}' - Routing immediately, skipping RAG")
+            print(f"[HUMAN-AGENT-REQUEST] User requested human agent: '{final_message}' - Routing immediately, skipping RAG")
             
             # If there's already an active ticket, just inform user they're already connected
             if has_active_ticket:
@@ -743,7 +772,7 @@ async def chat(
             # Create a placeholder response for the ticket
             placeholder_response = create_response(
                 db_session_id,
-                f"User requested to chat with human agent: {req.message}",
+                f"User requested to chat with human agent: {final_message}",
                 confidence=1.0,  # High confidence since it's an explicit request
                 domain=query_domain
             )
@@ -784,14 +813,14 @@ async def chat(
             # generate_answer_selfrag returns (answer, original_query, input_lang, sources, confidence_scores, domain_classification, selfrag_metrics)
             # Pass session_id for conversation memory
             result = await asyncio.to_thread(
-                rag_module.generate_answer_selfrag, req.message, top_k=5, filter_category=None, session_id=str(db_session_id)
+                rag_module.generate_answer_selfrag, final_message, top_k=5, filter_category=None, session_id=str(db_session_id)
             )
             answer, _, input_lang, sources, confidence_scores, domain_classification, selfrag_metrics = result
             is_urdu = (input_lang == "ur" or input_lang == "roman_ur")
         else:
             # generate_answer returns (answer, query, is_urdu, sources, confidence_scores, domain_classification)
             answer, _, is_urdu, sources, confidence_scores, domain_classification = await asyncio.to_thread(
-                rag_module.generate_answer, req.message, top_k=5, filter_category=None
+                rag_module.generate_answer, final_message, top_k=5, filter_category=None
             )
         
         # Use confidence from RAG module (combined confidence score)
