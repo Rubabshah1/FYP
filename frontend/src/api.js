@@ -111,7 +111,26 @@ async function sendChatMessage(sessionId, message) {
   }
   return data; // { answer, sources, agent_chat, response_id }
 }
-
+//new function for images
+// ✅ ADD THIS NEW FUNCTION BELOW
+async function sendChatMessageWithImage(sessionId, formData) {
+  const sessionIdFromStorage = localStorage.getItem('user_session_id');
+  
+  const res = await fetch(`${BASE_URL}/chats/${sessionId}`, {
+    method: 'POST',
+    headers: {
+      'X-Session-ID': sessionIdFromStorage || sessionId,
+      // ❌ DO NOT include 'Content-Type' - browser sets it automatically for FormData
+    },
+    body: formData
+  });
+  
+  const data = await res.json();
+  if (!res.ok) {
+    return Promise.reject({ status: res.status, data });
+  }
+  return data; // { answer, sources, agent_chat, response_id }
+}
 // ============================================================================
 // TICKET ENDPOINTS
 // ============================================================================
@@ -236,7 +255,7 @@ export default {
   // Authentication
   sendOTP, verifyOTP, agentLogin, adminLogin,
   // Chat
-  createChat, sendChatMessage, getChatHistory,
+  createChat, sendChatMessage, sendChatMessageWithImage, getChatHistory,
   // Tickets
   createTicket, listTickets, getTicket, assignTicket, getTicketChat, sendAgentMessage, resolveTicket,
   // Admin
