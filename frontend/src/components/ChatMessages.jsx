@@ -28,11 +28,12 @@ function formatTime(timestamp) {
 
 // Memoized message item component - WhatsApp style
 const MessageItem = memo(({ message }) => {
-  const { role, content, loading, error, timestamp, sources, sender } = message;
+  const { role, content, loading, error, timestamp, sources, sender, imageUrl, image_url, imageName, ocrText } = message;
   // Support both role and sender fields, and handle agent messages
   const actualRole = role || sender || 'assistant';
   const isUser = actualRole === 'user';
   const isAgent = actualRole === 'agent' || sender === 'agent';
+  const msgImageUrl = imageUrl || image_url;
   
   // Ensure content is always a string
   const messageContent = content || '';
@@ -85,6 +86,16 @@ const MessageItem = memo(({ message }) => {
             </div>
           ) : (actualRole === 'assistant' || actualRole === 'agent') ? (
             <div className="text-sm leading-relaxed">
+              {msgImageUrl && (
+                <div className="mb-2">
+                  <img
+                    src={msgImageUrl}
+                    alt={imageName ? `Image: ${imageName}` : "Image"}
+                    className="max-h-80 w-auto rounded-md"
+                    loading="lazy"
+                  />
+                </div>
+              )}
               {messageContent ? (
                 <Markdown 
                   components={{
@@ -101,7 +112,25 @@ const MessageItem = memo(({ message }) => {
               )}
             </div>
           ) : (
-            <div className="text-sm leading-relaxed whitespace-pre-wrap break-words">{messageContent}</div>
+            <div className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+              {msgImageUrl && (
+                <div className="mb-2">
+                  <img
+                    src={msgImageUrl}
+                    alt={imageName ? `Image: ${imageName}` : "Image"}
+                    className="max-h-80 w-auto rounded-md"
+                    loading="lazy"
+                  />
+                </div>
+              )}
+              {messageContent}
+              {ocrText && (
+                <div className="mt-2 text-xs text-gray-600 whitespace-pre-wrap">
+                  <div className="font-medium text-gray-700">Text detected in image:</div>
+                  <div>{ocrText}</div>
+                </div>
+              )}
+            </div>
           )}
           
           {error && (
