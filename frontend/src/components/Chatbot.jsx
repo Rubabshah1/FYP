@@ -297,6 +297,10 @@ function Chatbot() {
 async function submitNewMessage(messageOrFormData) {
   // Detect if it's FormData or plain string
   const isFormData = messageOrFormData instanceof FormData;
+  const imageFile = isFormData ? messageOrFormData.get('image') : null;
+  const hasImage = Boolean(imageFile);
+  // Create a dedicated object URL for the chat message (so ChatInput can revoke its own preview safely)
+  const localImageUrl = hasImage ? URL.createObjectURL(imageFile) : null;
   
   let trimmedMessage;
   if (isFormData) {
@@ -305,11 +309,15 @@ async function submitNewMessage(messageOrFormData) {
     trimmedMessage = messageOrFormData?.trim() || '';
   }
   
-  console.log('📤 submitNewMessage:', { isFormData, trimmedMessage, hasImage: isFormData && messageOrFormData.get('image') !== null });
+  console.log('📤 submitNewMessage:', { isFormData, trimmedMessage, hasImage });
   
   // Validation
   if (!trimmedMessage && !isFormData) {
     console.log('❌ Empty message');
+    return;
+  }
+  if (isFormData && !trimmedMessage && !hasImage) {
+    console.log('❌ Empty FormData (no text, no image)');
     return;
   }
   if (isLoading || !sessionId) {
@@ -327,8 +335,7 @@ async function submitNewMessage(messageOrFormData) {
   const assistantMessageId = `assistant-${Date.now()}-${Math.random()}`;
   
   // Determine user message content
-  const hasImage = isFormData && messageOrFormData.get('image') !== null;
-  const userContent = trimmedMessage || (hasImage ? '[Image]' : '');
+  const userContent = trimmedMessage || (hasImage ? '' : '');
   
   console.log('💬 User message:', userContent);
   
@@ -337,7 +344,8 @@ async function submitNewMessage(messageOrFormData) {
     id: userMessageId,
     role: 'user', 
     content: userContent, 
-    timestamp: new Date().toISOString() 
+    timestamp: new Date().toISOString(),
+    ...(hasImage ? { imageUrl: localImageUrl, imageName: imageFile?.name } : {})
   };
   
   // Add loading assistant message immediately
@@ -367,13 +375,23 @@ async function submitNewMessage(messageOrFormData) {
     
     console.log('✅ Response received:', responseData);
     
-    const { answer = '', sources = [], agent_chat = false, ticket_id } = responseData;
+    const { answer = '', sources = [], agent_chat = false, ticket_id, ocr_text } = responseData;
     
     if (agent_chat) {
       setIsAgentChat(true);
       if (ticket_id) {
         setTicketId(ticket_id);
       }
+    }
+
+    // If OCR text was extracted, attach it to the user message so it shows in the UI (instead of terminal logs)
+    if (ocr_text && typeof ocr_text === 'string' && ocr_text.trim()) {
+      setMessages(draft => {
+        const userIndex = draft.findIndex(msg => msg.id === userMessageId);
+        if (userIndex !== -1) {
+          draft[userIndex].ocrText = ocr_text;
+        }
+      });
     }
     
     // Update the assistant message by ID (more reliable than index)
