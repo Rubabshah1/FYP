@@ -111,3 +111,8 @@ pytesseract>=0.3.12    # Tesseract OCR wrapper
 
 # GPT4All (Replaced by llama-cpp-python)
 # gpt4all>=2.0.0
+
+# ============================================================================
+# EVALUATION & TESTING (LLM / RAG Evaluation)
+# ============================================================================
+deepeval>=0.21.0

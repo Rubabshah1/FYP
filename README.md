@@ -204,6 +204,11 @@ npm run build
 npm run preview
 ```
 
+### Running the evaluation 
+python test_rag_evaluation.py --max-cases 3 --use-openai-judge
+#you can determine the number of tests you are going to run this for, also the file has path to english_testcases only for now, will add the other two soon.
+
+
 ## 🔐 Environment Variables
 
 ### Backend (.env in root)
