@@ -1,0 +1,45 @@
+{
+  "language": "English",
+  "language_key": "english",
+  "run_at": "2026-03-01T02:04:19.808894",
+  "results": [
+    {
+      "id": "Q01",
+      "question": "How can I donate to Alkhidmat Foundation for Gaza?",
+      "expected_answer": "You can donate via Meezan Bank account 02140100861151, by calling the cash pick-up number 0800-44448, in-person at Collection Centers, or online using debit/credit cards through their website alkhidmat.org/donate.",
+      "actual_answer": "- Donate via EasyPaisa/JazzCash: open the app, go to “Donations”, select “Alkhidmat Foundation Pakistan”, enter the amount, and donate (choose the “Help Us Save Lives in Gaza/Donate to Palestine” option if shown)  \n- Donate online by debit/credit card at: alkhidmat.org/donate  \n- Bank transfer/direct deposit (Bank of Punjab – Taqwa Islamic Banking):  \n  - Account Title: Alkhidmat Foundation Pakistan  \n  - Account No. (PKR): 5310067845100016  \n  - IBAN: PK19BPUN5310067845100016  \n  - Branch: Allama Iqbal Town, Lahore  \n  - SWIFT: BPUNPKKA  \n- For a donation receipt, share your transaction slip on WhatsApp: +923000776016",
+      "rag_time_seconds": 345.02,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "Great job! The answer is fully relevant and directly addresses the question about donating to Alkhidmat Foundation for Gaza, with no irrelevant information included.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—everything in the actual output aligns perfectly with the retrieval context. Great job staying accurate!",
+        "ContextualPrecision": "The score is 0.00 because all the top-ranked nodes in the retrieval contexts are irrelevant—they only discuss the impact, reputation, or projects of Alkhidmat Foundation for Gaza, but none provide specific donation methods or instructions. For example, the first node 'does not provide any specific donation methods such as bank account details, phone numbers, or website links.' Since no relevant nodes are present, the score cannot be higher.",
+        "ContextualRecall": "The score is 0.00 because none of the nodes in the retrieval context provide the specific donation methods listed in sentence 1 of the expected output; the context only refers to general support or donations to Alkhidmat Foundation without mentioning the detailed channels.",
+        "Hallucination": "The score is 0.00 because all factual alignments show the actual output is fully consistent with the context, with no contradictions or unsupported information present."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9354611040970523,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    }
+  ]
+}

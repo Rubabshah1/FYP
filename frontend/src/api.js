@@ -251,6 +251,28 @@ async function adminListTickets(status = null) {
   return data; // { tickets }
 }
 
+// ============================================================================
+// EVAL ENDPOINTS
+// ============================================================================
+
+async function getEvalStatus() {
+  const res = await fetch(`${BASE_URL}/admin/eval/status`, {
+    headers: getAuthHeaders()
+  });
+  const data = await res.json();
+  if (!res.ok) return Promise.reject({ status: res.status, data });
+  return data;
+}
+
+async function getEvalReportByLanguage(language) {
+  const res = await fetch(`${BASE_URL}/admin/eval/reports/${language}`, {
+    headers: getAuthHeaders()
+  });
+  const data = await res.json();
+  if (!res.ok) return Promise.reject({ status: res.status, data });
+  return data;
+}
+
 export default {
   // Authentication
   sendOTP, verifyOTP, agentLogin, adminLogin,
@@ -259,5 +281,7 @@ export default {
   // Tickets
   createTicket, listTickets, getTicket, assignTicket, getTicketChat, sendAgentMessage, resolveTicket,
   // Admin
-  getAnalytics, adminListTickets
+  getAnalytics, adminListTickets,
+  // Eval
+  getEvalStatus, getEvalReportByLanguage
 };
