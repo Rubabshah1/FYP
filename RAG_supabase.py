@@ -66,7 +66,7 @@ from rag_embeddings import (
     get_embedder,
     normalize_query,
 )
-from rag_llm import load_llm, llm_generate
+from rag_llm import load_llm_default as load_llm, llm_generate
 from rag_supabase_client import get_supabase_client, test_connection
 
 # ============================================================================
@@ -327,32 +327,51 @@ Answer:"""
             return "uncertain"
 
     def evaluate_utility(self, query: str, answer: str) -> int:
-        prompt = f"""Evaluate how useful this answer is for the question.
-
-Question: {query}
-
-Answer:
-{answer}
-
-Rate the utility on a scale of 1-5:
-5 = Excellent, complete, and directly answers the question
-4 = Good, mostly answers the question
-3 = Acceptable, provides some useful information
-2 = Poor, barely addresses the question
-1 = Very poor, does not answer the question
-
-Respond with ONLY one of:
-{SelfRAGReflectionTokens.UTILITY_5}
-{SelfRAGReflectionTokens.UTILITY_4}
-{SelfRAGReflectionTokens.UTILITY_3}
-{SelfRAGReflectionTokens.UTILITY_2}
-{SelfRAGReflectionTokens.UTILITY_1}
-
-Answer:"""
+        """
+        IMPORTANT:
+        Utility judging is done in English to avoid the local LLM mis-scoring Urdu answers.
+        We translate Urdu query/answer to English ONLY for this evaluation step.
+        """
         try:
+            q_eval = query
+            a_eval = answer
+
+            # If either side is Urdu-script, translate to English for the critic
+            # Uses helpers already defined in this file:
+            # - is_urdu_script(...)
+            # - translate_urdu_to_english(...)
+            # - translate_auto_to_english(...)
+            if is_urdu_script(query) or is_urdu_script(answer):
+                q_eval = translate_urdu_to_english(query) if is_urdu_script(query) else translate_auto_to_english(query)
+                a_eval = translate_urdu_to_english(answer) if is_urdu_script(answer) else translate_auto_to_english(answer)
+
+            prompt = f"""Evaluate how useful this answer is for the question.
+
+    Question: {q_eval}
+
+    Answer:
+    {a_eval}
+
+    Rate the utility on a scale of 1-5:
+    5 = Excellent, complete, and directly answers the question
+    4 = Good, mostly answers the question
+    3 = Acceptable, provides some useful information
+    2 = Poor, barely addresses the question
+    1 = Very poor, does not answer the question
+
+    Respond with ONLY one of:
+    {SelfRAGReflectionTokens.UTILITY_5}
+    {SelfRAGReflectionTokens.UTILITY_4}
+    {SelfRAGReflectionTokens.UTILITY_3}
+    {SelfRAGReflectionTokens.UTILITY_2}
+    {SelfRAGReflectionTokens.UTILITY_1}
+
+    Answer:"""
+
             model = self._get_llm()
             output = model(prompt, max_tokens=15, temperature=0.1, stop=["\n"], echo=False)
-            response = output['choices'][0]['text'].strip()
+            response = output["choices"][0]["text"].strip()
+
             if SelfRAGReflectionTokens.UTILITY_5 in response:
                 return 5
             elif SelfRAGReflectionTokens.UTILITY_4 in response:
@@ -363,7 +382,9 @@ Answer:"""
                 return 2
             elif SelfRAGReflectionTokens.UTILITY_1 in response:
                 return 1
+
             return 3
+
         except Exception as e:
             print(f"[SelfRAG] Utility evaluation error: {e}")
             return 3
@@ -1884,7 +1905,7 @@ def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400,
     wants_detail = query_info['wants_detail']
 
     if profile.output_lang == "ur":
-        base_instruction = "آپ الخدمت فاؤنڈیشن پاکستان کے لیے ایک مددگار اسسٹنٹ ہیں。"
+        base_instruction = "آپ الخدمت فاؤنڈیشن پاکستان کے لیے ایک مددگار اسسٹنٹ ہیں۔"
         if wants_list:
             format_instruction = "براہ کرم نقاط کی شکل میں واضح جواب دیں۔"
         elif wants_summary:
@@ -1947,9 +1968,20 @@ Answer (ONLY the final answer, no labels):
     llm_start = time.time()
     print(f"[RAG] Generating answer with LLM...", flush=True)
     sys.stdout.flush()
+    # choose generator language:
+    # - for Urdu Nastaliq output -> use Urdu LLM
+    # - for roman_ur output -> STILL use Urdu LLM (then your existing romanization step can run after)
+    gen_lang = "ur" if profile.output_lang in ("ur", "roman_ur") else None
+
     answer, log_probs, token_probs_distributions = llm_generate(
-        prompt, max_tokens=max_tokens, stop_tokens=["\nUser question:", "\nQuestion:", "\nسوال:"]
+        prompt,
+        max_tokens=400,
+        stop_tokens=["\nUser question:", "\nQuestion:", "\nسوال:"],
+        language=gen_lang,
     )
+    # answer, log_probs, token_probs_distributions = llm_generate(
+    #     prompt, max_tokens=max_tokens, stop_tokens=["\nUser question:", "\nQuestion:", "\nسوال:"]
+    # )
     print(f"[TIMING] LLM generation: {time.time() - llm_start:.2f}s", flush=True)
    
     print(f"[RAG] Cleaning response...", flush=True)
@@ -2356,7 +2388,7 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
     wants_detail = query_info['wants_detail']
 
     if profile.output_lang == "ur":
-        base_instruction = "آپ الخدمت فاؤنڈیشن پاکستان کے لیے ایک مددگار اسسٹنٹ ہیں。"
+        base_instruction = "آپ الخدمت فاؤنڈیشن پاکستان کے لیے ایک مددگار اسسٹنٹ ہیں۔"
         if wants_list:
             format_instruction = "براہ کرم نقاط کی شکل میں واضح جواب دیں۔"
         elif wants_summary:
@@ -2370,6 +2402,7 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
             display_question = original_query
 
         prompt = f"""{base_instruction}
+    
 {format_instruction}
 
 اہم ہدایات:
@@ -2421,12 +2454,36 @@ Answer (ONLY the final answer, no labels):
     llm_start = time.time()
     print(f"\n[SELF-RAG] Step 4: Generating answer...", flush=True)
     sys.stdout.flush()
+    # choose generator language:
+    # - for Urdu Nastaliq output -> use Urdu LLM
+    # - for roman_ur output -> STILL use Urdu LLM (then your existing romanization step can run after)
+    gen_lang = "ur" if profile.output_lang in ("ur", "roman_ur") else None
+
     answer, log_probs, token_probs_distributions = llm_generate(
-        prompt, max_tokens=max_tokens, stop_tokens=["\nUser question:", "\nQuestion:", "\nسوال:"]
+        prompt,
+        max_tokens=400,
+        stop_tokens=["\nUser question:", "\nQuestion:", "\nسوال:"],
+        language=gen_lang,
     )
+    # answer, log_probs, token_probs_distributions = llm_generate(
+    #     prompt, max_tokens=max_tokens, stop_tokens=["\nUser question:", "\nQuestion:", "\nسوال:"]
+    # )
     print(f"[TIMING] LLM generation: {time.time() - llm_start:.2f}s", flush=True)
     answer = clean_llm_response(answer)
 
+    # --- NEW: For Self-RAG critic steps, evaluate in English even if we will OUTPUT Urdu ---
+    answer_for_critic = answer
+    if profile.output_lang == "ur":
+        try:
+            answer_for_critic = translate_urdu_to_english(answer)
+        except Exception:
+            answer_for_critic = answer  # fallback: still evaluate original
+    elif profile.output_lang == "roman_ur":
+        # If you generate roman urdu, still translate to English for scoring
+        try:
+            answer_for_critic = translate_auto_to_english(answer)
+        except Exception:
+            answer_for_critic = answer
     # AGENTIC STEP 4.5: Evidence Coverage Agent (claim-by-claim verification)
     if EVIDENCE_COVERAGE_ENABLE:
         print(f"\n[AGENTIC-RAG] Evidence Coverage Agent: Checking claim-by-claim support...", flush=True)
@@ -2465,7 +2522,7 @@ Answer (ONLY the final answer, no labels):
     # STEP 5: Verify support
     if SELFRAG_ENABLE:
         print(f"\n[SELF-RAG] Step 5: Verifying answer support...", flush=True)
-        support_level = critic.verify_support(query_for_rag, answer, context)
+        support_level = critic.verify_support(query_for_rag, answer_for_critic, context)
         selfrag_metrics['support_level'] = support_level
         print(f" → Support level: {support_level.upper()}", flush=True)
 
@@ -2475,17 +2532,41 @@ Answer (ONLY the final answer, no labels):
             return no_answer, original_query, profile.input_lang, results, {}, domain_classification, selfrag_metrics
 
     # STEP 6: Utility
-    if SELFRAG_ENABLE:
-        print(f"\n[SELF-RAG] Step 6: Evaluating answer utility...", flush=True)
-        utility_rating = critic.evaluate_utility(query_for_rag, answer)
-        selfrag_metrics['utility_rating'] = utility_rating
-        print(f" → Utility rating: {utility_rating}/5", flush=True)
+    print(f"\n[SELF-RAG] Step 6: Evaluating answer utility.", flush=True)
+    utility_rating = critic.evaluate_utility(query_for_rag, answer_for_critic)
+    selfrag_metrics["utility_rating"] = utility_rating
+    print(f" → Utility rating: {utility_rating}/5", flush=True)
 
-        if utility_rating <= 2:
-            print(f" ⚠️ Answer utility too low - rejecting!", flush=True)
-            no_answer = "I cannot provide a sufficiently useful answer to your question based on the available information."
-            return no_answer, original_query, profile.input_lang, results, {}, domain_classification, selfrag_metrics
+    # Set different minimum utility by output language
+    min_utility = 2 if profile.output_lang in ("ur", "roman_ur") else 3
 
+    # If utility is low, only reject if we ALSO lack strong support/evidence
+    if utility_rating < min_utility:
+        support_level = selfrag_metrics.get("support_level", "uncertain")
+        answer_in_context = bool(selfrag_metrics.get("answer_in_context", False))
+        evidence_cov = float(selfrag_metrics.get("evidence_coverage", 0.0) or 0.0)
+
+        strong_evidence = (
+            answer_in_context and
+            (support_level in ("fully_supported", "partially_supported")) and
+            (evidence_cov >= 0.80)  # your logs show 1.00, so this will pass
+        )
+
+        if strong_evidence:
+            print(" ⚠️ Utility low but evidence/support strong — NOT rejecting.", flush=True)
+        else:
+            print(" ⚠️ Answer utility too low - rejecting!", flush=True)
+            # Return a helpful fallback in the user's language
+            if profile.output_lang == "ur":
+                return (
+                    "معاف کیجیے، میں اس سوال کا واضح جواب نہیں دے سکا۔ براہِ کرم سوال کو تھوڑا مزید واضح کر دیں۔",
+                    original_query, profile.input_lang, [], {}, domain_classification, selfrag_metrics
+                )
+            else:
+                return (
+                    "Sorry — I couldn’t produce a clear enough answer. Please rephrase with a bit more detail.",
+                    original_query, profile.input_lang, [], {}, domain_classification, selfrag_metrics
+                )
     # Confidence scores (based on real signals only)
     print(f"\n[SELF-RAG] Calculating final confidence scores...", flush=True)
     sys.stdout.flush()
