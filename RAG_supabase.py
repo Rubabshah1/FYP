@@ -97,7 +97,7 @@ class SelfRAGCritic:
             self.llm = load_llm()
         return self.llm
 
-    def is_domain_relevant(self, query: str) -> Tuple[bool, float]:
+    def is_domain_relevant(self, query: str) -> bool:
         # Pre-check: Look for Alkhidmat-related keywords and program names
         query_lower = query.lower().strip()
         
@@ -126,18 +126,13 @@ class SelfRAGCritic:
         has_program_keyword = any(program in query_lower for program in alkhidmat_programs)
         
         # If query contains program/service keywords, it's likely relevant even without "Alkhidmat" explicitly
-        # This handles cases like "what is bano qabil" where the program name implies Alkhidmat context
         if has_program_keyword and not has_alkhidmat_keyword:
-            # Check if it's a question about the program/service (likely relevant)
             question_words = ["what", "who", "where", "when", "how", "why", "kya", "kaun", "kahan", "kab"]
             is_question = any(query_lower.startswith(q) for q in question_words) or "?" in query
             
             if is_question:
                 print(f"[DOMAIN-RELEVANCE] Detected Alkhidmat program/service query: '{query}' - Likely relevant")
-                # Return relevant with moderate confidence (will be checked by LLM too)
-                # But we'll still run LLM check for final decision
             elif len(query_lower.split()) <= 5:
-                # Short query with program keyword - likely asking about the program
                 print(f"[DOMAIN-RELEVANCE] Short query with program keyword: '{query}' - Likely relevant")
         
         prompt = f"""Determine if this question is about Alkhidmat Foundation Pakistan.
@@ -196,25 +191,22 @@ Answer:"""
             output = model(prompt, max_tokens=10, temperature=0.1, stop=["\n"], echo=False)
             response = output['choices'][0]['text'].strip().upper()
             if "[RELEVANT]" in response:
-                return True, 0.85
+                return True
             elif "[IRRELEVANT]" in response:
-                # More lenient: If it contains program keywords, still consider relevant with lower confidence
                 if has_program_keyword:
                     print(f"[DOMAIN-RELEVANCE] LLM marked irrelevant but contains program keyword - Overriding to relevant")
-                    return True, 0.6  # Lower confidence but still relevant
-                return False, 0.85
-            # Default: If unclear but has program keyword, assume relevant
+                    return True
+                return False
             if has_program_keyword:
-                return True, 0.6
-            return True, 0.4
+                return True
+            return True
         except Exception as e:
             print(f"[SelfRAG] Domain relevance check error: {e}")
-            # On error, if it has program keywords, assume relevant
             if has_program_keyword:
-                return True, 0.6
-            return True, 0.5
+                return True
+            return True
 
-    def should_retrieve(self, query: str) -> Tuple[bool, float]:
+    def should_retrieve(self, query: str) -> bool:
         prompt = f"""Determine if external knowledge retrieval is needed to answer this question.
 
 Question: {query}
@@ -234,15 +226,15 @@ Answer:"""
             output = model(prompt, max_tokens=10, temperature=0.1, stop=["\n"], echo=False)
             response = output['choices'][0]['text'].strip()
             if SelfRAGReflectionTokens.RETRIEVE in response:
-                return True, 0.8
+                return True
             elif SelfRAGReflectionTokens.NO_RETRIEVE in response:
-                return False, 0.8
-            return True, 0.5
+                return False
+            return True
         except Exception as e:
             print(f"[SelfRAG] Retrieval prediction error: {e}")
-            return True, 0.5
+            return True
 
-    def assess_relevance(self, query: str, document: str) -> Tuple[bool, float]:
+    def assess_relevance(self, query: str, document: str) -> bool:
         doc_preview = document[:500] + "..." if len(document) > 500 else document
         prompt = f"""Assess if this document is relevant to answering the question.
 
@@ -263,15 +255,15 @@ Answer:"""
             output = model(prompt, max_tokens=10, temperature=0.1, stop=["\n"], echo=False)
             response = output['choices'][0]['text'].strip()
             if SelfRAGReflectionTokens.RELEVANT in response:
-                return True, 0.8
+                return True
             elif SelfRAGReflectionTokens.IRRELEVANT in response:
-                return False, 0.8
-            return True, 0.5
+                return False
+            return True
         except Exception as e:
             print(f"[SelfRAG] Relevance assessment error: {e}")
-            return True, 0.5
+            return True
 
-    def check_answer_in_context(self, query: str, context: str) -> Tuple[bool, float]:
+    def check_answer_in_context(self, query: str, context: str) -> bool:
         context_preview = context[:1000] + "..." if len(context) > 1000 else context
         prompt = f"""Check if the provided context contains information to answer the question.
 
@@ -292,15 +284,15 @@ Answer:"""
             output = model(prompt, max_tokens=10, temperature=0.1, stop=["\n"], echo=False)
             response = output['choices'][0]['text'].strip().upper()
             if "[CAN_ANSWER]" in response:
-                return True, 0.8
+                return True
             elif "[CANNOT_ANSWER]" in response:
-                return False, 0.8
-            return True, 0.4
+                return False
+            return True
         except Exception as e:
             print(f"[SelfRAG] Answer presence check error: {e}")
-            return True, 0.5
+            return True
 
-    def verify_support(self, query: str, answer: str, context: str) -> Tuple[str, float]:
+    def verify_support(self, query: str, answer: str, context: str) -> str:
         prompt = f"""Verify if the answer is supported by the provided context.
 
 Question: {query}
@@ -324,17 +316,17 @@ Answer:"""
             output = model(prompt, max_tokens=20, temperature=0.1, stop=["\n"], echo=False)
             response = output['choices'][0]['text'].strip()
             if SelfRAGReflectionTokens.FULLY_SUPPORTED in response:
-                return "fully_supported", 0.9
+                return "fully_supported"
             elif SelfRAGReflectionTokens.PARTIALLY_SUPPORTED in response:
-                return "partially_supported", 0.6
+                return "partially_supported"
             elif SelfRAGReflectionTokens.NO_SUPPORT in response:
-                return "no_support", 0.9
-            return "uncertain", 0.4
+                return "no_support"
+            return "uncertain"
         except Exception as e:
             print(f"[SelfRAG] Support verification error: {e}")
-            return "uncertain", 0.4
+            return "uncertain"
 
-    def evaluate_utility(self, query: str, answer: str) -> Tuple[int, float]:
+    def evaluate_utility(self, query: str, answer: str) -> int:
         prompt = f"""Evaluate how useful this answer is for the question.
 
 Question: {query}
@@ -362,19 +354,19 @@ Answer:"""
             output = model(prompt, max_tokens=15, temperature=0.1, stop=["\n"], echo=False)
             response = output['choices'][0]['text'].strip()
             if SelfRAGReflectionTokens.UTILITY_5 in response:
-                return 5, 0.8
+                return 5
             elif SelfRAGReflectionTokens.UTILITY_4 in response:
-                return 4, 0.8
+                return 4
             elif SelfRAGReflectionTokens.UTILITY_3 in response:
-                return 3, 0.8
+                return 3
             elif SelfRAGReflectionTokens.UTILITY_2 in response:
-                return 2, 0.8
+                return 2
             elif SelfRAGReflectionTokens.UTILITY_1 in response:
-                return 1, 0.8
-            return 3, 0.4
+                return 1
+            return 3
         except Exception as e:
             print(f"[SelfRAG] Utility evaluation error: {e}")
-            return 3, 0.4
+            return 3
 
 # ============================================================================
 # AGENTIC AI ARCHITECTURE - EMBEDDING REGULATION & HALLUCINATION REDUCTION
@@ -426,9 +418,7 @@ class RouterAgent:
                 "i appreciate", "appreciate it", "much appreciated", "grateful",
                 "that's great", "that's good", "good job", "well done"
             ]
-            # Only match if message starts with or is exactly a nicety pattern
             if any(query_lower == pattern or query_lower.startswith(pattern + " ") for pattern in nicety_patterns):
-                # Return appropriate nicety response
                 if any(query_lower.startswith(kw) for kw in ["thank you", "thanks", "thank", "thx", "ty", "shukriya", "i appreciate", "appreciate"]):
                     return False, 0.9, "You're welcome! I'm glad I could help. Is there anything else you'd like to know about Alkhidmat Foundation?"
                 elif any(query_lower.startswith(kw) for kw in ["bye", "goodbye", "see you", "farewell", "khuda hafiz"]):
@@ -436,14 +426,14 @@ class RouterAgent:
                 else:
                     return False, 0.9, "You're welcome! Is there anything else I can help you with?"
         
-        # Check retrieval necessity (reuse Self-RAG Step 1)
-        retrieve_needed, confidence = self.critic.should_retrieve(query)
+        # Check retrieval necessity via Self-RAG critic
+        retrieve_needed = self.critic.should_retrieve(query)
         
-        if not retrieve_needed and confidence > 0.8:
-            # High confidence that retrieval not needed
-            return False, confidence, None
+        if not retrieve_needed:
+            # Retrieval not needed - return with low confidence so caller can decide
+            return False, 0.7, None
         
-        return retrieve_needed, confidence, None
+        return True, 0.9, None
 
 class RetrieverAgent:
     """Retrieves documents with retry logic and query reformulation."""
@@ -489,40 +479,31 @@ Reformulated Query:"""
     
     def retrieve_with_retry(self, query: str, domain: str, top_k: int = 5, 
                            filter_category: Optional[str] = None) -> Tuple[List[Dict], np.ndarray, List[np.ndarray], bool]:
-        """Retrieve documents with automatic retry on low relevance.
-        If domain-specific query doesn't find enough relevant docs, also checks general domain.
-        Returns: (results, query_embedding, doc_embeddings, was_retried)
-        """
-        # Configuration for fallback to general domain
-        MIN_RELEVANT_DOCS = 2  # Minimum number of relevant documents needed
-        MIN_AVG_RELEVANCE = 0.6  # Minimum average relevance threshold
+        """Retrieve documents with automatic retry on low relevance."""
+        MIN_RELEVANT_DOCS = 2
+        MIN_AVG_RELEVANCE = 0.6
         
         results, query_embedding, doc_embeddings = retrieve_from_supabase(
             query, top_k=top_k, filter_category=filter_category
         )
         was_retried = False
         
-        # Check if we have enough relevant documents
         if results:
             avg_relevance = sum(r.get('similarity', 0) for r in results) / len(results)
             high_relevance_count = sum(1 for r in results if r.get('similarity', 0) >= MIN_AVG_RELEVANCE)
             
-            # If we have enough relevant docs, proceed with retry logic if enabled
             if high_relevance_count >= MIN_RELEVANT_DOCS and avg_relevance >= MIN_AVG_RELEVANCE:
-                # Enough relevant docs found - proceed with normal retry logic if enabled
                 if not RETRIEVAL_RETRY_ENABLE:
                     return results, query_embedding, doc_embeddings, was_retried
                 
                 if avg_relevance >= RETRIEVAL_RETRY_RELEVANCE_THRESHOLD:
                     return results, query_embedding, doc_embeddings, was_retried
                 
-                # Low relevance - try reformulation
                 print(f"[RETRIEVER-AGENT] ⚠️ Low relevance ({avg_relevance:.3f}), attempting reformulation...")
                 
                 for attempt in range(RETRIEVAL_RETRY_MAX_ATTEMPTS):
                     reformulated = self.reformulate_query(query, domain, reason="low_relevance")
                     
-                    # Get cached embedding or create new
                     cached_emb = find_similar_cached_embedding(reformulated)
                     if cached_emb is not None:
                         query_embedding = cached_emb
@@ -532,7 +513,6 @@ Reformulated Query:"""
                         query_embedding = embedder.encode([query_prefixed], normalize_embeddings=True)[0]
                         cache_query_embedding(reformulated, query_embedding)
                     
-                    # Retry retrieval with reformulated query
                     retry_results, _, retry_doc_embeddings = retrieve_from_supabase(
                         reformulated, top_k=top_k, filter_category=filter_category, query_embedding=query_embedding
                     )
@@ -548,43 +528,34 @@ Reformulated Query:"""
                 
                 return results, query_embedding, doc_embeddings, was_retried
             
-            # Not enough relevant docs - check general domain if domain-specific search
-            # Check if this was a domain-specific search (either via filter_category or domain parameter)
             is_domain_specific = (filter_category and filter_category != "general") or (not filter_category and domain != "general")
             
             if is_domain_specific:
                 print(f"[RETRIEVER-AGENT] ⚠️ Only found {high_relevance_count} relevant doc(s) in {domain} domain (avg relevance: {avg_relevance:.3f})")
                 print(f"[RETRIEVER-AGENT] 🔍 Falling back to general domain...")
                 
-                # Retrieve from general domain
                 general_results, _, general_doc_embeddings = retrieve_from_supabase(
                     query, top_k=top_k, filter_category="general", query_embedding=query_embedding
                 )
                 
                 if general_results:
-                    # Combine results, prioritizing domain-specific ones
-                    # Deduplicate by file_path + chunk_index
                     seen = set()
                     combined_results = []
                     
-                    # Add domain-specific results first (higher priority)
                     for r in results:
                         key = (r.get('file_path', ''), r.get('chunk_index', 0))
                         if key not in seen:
                             seen.add(key)
                             combined_results.append(r)
                     
-                    # Add general domain results (avoid duplicates)
                     for r in general_results:
                         key = (r.get('file_path', ''), r.get('chunk_index', 0))
                         if key not in seen:
                             seen.add(key)
                             combined_results.append(r)
                     
-                    # Sort by similarity (descending) and limit to top_k
                     combined_results = sorted(combined_results, key=lambda x: x.get('similarity', 0), reverse=True)[:top_k]
                     
-                    # Combine embeddings
                     combined_embeddings = doc_embeddings.copy()
                     combined_embeddings.extend(general_doc_embeddings)
                     
@@ -594,7 +565,6 @@ Reformulated Query:"""
                 else:
                     print(f"[RETRIEVER-AGENT] ⚠️ No results found in general domain either")
         
-        # No results initially - if domain-specific search, try general domain
         if not results:
             is_domain_specific = (filter_category and filter_category != "general") or (not filter_category and domain != "general")
             if is_domain_specific:
@@ -610,7 +580,6 @@ Reformulated Query:"""
                     was_retried = True
                     return general_results, query_embedding, general_doc_embeddings, was_retried
         
-        # No results or fallback didn't help - return original results
         if not RETRIEVAL_RETRY_ENABLE or not results:
             return results, query_embedding, doc_embeddings, was_retried
         
@@ -623,31 +592,17 @@ class EvidenceCoverageAgent:
         self.critic = critic
     
     def _split_compound_claims(self, sentence: str) -> List[str]:
-        """Split compound sentences into atomic claims.
-        
-        Example:
-        "Alkhidmat Foundation Pakistan is a non-profit organization that provides humanitarian aid, disaster relief, healthcare, education, and social welfare services."
-        →
-        [
-          "Alkhidmat Foundation Pakistan is a non-profit organization",
-          "It provides humanitarian aid and disaster relief",
-          "It works in healthcare and education",
-          "It supports social welfare services"
-        ]
-        """
+        """Split compound sentences into atomic claims."""
         import re
         
         sentence = sentence.strip()
         if not sentence or len(sentence) < 10:
             return []
         
-        # Extract subject (first noun phrase)
         subject_match = re.match(r'^([A-Z][^,\.!?]+?)(?:\s+(?:is|are|was|were|provides|provide|works|work|supports|support|offers|offer|operates|operate))', sentence)
         subject = subject_match.group(1).strip() if subject_match else None
         
-        # Pattern 1: Split on ", and", ", or" (Oxford comma pattern)
         if re.search(r',\s+(?:and|or)\s+', sentence, re.IGNORECASE):
-            # Split on comma-conjunction patterns
             parts = re.split(r',\s+(?:and|or)\s+', sentence, flags=re.IGNORECASE)
             if len(parts) > 1:
                 claims = []
@@ -655,23 +610,15 @@ class EvidenceCoverageAgent:
                     part = part.strip()
                     if not part:
                         continue
-                    
-                    # Remove leading comma if present
                     part = re.sub(r'^,\s*', '', part)
-                    
-                    # If this is not the first part and doesn't start with capital, add subject
                     if i > 0 and subject and not part[0].isupper():
-                        # Check if part already has a verb (like "provides", "works")
                         if not re.search(r'\b(?:provides|provide|works|work|supports|support|offers|offer|operates|operate|is|are)\b', part, re.IGNORECASE):
                             part = f"{subject} {part}"
-                    
                     if len(part.strip()) > 10:
                         claims.append(part.strip())
-                
                 if claims:
                     return claims
         
-        # Pattern 2: Split on standalone "and", "or" (not after comma)
         if re.search(r'\s+and\s+', sentence, re.IGNORECASE) and not re.search(r',\s+and\s+', sentence, re.IGNORECASE):
             parts = re.split(r'\s+and\s+', sentence, flags=re.IGNORECASE)
             if len(parts) > 1:
@@ -680,95 +627,61 @@ class EvidenceCoverageAgent:
                     part = part.strip()
                     if not part:
                         continue
-                    
-                    # If this is not the first part and doesn't start with capital, add subject
                     if i > 0 and subject and not part[0].isupper():
                         if not re.search(r'\b(?:provides|provide|works|work|supports|support|offers|offer|operates|operate|is|are)\b', part, re.IGNORECASE):
                             part = f"{subject} {part}"
-                    
                     if len(part.strip()) > 10:
                         claims.append(part.strip())
-                
                 if claims:
                     return claims
         
-        # Pattern 3: Split on commas (if multiple items listed)
         comma_parts = [p.strip() for p in sentence.split(',')]
-        if len(comma_parts) > 2:  # At least 3 parts means likely a list
-            # Check if it's a list pattern (all parts are similar length/structure)
+        if len(comma_parts) > 2:
             avg_len = sum(len(p) for p in comma_parts) / len(comma_parts)
-            if avg_len < 50:  # Short items suggest a list
+            if avg_len < 50:
                 claims = []
-                # First part is usually the main clause
                 if comma_parts[0]:
                     claims.append(comma_parts[0])
-                
-                # Remaining parts might be list items
                 for part in comma_parts[1:]:
                     part = part.strip()
                     if not part:
                         continue
-                    
-                    # Remove trailing "and" or "or"
                     part = re.sub(r'\s+(?:and|or)\s*$', '', part, flags=re.IGNORECASE)
-                    
-                    # Add subject if needed
                     if subject and not part[0].isupper():
                         if not re.search(r'\b(?:provides|provide|works|work|supports|support|offers|offer|operates|operate|is|are)\b', part, re.IGNORECASE):
                             part = f"{subject} {part}"
-                    
                     if len(part.strip()) > 10:
                         claims.append(part.strip())
-                
                 if len(claims) > 1:
                     return claims
         
-        # Pattern 4: Split on relative clauses ("that", "which", "who")
         relative_match = re.search(r'(.+?)\s+(?:that|which|who)\s+(.+)', sentence)
         if relative_match:
             main_clause = relative_match.group(1).strip()
             relative_clause = relative_match.group(2).strip()
-            
             claims = []
             if main_clause and len(main_clause) > 10:
                 claims.append(main_clause)
-            
-            # The relative clause might also need splitting
             if relative_clause and len(relative_clause) > 10:
-                # Try to add subject to relative clause if it's a complete thought
                 if subject and not relative_clause[0].isupper():
                     relative_clause = f"{subject} {relative_clause}"
                 claims.append(relative_clause)
-            
             if claims:
                 return claims
         
-        # If no splitting worked, return original sentence as single claim
         return [sentence] if len(sentence.strip()) > 10 else []
     
     def check_coverage(self, answer: str, context: str, query: str, domain: str = "general", 
                       results: Optional[List[Dict]] = None) -> Tuple[bool, List[str], float]:
-        """
-        Check if all claims in answer are supported by context.
-        Returns: (all_covered, unsupported_claims, coverage_score)
-        
-        Args:
-            answer: Generated answer text
-            context: Combined context from all retrieved documents
-            query: Original user query
-            domain: Query domain (general, donation, healthcare, etc.)
-            results: List of retrieved document results (for multi-document support)
-        """
+        """Check if all claims in answer are supported by context."""
         if not EVIDENCE_COVERAGE_ENABLE:
             return True, [], 1.0
         
-        # Check if summary is allowed for this domain/query type
         allow_abstractive_summary = self._is_summary_allowed(query, domain)
         
         if allow_abstractive_summary:
             print(f"[EVIDENCE-COVERAGE] Summary-allowed mode: Relaxing strictness for {domain} domain")
         
-        # Split answer into sentences first
         import re
         sentences = re.split(r'[.!?]\s+', answer)
         sentences = [s.strip() for s in sentences if len(s.strip()) > 10]
@@ -776,7 +689,6 @@ class EvidenceCoverageAgent:
         if not sentences:
             return True, [], 1.0
         
-        # Split compound sentences into atomic claims
         all_claims = []
         for sentence in sentences:
             atomic_claims = self._split_compound_claims(sentence)
@@ -790,14 +702,12 @@ class EvidenceCoverageAgent:
         unsupported = []
         supported_count = 0
         
-        # Use individual document contexts if available for multi-document support
         document_contexts = None
         if results and len(results) > 1:
             document_contexts = [r.get('text', '') for r in results]
             print(f"[EVIDENCE-COVERAGE] Using multi-document support ({len(document_contexts)} documents)")
         
         for claim in all_claims:
-            # Check if claim is supported by context (allows multi-document support)
             is_supported, confidence = self._check_claim_support(
                 claim, context, query, 
                 allow_multi_document=True,
@@ -805,7 +715,6 @@ class EvidenceCoverageAgent:
                 allow_abstractive=allow_abstractive_summary
             )
             
-            # Adjust threshold based on summary mode - MORE LENIENT
             threshold = 0.3 if allow_abstractive_summary else 0.4
             
             if not is_supported or confidence < threshold:
@@ -814,18 +723,15 @@ class EvidenceCoverageAgent:
                 supported_count += 1
         
         coverage_score = supported_count / len(all_claims) if all_claims else 1.0
-        all_covered = len(unsupported) == 0
         
-        # For summary mode, be more lenient - LOWERED THRESHOLD
         if allow_abstractive_summary:
-            all_covered = coverage_score >= 0.5  # Allow if 50%+ claims supported (was 70%)
+            all_covered = coverage_score >= 0.5
         else:
-            # For non-summary mode, also be more lenient
-            all_covered = coverage_score >= 0.4  # Allow if 40%+ claims supported
+            all_covered = coverage_score >= 0.4
         
         if not all_covered:
             print(f"[EVIDENCE-COVERAGE] ⚠️ Found {len(unsupported)} unsupported claims out of {len(all_claims)} (coverage: {coverage_score:.2f})")
-            for claim in unsupported[:3]:  # Show first 3
+            for claim in unsupported[:3]:
                 print(f"   - Unsupported: '{claim[:80]}...'")
         else:
             print(f"[EVIDENCE-COVERAGE] ✅ All claims supported (coverage: {coverage_score:.2f})")
@@ -835,41 +741,29 @@ class EvidenceCoverageAgent:
     def _is_summary_allowed(self, query: str, domain: str) -> bool:
         """Determine if abstractive summary is allowed for this query."""
         query_lower = query.lower()
-        
-        # Summary-allowed domains
         summary_domains = ["general", "about", "introduction"]
-        
-        # Summary-allowed query patterns
         summary_patterns = [
             "what is", "who is", "tell me about", "describe",
             "about", "overview", "introduction", "summary",
-            "kya hai", "kya hain", "kya hota hai"  # Urdu patterns
+            "kya hai", "kya hain", "kya hota hai"
         ]
-        
         is_summary_query = any(pattern in query_lower for pattern in summary_patterns)
         is_summary_domain = domain.lower() in summary_domains
-        
         return is_summary_query or is_summary_domain
     
     def _check_claim_support(self, claim: str, context: str, query: str,
                             allow_multi_document: bool = True,
                             document_contexts: Optional[List[str]] = None,
                             allow_abstractive: bool = False) -> Tuple[bool, float]:
-        """
-        Check if a single claim is supported by context.
-        Allows multi-document support - claim can be supported by one or more chunks.
-        """
-        # Use individual document contexts if available
+        """Check if a single claim is supported by context."""
         if document_contexts and len(document_contexts) > 1:
-            # Check each document separately
             context_parts = []
-            for i, doc_context in enumerate(document_contexts[:5]):  # Limit to first 5 docs
+            for i, doc_context in enumerate(document_contexts[:5]):
                 context_parts.append(f"Document {i+1}:\n{doc_context[:500]}")
             full_context = "\n\n".join(context_parts)
         else:
-            full_context = context[:2000]  # Use combined context
+            full_context = context[:2000]
         
-        # Adjust prompt based on mode - MORE LENIENT
         if allow_abstractive:
             support_instruction = """The claim may be supported by information spread across multiple documents.
             A claim is SUPPORTED if the information in the context (across one or more documents) substantiates it, 
@@ -906,17 +800,13 @@ Answer:"""
             if "[SUPPORTED]" in response:
                 return True, 0.8
             elif "[NOT_SUPPORTED]" in response:
-                # More lenient: even if NOT_SUPPORTED, give partial credit if context is related
-                # Check if claim keywords appear in context
                 claim_keywords = set(claim.lower().split())
                 context_keywords = set(full_context.lower().split())
                 overlap = len(claim_keywords & context_keywords) / len(claim_keywords) if claim_keywords else 0
-                
-                if overlap > 0.3:  # If 30%+ keyword overlap, give partial support
-                    return True, 0.4  # Partial support with lower confidence
+                if overlap > 0.3:
+                    return True, 0.4
                 return False, 0.2
-            # Default to supported if unclear - INCREASED CONFIDENCE
-            return True, 0.6  # Default to supported with higher confidence (was 0.5)
+            return True, 0.6
         except Exception as e:
             print(f"[EVIDENCE-COVERAGE] Error checking claim: {e}")
             return True, 0.5
@@ -925,14 +815,12 @@ class ConversationMemoryAgent:
     """Manages conversation state for follow-up queries without re-embedding."""
     
     def get_state(self, session_id: str) -> Optional[Dict]:
-        """Get conversation state for session."""
         if not CONVERSATION_MEMORY_ENABLE:
             return None
         return _conversation_state.get(session_id)
     
     def update_state(self, session_id: str, domain: str, doc_ids: List[str], 
                     confidence: float, query: str):
-        """Update conversation state."""
         if not CONVERSATION_MEMORY_ENABLE:
             return
         
@@ -944,7 +832,6 @@ class ConversationMemoryAgent:
             'timestamp': time.time()
         }
         
-        # Clean old states (older than 1 hour)
         current_time = time.time()
         expired_sessions = [
             sid for sid, state in _conversation_state.items()
@@ -954,7 +841,6 @@ class ConversationMemoryAgent:
             del _conversation_state[sid]
     
     def is_followup(self, query: str, session_id: str) -> Tuple[bool, Optional[Dict]]:
-        """Detect if query is a follow-up to previous conversation."""
         if not CONVERSATION_MEMORY_ENABLE:
             return False, None
         
@@ -962,21 +848,17 @@ class ConversationMemoryAgent:
         if not state:
             return False, None
         
-        # More lenient: Lower confidence threshold (was 0.7, now 0.5)
-        # Also check if there was a recent query (within last 5 minutes)
         last_confidence = state.get('last_answer_confidence', 0)
         last_timestamp = state.get('timestamp', 0)
         time_since_last = time.time() - last_timestamp
         
-        # If query is very recent (within 5 minutes), treat as follow-up even with lower confidence
-        is_recent = time_since_last < 300  # 5 minutes
+        is_recent = time_since_last < 300
         
         if last_confidence < 0.5 and not is_recent:
             return False, None
         
         query_lower = query.lower().strip()
         
-        # Expanded follow-up indicators
         followup_indicators = [
             "what about", "how about", "and", "also", "tell me more",
             "more", "details", "elaborate", "explain", "kya", "aur",
@@ -984,17 +866,12 @@ class ConversationMemoryAgent:
             "receipt", "payment", "donation", "get", "my", "me"
         ]
         
-        # Check for follow-up indicators
         has_indicator = any(indicator in query_lower for indicator in followup_indicators)
-        
-        # Check if query is very short (likely follow-up)
         is_short = len(query.split()) <= 5
         
-        # Check if query references previous context (contains words from last query/domain)
         last_query = state.get('last_query', '').lower()
         last_domain = state.get('last_domain', '').lower()
         
-        # If query contains words related to last domain or query, likely follow-up
         domain_keywords = {
             'donation': ['donation', 'donate', 'payment', 'receipt', 'zakat', 'sadaqah', 'money', 'pay'],
             'healthcare': ['hospital', 'clinic', 'health', 'treatment', 'doctor', 'medical', 'service'],
@@ -1004,13 +881,11 @@ class ConversationMemoryAgent:
         relevant_keywords = domain_keywords.get(last_domain, [])
         has_domain_keywords = any(keyword in query_lower for keyword in relevant_keywords)
         
-        # Check for word overlap with last query
         last_query_words = set(last_query.split())
         current_query_words = set(query_lower.split())
         word_overlap = len(last_query_words & current_query_words) / max(len(last_query_words), 1)
-        has_overlap = word_overlap > 0.2  # 20% word overlap
+        has_overlap = word_overlap > 0.2
         
-        # More lenient follow-up detection
         is_followup = (
             has_indicator or 
             (is_short and is_recent) or 
@@ -1036,28 +911,20 @@ class DomainClassifier:
    
     @staticmethod
     def initialize_domain_embeddings(model_name: str = None):
-        """
-        Pre-compute embeddings for all anchor queries and create domain centroids.
-        OPTIMIZED: Reuses main embedding model instead of loading a separate one.
-        """
         if DomainClassifier._domain_embeddings_cache is not None:
             return
        
         if os.environ.get('BATCH_MODE') != 'True':
             print("\n🔄 Initializing domain embeddings from anchor queries...")
        
-        # OPTIMIZATION: Reuse the main embedding model instead of loading a new one
-        # This saves ~1-2 seconds on first query
-        # Get the embedder function from the module namespace (avoid circular import)
         import sys
         current_module = sys.modules[__name__]
-        model = current_module.get_embedder() # Reuse main embedding model
+        model = current_module.get_embedder()
         DomainClassifier._embedding_model = model
        
         domain_embeddings = {}
        
         for domain, queries in DOMAIN_ANCHOR_QUERIES.items():
-            # Use the same prefix format as query encoding for consistency
             prefixed_queries = [f"query: {q}" for q in queries]
             embeddings = model.encode(prefixed_queries, show_progress_bar=False, normalize_embeddings=True)
             centroid = np.mean(embeddings, axis=0)
@@ -1073,14 +940,9 @@ class DomainClassifier:
    
     @staticmethod
     def classify_domain(query: str) -> Dict[str, any]:
-        """
-        Classify query using embedding similarity to domain centroids.
-        OPTIMIZED: Reuses main embedding model.
-        """
         if DomainClassifier._domain_embeddings_cache is None:
             DomainClassifier.initialize_domain_embeddings()
        
-        # Use same prefix format as query encoding for consistency
         query_prefixed = f"query: {query}"
         query_embedding = DomainClassifier._embedding_model.encode([query_prefixed], normalize_embeddings=True)[0]
        
@@ -1102,7 +964,6 @@ class DomainClassifier:
    
     @staticmethod
     def get_domain_emoji(domain: str) -> str:
-        """Get emoji representation for domain."""
         emoji_map = {
             'donation': '💰',
             'healthcare': '🏥',
@@ -1124,10 +985,8 @@ class ConfidenceScorer:
    
     @staticmethod
     def calculate_perplexity(log_probs: List[float]) -> float:
-        """Calculate perplexity from log probabilities."""
         if not log_probs:
             return float('inf')
-       
         avg_log_prob = np.mean(log_probs)
         perplexity = np.exp(-avg_log_prob)
         alpha = 0.1
@@ -1135,45 +994,35 @@ class ConfidenceScorer:
    
     @staticmethod
     def calculate_average_token_confidence(log_probs: List[float]) -> float:
-        """Calculate average token log-probability."""
         if not log_probs:
             return 0.0
-       
         probs = [np.exp(lp) for lp in log_probs]
         return np.mean(probs)
    
     @staticmethod
     def calculate_entropy_confidence(token_probs_distributions: List[np.ndarray]) -> float:
-        """Calculate entropy-based confidence."""
         if not token_probs_distributions:
             return float('inf')
-       
         entropies = []
         for prob_dist in token_probs_distributions:
             if len(prob_dist) > 0:
                 ent = entropy(prob_dist)
                 entropies.append(ent)
-       
         if not entropies:
             return float('inf')
-       
         max_entropy = max(entropies)
         confidence = 1 - min(max_entropy / 10.0, 1.0)
         return confidence
    
     @staticmethod
     def calculate_top_k_weighted_confidence(log_probs: List[float], k: int = 5) -> float:
-        """Weighted confidence score using top k% tokens."""
         if not log_probs or len(log_probs) < 5:
             return np.mean([np.exp(lp) for lp in log_probs]) if log_probs else 0.0
-       
         probs = [np.exp(lp) for lp in log_probs]
         sorted_probs = sorted(probs, reverse=True)
         top_k_probs = sorted_probs[:k]
-       
         joint_top_k = np.prod(top_k_probs) ** (1/k)
         joint_all = np.prod(probs) ** (1/len(probs))
-       
         weighted_score = 0.7 * joint_top_k + 0.3 * joint_all
         return weighted_score
    
@@ -1183,17 +1032,14 @@ class ConfidenceScorer:
         doc_embeddings: List[np.ndarray],
         top_k: int = 5
     ) -> float:
-        """Calculate confidence based on cosine similarity between query and documents."""
         if not doc_embeddings:
             return 0.0
-       
         cosine_similarities = []
         for doc_emb in doc_embeddings[:top_k]:
             query_reshaped = query_embedding.reshape(1, -1)
             doc_reshaped = doc_emb.reshape(1, -1)
             cos_sim = cosine_similarity(query_reshaped, doc_reshaped)[0][0]
             cosine_similarities.append(cos_sim)
-       
         return float(np.mean(cosine_similarities))
    
     @staticmethod
@@ -1203,7 +1049,12 @@ class ConfidenceScorer:
         token_probs_distributions: List[np.ndarray] = None,
         selfrag_scores: Dict = None
     ) -> Dict[str, float]:
-        """Calculate all confidence metrics and return a comprehensive score."""
+        """Calculate all confidence metrics and return a comprehensive score.
+        
+        Note: selfrag_scores parameter is kept for API compatibility but
+        selfrag_support and selfrag_utility are no longer used as they were
+        hardcoded constants, not genuinely calculated values.
+        """
         scores = {}
         scores['retrieval_confidence'] = retrieval_confidence
        
@@ -1215,9 +1066,9 @@ class ConfidenceScorer:
         if token_probs_distributions:
             scores['entropy_confidence'] = ConfidenceScorer.calculate_entropy_confidence(token_probs_distributions)
 
-        if selfrag_scores:
-            scores['selfrag_support'] = selfrag_scores.get('support_score', 0.0)
-            scores['selfrag_utility'] = selfrag_scores.get('utility_score', 0.0)
+        # Note: selfrag_support/utility removed - they were hardcoded constants (not real scores)
+        # Only keep selfrag_relevance if provided, as it comes from actual document assessments
+        if selfrag_scores and selfrag_scores.get('relevance_score', 0) > 0:
             scores['selfrag_relevance'] = selfrag_scores.get('relevance_score', 0.0)
        
         # Combined score (weighted average)
@@ -1235,14 +1086,6 @@ class ConfidenceScorer:
         if 'weighted_top_k' in scores:
             combined += 0.15 * scores['weighted_top_k']
             weight_sum += 0.15
-
-        if 'selfrag_support' in scores:
-            combined += 0.25 * scores['selfrag_support']
-            weight_sum += 0.25
-       
-        if 'selfrag_utility' in scores:
-            combined += 0.15 * scores['selfrag_utility']
-            weight_sum += 0.15
        
         if weight_sum > 0:
             scores['combined_confidence'] = combined / weight_sum
@@ -1253,32 +1096,26 @@ class ConfidenceScorer:
 
 # ============ Brand Term Protection ============
 def protect_brand_terms(text: str) -> str:
-    """Protect brand terms during translation to prevent corruption."""
     for term in BRAND_TERMS:
         text = re.sub(rf"\b{re.escape(term)}\b", f"@@{term}@@", text, flags=re.IGNORECASE)
     return text
 
 def restore_brand_terms(text: str) -> str:
-    """Restore brand terms after translation."""
     return text.replace("@@", "")
 
 # ============ Enhanced Language Detection ============
 def is_urdu_script(text: str) -> bool:
-    """Check if text contains Urdu script (Arabic block)."""
     return bool(re.search(r'[\u0600-\u06FF]', text))
 
 def looks_like_roman_urdu(text: str) -> bool:
-    """Heuristic detection of Roman Urdu text."""
     if is_urdu_script(text):
         return False
-    # If it contains many non-latin characters, skip
     if re.search(r'[^\x00-\x7F]', text):
         return False
     tokens = re.findall(r"[a-zA-Z']+", text.lower())
     if not tokens:
         return False
     hits = sum(1 for t in tokens if t in ROMAN_URDU_MARKERS)
-    # Heuristic: at least 2 marker tokens OR 1 marker token with short query
     if hits >= 2:
         return True
     if hits >= 1 and len(tokens) <= 6:
@@ -1286,21 +1123,12 @@ def looks_like_roman_urdu(text: str) -> bool:
     return False
 
 def translate_auto_to_english(text: str) -> str:
-    """Fallback translation for roman urdu if transliteration isn't available."""
     try:
         return GoogleTranslator(source='auto', target='en').translate(text)
     except Exception:
         return text
 
 class QueryLangProfile:
-    """
-    Keeps the pipeline consistent:
-    - original_query: what user typed
-    - input_lang: 'en' | 'ur' | 'roman_ur'
-    - query_en: English version used for embeddings/retrieval/classification/critic prompts
-    - output_lang: same as input_lang (answer must match)
-    - query_urdu_script: if roman_ur, we also produce Urdu-script version for better downstream translation prompts
-    """
     def __init__(self, original_query: str, input_lang: str, query_en: str,
                  output_lang: str, query_urdu_script: Optional[str] = None):
         self.original_query = original_query
@@ -1310,17 +1138,13 @@ class QueryLangProfile:
         self.query_urdu_script = query_urdu_script
 
 def build_query_lang_profile(query: str) -> QueryLangProfile:
-    """Build language profile for a query."""
     q = query.strip()
 
-    # 1) Urdu script
     if is_urdu_script(q) or detect_language(q) == "ur":
         q_en = translate_urdu_to_english(q)
         return QueryLangProfile(original_query=q, input_lang="ur", query_en=q_en, output_lang="ur", query_urdu_script=q)
 
-    # 2) Roman Urdu (heuristic)
     if looks_like_roman_urdu(q):
-        # Prefer direct auto->English translation (stable, no extra deps)
         q_en = translate_auto_to_english(q)
         return QueryLangProfile(
             original_query=q,
@@ -1330,7 +1154,6 @@ def build_query_lang_profile(query: str) -> QueryLangProfile:
             query_urdu_script=None
         )
 
-    # 3) Default English
     return QueryLangProfile(original_query=q, input_lang="en", query_en=q, output_lang="en", query_urdu_script=None)
 
 # ============ Language Detection ============
@@ -1352,11 +1175,6 @@ def translate_urdu_to_english(text: str) -> str:
         return text
 
 def translate_english_to_urdu(text: str, timeout: int = 10) -> str:
-    """
-    Translate English text to Urdu with timeout protection.
-    Returns original text if translation fails or times out.
-    Uses concurrent.futures for cross-platform timeout support.
-    """
     try:
         from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
        
@@ -1377,10 +1195,8 @@ def translate_english_to_urdu(text: str, timeout: int = 10) -> str:
 
 # ============ Query Analysis ============
 def analyze_query(query: str) -> Dict[str, Any]:
-    """Detect what kind of answer the user wants"""
     q_lower = query.lower().strip()
 
-    # Treat "how to" questions as procedural (steps)
     procedural_markers = ["how to", "how do i", "how can i", "steps", "step by step", "procedure"]
     roman_markers = ["kaise", "kesy", "kese", "kaisay", "kya", "kyun", "kyu"]
 
@@ -1401,10 +1217,6 @@ def analyze_query(query: str) -> Dict[str, Any]:
     }
 
 def expand_query_for_retrieval(query_en: str, domain: str, query_info: Dict[str, Any]) -> str:
-    """
-    Small deterministic expansion for short/procedural queries to improve retrieval.
-    Keeps core RAG logic identical; only changes the string embedded.
-    """
     q = query_en.strip()
     if len(q.split()) >= 6 and not query_info.get("wants_list"):
         return q
@@ -1421,7 +1233,6 @@ def expand_query_for_retrieval(query_en: str, domain: str, query_info: Dict[str,
 # ============ Document Processing ============
 
 def extract_text_from_pdf(file_bytes: bytes) -> str:
-    """Extract text from PDF file bytes."""
     try:
         import PyPDF2
         from io import BytesIO
@@ -1448,7 +1259,6 @@ def extract_text_from_pdf(file_bytes: bytes) -> str:
         return ""
 
 def extract_text_from_docx(file_bytes: bytes) -> str:
-    """Extract text from DOCX file bytes."""
     try:
         from docx import Document
         from io import BytesIO
@@ -1457,12 +1267,10 @@ def extract_text_from_docx(file_bytes: bytes) -> str:
         doc = Document(docx_file)
         text_parts = []
         
-        # Extract text from paragraphs
         for paragraph in doc.paragraphs:
             if paragraph.text.strip():
                 text_parts.append(paragraph.text)
         
-        # Extract text from tables
         for table in doc.tables:
             for row in table.rows:
                 row_text = []
@@ -1481,69 +1289,40 @@ def extract_text_from_docx(file_bytes: bytes) -> str:
         return ""
 
 def load_documents_from_zip(zip_path: str, file_paths_filter: Optional[set] = None) -> Dict[str, List[Dict]]:
-    """
-    Load documents from ZIP file.
-    
-    Args:
-        zip_path: Path to ZIP file
-        file_paths_filter: Optional set of file paths to process. If provided, only these files will be extracted.
-                          This allows skipping expensive text extraction for files that already exist.
-    
-    Returns:
-        Dictionary mapping category to list of documents
-    """
     if not os.path.exists(zip_path):
         raise FileNotFoundError(f"ZIP file not found: {zip_path}")
     documents_by_category = {}
     skipped_files = []
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
         for file_path in zip_ref.namelist():
-            # Skip directories
             if file_path.endswith("/"):
                 continue
-            
-            # Skip macOS metadata files and directories
             if "__MACOSX" in file_path or file_path.startswith("._") or Path(file_path).name.startswith("._"):
                 skipped_files.append(file_path)
                 continue
-            
-            # If filter is provided, only process files in the filter set
             if file_paths_filter is not None and file_path not in file_paths_filter:
                 continue
-            
-            # Skip other common system/metadata files
             filename = Path(file_path).name.lower()
             if filename in [".ds_store", "thumbs.db", ".gitignore", ".gitkeep"]:
                 skipped_files.append(file_path)
                 continue
-            
-            # Extract file extension
             file_ext = Path(file_path).suffix.lower()
-            
-            # Skip unsupported file types
             if file_ext not in [".txt", ".pdf", ".docx"]:
                 skipped_files.append(file_path)
                 continue
-            
             parts = Path(file_path).parts
             if len(parts) < 3:
                 skipped_files.append(file_path)
                 continue
-            
             category = parts[-2]
             filename = parts[-1]
-            
             try:
-                # Read file bytes
                 with zip_ref.open(file_path) as f:
                     file_bytes = f.read()
-                
-                # Extract text based on file type
                 if file_ext == ".txt":
                     try:
                         content = file_bytes.decode("utf-8")
                     except UnicodeDecodeError:
-                        # Try with different encoding
                         try:
                             content = file_bytes.decode("latin-1")
                         except Exception as e:
@@ -1567,8 +1346,6 @@ def load_documents_from_zip(zip_path: str, file_paths_filter: Optional[set] = No
                 else:
                     skipped_files.append(file_path)
                     continue
-                
-                # Add document if content was successfully extracted
                 if content.strip():
                     documents_by_category.setdefault(category, []).append({
                         "content": content,
@@ -1584,40 +1361,21 @@ def load_documents_from_zip(zip_path: str, file_paths_filter: Optional[set] = No
     
     if skipped_files:
         print(f"\n⚠️ Skipped {len(skipped_files)} files:")
-        # Group by reason
         metadata_files = [f for f in skipped_files if "__MACOSX" in f or Path(f).name.startswith("._")]
         unsupported = [f for f in skipped_files if f not in metadata_files and Path(f).suffix.lower() not in [".txt", ".pdf", ".docx"]]
         empty_or_error = [f for f in skipped_files if f not in metadata_files and Path(f).suffix.lower() in [".txt", ".pdf", ".docx"]]
-        
         if metadata_files:
             print(f"   - {len(metadata_files)} system/metadata file(s) (macOS resource forks, etc.)")
-            if len(metadata_files) <= 3:
-                for f in metadata_files:
-                    print(f"     • {f}")
-            else:
-                for f in metadata_files[:3]:
-                    print(f"     • {f}")
-                print(f"     ... and {len(metadata_files) - 3} more")
-        
         if unsupported:
             print(f"   - {len(unsupported)} unsupported file type(s)")
-            if len(unsupported) <= 5:
-                for f in unsupported:
-                    print(f"     • {f}")
-        
         if empty_or_error:
             print(f"   - {len(empty_or_error)} file(s) with extraction errors or empty content")
-            if len(empty_or_error) <= 5:
-                for f in empty_or_error:
-                    print(f"     • {f}")
     
     total_loaded = sum(len(docs) for docs in documents_by_category.values())
     print(f"\n✅ Successfully loaded {total_loaded} documents from ZIP")
-    
     return documents_by_category
 
 def clean_text(text: str) -> str:
-    """Enhanced cleaning while preserving structure"""
     text = re.sub(r'={3,}[\s\S]*?={3,}', '', text)
     text = re.sub(r'URL:\s*https?://\S+', '', text)
     text = re.sub(r'TITLE:.*?\n', '', text)
@@ -1642,7 +1400,6 @@ def prepare_documents(zip_path: str) -> Tuple[List[str], List[Dict]]:
     return all_docs, metadata
 
 def split_documents(documents: List[str], metadata: List[Dict]):
-    """Improved semantic chunking"""
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=CHUNK_SIZE,
         chunk_overlap=CHUNK_OVERLAP,
@@ -1659,23 +1416,17 @@ def split_documents(documents: List[str], metadata: List[Dict]):
             metas.append(chunk_meta)
 
     avg_len = int(np.mean([len(c) for c in chunks]))
-    print(
-        f"Split into {len(chunks)} chunks (avg {avg_len} chars, overlap {CHUNK_OVERLAP})"
-    )
+    print(f"Split into {len(chunks)} chunks (avg {avg_len} chars, overlap {CHUNK_OVERLAP})")
     return chunks, metas
 
 # ============ Supabase Storage ============
 def save_chunks_to_supabase(chunks: List[str], metadata: List[Dict], embeddings: np.ndarray):
-    """Store chunks and embeddings in Supabase using client"""
     supabase = get_supabase_client()
-   
     print("Saving to Supabase...")
-   
     rows = []
     for i, chunk in enumerate(chunks):
         meta = metadata[i]
         emb_list = embeddings[i].tolist()
-       
         rows.append({
             "doc_id": str(uuid.uuid4()),
             "chunk_text": chunk,
@@ -1686,10 +1437,8 @@ def save_chunks_to_supabase(chunks: List[str], metadata: List[Dict], embeddings:
             "doc_domain": meta.get("category"),
             "embedding": emb_list
         })
-   
     batch_size = 100
     total_inserted = 0
-   
     for i in range(0, len(rows), batch_size):
         batch = rows[i:i + batch_size]
         try:
@@ -1704,13 +1453,10 @@ def save_chunks_to_supabase(chunks: List[str], metadata: List[Dict], embeddings:
                     total_inserted += 1
                 except Exception as e2:
                     print(f" ⚠️ Failed to insert chunk: {e2}")
-   
     print(f"✅ Stored {total_inserted}/{len(rows)} chunks in Supabase")
 
 def clear_documents_table():
-    """Clear all documents (use with caution!)"""
     supabase = get_supabase_client()
-   
     try:
         result = supabase.table("documents").delete().neq("doc_id", "00000000-0000-0000-0000-000000000000").execute()
         print("✅ Cleared all documents from Supabase")
@@ -1718,7 +1464,6 @@ def clear_documents_table():
         print(f"⚠️ Error clearing documents: {e}")
 
 def document_exists(file_path: str) -> bool:
-    """Check if a document already exists in the database by file_path."""
     supabase = get_supabase_client()
     try:
         result = supabase.table("documents").select("doc_id").eq("file_path", file_path).limit(1).execute()
@@ -1728,7 +1473,6 @@ def document_exists(file_path: str) -> bool:
         return False
 
 def delete_document_by_path(file_path: str) -> bool:
-    """Delete all chunks of a document by file_path (for re-indexing)."""
     supabase = get_supabase_client()
     try:
         result = supabase.table("documents").delete().eq("file_path", file_path).execute()
@@ -1741,22 +1485,7 @@ def delete_document_by_path(file_path: str) -> bool:
 
 def add_document_incremental(file_path: str, content: str, category: str, filename: str, 
                              reindex: bool = False) -> bool:
-    """
-    Add a single document incrementally to the knowledge base.
-    
-    Args:
-        file_path: Path to the document (used as unique identifier)
-        content: Document content text
-        category: Document category (donation, healthcare, general, etc.)
-        filename: Original filename
-        reindex: If True, delete existing chunks and re-index
-    
-    Returns:
-        True if successful, False otherwise
-    """
     supabase = get_supabase_client()
-    
-    # Check if document already exists
     if document_exists(file_path):
         if reindex:
             print(f"🔄 Document exists, re-indexing: {file_path}")
@@ -1769,13 +1498,11 @@ def add_document_incremental(file_path: str, content: str, category: str, filena
     print(f"   Category: {category}")
     print(f"   Path: {file_path}")
     
-    # Clean text
     cleaned_content = clean_text(content)
     if not cleaned_content:
         print(f"⚠️ Document has no content after cleaning, skipping")
         return False
     
-    # Split into chunks
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=CHUNK_SIZE,
         chunk_overlap=CHUNK_OVERLAP,
@@ -1790,14 +1517,12 @@ def add_document_incremental(file_path: str, content: str, category: str, filena
         print(f"⚠️ No chunks created, skipping")
         return False
     
-    # Create embeddings only for new chunks
     print(f"   Creating embeddings for {len(chunks)} chunks...")
     embedder = get_embedder()
     prefixed = [f"passage: {chunk}" for chunk in chunks]
     embeddings = embedder.encode(prefixed, show_progress_bar=False, batch_size=32, normalize_embeddings=True)
     embeddings = np.array(embeddings).astype("float32")
     
-    # Prepare rows for insertion
     rows = []
     for idx, chunk in enumerate(chunks):
         rows.append({
@@ -1811,10 +1536,8 @@ def add_document_incremental(file_path: str, content: str, category: str, filena
             "embedding": embeddings[idx].tolist()
         })
     
-    # Insert into Supabase
     batch_size = 100
     total_inserted = 0
-    
     for i in range(0, len(rows), batch_size):
         batch = rows[i:i + batch_size]
         try:
@@ -1823,7 +1546,6 @@ def add_document_incremental(file_path: str, content: str, category: str, filena
             print(f"   Inserted batch {i//batch_size + 1}: {len(batch)} chunks")
         except Exception as e:
             print(f"   ⚠️ Error inserting batch {i//batch_size + 1}: {e}")
-            # Try individual inserts
             for row in batch:
                 try:
                     supabase.table("documents").insert(row).execute()
@@ -1836,40 +1558,10 @@ def add_document_incremental(file_path: str, content: str, category: str, filena
 
 def add_single_file_incremental(file_path: str, content: str, category: str = "general", 
                                 reindex: bool = False) -> bool:
-    """
-    Add a single file (not from ZIP) incrementally to the knowledge base.
-    
-    Args:
-        file_path: Path/identifier for the document (e.g., "General/new_doc.txt")
-        content: Document content text
-        category: Document category (donation, healthcare, general, etc.)
-        reindex: If True, delete existing chunks and re-index
-    
-    Returns:
-        True if successful, False otherwise
-    
-    Example:
-        add_single_file_incremental(
-            file_path="General/new_policy.txt",
-            content="New policy content...",
-            category="general"
-        )
-    """
     filename = Path(file_path).name
     return add_document_incremental(file_path, content, category, filename, reindex=reindex)
 
 def add_documents_from_zip_incremental(zip_path: str, reindex_existing: bool = False) -> Dict[str, int]:
-    """
-    Add documents from ZIP file incrementally (only new documents).
-    Optimized to check existence BEFORE extracting text to avoid unnecessary processing.
-    
-    Args:
-        zip_path: Path to ZIP file containing documents
-        reindex_existing: If True, re-index existing documents; if False, skip them
-    
-    Returns:
-        Dictionary with stats: {"added": count, "skipped": count, "reindexed": count, "failed": count}
-    """
     print("\n" + "="*80)
     print("INCREMENTAL DOCUMENT ADDITION")
     print("="*80)
@@ -1878,7 +1570,6 @@ def add_documents_from_zip_incremental(zip_path: str, reindex_existing: bool = F
         print("❌ Cannot connect to Supabase. Aborting.")
         return {"added": 0, "skipped": 0, "reindexed": 0, "failed": 0}
     
-    # First, get list of file paths from ZIP without extracting content
     print("\n📦 Scanning ZIP file for documents...")
     import zipfile
     file_paths_to_process = []
@@ -1886,36 +1577,23 @@ def add_documents_from_zip_incremental(zip_path: str, reindex_existing: bool = F
     
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
         for file_path in zip_ref.namelist():
-            # Skip directories
             if file_path.endswith("/"):
                 continue
-            
-            # Skip macOS metadata files
             if "__MACOSX" in file_path or Path(file_path).name.startswith("._"):
                 continue
-            
-            # Skip other system files
             filename = Path(file_path).name.lower()
             if filename in [".ds_store", "thumbs.db", ".gitignore", ".gitkeep"]:
                 continue
-            
-            # Check file extension
             file_ext = Path(file_path).suffix.lower()
             if file_ext not in [".txt", ".pdf", ".docx"]:
                 continue
-            
-            # Check path structure
             parts = Path(file_path).parts
             if len(parts) < 3:
                 continue
-            
-            # Check if document already exists (before expensive extraction)
             exists = document_exists(file_path)
-            
             if exists and not reindex_existing:
                 skipped_paths.append(file_path)
                 continue
-            
             file_paths_to_process.append(file_path)
     
     print(f"   Found {len(file_paths_to_process)} new documents to process")
@@ -1925,7 +1603,6 @@ def add_documents_from_zip_incremental(zip_path: str, reindex_existing: bool = F
         print("\n✅ All documents already exist in knowledge base. Nothing to add.")
         return {"added": 0, "skipped": len(skipped_paths), "reindexed": 0, "failed": 0}
     
-    # Now load and extract only the documents we need to process
     print("\n📦 Loading documents from ZIP (extracting text only for new documents)...")
     docs_by_cat = load_documents_from_zip(zip_path, file_paths_filter=set(file_paths_to_process))
     
@@ -1934,7 +1611,6 @@ def add_documents_from_zip_incremental(zip_path: str, reindex_existing: bool = F
     total_docs = sum(len(docs) for docs in docs_by_cat.values())
     print(f"Found {total_docs} documents to process across {len(docs_by_cat)} categories\n")
     
-    # Process each document
     for cat, docs in docs_by_cat.items():
         print(f"📁 Category: {cat} ({len(docs)} documents)")
         for doc in docs:
@@ -1943,7 +1619,6 @@ def add_documents_from_zip_incremental(zip_path: str, reindex_existing: bool = F
             content = doc["content"]
             category = doc["category"]
             
-            # Check if exists (should already be checked, but double-check for reindex case)
             exists = document_exists(file_path)
             
             if exists and not reindex_existing:
@@ -1955,7 +1630,6 @@ def add_documents_from_zip_incremental(zip_path: str, reindex_existing: bool = F
                 print(f"   🔄 Re-indexing: {filename} [{file_path}]")
                 stats["reindexed"] += 1
             
-            # Add document incrementally
             print(f"   ➕ Processing: {filename} [{file_path}]")
             success = add_document_incremental(
                 file_path=file_path,
@@ -1980,20 +1654,10 @@ def add_documents_from_zip_incremental(zip_path: str, reindex_existing: bool = F
     print(f"🔄 Re-indexed: {stats['reindexed']}")
     print(f"❌ Failed: {stats['failed']}")
     print("="*80 + "\n")
-    
     return stats
 
 # ============ Build Pipeline ============
 def build_alkhidmat_rag(zip_path: str, clear_existing: bool = False, incremental: bool = False):
-    """
-    Build the RAG system and store in Supabase.
-    
-    Args:
-        zip_path: Path to ZIP file containing documents
-        clear_existing: If True, clear all existing documents before building
-        incremental: If True, only add new documents (skip existing ones)
-                     If False, rebuild everything (unless clear_existing=False and incremental=False)
-    """
     print("\n" + "="*80)
     print("BUILDING ALKHIDMAT RAG SYSTEM")
     print("="*80)
@@ -2002,7 +1666,6 @@ def build_alkhidmat_rag(zip_path: str, clear_existing: bool = False, incremental
         print("❌ Cannot connect to Supabase. Aborting.")
         return
    
-    # Incremental mode: only add new documents
     if incremental:
         stats = add_documents_from_zip_incremental(zip_path, reindex_existing=False)
         print("\nBUILD: Initializing domain classification...")
@@ -2012,7 +1675,6 @@ def build_alkhidmat_rag(zip_path: str, clear_existing: bool = False, incremental
         print("="*80)
         return
     
-    # Full rebuild mode
     if clear_existing:
         print("\n⚠️ Clearing existing documents...")
         clear_documents_table()
@@ -2043,13 +1705,8 @@ def build_alkhidmat_rag(zip_path: str, clear_existing: bool = False, incremental
 def retrieve_from_supabase(query: str, top_k: int = 5,
                            filter_category: str = None,
                            query_embedding: Optional[np.ndarray] = None) -> Tuple[List[Dict], np.ndarray, List[np.ndarray]]:
-    """
-    FIXED: Now properly extracts embeddings from Supabase for confidence scoring
-    AGENTIC: Supports embedding caching - if query_embedding provided, skips generation
-    """
     embed_start = time.time()
     
-    # Use provided embedding or check cache or generate new
     if query_embedding is not None:
         print(f"[RETRIEVAL] Using provided embedding", flush=True)
     else:
@@ -2078,27 +1735,20 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
         if filter_category:
             params['filter_category'] = filter_category
        
-        # First, get the matches using RPC
         result = supabase.rpc('match_documents', params).execute()
         rows = result.data
         print(f"[TIMING] Supabase RPC call: {time.time() - rpc_start:.2f}s", flush=True)
        
-        # OPTIMIZED: Only fetch embeddings if we have results
-        # The RPC already returns similarity and text, so we only need embeddings for confidence scoring
         if rows:
             fetch_start = time.time()
             doc_ids = [row['doc_id'] for row in rows]
            
-            # OPTIMIZATION: Only fetch embeddings, not full documents (we already have text from RPC)
-            # This reduces data transfer and speeds up the query
             full_docs_result = supabase.table("documents").select(
-                "doc_id, embedding" # Only fetch what we need
+                "doc_id, embedding"
             ).in_("doc_id", doc_ids).execute()
            
-            # Create a mapping for easy lookup
             doc_map = {doc['doc_id']: doc for doc in full_docs_result.data}
            
-            # Merge embedding data back into rows
             for row in rows:
                 if row['doc_id'] in doc_map:
                     row['embedding'] = doc_map[row['doc_id']]['embedding']
@@ -2107,7 +1757,6 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
     except Exception as e:
         print(f"⚠️ RPC function not available, using fallback method: {e}")
        
-        # Fallback: manual similarity calculation
         result = supabase.table("documents").select(
             "doc_id, chunk_text, category, filename, file_path, chunk_index, embedding"
         ).execute()
@@ -2137,20 +1786,15 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
             "similarity": float(row.get('similarity', 0))
         })
        
-        # FIXED: Properly extract and convert embedding
         if 'embedding' in row and row['embedding'] is not None:
             try:
-                # Handle different embedding formats
                 if isinstance(row['embedding'], str):
-                    # If it's a string representation, try to parse it
                     import ast
                     embedding_data = ast.literal_eval(row['embedding'])
                     doc_embeddings.append(np.array(embedding_data, dtype=np.float32))
                 elif isinstance(row['embedding'], list):
-                    # If it's already a list
                     doc_embeddings.append(np.array(row['embedding'], dtype=np.float32))
                 elif isinstance(row['embedding'], np.ndarray):
-                    # If it's already a numpy array
                     doc_embeddings.append(row['embedding'].astype(np.float32))
                 else:
                     print(f"⚠️ Unexpected embedding type: {type(row['embedding'])}")
@@ -2165,12 +1809,11 @@ def retrieve_from_supabase(query: str, top_k: int = 5,
         print(f"{i}. [{r['category']}] {r['filename']} (similarity: {r['similarity']:.3f})", flush=True)
     print(f"📊 Document embeddings extracted: {len(doc_embeddings)}/{len(results)}", flush=True)
     print("="*80 + "\n", flush=True)
-    sys.stdout.flush() # Force flush
+    sys.stdout.flush()
    
     return results, query_embedding, doc_embeddings
 
 def sanitize_chunk_text(text: str) -> str:
-    """Remove existing Q/A labels from chunks"""
     text = re.sub(r'(?mi)^\s*(user\s+question|question|q:)\s*[:\-–]?\s*.*$', '', text)
     text = re.sub(r'(?mi)^\s*(answer|a:)\s*[:\-–]?\s*.*$', '', text)
     text = re.sub(r'(?is)(?:^|\n)\s*q[:\.\-\)]\s*.*?\n\s*a[:\.\-\)]\s*.*?(?:\n|$)', '', text)
@@ -2187,21 +1830,16 @@ _LLM_MODEL = None
 # ============ Answer Generation (ENHANCED) ============
 def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400,
                     filter_category: str = None):
-    """
-    ENHANCED: Now includes domain classification and confidence scoring
-    FIXED: Added multilingual profile handling like in Self-RAG path for consistent Urdu query processing.
-    """
+    """ENHANCED: Now includes domain classification and confidence scoring"""
     start_time = time.time()
     print(f"[RAG] Processing query: {query[:50]}...", flush=True)
     sys.stdout.flush()
    
-    # FIXED: Use profile for multilingual handling
     profile = build_query_lang_profile(query)
     query_info = analyze_query(profile.original_query)
-    query_for_rag = profile.query_en  # English for retrieval/classification
+    query_for_rag = profile.query_en
     original_query = profile.original_query
    
-    # CLASSIFY DOMAIN (using English query)
     domain_start = time.time()
     print(f"[RAG] Classifying domain...", flush=True)
     sys.stdout.flush()
@@ -2209,10 +1847,8 @@ def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400,
     print(f"[TIMING] Domain classification: {time.time() - domain_start:.2f}s", flush=True)
     winning_domain = domain_classification.get("domain", "general")
    
-    # FIXED: Expand English query for retrieval
     retrieval_query_en = expand_query_for_retrieval(query_for_rag, winning_domain, query_info)
    
-    # Retrieve with embeddings (using English query)
     retrieval_start = time.time()
     print(f"[RAG] Retrieving from Supabase (top_k={top_k})...", flush=True)
     sys.stdout.flush()
@@ -2225,7 +1861,6 @@ def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400,
         no_answer = "معاف کیجیے، میں اس سوال کا جواب دینے کے لیے متعلقہ معلومات نہیں ڈھونڈ سکا۔" if profile.output_lang == "ur" else "I apologize, but I couldn't find relevant information to answer this question."
         return no_answer, original_query, profile.input_lang, [], {}, domain_classification
    
-    # Build context (translate if needed for output lang)
     context_parts = []
     for r in results:
         chunk_text = sanitize_chunk_text(r["text"])
@@ -2244,7 +1879,6 @@ def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400,
    
     context = "\n\n".join(context_parts)
    
-    # Build prompt based on output lang
     wants_list = query_info['wants_list']
     wants_summary = query_info['wants_summary']
     wants_detail = query_info['wants_detail']
@@ -2258,7 +1892,6 @@ def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400,
         else:
             format_instruction = "براہ کرم مکمل اور واضح جواب دیں۔ اگر سیاق و سباق میں تفصیلات ہیں تو سب شامل کریں۔"
        
-        # Use Urdu-script query for display if available
         display_question = profile.query_urdu_script or original_query
 
         prompt = f"""{base_instruction}
@@ -2311,7 +1944,6 @@ User question: {original_query}
 Answer (ONLY the final answer, no labels):
 """
    
-    # Generate with confidence data
     llm_start = time.time()
     print(f"[RAG] Generating answer with LLM...", flush=True)
     sys.stdout.flush()
@@ -2320,12 +1952,10 @@ Answer (ONLY the final answer, no labels):
     )
     print(f"[TIMING] LLM generation: {time.time() - llm_start:.2f}s", flush=True)
    
-    # Clean response
     print(f"[RAG] Cleaning response...", flush=True)
     sys.stdout.flush()
     answer = clean_llm_response(answer)
    
-    # CALCULATE CONFIDENCE SCORES
     print(f"[RAG] Calculating confidence scores...", flush=True)
     sys.stdout.flush()
     retrieval_conf = ConfidenceScorer.calculate_retrieval_confidence(
@@ -2340,7 +1970,6 @@ Answer (ONLY the final answer, no labels):
         token_probs_distributions=token_probs_distributions
     )
    
-    # FIXED: Post-process answer based on output_lang
     if profile.output_lang == "ur":
         if not is_urdu_script(answer):
             answer = translate_english_to_urdu(answer, timeout=15)
@@ -2350,7 +1979,6 @@ Answer (ONLY the final answer, no labels):
         answer_ur = restore_brand_terms(answer_ur)
         answer = romanize_to_roman_urdu_with_llm(answer_ur)
 
-    # Print confidence scores
     print("\n" + "="*80, flush=True)
     print("CONFIDENCE SCORES:", flush=True)
     print("="*80, flush=True)
@@ -2369,7 +1997,6 @@ Answer (ONLY the final answer, no labels):
     print(f" └─ Entropy Confidence: {entropy_conf:.4f}", flush=True)
     print("="*80, flush=True)
    
-    # Interpretation
     if combined_conf >= 0.7:
         print("✅ High confidence - Answer is likely reliable", flush=True)
     elif combined_conf >= 0.5:
@@ -2379,7 +2006,6 @@ Answer (ONLY the final answer, no labels):
     print("="*80 + "\n", flush=True)
     sys.stdout.flush()
    
-    # Create sources list
     sources = [{
         "category": r['category'],
         "filename": r['filename'],
@@ -2394,14 +2020,12 @@ Answer (ONLY the final answer, no labels):
    
     return answer, original_query, profile.input_lang, sources, confidence_scores, domain_classification
 
-LATIN_ONLY_RE = re.compile(r'^[\x00-\x7F\s]+$') # only ASCII + whitespace
+LATIN_ONLY_RE = re.compile(r'^[\x00-\x7F\s]+$')
 
 def romanize_to_roman_urdu_with_llm(urdu_text: str, max_tokens: int = 260) -> str:
-    """Convert Urdu script to Roman Urdu using LLM."""
     if not urdu_text.strip():
         return urdu_text
 
-    # Attempt 1-2: direct Urdu -> Roman Urdu
     for attempt in range(2):
         prompt = f"""Task: Convert Urdu (Arabic script) to Roman Urdu (Latin letters).
 
@@ -2422,11 +2046,9 @@ Roman Urdu (Latin-only):"""
         out = model(prompt, max_tokens=max_tokens, temperature=0.0, stop=["\n\n", "\nUrdu:", "\nRoman Urdu:"], echo=False)
         out = out['choices'][0]['text'].strip()
 
-        # Accept only if it's truly Latin-only AND not Urdu-script
         if out and (not is_urdu_script(out)) and LATIN_ONLY_RE.match(out):
             return out
 
-    # Fallback: Urdu -> English via GoogleTranslator, then English -> Roman Urdu via LLM
     en = translate_urdu_to_english(urdu_text)
     prompt2 = f"""Task: Translate English into Roman Urdu (Latin letters).
 
@@ -2448,11 +2070,9 @@ Roman Urdu (Latin-only):"""
     if out2 and (not is_urdu_script(out2)) and LATIN_ONLY_RE.match(out2):
         return out2
 
-    # Last resort: return an English version rather than Urdu (better than violating roman_ur contract)
     return en
 
 def clean_llm_response(text: str) -> str:
-    """Clean up LLM output to remove unwanted artifacts"""
     if not text:
         return text
 
@@ -2518,17 +2138,15 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
     evidence_agent = EvidenceCoverageAgent(critic)
     memory_agent = ConversationMemoryAgent()
 
+    # Note: removed fake confidence fields (domain_confidence, retrieve_confidence,
+    # answer_in_context_confidence, support_score, utility_score) - these were
+    # hardcoded constants, not genuinely calculated values.
     selfrag_metrics = {
         'domain_relevant': True,
-        'domain_confidence': 0.0,
         'retrieve_needed': False,
-        'retrieve_confidence': 0.0,
         'answer_in_context': False,
-        'answer_in_context_confidence': 0.0,
         'relevance_score': 0.0,
         'support_level': 'uncertain',
-        'support_score': 0.0,
-        'utility_score': 0.0,
         'utility_rating': 0,
         'embedding_cached': False,
         'retrieval_retried': False,
@@ -2544,9 +2162,7 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
         if is_followup and memory_state:
             print(f"[AGENTIC-RAG] 🔄 Follow-up detected! Previous context: {memory_state.get('last_domain', 'unknown')} domain", flush=True)
             selfrag_metrics['followup_detected'] = True
-            # Use previous domain for follow-ups to maintain context
             if memory_state.get('last_domain'):
-                # Set filter_category based on previous domain for better retrieval
                 domain_to_category = {
                     'donation': 'Donors',
                     'healthcare': 'Health',
@@ -2558,10 +2174,11 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
                     print(f"[AGENTIC-RAG] Using previous domain context: {filter_category}", flush=True)
 
     # AGENTIC STEP 0.5: Query Router Agent (before embeddings)
+    # This is the SINGLE retrieval check - handles greetings, niceties, and retrieval necessity.
+    # No duplicate check in Self-RAG Step 1 (removed).
     print(f"\n[AGENTIC-RAG] Router Agent: Checking if retrieval needed...", flush=True)
     should_retrieve, router_confidence, cached_answer = router_agent.route(query_for_rag)
     selfrag_metrics['retrieve_needed'] = should_retrieve
-    selfrag_metrics['retrieve_confidence'] = router_confidence
     
     if not should_retrieve and cached_answer:
         print(f"[AGENTIC-RAG] ✅ Router: No retrieval needed, returning cached answer", flush=True)
@@ -2569,29 +2186,22 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
                 {'combined_confidence': router_confidence}, {}, selfrag_metrics)
     
     if not should_retrieve:
-        print(f"[AGENTIC-RAG] ⚠️ Router: Retrieval not needed but no cached answer", flush=True)
-        # Continue with retrieval anyway (fallback)
+        print(f"[AGENTIC-RAG] ⚠️ Router: Retrieval not needed but no cached answer - continuing anyway", flush=True)
 
     # STEP 0: Check domain relevance (SKIP or RELAX for follow-ups)
     if SELFRAG_ENABLE:
-        # For follow-ups, skip strict domain relevance check or be more lenient
         if is_followup:
             print(f"\n[SELF-RAG] Step 0: Skipping strict domain relevance check for follow-up query", flush=True)
-            # Use previous domain for follow-ups
             if memory_state and memory_state.get('last_domain'):
                 prev_domain = memory_state.get('last_domain')
                 print(f" ✓ Using previous domain context: {prev_domain}", flush=True)
                 selfrag_metrics['domain_relevant'] = True
-                selfrag_metrics['domain_confidence'] = 0.8  # High confidence for follow-ups
             else:
-                # Still check but be lenient
                 print(f"\n[SELF-RAG] Step 0: Checking domain relevance (lenient for follow-up)...", flush=True)
-                is_domain_relevant, domain_conf = critic.is_domain_relevant(query_for_rag)
+                is_domain_relevant = critic.is_domain_relevant(query_for_rag)
                 selfrag_metrics['domain_relevant'] = is_domain_relevant
-                selfrag_metrics['domain_confidence'] = domain_conf
-                # More lenient threshold for follow-ups (0.85 instead of 0.75)
-                if (not is_domain_relevant) and (domain_conf >= 0.85):
-                    print(f" ✗ Question is IRRELEVANT (confidence: {domain_conf:.2f})", flush=True)
+                if not is_domain_relevant:
+                    print(f" ✗ Question is IRRELEVANT to Alkhidmat Foundation", flush=True)
                     dummy_domain_classification = {
                         'domain': 'irrelevant',
                         'confidence': 0.0,
@@ -2601,15 +2211,14 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
                     return (irrelevant_response, original_query, profile.input_lang, [], {'combined_confidence': 0.0},
                             dummy_domain_classification, selfrag_metrics)
                 else:
-                    print(f" ✓ Question is RELEVANT to domain (confidence: {domain_conf:.2f})", flush=True)
+                    print(f" ✓ Question is RELEVANT to domain", flush=True)
         else:
             print(f"\n[SELF-RAG] Step 0: Checking domain relevance...", flush=True)
-            is_domain_relevant, domain_conf = critic.is_domain_relevant(query_for_rag)
+            is_domain_relevant = critic.is_domain_relevant(query_for_rag)
             selfrag_metrics['domain_relevant'] = is_domain_relevant
-            selfrag_metrics['domain_confidence'] = domain_conf
 
-            if (not is_domain_relevant) and (domain_conf >= 0.75):
-                print(f" ✗ Question is IRRELEVANT to Alkhidmat Foundation (confidence: {domain_conf:.2f})", flush=True)
+            if not is_domain_relevant:
+                print(f" ✗ Question is IRRELEVANT to Alkhidmat Foundation", flush=True)
                 dummy_domain_classification = {
                     'domain': 'irrelevant',
                     'confidence': 0.0,
@@ -2619,35 +2228,19 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
                 return (irrelevant_response, original_query, profile.input_lang, [], {'combined_confidence': 0.0},
                         dummy_domain_classification, selfrag_metrics)
             else:
-                print(f" ✓ Question is RELEVANT to domain (confidence: {domain_conf:.2f})", flush=True)
+                print(f" ✓ Question is RELEVANT to domain", flush=True)
 
-    # STEP 1: Should we retrieve?
-    if SELFRAG_ENABLE:
-        print(f"\n[SELF-RAG] Step 1: Checking retrieval necessity...", flush=True)
-        retrieve_needed, retrieve_conf = critic.should_retrieve(query_for_rag)
-        selfrag_metrics['retrieve_needed'] = retrieve_needed
-        selfrag_metrics['retrieve_confidence'] = retrieve_conf
-
-        if retrieve_needed:
-            print(f" ✓ Retrieval NEEDED (confidence: {retrieve_conf:.2f})", flush=True)
-        else:
-            print(f" ✗ Retrieval NOT needed (confidence: {retrieve_conf:.2f})", flush=True)
-            no_retrieval_answer = "I can help with that, but I need to access my knowledge base for specific information about Alkhidmat Foundation."
-            return (no_retrieval_answer, original_query, profile.input_lang, [],
-                    {'combined_confidence': 0.5}, {}, selfrag_metrics)
-    else:
-        retrieve_needed = True
-        selfrag_metrics['retrieve_needed'] = True
+    # Retrieval always proceeds from here - RouterAgent already handled the check above
+    selfrag_metrics['retrieve_needed'] = True
 
     # Classify domain (use previous domain for follow-ups if available)
     domain_start = time.time()
     if is_followup and memory_state and memory_state.get('last_domain'):
-        # For follow-ups, use previous domain to maintain context
         prev_domain = memory_state.get('last_domain')
         print(f"\n[SELF-RAG] Using previous domain for follow-up: {prev_domain}", flush=True)
         domain_classification = {
             'domain': prev_domain,
-            'confidence': 0.85,  # High confidence for follow-ups
+            'confidence': 0.85,
             'all_scores': {prev_domain: 0.85}
         }
         winning_domain = prev_domain
@@ -2669,7 +2262,6 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
         selfrag_metrics['embedding_cached'] = True
         print(f"[AGENTIC-RAG] ✅ Using cached embedding!", flush=True)
     else:
-        # Generate new embedding
         embed_start = time.time()
         embedder = get_embedder()
         query_prefixed = f"query: {retrieval_query_en}"
@@ -2703,14 +2295,16 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
         relevance_scores = []
 
         for i, result in enumerate(results):
-            is_relevant, rel_conf = critic.assess_relevance(query_for_rag, result['text'])
-            relevance_scores.append(rel_conf if is_relevant else 0.0)
+            is_relevant = critic.assess_relevance(query_for_rag, result['text'])
+            # Use 0.8 as proxy score for relevant (1.0 would be harsh, 0 for irrelevant)
+            relevance_score = 0.8 if is_relevant else 0.0
+            relevance_scores.append(relevance_score)
 
-            if is_relevant and rel_conf >= SELFRAG_RELEVANCE_THRESHOLD:
+            if is_relevant:
                 relevant_results.append(result)
-                print(f" ✓ Doc {i+1}: RELEVANT (confidence: {rel_conf:.2f})", flush=True)
+                print(f" ✓ Doc {i+1}: RELEVANT", flush=True)
             else:
-                print(f" ✗ Doc {i+1}: Not relevant (confidence: {rel_conf:.2f})", flush=True)
+                print(f" ✗ Doc {i+1}: Not relevant", flush=True)
 
         if not relevant_results:
             print(f" ⚠️ No relevant documents found after filtering!", flush=True)
@@ -2745,17 +2339,16 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
     # STEP 3.5: Check if answer exists in context
     if SELFRAG_ENABLE:
         print(f"\n[SELF-RAG] Step 3.5: Checking if answer exists in context...", flush=True)
-        can_answer, answer_conf = critic.check_answer_in_context(query_for_rag, context)
+        can_answer = critic.check_answer_in_context(query_for_rag, context)
         selfrag_metrics['answer_in_context'] = can_answer
-        selfrag_metrics['answer_in_context_confidence'] = answer_conf
 
-        if not can_answer and answer_conf >= 0.7:
-            print(f" ✗ Answer CANNOT be found in context (confidence: {answer_conf:.2f})", flush=True)
+        if not can_answer:
+            print(f" ✗ Answer CANNOT be found in context", flush=True)
             no_info_response = "I don't have that information."
             return (no_info_response, original_query, profile.input_lang, results,
                     {'combined_confidence': 0.0}, domain_classification, selfrag_metrics)
         else:
-            print(f" ✓ Answer CAN be found in context (confidence: {answer_conf:.2f})", flush=True)
+            print(f" ✓ Answer CAN be found in context", flush=True)
 
     # Build prompt
     wants_list = query_info['wants_list']
@@ -2844,21 +2437,16 @@ Answer (ONLY the final answer, no labels):
         )
         selfrag_metrics['evidence_coverage'] = coverage_score
         
-        # Adjust threshold based on summary mode - MORE LENIENT
         allow_summary = evidence_agent._is_summary_allowed(query_for_rag, winning_domain)
-        coverage_threshold = 0.3 if allow_summary else 0.4  # Lowered from 0.5/0.6
+        coverage_threshold = 0.3 if allow_summary else 0.4
         
         if not all_covered and coverage_score < coverage_threshold:
             print(f"[AGENTIC-RAG] ⚠️ Low evidence coverage ({coverage_score:.2f}), removing unsupported claims...", flush=True)
-            # Remove unsupported claims from answer
             for claim in unsupported_claims:
-                # More careful removal - remove whole sentences containing the claim
                 import re
-                # Find sentences containing the claim
                 sentences = re.split(r'[.!?]\s+', answer)
                 filtered_sentences = []
                 for sentence in sentences:
-                    # Check if sentence contains any unsupported claim
                     contains_unsupported = any(claim.lower() in sentence.lower() for claim in unsupported_claims)
                     if not contains_unsupported:
                         filtered_sentences.append(sentence)
@@ -2870,7 +2458,6 @@ Answer (ONLY the final answer, no labels):
                 else:
                     answer = ""
             
-            # Clean up extra whitespace
             answer = re.sub(r'\s+', ' ', answer).strip()
             if not answer:
                 answer = "I cannot provide a reliable answer as some claims cannot be verified from the available information."
@@ -2878,12 +2465,11 @@ Answer (ONLY the final answer, no labels):
     # STEP 5: Verify support
     if SELFRAG_ENABLE:
         print(f"\n[SELF-RAG] Step 5: Verifying answer support...", flush=True)
-        support_level, support_conf = critic.verify_support(query_for_rag, answer, context)
+        support_level = critic.verify_support(query_for_rag, answer, context)
         selfrag_metrics['support_level'] = support_level
-        selfrag_metrics['support_score'] = support_conf
-        print(f" → Support level: {support_level.upper()} (confidence: {support_conf:.2f})", flush=True)
+        print(f" → Support level: {support_level.upper()}", flush=True)
 
-        if support_level == "no_support" and support_conf >= SELFRAG_SUPPORT_THRESHOLD:
+        if support_level == "no_support":
             print(f" ⚠️ Answer NOT supported by context - rejecting!", flush=True)
             no_answer = "I cannot provide a reliable answer based on the available information."
             return no_answer, original_query, profile.input_lang, results, {}, domain_classification, selfrag_metrics
@@ -2891,25 +2477,22 @@ Answer (ONLY the final answer, no labels):
     # STEP 6: Utility
     if SELFRAG_ENABLE:
         print(f"\n[SELF-RAG] Step 6: Evaluating answer utility...", flush=True)
-        utility_rating, utility_conf = critic.evaluate_utility(query_for_rag, answer)
+        utility_rating = critic.evaluate_utility(query_for_rag, answer)
         selfrag_metrics['utility_rating'] = utility_rating
-        selfrag_metrics['utility_score'] = utility_rating / 5.0
-        print(f" → Utility rating: {utility_rating}/5 (confidence: {utility_conf:.2f})", flush=True)
+        print(f" → Utility rating: {utility_rating}/5", flush=True)
 
         if utility_rating <= 2:
             print(f" ⚠️ Answer utility too low - rejecting!", flush=True)
             no_answer = "I cannot provide a sufficiently useful answer to your question based on the available information."
             return no_answer, original_query, profile.input_lang, results, {}, domain_classification, selfrag_metrics
 
-    # Confidence scores
+    # Confidence scores (based on real signals only)
     print(f"\n[SELF-RAG] Calculating final confidence scores...", flush=True)
     sys.stdout.flush()
     retrieval_conf = ConfidenceScorer.calculate_retrieval_confidence(query_embedding, doc_embeddings, top_k=top_k)
    
-    # Prepare Self-RAG scores for confidence calculation
+    # Only pass relevance_score - the one genuine Self-RAG signal we have
     selfrag_scores = {
-        'support_score': selfrag_metrics.get('support_score', 0.0),
-        'utility_score': selfrag_metrics.get('utility_score', 0.0),
         'relevance_score': selfrag_metrics.get('relevance_score', 0.0)
     }
    
@@ -2967,7 +2550,6 @@ Answer (ONLY the final answer, no labels):
 
 # ============ CLI Functions (ENHANCED) ============
 def query_alkhidmat_rag(query: str, category: str = None, use_selfrag: bool = True):
-    """ENHANCED: Now displays domain classification and confidence scores"""
     if use_selfrag and SELFRAG_ENABLE:
         answer, original_query, input_lang, sources, confidence_scores, domain_classification, selfrag_metrics = generate_answer_selfrag(
             query, filter_category=category
@@ -2985,7 +2567,6 @@ def query_alkhidmat_rag(query: str, category: str = None, use_selfrag: bool = Tr
         print("CATEGORY FILTER:", category)
     print("="*80)
    
-    # Display domain classification (NEW)
     domain_emoji = DomainClassifier.get_domain_emoji(domain_classification['domain'])
     print(f"\n{domain_emoji} DOMAIN CLASSIFICATION:")
     print(f"{'-'*80}")
@@ -3001,7 +2582,6 @@ def query_alkhidmat_rag(query: str, category: str = None, use_selfrag: bool = Tr
     print("\nANSWER:")
     print(answer)
    
-    # Display confidence scores (NEW)
     print("\n" + "="*80)
     print("CONFIDENCE SCORES:")
     print("="*80)
@@ -3013,7 +2593,6 @@ def query_alkhidmat_rag(query: str, category: str = None, use_selfrag: bool = Tr
     print(f" └─ Entropy Confidence: {confidence_scores.get('entropy_confidence', 0):.4f}")
     print("="*80)
    
-    # Interpretation (NEW)
     combined = confidence_scores.get('combined_confidence', 0)
     if combined >= 0.7:
         print("✅ High confidence - Answer is likely reliable")
@@ -3026,33 +2605,26 @@ def query_alkhidmat_rag(query: str, category: str = None, use_selfrag: bool = Tr
     return answer
 
 def show_statistics():
-    """Show database statistics"""
     supabase = get_supabase_client()
-   
     print("\n" + "="*80)
     print("DATABASE STATISTICS")
     print("="*80)
-   
     try:
         result = supabase.table("documents").select("doc_id", count="exact").execute()
         print(f"\nTotal chunks: {result.count}")
-       
         result = supabase.table("documents").select("category").execute()
         categories = {}
         for row in result.data:
             cat = row.get('category', 'Unknown')
             categories[cat] = categories.get(cat, 0) + 1
-       
         print("\nDocuments by Category:")
         for cat, count in sorted(categories.items(), key=lambda x: x[1], reverse=True):
             print(f" {cat}: {count} chunks")
-           
     except Exception as e:
         print(f"Error getting statistics: {e}")
 
 # ============ Batch Processing (ENHANCED) ============
 def batch_query_file(input_file: str, output_file: str, use_selfrag: bool = True):
-    """ENHANCED: Now includes domain classification and confidence scores in output"""
     os.environ['BATCH_MODE'] = 'True'
    
     print(f"\n{'='*80}")
@@ -3086,7 +2658,6 @@ def batch_query_file(input_file: str, output_file: str, use_selfrag: bool = True
                 f_out.write(f"QUERY: {original_query}\n")
                 f_out.write(f"LANGUAGE: {input_lang}\n\n")
                
-                # Write domain classification (NEW)
                 domain_emoji = DomainClassifier.get_domain_emoji(domain_classification['domain'])
                 f_out.write(f"{domain_emoji} DOMAIN CLASSIFICATION:\n")
                 f_out.write(f"{'-'*80}\n")
@@ -3099,7 +2670,6 @@ def batch_query_file(input_file: str, output_file: str, use_selfrag: bool = True
                
                 f_out.write(f"ANSWER:\n{answer}\n\n")
                
-                # Write confidence scores (NEW)
                 f_out.write(f"CONFIDENCE SCORES:\n")
                 f_out.write(f"{'-'*80}\n")
                 f_out.write(f"Combined Confidence: {confidence_scores.get('combined_confidence', 0):.4f} ⭐\n")
@@ -3144,7 +2714,6 @@ if __name__ == "__main__":
     import sys
     import atexit
    
-    # Add cleanup handler for LLM
     def cleanup_llm():
         global _LLM_MODEL
         if _LLM_MODEL is not None:
@@ -3187,16 +2756,12 @@ if __name__ == "__main__":
         print("\nUSAGE:")
         print("1. Test Connection:")
         print(" python RAG_supabase_enhanced.py test")
-       
         print("\n2. Build Index (Upload to Supabase):")
         print(" python RAG_supabase_enhanced.py build [zip_path] [--clear]")
-       
         print("\n3. Single Query (Terminal):")
         print(" python RAG_supabase_enhanced.py query 'your question'")
-       
         print("\n4. Batch Query (File I/O):")
         print(" python RAG_supabase_enhanced.py file_query input.txt output.txt")
-       
         print("\n5. View Stats:")
         print(" python RAG_supabase_enhanced.py stats")
         print("\n" + "="*80)
