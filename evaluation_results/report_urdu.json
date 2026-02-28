@@ -1,0 +1,45 @@
+{
+  "language": "Urdu",
+  "language_key": "urdu",
+  "run_at": "2026-03-01T03:31:22.849285",
+  "results": [
+    {
+      "id": "Q01",
+      "question": "میں غزہ کے لیے الخدمت فاؤنڈیشن کو عطیہ کیسے دے سکتا/سکتی ہوں؟",
+      "expected_answer": "آپ میزان بینک اکاؤنٹ نمبر 02140100861151 کے ذریعے، کیش پک اپ نمبر 0800-44448 پر کال کر کے، کلیکشن سینٹرز پر جا کر، یا ویب سائٹ alkhidmat.org/donate کے ذریعے ڈیبٹ یا کریڈٹ کارڈ سے عطیہ دے سکتے ہیں۔",
+      "actual_answer": "آپ الخدمت فاؤنڈیشن کے “Rebuild Gaza” کیمپین کے لیے ان طریقوں سے عطیہ دے سکتے/سکتی ہیں:\n\n1) ایزی پیسہ/جاز کیش کے ذریعے  \n- اپنی پسندیدہ ایپ کھولیں  \n- Other Payments (Donations) میں جائیں  \n- “Alkhidmat Foundation” منتخب کریں اور ڈونیٹ کریں\n\n2) چیک/بینک ڈرافٹ کے ذریعے  \n- چیک یا بینک ڈرافٹ “Alkhidmat Foundation Pakistan” کے نام بنوائیں  \n- گھر سے کلیکشن کے لیے 0800 44 44 8 یا 0304 111 4 222 پر کال کریں، الخدمت کا نمائندہ وصول کر لے گا\n\n3) بینک اکاؤنٹ (Meezan Bank) میں جمع کرا کے  \n- Account Title: Al Khidmat Foundation Pakistan  \n- Account No. (PKR): 02140101095120  \n- IBAN: PK94MEZN0002140101095120  \n- SWIFT Code: MEZNPKKA",
+      "rag_time_seconds": 4955.87,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "Great job! The answer is fully relevant and directly addresses the question without any irrelevant information.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—great job staying true to the retrieval context!",
+        "ContextualPrecision": "The score is 0.00 because all the top-ranked nodes in the retrieval contexts are irrelevant to the input. For example, the first node only discusses the president's participation in a convention and relief activities, but 'does not mention any donation methods or instructions on how to donate.' Similarly, the second node appeals for public participation but 'does not provide any information about how to donate or specific donation channels.' Since none of the nodes provide the required information about donation methods, the score cannot be higher.",
+        "ContextualRecall": "The score is 0.00 because none of the sentences in the expected output can be attributed to any of the 5 nodes in the retrieval context; the context does not mention donation methods, bank account numbers, phone numbers, collection centers, or the website referenced in the expected output.",
+        "Hallucination": "The score is 0.00 because all factual alignments show the actual output is fully consistent with the context, and there are no contradictions or unsupported claims."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9198595420764633,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    }
+  ]
+}

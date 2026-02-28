@@ -2797,6 +2797,68 @@ async def update_knowledge_base(
             detail=f"Error updating knowledge base: {str(e)}"
         )
 
+# ============================================================================
+# EVAL REPORT ENDPOINTS
+# ============================================================================
+
+EVAL_REPORT_FILES = {
+    "english": "report_english.json",
+    "urdu":    "report_urdu.json",
+    "roman":   "report_roman.json",
+}
+
+@app.get("/admin/eval/status")
+async def get_eval_status(admin: dict = Depends(get_current_admin)):
+    """Returns which language reports exist on disk."""
+    report_dir = Path("evaluation_results")
+    status = {}
+    for lang, filename in EVAL_REPORT_FILES.items():
+        path = report_dir / filename
+        if path.exists():
+            try:
+                stat = path.stat()
+                with open(path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                status[lang] = {
+                    "exists": True,
+                    "filename": filename,
+                    "run_at": data.get("run_at") or datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                    "language": data.get("language", lang),
+                    "total_cases": len(data.get("results", [])),
+                }
+            except Exception:
+                status[lang] = {"exists": True, "filename": filename, "run_at": None, "total_cases": 0}
+        else:
+            status[lang] = {"exists": False, "filename": filename}
+    return status
+
+
+@app.get("/admin/eval/reports/{language}")
+async def get_eval_report_by_language(
+    language: str,
+    admin: dict = Depends(get_current_admin)
+):
+    """Returns evaluation results for a given language (english | urdu | roman)."""
+    if language not in EVAL_REPORT_FILES:
+        raise HTTPException(status_code=400, detail=f"Unknown language '{language}'. Use: english, urdu, roman")
+
+    report_path = Path("evaluation_results") / EVAL_REPORT_FILES[language]
+    if not report_path.exists():
+        raise HTTPException(
+            status_code=404,
+            detail=f"No report found for '{language}'. Run: python test_rag_evaluation.py --language {language} --use-openai-judge"
+        )
+
+    try:
+        with open(report_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return {
+            "language": language,
+            "run_at": data.get("run_at"),
+            "results": data.get("results", []),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error reading report: {e}")
 
 # ============================================================================
 # LEGACY ENDPOINTS (for backward compatibility)
