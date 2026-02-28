@@ -2,33 +2,58 @@ import os
 
 """
 Shared configuration/constants for the Alkhidmat RAG system.
-Separated from `RAG_supabase.py` so other modules can import without
-pulling in the entire RAG implementation.
+Keep this file lightweight: env + constants only.
 """
 
 # ============ SUPABASE CONFIG ============
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_ANON_KEY")
+SUPABASE_KEY = os.environ.get("SUPABASE_ANON_KEY") or os.environ.get("SUPABASE_KEY")
 
 # ============ MODELS ============
-EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-base"
-LLM_MODEL_FILENAME = os.environ.get(
-    "GPT4ALL_MODEL", "Llama-3.2-3B-Instruct-Q4_K_M.gguf"
-)
+# Multilingual cross-lingual retrieval model (Urdu <-> English works)
+EMBEDDING_MODEL_NAME = os.environ.get("EMBEDDING_MODEL_NAME", "intfloat/multilingual-e5-base")
+EMBEDDING_DIM = int(os.environ.get("EMBEDDING_DIM", "768"))
+
+# Default (general) local model (GGUF path)
+LLM_MODEL_FILENAME = os.environ.get("LLM_MODEL_FILENAME", os.environ.get("GPT4ALL_MODEL", "Llama-3.2-3B-Instruct-Q4_K_M.gguf"))
+
+# Urdu LLM options
+URDU_LLM_ENABLE = os.environ.get("URDU_LLM_ENABLE", "1").lower() in ("1", "true", "yes", "y")
+
+# (A) Local GGUF path (if you already downloaded it)
+URDU_LLM_MODEL_FILENAME = os.environ.get("URDU_LLM_MODEL", "Alif-1.0-8B-Instruct.gguf")
+
+# (B) Load GGUF directly from Hugging Face via llama-cpp-python
+URDU_LLM_HF_REPO = os.environ.get("URDU_LLM_HF_REPO", "large-traversaal/Alif-1.0-8B-Instruct")
+URDU_LLM_HF_FILENAME = os.environ.get("URDU_LLM_HF_FILENAME", "model-Q4_K.gguf")
+URDU_LLM_LOAD_VIA_HF = os.environ.get("URDU_LLM_LOAD_VIA_HF", "1").lower() in ("1", "true", "yes", "y")
+
+# Evidence handling for Urdu output
+# - bilingual_evidence: keep context English, answer Urdu Nastaliq
+# - translate_context: translate retrieved context to Urdu before generation (slower, noisier)
+URDU_EVIDENCE_MODE = os.environ.get("URDU_EVIDENCE_MODE", "bilingual_evidence")  # bilingual_evidence | translate_context
+
+# Retrieval controls
+CROSS_LINGUAL_RETRIEVAL_ENABLE = os.environ.get("CROSS_LINGUAL_RETRIEVAL_ENABLE", "1").lower() in ("1", "true", "yes", "y")
+DUAL_QUERY_RETRIEVAL_ENABLE = os.environ.get("DUAL_QUERY_RETRIEVAL_ENABLE", "1").lower() in ("1", "true", "yes", "y")
+
+# If True, translate context into Urdu before generation for Urdu/Roman Urdu outputs
+# For Option-3 bilingual-evidence mode, keep this False or leave it True but it will be overridden by URDU_EVIDENCE_MODE.
+TRANSLATE_CONTEXT_FOR_URDU_OUTPUT = os.environ.get(
+    "TRANSLATE_CONTEXT_FOR_URDU_OUTPUT", "0"
+).lower() in ("1", "true", "yes", "y")
 
 # ============ CHUNKING / RETRIEVAL ============
-CHUNK_SIZE = 800
-CHUNK_OVERLAP = 200
-EMBEDDING_DIM = 768
-
-RELEVANCE_THRESHOLD = 0.7
+CHUNK_SIZE = int(os.environ.get("CHUNK_SIZE", "800"))
+CHUNK_OVERLAP = int(os.environ.get("CHUNK_OVERLAP", "200"))
+RELEVANCE_THRESHOLD = float(os.environ.get("RELEVANCE_THRESHOLD", "0.7"))
 
 # ============ SELF-RAG PARAMETERS ============
-SELFRAG_ENABLE = True
-SELFRAG_RETRIEVE_THRESHOLD = 0.5
-SELFRAG_RELEVANCE_THRESHOLD = 0.6
-SELFRAG_SUPPORT_THRESHOLD = 0.7
-SELFRAG_MIN_CONFIDENCE = 0.6
+SELFRAG_ENABLE = os.environ.get("SELFRAG_ENABLE", "1").lower() in ("1", "true", "yes", "y")
+SELFRAG_RETRIEVE_THRESHOLD = float(os.environ.get("SELFRAG_RETRIEVE_THRESHOLD", "0.5"))
+SELFRAG_RELEVANCE_THRESHOLD = float(os.environ.get("SELFRAG_RELEVANCE_THRESHOLD", "0.6"))
+SELFRAG_SUPPORT_THRESHOLD = float(os.environ.get("SELFRAG_SUPPORT_THRESHOLD", "0.7"))
+SELFRAG_MIN_CONFIDENCE = float(os.environ.get("SELFRAG_MIN_CONFIDENCE", "0.6"))
 
 # ============ BRAND / LANGUAGE HELPERS ============
 BRAND_TERMS = [
@@ -41,71 +66,21 @@ BRAND_TERMS = [
 ]
 
 ROMAN_URDU_MARKERS = {
-    "kya",
-    "kyu",
-    "kyun",
-    "kaise",
-    "kesy",
-    "kese",
-    "kis",
-    "kon",
-    "ka",
-    "ki",
-    "ko",
-    "mein",
-    "main",
-    "mera",
-    "meri",
-    "mere",
-    "hum",
-    "ham",
-    "aap",
-    "ap",
-    "tum",
-    "yeh",
-    "nahi",
-    "nai",
-    "han",
-    "haan",
-    "hai",
-    "hain",
-    "tha",
-    "thi",
-    "thay",
-    "kr",
-    "kar",
-    "karo",
-    "kren",
-    "karein",
-    "krna",
-    "hona",
-    "hogya",
-    "ho",
-    "hoga",
-    "please",
-    "plz",
+    "kya","kyu","kyun","kaise","kesy","kese","kis","kon","ka","ki","ko",
+    "mein","main","mera","meri","mere","hum","ham","aap","ap","tum","yeh",
+    "nahi","nai","han","haan","hai","hain","tha","thi","thay","kr","kar",
+    "karo","kren","karein","krna","hona","hogya","ho","hoga","please","plz",
 }
 
-# If True, translate context into Urdu before generation for Urdu/Roman Urdu outputs
-TRANSLATE_CONTEXT_FOR_URDU_OUTPUT = True
-
 # ============ AGENTIC / CACHE SETTINGS ============
-AGENTIC_ENABLE = True  # Enable agentic workflows
-EMBEDDING_CACHE_ENABLE = True  # Enable query embedding cache
-QUERY_ROUTER_ENABLE = True  # Enable query routing before embeddings
-RETRIEVAL_RETRY_ENABLE = True  # Enable retrieval retry with reformulation
-EVIDENCE_COVERAGE_ENABLE = True  # Enable claim-by-claim evidence checking
-CONVERSATION_MEMORY_ENABLE = True  # Enable conversation state reuse
+AGENTIC_ENABLE = os.environ.get("AGENTIC_ENABLE", "1").lower() in ("1", "true", "yes", "y")
+EMBEDDING_CACHE_ENABLE = os.environ.get("EMBEDDING_CACHE_ENABLE", "1").lower() in ("1", "true", "yes", "y")
+QUERY_ROUTER_ENABLE = os.environ.get("QUERY_ROUTER_ENABLE", "1").lower() in ("1", "true", "yes", "y")
+RETRIEVAL_RETRY_ENABLE = os.environ.get("RETRIEVAL_RETRY_ENABLE", "1").lower() in ("1", "true", "yes", "y")
+EVIDENCE_COVERAGE_ENABLE = os.environ.get("EVIDENCE_COVERAGE_ENABLE", "1").lower() in ("1", "true", "yes", "y")
+CONVERSATION_MEMORY_ENABLE = os.environ.get("CONVERSATION_MEMORY_ENABLE", "1").lower() in ("1", "true", "yes", "y")
 
-# Cache thresholds
-EMBEDDING_CACHE_SIMILARITY_THRESHOLD = (
-    0.95  # Reuse embedding if similarity >= this
-)
-DOMAIN_CENTROID_REUSE_THRESHOLD = (
-    0.85  # Reuse domain embedding if similarity >= this
-)
-RETRIEVAL_RETRY_MAX_ATTEMPTS = 2  # Maximum retrieval retry attempts
-RETRIEVAL_RETRY_RELEVANCE_THRESHOLD = (
-    0.6  # Retry if relevance < this
-)
-
+EMBEDDING_CACHE_SIMILARITY_THRESHOLD = float(os.environ.get("EMBEDDING_CACHE_SIMILARITY_THRESHOLD", "0.95"))
+DOMAIN_CENTROID_REUSE_THRESHOLD = float(os.environ.get("DOMAIN_CENTROID_REUSE_THRESHOLD", "0.85"))
+RETRIEVAL_RETRY_MAX_ATTEMPTS = int(os.environ.get("RETRIEVAL_RETRY_MAX_ATTEMPTS", "2"))
+RETRIEVAL_RETRY_RELEVANCE_THRESHOLD = float(os.environ.get("RETRIEVAL_RETRY_RELEVANCE_THRESHOLD", "0.6"))
