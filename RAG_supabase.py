@@ -66,6 +66,19 @@ from rag_embeddings import (
     get_embedder,
     normalize_query,
 )
+from rag_language import (
+    build_query_lang_profile,
+    analyze_query,
+    select_retrieval_queries,
+    is_urdu_script,
+    looks_like_roman_urdu,
+    translate_auto_to_english,
+    translate_urdu_to_english,
+    translate_english_to_urdu,
+    protect_brand_terms,
+    restore_brand_terms,
+    to_roman_urdu,
+)
 from rag_llm import load_llm_default as load_llm, llm_generate
 from rag_supabase_client import get_supabase_client, test_connection
 
@@ -2009,7 +2022,7 @@ Answer (ONLY the final answer, no labels):
         protected = protect_brand_terms(answer)
         answer_ur = translate_english_to_urdu(protected, timeout=15)
         answer_ur = restore_brand_terms(answer_ur)
-        answer = romanize_to_roman_urdu_with_llm(answer_ur)
+        answer = to_roman_urdu(answer_ur)
 
     print("\n" + "="*80, flush=True)
     print("CONFIDENCE SCORES:", flush=True)
@@ -2051,58 +2064,6 @@ Answer (ONLY the final answer, no labels):
     sys.stdout.flush()
    
     return answer, original_query, profile.input_lang, sources, confidence_scores, domain_classification
-
-LATIN_ONLY_RE = re.compile(r'^[\x00-\x7F\s]+$')
-
-def romanize_to_roman_urdu_with_llm(urdu_text: str, max_tokens: int = 260) -> str:
-    if not urdu_text.strip():
-        return urdu_text
-
-    for attempt in range(2):
-        prompt = f"""Task: Convert Urdu (Arabic script) to Roman Urdu (Latin letters).
-
-STRICT RULES:
-- Output MUST be in Latin letters only (a-z). No Urdu/Arabic characters at all.
-- If you output any Urdu/Arabic characters, your answer is INVALID.
-- Keep meaning exactly the same.
-- Keep proper names like Alkhidmat as "Alkhidmat".
-- Keep phone numbers/URLs unchanged.
-- Output ONLY the Roman Urdu text (no labels).
-
-Urdu:
-{urdu_text}
-
-Roman Urdu (Latin-only):"""
-
-        model = load_llm()
-        out = model(prompt, max_tokens=max_tokens, temperature=0.0, stop=["\n\n", "\nUrdu:", "\nRoman Urdu:"], echo=False)
-        out = out['choices'][0]['text'].strip()
-
-        if out and (not is_urdu_script(out)) and LATIN_ONLY_RE.match(out):
-            return out
-
-    en = translate_urdu_to_english(urdu_text)
-    prompt2 = f"""Task: Translate English into Roman Urdu (Latin letters).
-
-STRICT RULES:
-- Output MUST be in Latin letters only (a-z). No Urdu/Arabic characters.
-- Keep meaning exactly the same.
-- Keep proper names like Alkhidmat as "Alkhidmat".
-- Keep phone numbers/URLs unchanged.
-- Output ONLY Roman Urdu text (no labels).
-
-English:
-{en}
-
-Roman Urdu (Latin-only):"""
-
-    model = load_llm()
-    out2 = model(prompt2, max_tokens=max_tokens, temperature=0.0, echo=False)
-    out2 = out2['choices'][0]['text'].strip()
-    if out2 and (not is_urdu_script(out2)) and LATIN_ONLY_RE.match(out2):
-        return out2
-
-    return en
 
 def clean_llm_response(text: str) -> str:
     if not text:
@@ -2598,7 +2559,7 @@ Answer (ONLY the final answer, no labels):
         protected = protect_brand_terms(answer)
         answer_ur = translate_english_to_urdu(protected, timeout=15)
         answer_ur = restore_brand_terms(answer_ur)
-        answer = romanize_to_roman_urdu_with_llm(answer_ur)
+        answer = to_roman_urdu(answer_ur)
 
     # Create sources list
     sources = [{
