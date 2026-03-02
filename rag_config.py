@@ -43,6 +43,23 @@ TRANSLATE_CONTEXT_FOR_URDU_OUTPUT = os.environ.get(
     "TRANSLATE_CONTEXT_FOR_URDU_OUTPUT", "0"
 ).lower() in ("1", "true", "yes", "y")
 
+# ============ ROMAN URDU (LATIN URDU) ============
+ROMAN_URDU_ENABLE = os.environ.get("ROMAN_URDU_ENABLE", "1").lower() in ("1", "true", "yes", "y")
+
+# Romanization strategy:
+# - "llm_then_fallback": try LLM romanization, else fallback transliteration
+# - "fallback_only": never call LLM (fast, lower quality)
+ROMAN_URDU_ROMANIZATION_MODE = os.environ.get("ROMAN_URDU_ROMANIZATION_MODE", "llm_then_fallback")
+
+# Enforce strict Latin-only output (recommended)
+ROMAN_URDU_STRICT_LATIN_ONLY = os.environ.get("ROMAN_URDU_STRICT_LATIN_ONLY", "1").lower() in ("1", "true", "yes", "y")
+
+# Max tokens for romanization step
+ROMAN_URDU_MAX_TOKENS = int(os.environ.get("ROMAN_URDU_MAX_TOKENS", "260"))
+
+# If you want a stronger “Pakistani” feel (spellings + particles)
+ROMAN_URDU_PAK_VERBIAGE = os.environ.get("ROMAN_URDU_PAK_VERBIAGE", "1").lower() in ("1", "true", "yes", "y")
+
 # ============ CHUNKING / RETRIEVAL ============
 CHUNK_SIZE = int(os.environ.get("CHUNK_SIZE", "800"))
 CHUNK_OVERLAP = int(os.environ.get("CHUNK_OVERLAP", "200"))
