@@ -1,14 +1,14 @@
 {
   "language": "English",
   "language_key": "english",
-  "run_at": "2026-03-01T02:04:19.808894",
+  "run_at": "2026-03-02T07:07:41.565907",
   "results": [
     {
       "id": "Q01",
       "question": "How can I donate to Alkhidmat Foundation for Gaza?",
       "expected_answer": "You can donate via Meezan Bank account 02140100861151, by calling the cash pick-up number 0800-44448, in-person at Collection Centers, or online using debit/credit cards through their website alkhidmat.org/donate.",
-      "actual_answer": "- Donate via EasyPaisa/JazzCash: open the app, go to “Donations”, select “Alkhidmat Foundation Pakistan”, enter the amount, and donate (choose the “Help Us Save Lives in Gaza/Donate to Palestine” option if shown)  \n- Donate online by debit/credit card at: alkhidmat.org/donate  \n- Bank transfer/direct deposit (Bank of Punjab – Taqwa Islamic Banking):  \n  - Account Title: Alkhidmat Foundation Pakistan  \n  - Account No. (PKR): 5310067845100016  \n  - IBAN: PK19BPUN5310067845100016  \n  - Branch: Allama Iqbal Town, Lahore  \n  - SWIFT: BPUNPKKA  \n- For a donation receipt, share your transaction slip on WhatsApp: +923000776016",
-      "rag_time_seconds": 345.02,
+      "actual_answer": "- Donate via EasyPaisa: open the app → scroll down and tap “Donations” → select “Alkhidmat Foundation Pakistan” → enter amount → donate  \n- Donate via JazzCash: open the app → scroll down and tap “Donations” → select “Alkhidmat Foundation Pakistan” → enter amount → donate  \n- Donate online by debit/credit card at alkhidmat.org/donate  \n- Donate via bank transfer/direct deposit (Bank of Punjab – Taqwa Islamic Banking):  \n  - Account Title: Alkhidmat Foundation Pakistan  \n  - Account No. (PKR): 5310067845100016  \n  - IBAN: PK19BPUN5310067845100016  \n  - Branch: Allama Iqbal Town, Lahore  \n  - SWIFT: BPUNPKKA  \n- For a donation receipt, share your transaction slip on WhatsApp: +923000776016",
+      "rag_time_seconds": 428.46,
       "contexts_retrieved": 5,
       "rag_rejected": false,
       "scores": {
@@ -26,15 +26,315 @@
         "Hallucination": true
       },
       "reasons": {
-        "AnswerRelevancy": "Great job! The answer is fully relevant and directly addresses the question about donating to Alkhidmat Foundation for Gaza, with no irrelevant information included.",
-        "Faithfulness": "The score is 1.00 because there are no contradictions—everything in the actual output aligns perfectly with the retrieval context. Great job staying accurate!",
-        "ContextualPrecision": "The score is 0.00 because all the top-ranked nodes in the retrieval contexts are irrelevant—they only discuss the impact, reputation, or projects of Alkhidmat Foundation for Gaza, but none provide specific donation methods or instructions. For example, the first node 'does not provide any specific donation methods such as bank account details, phone numbers, or website links.' Since no relevant nodes are present, the score cannot be higher.",
+        "AnswerRelevancy": "The score is 1.00 because the answer was fully relevant and addressed the question directly without any irrelevant information. Great job staying focused and helpful!",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output aligns perfectly with the retrieval context. Great job staying accurate!",
+        "ContextualPrecision": "The score is 0.00 because all the top-ranked nodes in the retrieval contexts are irrelevant—they only discuss Alkhidmat Foundation's work or recommend supporting them, but none provide specific donation methods or instructions. Since no relevant nodes are present, the score cannot be higher.",
         "ContextualRecall": "The score is 0.00 because none of the nodes in the retrieval context provide the specific donation methods listed in sentence 1 of the expected output; the context only refers to general support or donations to Alkhidmat Foundation without mentioning the detailed channels.",
-        "Hallucination": "The score is 0.00 because all factual alignments show the actual output is fully consistent with the context, with no contradictions or unsupported information present."
+        "Hallucination": "The score is 0.00 because all factual alignments show that the actual output is fully consistent with the context, with no contradictions or unsupported information present."
       },
       "overall_pass": false,
       "metadata": {
-        "combined_confidence": 0.9354611040970523,
+        "combined_confidence": 0.9407196180470742,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q02",
+      "question": "Is Alkhidmat Foundation tax-exempt in Pakistan?",
+      "expected_answer": "Yes, Alkhidmat Foundation Pakistan is tax-exempt under FBR Act 2(36)c.",
+      "actual_answer": "I cannot provide a reliable answer as some claims cannot be verified from the available information.",
+      "rag_time_seconds": 142.76,
+      "rag_rejected": true,
+      "rejection_message": "I cannot provide a reliable answer as some claims cannot be verified from the available information.",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9364627475844763,
+        "domain": "healthcare"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q03",
+      "question": "Where is the head office of Alkhidmat Foundation located?",
+      "expected_answer": "The head office of Alkhidmat Foundation is located at 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan.",
+      "actual_answer": "Alkhidmat Foundation Head Office is located at 3km Khayaban-e-Jinnah, Lahore, Pakistan.",
+      "rag_time_seconds": 184.91,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.8667,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the answer is fully relevant and directly addresses the question without any irrelevant information. Great job staying focused!",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—everything in the actual output aligns perfectly with the retrieval context. Great job!",
+        "ContextualPrecision": "The score is 0.87 because the first two nodes in the retrieval contexts directly provide the head office location, and the fifth node confirms the city and province, all ranked above the irrelevant nodes. However, the third and fourth nodes, which only list questions like 'Where is Alkhidmat Central Office (Head Office) located?' without providing the address, appear before the fifth relevant node. These irrelevant nodes should be ranked lower than all relevant nodes to achieve a perfect score.",
+        "ContextualRecall": "The score is 1.00 because every detail in the expected output is fully supported by the information in the relevant nodes in the retrieval context. Great job!",
+        "Hallucination": "The score is 0.00 because all factual alignments indicate that the actual output is fully consistent with the context, and there are no contradictions or unsupported details."
+      },
+      "overall_pass": true,
+      "metadata": {
+        "combined_confidence": 0.9396393723311901,
+        "domain": "general",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q04",
+      "question": "How can I contact Alkhidmat Foundation for more information?",
+      "expected_answer": "You can contact them by phone at +92 42 3802 0222 or by email at info@alkhidmat.org.",
+      "actual_answer": "- Phone: +92 42 3802 0222  \n- Email: info@alkhidmat.org  \n- Address: Alkhidmat Foundation Head Office, 3km Khayaban-e-Jinnah, Lahore, Pakistan  \n- For privacy/data protection or data retention queries:  \n  - Phone: 0800 44448  \n  - Email: digital@alkhidmat.org  \n  - Post: Alkhidmat Foundation Headoffice, 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan",
+      "rag_time_seconds": 320.73,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.4167,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.2
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "Great job! The answer is fully relevant and directly addresses the question without any irrelevant information.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—everything in the actual output aligns perfectly with the retrieval context. Great job staying faithful to the source!",
+        "ContextualPrecision": "The score is 0.42 because the first and second nodes in the retrieval contexts are irrelevant—they provide contact information for the Data Protection Lead and Team, not the general contact details needed ('info@alkhidmat.org', '+92 42 3802 0222'), as stated in their explanations. These irrelevant nodes are ranked higher than the relevant nodes, which directly provide the correct general contact information and appear at ranks 3 and 4. This lowers the score. However, the relevant nodes are still present and not buried at the very bottom, which is why the score is not even lower.",
+        "ContextualRecall": "The score is 1.00 because every detail in the expected output is fully supported by the 3rd and 4th nodes in the retrieval context, with exact matches for both the phone number and email. Great job!",
+        "Hallucination": "The score is 0.20 because the actual output accurately reflects the head office contact details as in the context, but omits the regional office contact details that are present in the context, resulting in a minor factual omission."
+      },
+      "overall_pass": true,
+      "metadata": {
+        "combined_confidence": 0.9339167002222082,
+        "domain": "general",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q05",
+      "question": "How can I get a donation receipt from Alkhidmat Foundation?",
+      "expected_answer": "You can get a donation receipt by sharing your transaction slip via WhatsApp at +923000776016.",
+      "actual_answer": "- Share your transaction slip on WhatsApp at +923000776016 to get your donation receipt.",
+      "rag_time_seconds": 163.1,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": null,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": false,
+        "ContextualPrecision": true,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the answer was fully relevant and addressed the question directly without any irrelevant information. Great job!",
+        "Faithfulness": "Error: RetryError[<Future at 0x14631850d00 state=finished raised TimeoutError>]",
+        "ContextualPrecision": "The score is 1.00 because the relevant nodes are ranked at the top and provide direct answers, such as 'To get donation receipt please share your transaction slip to our following WhatsApp number: +923000776016'. Irrelevant nodes, like the third node which only describes donation methods and does not mention receipts, are ranked lower, ensuring high contextual precision.",
+        "ContextualRecall": "The score is 1.00 because every part of the expected output is fully supported by the information in the 1st and 2nd nodes in the retrieval context. Great job!",
+        "Hallucination": "The score is 0.00 because all factual alignments confirm that the actual output is fully supported by the provided contexts, with no contradictions present."
+      },
+      "overall_pass": true,
+      "metadata": {
+        "combined_confidence": 0.9359016667832976,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q06",
+      "question": "What online donation methods are available?",
+      "expected_answer": "You can donate online via debit/credit card on the website, online banking, bank transfer, JazzCash, EasyPaisa, or home collection.",
+      "actual_answer": "- Debit/Credit Card (via alkhidmat.org/donate)  \n- JazzCash (through the JazzCash app “Donations” section)  \n- EasyPaisa (through the EasyPaisa app “Donations” section)  \n- Online banking / Bank transfer (including direct deposit)",
+      "rag_time_seconds": 165.39,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.7,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the answer was fully relevant and addressed the question directly without any irrelevant information. Great job staying focused and concise!",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—everything in the actual output aligns perfectly with the retrieval context. Great job!",
+        "ContextualPrecision": "The score is 0.70 because the first node in the retrieval contexts is highly relevant, directly listing the online donation methods, and is ranked first. However, irrelevant nodes that only say 'Click here to donate' or are duplicates without specifying online donation methods appear before the second relevant node, which is ranked fifth. These irrelevant nodes, such as the second node ('Click here to donate') and its duplicates (third and fourth nodes), should be ranked lower than the relevant fifth node that implies online donation via the website. The presence of these irrelevant nodes above a relevant one lowers the score from a perfect value.",
+        "ContextualRecall": "The score is 1.00 because all sentences in the expected output are fully supported by the node(s) in retrieval context. Great job!",
+        "Hallucination": "The score is 0.00 because all details in the actual output are fully supported by the context, with no contradictions or unsupported information present."
+      },
+      "overall_pass": true,
+      "metadata": {
+        "combined_confidence": 0.9033418310115475,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q07",
+      "question": "Can I donate internationally to Alkhidmat Foundation?",
+      "expected_answer": "Yes, you can donate from anywhere in the world using debit/credit cards through the Alkhidmat Foundation website.",
+      "actual_answer": "Yes. You can donate internationally using a debit or credit card through Alkhidmat’s website: alkhidmat.org/donate.",
+      "rag_time_seconds": 147.73,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": null,
+        "ContextualPrecision": 0.8875,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": false,
+        "ContextualPrecision": true,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the answer was fully relevant and addressed the question directly without any irrelevant information. Great job staying focused and concise!",
+        "Faithfulness": "Error: RetryError[<Future at 0x146328e4eb0 state=finished raised TimeoutError>]",
+        "ContextualPrecision": "The score is 0.89 because most of the top-ranked nodes are highly relevant, directly addressing international donations to Alkhidmat Foundation. However, the third node, ranked 3rd, is less relevant as it only discusses donation methods within Pakistan and does not mention international donations, so it should have been ranked lower than the other nodes that specifically confirm international donation options.",
+        "ContextualRecall": "The score is 1.00 because all parts of the expected output are fully supported by the 4th and 5th nodes in the retrieval context. Great job!",
+        "Hallucination": "The score is 0.00 because all statements in the actual output are fully supported by the context, with no contradictions or unsupported claims."
+      },
+      "overall_pass": true,
+      "metadata": {
+        "combined_confidence": 0.9116814743092035,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q08",
+      "question": "What emergency appeals does Alkhidmat Foundation currently have?",
+      "expected_answer": "Alkhidmat Foundation currently runs emergency appeals including Bano Qabil and the Palestine Emergency Appeal.",
+      "actual_answer": "I cannot provide a reliable answer based on the available information.",
+      "rag_time_seconds": 143.16,
+      "rag_rejected": true,
+      "rejection_message": "I cannot provide a reliable answer based on the available information.",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q09",
+      "question": "What are the main focus areas of Alkhidmat Foundation?",
+      "expected_answer": "Alkhidmat Foundation focuses on humanitarian services including health, education, disaster relief, women philanthropy, and social welfare programs since 1990.",
+      "actual_answer": "Disaster management (rescue, relief and rehabilitation), health services, education, orphan care, WASH, the Alkhidmat Bano Qabil Program for female IT skills, and educational support and scholarships for girls and women.",
+      "rag_time_seconds": 185.48,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.2
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the answer was fully relevant and addressed the question directly without including any irrelevant information. Great job staying focused!",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—great job staying true to the retrieval context!",
+        "ContextualPrecision": "The score is 1.00 because all relevant nodes are ranked above the irrelevant node. The first four nodes directly address the main focus areas of Alkhidmat Foundation, such as 'health, education, disaster relief, and women philanthropy', while the fifth node, which only discusses a photography workshop and cultural enrichment, is correctly ranked last as it does not mention any main focus areas. Great job keeping the relevant information at the top!",
+        "ContextualRecall": "The score is 1.00 because every part of the expected output is well supported by the nodes in the retrieval context, covering all mentioned services and programs. Great job!",
+        "Hallucination": "The score is 0.20 because the actual output accurately reflects most of the factual details from the context, with only a minor omission regarding workshops and cultural enrichment, resulting in a low but non-zero hallucination score."
+      },
+      "overall_pass": true,
+      "metadata": {
+        "combined_confidence": 0.9194349049186117,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q10",
+      "question": "How can I make a donation in-person?",
+      "expected_answer": "You can make an in-person donation at any of Alkhidmat Foundation's Collection Centers or directly at their head office in Lahore.",
+      "actual_answer": "- Use the home collection option to donate in-person",
+      "rag_time_seconds": 180.42,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the answer was fully relevant and addressed the question directly with no irrelevant information. Great job staying focused and helpful!",
+        "Faithfulness": "The score is 1.00 because there are no contradictions listed, indicating the actual output aligns perfectly with the retrieval context. Great job staying accurate!",
+        "ContextualPrecision": "The score is 0.00 because all the top-ranked nodes in the retrieval contexts are irrelevant to the input question. For example, the first node only contains a donation summary and a prompt to click to donate, but does not mention in-person donation or locations. Similarly, the second and third nodes are duplicates and also lack any information about in-person donations. The fourth node discusses receipts and donation programs, and the fifth node discusses wallet payments and campus ambassador programs, but neither mentions in-person donation or physical locations. Since no relevant nodes are present or ranked higher than irrelevant ones, the score is at its lowest.",
+        "ContextualRecall": "The score is 0.00 because none of the nodes in the retrieval context provide information about in-person donations, Collection Centers, or the head office in Lahore as mentioned in sentence 1 of the expected output.",
+        "Hallucination": "The score is 1.00 because the actual output repeatedly references a 'home collection option' for in-person donations, which is not mentioned anywhere in the provided context, indicating complete hallucination."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.897840203170894,
         "domain": "donation",
         "selfrag_support": "fully_supported",
         "evidence_coverage": 1.0,
