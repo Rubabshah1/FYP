@@ -1,5 +1,5 @@
 \section{System Architecture: Agentic RAG and Frontend Integration}
-The system is a full-stack implementation comprising a React-based frontend, a FastAPI backend, and an Agentic Retrieval-Augmented Generation (RAG) reasoning engine powered by Llama 3.2 \cite{...}. The architecture is designed to optimize retrieval efficiency, minimize hallucinations, and support multilingual, multimodal interaction.
+The system is a full-stack implementation comprising a React-based frontend, a FastAPI backend, and an Agentic Retrieval-Augmented Generation (RAG) reasoning engine powered by Llama 3.2. The architecture is designed to optimize retrieval efficiency, minimize hallucinations, and support multilingual, multimodal interaction.
 
 \subsection{Frontend Architecture and User Interface}
 The frontend is built using \textbf{React.js 18}, \textbf{Vite}, and \textbf{Tailwind CSS}, delivering a responsive, chat-based interface. Key features include:
@@ -25,6 +25,8 @@ The backend implements an Agentic AI architecture to regulate retrieval and enfo
 
 \section{Experimental Setup}
 The system was evaluated using both a structured query dataset and a defined technical environment.
+
+We are currently testing our chatbot system across nine key modules to ensure overall reliability and performance. This includes validating the RAG (Retrieval-Augmented Generation) pipeline to confirm it is functioning correctly end-to-end, along with thorough testing of all API endpoints for stability and error handling. We are evaluating multimodal and language processing capabilities to ensure the system can handle diverse inputs effectively. Security and privacy checks are being conducted to safeguard user data, while human-in-the-loop mechanisms are assessed for confidence scoring and appropriate escalation. Additionally, we are verifying routing logic to ensure queries are directed correctly, performing deployment and load testing to measure scalability and robustness, running a deep evaluation suite to assess RAG response quality, ensuring database integrity and recovery mechanisms, and conducting full end-to-end frontend testing to validate a seamless user experience.
 
 \subsection{Dataset}
 A total of 192 queries were used (64 each in English, Urdu, and Roman Urdu), spanning key domains including Healthcare, Donors, and General NGO services.

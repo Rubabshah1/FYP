@@ -2465,8 +2465,7 @@
     <bcf:citekey order="76" intorder="2">munir2021bablibot</bcf:citekey>
     <bcf:citekey order="77" intorder="1">mit2022overconfidence</bcf:citekey>
     <bcf:citekey order="77" intorder="2">cyara2023threshold</bcf:citekey>
-    <bcf:citekey order="78" intorder="1">...</bcf:citekey>
-    <bcf:citekey order="79" intorder="1">alif_instruct_2024</bcf:citekey>
+    <bcf:citekey order="78" intorder="1">alif_instruct_2024</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="nty">

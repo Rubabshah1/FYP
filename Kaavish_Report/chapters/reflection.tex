@@ -1,4 +1,28 @@
-Learning Reflection: Learning experience, skills gained, and challenges overcome.
-Team Reflection (if applicable): Collaboration experience, role distribution, communication, and teamwork challenges.
-Project Reflection: Also a reflection on what was proposed vs what was achieved? Were any proposed features removed/were any features added that were not proposed initially? What are the reasons for these choices? What are opportunities and challenges led to these design decisions?
-Process Reflection: What worked well? What could be improved in the approach?
+\section{Learning Reflection}
+This project served as a significant technical milestone for the team, as it was our first time being exposed to and building an \textbf{Agentic Retrieval-Augmented Generation (RAG)} pipeline. We gained extensive hands-on experience in several cutting-edge AI domains:
+\begin{itemize}
+    \item \textbf{Agentic AI \& RAG:} We learned to implement a multi-agent system, including \textbf{Router Agents} to optimize computational overhead and \textbf{Self-RAG Critics} to verify facts.
+    \item \textbf{Classification \& Confidence:} We developed a \textbf{Confidence Scoring Engine} that aggregates retrieval similarity and token probability to ensure response reliability.
+    \item \textbf{Human-in-the-Loop:} We gained insights into designing \textbf{escalation workflows} where the AI flags low-confidence queries for human intervention.
+\end{itemize}
+
+\section{Team Reflection}
+The collaboration among our four team members was central to our progress. 
+\begin{itemize}
+    \item \textbf{Role Distribution:} Work was divided effectively: \textbf{Samah} led backend and documentation, \textbf{Rubab} focused on the frontend and Agentic Module, \textbf{Yashfeen} managed UX, testing, and model evaluation \& improvement, and \textbf{Fatima} handled data pipeline and image model.
+    \item \textbf{Collaboration:} Coordinating a five-layer architecture required constant communication to ensure the presentation, application, AI/ML, data, and infrastructure layers remained integrated.
+\end{itemize}
+
+\section{Project Reflection}
+The project successfully moved Alkhidmat Foundation toward an automated, multilingual communication system.
+\begin{itemize}
+    \item \textbf{Proposed vs. Achieved:} While the \textbf{Agentic RAG engine} and \textbf{Staff Dashboard} are functional, certain operational features were affected by external constraints, such as the Agentic RAG has not been integrated into Whatsapp yet.
+    \item \textbf{Industry Partner Constraints:} The \textbf{Human Escalation} and real-time handoff have not been fully completed as intended due to delays in receiving necessary data and support from the \textbf{industry partner}.
+    \item \textbf{Design Decisions:} We prioritized core domains like \textbf{Healthcare and Donation} to ensure a stable MVP, moving broader domain coverage to future work.
+\end{itemize}
+
+\section{Process Reflection}
+\begin{itemize}
+    \item \textbf{What Worked Well:} The \textbf{modular five-layer architecture} made the system highly maintainable and allowed for parallel development across the team.
+    \item \textbf{Improvements:} Current end-to-end \textbf{latency} ranges from 30 to 60 seconds. Future iterations must focus on \textbf{embedding caches} and pipeline optimization to bring response times under 10 seconds.
+\end{itemize}
