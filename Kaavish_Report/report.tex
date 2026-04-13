@@ -54,8 +54,18 @@
 % \chapter*{Acknowledgements}
 % % We want to thank the CS faculty and ...
 
-% \chapter*{Abstract}
-% Abstract goes here
+\chapter*{Abstract}
+The \textbf{Alkhidmat Public Chat Portal} is an AI-powered, multi-domain organizational assistant designed to bridge communication gaps for one of Pakistan's largest non-profit organizations. Addressing the operational burden of manually handling thousands of daily inquiries, the system provides an automated solution for \textbf{donors, volunteers, and beneficiaries}. Unlike existing single-domain chatbots in Pakistan, this platform integrates a \textbf{Retrieval-Augmented Generation (RAG)} framework to provide verified, contextually accurate information across multiple sectors, including \textbf{healthcare, disaster management, blood services, and orphan care}.
+
+The system architecture employs a five-layer structure—Presentation, Application, AI/ML, Data, and Infrastructure—supporting multilingual interaction in \textbf{English, Urdu, and Roman Urdu}. Key technical features include:
+\begin{itemize}
+    \item \textbf{Multimodal Processing}: The capability to analyze text and image inputs, such as payment receipts and medical prescriptions.
+    \item \textbf{Human-in-the-Loop Escalation}: A confidence-scoring engine that automatically routes complex or sensitive queries with a confidence score below 0.7 to specialized human agents.
+    \item \textbf{Staff and Analytics Dashboards}: Dedicated interfaces for real-time ticket handling, knowledge base updates, and performance monitoring of KPIs such as escalation rates and query volume.
+    \item \textbf{Agentic RAG Engine}: Utilizing models such as \textbf{Llama 3.2} and \textbf{OpenAI GPT-5}, the backend incorporates a self-validation pipeline to minimize hallucinations and ensure factual grounding.
+\end{itemize}
+
+This project establishes a scalable, transparent, and inclusive digital gateway that empowers stakeholders through localized AI innovation. The system not only enhances operational efficiency but also fosters trust and accessibility for a diverse user base, setting a precedent for AI-driven solutions in the non-profit sector of Pakistan.
 
 % The following are automatically populated by LaTeX \chapter, \section and related, \figure, and \table.
 \tableofcontents
@@ -78,13 +88,13 @@
 \label{chap:sds}
 \input{chapters/sds}
 
-% \chapter{Methodology, Experiments and Results OR Testing and Analysis}
-% \label{chap:results}
-% \input{chapters/results}
+\chapter{Methodology, Experiments and Results}
+\label{chap:results}
+\input{chapters/results}
 
-% \chapter{Conclusion and Future Work}
-% \label{chap:outro}
-% \input{chapters/conclusion}
+\chapter{Conclusion and Future Work}
+\label{chap:outro}
+\input{chapters/conclusion}
 
 % \chapter{Reflection}
 % \label{chap:Reflection}
@@ -107,14 +117,9 @@
 % \input{chapters/appendix-code}
 % \end{appendices}
 
-% % Print the bibliography with a ToC entry and titled, "References".
+% Print the bibliography using biblatex and include it in the TOC.
 \clearpage
-\chapter*{References}
-\addcontentsline{toc}{chapter}{References}
-% \bibliographystyle{plain}  % or unsrt, ieeetr, abbrv, etc.
-% \bibliography{references}   % your .bib file
-
-
+\printbibliography[heading=bibintoc,title=References]
 
 \end{document}
 
