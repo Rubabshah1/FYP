@@ -99,7 +99,7 @@ function StatusBadge({ r }) {
 // ─── Expandable row detail ────────────────────────────────────────────────────
 function RowDetail({ r }) {
   return (
-    <tr className="bg-purple-50">
+    <tr className="bg-blue-50">
       <td colSpan={8} className="px-6 py-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
@@ -153,7 +153,7 @@ function RowDetail({ r }) {
 const LANG_CONFIG = {
   english: { label: 'English',    flag: '🇬🇧', color: 'blue'   },
   urdu:    { label: 'Urdu',       flag: '🇵🇰', color: 'green'  },
-  roman:   { label: 'Roman Urdu', flag: '📝',  color: 'purple' },
+  roman:   { label: 'Roman Urdu', flag: '📝',  color: 'blue' },
 };
 
 function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSelectLang }) {
@@ -210,16 +210,16 @@ function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSel
                 onClick={() => onSelectLang(lang)}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all border-2 ${
                   isActive
-                    ? 'bg-purple-600 text-white border-purple-600 shadow-md'
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-md'
                     : hasData
-                      ? 'bg-white text-gray-700 border-gray-200 hover:border-purple-400 hover:text-purple-700'
+                      ? 'bg-white text-gray-700 border-gray-200 hover:border-blue-400 hover:text-blue-700'
                       : 'bg-gray-50 text-gray-400 border-dashed border-gray-200 hover:border-gray-300'
                 }`}
               >
                 <span className="text-base">{cfg.flag}</span>
                 <span>{cfg.label}</span>
                 {hasData ? (
-                  <span className={`text-xs px-1.5 py-0.5 rounded-full ${isActive ? 'bg-purple-500 text-white' : 'bg-emerald-100 text-emerald-700'}`}>
+                  <span className={`text-xs px-1.5 py-0.5 rounded-full ${isActive ? 'bg-blue-500 text-white' : 'bg-emerald-100 text-emerald-700'}`}>
                     {status.total_cases} cases
                   </span>
                 ) : (
@@ -245,7 +245,7 @@ function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSel
             No {LANG_CONFIG[evalLang]?.label} report yet
           </p>
           <p className="text-sm text-gray-500 mb-1">Run this command on your server:</p>
-          <code className="block bg-gray-100 text-purple-700 px-4 py-2 rounded-lg text-sm mt-2 mb-4">
+          <code className="block bg-gray-100 text-blue-700 px-4 py-2 rounded-lg text-sm mt-2 mb-4">
             python test_rag_evaluation.py --language {evalLang} --use-openai-judge
           </code>
           <p className="text-xs text-gray-400">
@@ -412,7 +412,7 @@ function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSel
                 placeholder="Search questions…"
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm w-48 focus:outline-none focus:ring-2 focus:ring-purple-300"
+                className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm w-48 focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
               <div className="flex gap-1">
                 {['all', 'pass', 'fail', 'rejected', 'crash'].map(s => (
@@ -421,7 +421,7 @@ function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSel
                     onClick={() => setStatusFilter(s)}
                     className={`px-3 py-1 text-xs rounded-lg font-medium transition-colors ${
                       statusFilter === s
-                        ? 'bg-purple-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
@@ -461,7 +461,7 @@ function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSel
                         <tr
                           onClick={() => setExpandedRow(isExpanded ? null : (r.id || i))}
                           className={`cursor-pointer border-t border-gray-50 transition-colors ${
-                            isExpanded ? 'bg-purple-50' : 'hover:bg-gray-50'
+                            isExpanded ? 'bg-blue-50' : 'hover:bg-gray-50'
                           }`}
                         >
                           <td className="px-4 py-3 font-mono text-xs text-gray-500">
@@ -683,7 +683,7 @@ function AdminDashboard() {
                     onClick={() => setActiveTab('evaluation')}
                     className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
                       activeTab === 'evaluation'
-                        ? 'bg-purple-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                   >
