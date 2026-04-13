@@ -51,12 +51,12 @@ function Welcome({ onSelectUserType }) {
           <div
             onClick={() => handleSelect('agent')}
             className={`bg-white rounded-2xl shadow-lg p-8 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl ${
-              selectedType === 'agent' ? 'ring-4 ring-green-500 scale-105' : ''
+              selectedType === 'agent' ? 'ring-4 ring-yellow-500 scale-105' : ''
             }`}
           >
             <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </div>
@@ -64,7 +64,7 @@ function Welcome({ onSelectUserType }) {
               <p className="text-sm text-gray-600 mb-4">
                 Access the agent dashboard to manage and resolve tickets
               </p>
-              <button className="w-full py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors">
+              <button className="w-full py-3 bg-yellow-600 text-white rounded-lg font-medium hover:bg-yellow-700 transition-colors">
                 Agent Login
               </button>
             </div>
@@ -74,12 +74,12 @@ function Welcome({ onSelectUserType }) {
                 <div
             onClick={() => handleSelect('admin')}
             className={`bg-white rounded-2xl shadow-lg p-8 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl ${
-              selectedType === 'admin' ? 'ring-4 ring-purple-500 scale-105' : ''
+              selectedType === 'admin' ? 'ring-4 ring-blue-500 scale-105' : ''
                   }`}
                 >
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                       </div>
@@ -87,7 +87,7 @@ function Welcome({ onSelectUserType }) {
               <p className="text-sm text-gray-600 mb-4">
                 View analytics and manage the entire support system
               </p>
-              <button className="w-full py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors">
+              <button className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
                 Admin Login
               </button>
                 </div>
