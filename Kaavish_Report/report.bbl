@@ -1,5 +1,5 @@
 % $ biblatex auxiliary file $
-% $ biblatex bbl format version 3.2 $
+% $ biblatex bbl format version 3.3 $
 % Do not modify the above lines!
 %
 % This is an auxiliary file used by the 'biblatex' package.
@@ -18,8 +18,8 @@
 
 
 \refsection{0}
-  \datalist[entry]{nty/global//global/global}
-    \entry{ijaresm2024multimodal}{online}{}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{ijaresm2024multimodal}{online}{}{}
       \name{author}{1}{}{%
         {{hash=a2de710fa2e8575577e1a8946c1191fc}{%
            family={(IJARESM)},
@@ -29,10 +29,12 @@
       }
       \strng{namehash}{a2de710fa2e8575577e1a8946c1191fc}
       \strng{fullhash}{a2de710fa2e8575577e1a8946c1191fc}
+      \strng{fullhashraw}{a2de710fa2e8575577e1a8946c1191fc}
       \strng{bibnamehash}{a2de710fa2e8575577e1a8946c1191fc}
       \strng{authorbibnamehash}{a2de710fa2e8575577e1a8946c1191fc}
       \strng{authornamehash}{a2de710fa2e8575577e1a8946c1191fc}
       \strng{authorfullhash}{a2de710fa2e8575577e1a8946c1191fc}
+      \strng{authorfullhashraw}{a2de710fa2e8575577e1a8946c1191fc}
       \field{sortinit}{I}
       \field{sortinithash}{8d291c51ee89b6cd86bf5379f0b151d8}
       \field{labelnamesource}{author}
@@ -46,7 +48,35 @@
       \verb https://www.ijaresm.com/ai-chatbot-integrating-voice-text-and-image-for-enhanced-human-computer-interaction#:~:text=and%20contextual%20nuances%2C%20enhancing%20the,RNNs%29%20and%20attention%20mechanisms
       \endverb
     \endentry
-    \entry{anwar2016survey}{inproceedings}{}
+    \entry{alif_instruct_2024}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=0499d68e1e7a80e466c641df69d9301b}{%
+           family={AI},
+           familyi={A\bibinitperiod},
+           given={Traversaal},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Hugging Face}%
+      }
+      \strng{namehash}{0499d68e1e7a80e466c641df69d9301b}
+      \strng{fullhash}{0499d68e1e7a80e466c641df69d9301b}
+      \strng{fullhashraw}{0499d68e1e7a80e466c641df69d9301b}
+      \strng{bibnamehash}{0499d68e1e7a80e466c641df69d9301b}
+      \strng{authorbibnamehash}{0499d68e1e7a80e466c641df69d9301b}
+      \strng{authornamehash}{0499d68e1e7a80e466c641df69d9301b}
+      \strng{authorfullhash}{0499d68e1e7a80e466c641df69d9301b}
+      \strng{authorfullhashraw}{0499d68e1e7a80e466c641df69d9301b}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{\url{https://huggingface.co/large-traversaal/Alif-1.0-8B-Instruct}}
+      \field{note}{Large language model, accessed 2026-04-13}
+      \field{title}{Alif-1.0-8B-Instruct (v1.0)}
+      \field{year}{2024}
+    \endentry
+    \entry{anwar2016survey}{inproceedings}{}{}
       \name{author}{3}{}{%
         {{hash=6807564c2b2fb163d37391d8b00119d9}{%
            family={Anwar},
@@ -66,10 +96,12 @@
       }
       \strng{namehash}{5d3d3dabb67be372ca860a3de83e3d3f}
       \strng{fullhash}{5d3d3dabb67be372ca860a3de83e3d3f}
+      \strng{fullhashraw}{5d3d3dabb67be372ca860a3de83e3d3f}
       \strng{bibnamehash}{5d3d3dabb67be372ca860a3de83e3d3f}
       \strng{authorbibnamehash}{5d3d3dabb67be372ca860a3de83e3d3f}
       \strng{authornamehash}{5d3d3dabb67be372ca860a3de83e3d3f}
       \strng{authorfullhash}{5d3d3dabb67be372ca860a3de83e3d3f}
+      \strng{authorfullhashraw}{5d3d3dabb67be372ca860a3de83e3d3f}
       \field{sortinit}{A}
       \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
       \field{labelnamesource}{author}
@@ -81,7 +113,7 @@
       \verb 10.1109/ICMLC.2006.259164
       \endverb
     \endentry
-    \entry{chambers2025pakistan}{online}{}
+    \entry{chambers2025pakistan}{online}{}{}
       \name{author}{2}{}{%
         {{hash=57d072c75cab43eb2305f5c460862a94}{%
            family={Chambers},
@@ -92,10 +124,12 @@
       }
       \strng{namehash}{dac449ac83f7045622aae2258f8e66d7}
       \strng{fullhash}{dac449ac83f7045622aae2258f8e66d7}
+      \strng{fullhashraw}{dac449ac83f7045622aae2258f8e66d7}
       \strng{bibnamehash}{dac449ac83f7045622aae2258f8e66d7}
       \strng{authorbibnamehash}{dac449ac83f7045622aae2258f8e66d7}
       \strng{authornamehash}{dac449ac83f7045622aae2258f8e66d7}
       \strng{authorfullhash}{dac449ac83f7045622aae2258f8e66d7}
+      \strng{authorfullhashraw}{dac449ac83f7045622aae2258f8e66d7}
       \field{sortinit}{C}
       \field{sortinithash}{4d103a86280481745c9c897c925753c0}
       \field{labelnamesource}{author}
@@ -109,7 +143,15 @@
       \verb https://practiceguides.chambers.com/practice-guides/data-protection-privacy-2025/pakistan#:~:text=The%20Constitution%20of%20Pakistan%2C%20under,of%20the%20European%20Union
       \endverb
     \endentry
-    \entry{fan2024ragllm}{inproceedings}{}
+    \entry{geeksforgeeks2024ragmetrics}{misc}{}{}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{GeeksforGeeks}
+      \field{title}{Evaluation Metrics for Retrieval-Augmented Generation (RAG) Systems}
+      \field{year}{2024}
+    \endentry
+    \entry{fan2024ragllm}{inproceedings}{}{}
       \name{author}{8}{}{%
         {{hash=44daba4ecc7d571b0f2fb0568e9fa40b}{%
            family={Fan},
@@ -154,10 +196,12 @@
       }
       \strng{namehash}{554fe17d703e8ed57020acf0ac689fc0}
       \strng{fullhash}{07657974d053fc88b54279e8fcb7dd50}
+      \strng{fullhashraw}{07657974d053fc88b54279e8fcb7dd50}
       \strng{bibnamehash}{554fe17d703e8ed57020acf0ac689fc0}
       \strng{authorbibnamehash}{554fe17d703e8ed57020acf0ac689fc0}
       \strng{authornamehash}{554fe17d703e8ed57020acf0ac689fc0}
       \strng{authorfullhash}{07657974d053fc88b54279e8fcb7dd50}
+      \strng{authorfullhashraw}{07657974d053fc88b54279e8fcb7dd50}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{labelnamesource}{author}
@@ -169,7 +213,7 @@
       \verb 10.1145/3637528.3671470
       \endverb
     \endentry
-    \entry{folstad2018socialgood}{inproceedings}{}
+    \entry{folstad2018socialgood}{inproceedings}{}{}
       \name{author}{6}{}{%
         {{hash=e7efde8eb532cc4268b5ea833c677d38}{%
            family={Følstad},
@@ -204,10 +248,12 @@
       }
       \strng{namehash}{684a175e3d9ff5954a7991ac570a9c4c}
       \strng{fullhash}{f18380b7ce95b82bdafc8e15a35ce384}
+      \strng{fullhashraw}{f18380b7ce95b82bdafc8e15a35ce384}
       \strng{bibnamehash}{684a175e3d9ff5954a7991ac570a9c4c}
       \strng{authorbibnamehash}{684a175e3d9ff5954a7991ac570a9c4c}
       \strng{authornamehash}{684a175e3d9ff5954a7991ac570a9c4c}
       \strng{authorfullhash}{f18380b7ce95b82bdafc8e15a35ce384}
+      \strng{authorfullhashraw}{f18380b7ce95b82bdafc8e15a35ce384}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{labelnamesource}{author}
@@ -219,7 +265,7 @@
       \verb 10.1145/3170427.3185372
       \endverb
     \endentry
-    \entry{freshworks2024analytics}{online}{}
+    \entry{freshworks2024analytics}{online}{}{}
       \name{author}{1}{}{%
         {{hash=74bf8664b28229886076c121dc56a218}{%
            family={Freshworks},
@@ -227,10 +273,12 @@
       }
       \strng{namehash}{74bf8664b28229886076c121dc56a218}
       \strng{fullhash}{74bf8664b28229886076c121dc56a218}
+      \strng{fullhashraw}{74bf8664b28229886076c121dc56a218}
       \strng{bibnamehash}{74bf8664b28229886076c121dc56a218}
       \strng{authorbibnamehash}{74bf8664b28229886076c121dc56a218}
       \strng{authornamehash}{74bf8664b28229886076c121dc56a218}
       \strng{authorfullhash}{74bf8664b28229886076c121dc56a218}
+      \strng{authorfullhashraw}{74bf8664b28229886076c121dc56a218}
       \field{sortinit}{F}
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{labelnamesource}{author}
@@ -244,7 +292,7 @@
       \verb https://www.freshworks.com/chatbots/analytics/
       \endverb
     \endentry
-    \entry{gao2023ragsurvey}{article}{}
+    \entry{gao2023ragsurvey}{article}{}{}
       \name{author}{10}{}{%
         {{hash=4531bc045c08b9165192fd733acf2bd5}{%
            family={Gao},
@@ -299,10 +347,12 @@
       }
       \strng{namehash}{eff5c0acbfcff31f941869f34a8fcc5d}
       \strng{fullhash}{b4c1f8a9c230e6cd015f8b0d8ae0428e}
+      \strng{fullhashraw}{b4c1f8a9c230e6cd015f8b0d8ae0428e}
       \strng{bibnamehash}{eff5c0acbfcff31f941869f34a8fcc5d}
       \strng{authorbibnamehash}{eff5c0acbfcff31f941869f34a8fcc5d}
       \strng{authornamehash}{eff5c0acbfcff31f941869f34a8fcc5d}
       \strng{authorfullhash}{b4c1f8a9c230e6cd015f8b0d8ae0428e}
+      \strng{authorfullhashraw}{b4c1f8a9c230e6cd015f8b0d8ae0428e}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{labelnamesource}{author}
@@ -314,7 +364,7 @@
       \verb 10.48550/arXiv.2312.10997
       \endverb
     \endentry
-    \entry{gulab2024multimodalrag}{online}{}
+    \entry{gulab2024multimodalrag}{online}{}{}
       \name{author}{1}{}{%
         {{hash=cd831fd7fc64894496e46c74b5f5d22c}{%
            family={Gulab},
@@ -324,10 +374,12 @@
       }
       \strng{namehash}{cd831fd7fc64894496e46c74b5f5d22c}
       \strng{fullhash}{cd831fd7fc64894496e46c74b5f5d22c}
+      \strng{fullhashraw}{cd831fd7fc64894496e46c74b5f5d22c}
       \strng{bibnamehash}{cd831fd7fc64894496e46c74b5f5d22c}
       \strng{authorbibnamehash}{cd831fd7fc64894496e46c74b5f5d22c}
       \strng{authornamehash}{cd831fd7fc64894496e46c74b5f5d22c}
       \strng{authorfullhash}{cd831fd7fc64894496e46c74b5f5d22c}
+      \strng{authorfullhashraw}{cd831fd7fc64894496e46c74b5f5d22c}
       \field{sortinit}{G}
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{labelnamesource}{author}
@@ -341,7 +393,7 @@
       \verb https://medium.com/@rajratangulab.more/building-a-multimodal-rag-chatbot-with-image-text-and-table-understanding-91946bc9c51c
       \endverb
     \endentry
-    \entry{hakeem2025romanurdu}{article}{}
+    \entry{hakeem2025romanurdu}{article}{}{}
       \name{author}{5}{}{%
         {{hash=bd8223d6a6960d435e0714b14d1f5eb0}{%
            family={Hakeem},
@@ -371,10 +423,12 @@
       }
       \strng{namehash}{0433d58b3830983a3c9c7a22a431d892}
       \strng{fullhash}{52fce0bf978423e36983430aa3ec6648}
+      \strng{fullhashraw}{52fce0bf978423e36983430aa3ec6648}
       \strng{bibnamehash}{0433d58b3830983a3c9c7a22a431d892}
       \strng{authorbibnamehash}{0433d58b3830983a3c9c7a22a431d892}
       \strng{authornamehash}{0433d58b3830983a3c9c7a22a431d892}
       \strng{authorfullhash}{52fce0bf978423e36983430aa3ec6648}
+      \strng{authorfullhashraw}{52fce0bf978423e36983430aa3ec6648}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{labelnamesource}{author}
@@ -393,7 +447,7 @@
       \verb https://journal.50sea.com/index.php/IJIST/article/view/1338
       \endverb
     \endentry
-    \entry{halperin2023storytelling}{inproceedings}{}
+    \entry{halperin2023storytelling}{inproceedings}{}{}
       \name{author}{4}{}{%
         {{hash=38a805e542f754d2e3b2f8e1128932d1}{%
            family={Halperin},
@@ -418,10 +472,12 @@
       }
       \strng{namehash}{7ba173b2ba08a69cc283f9a240e7e85e}
       \strng{fullhash}{dda9a6ba90659fbef1b2cc3f5bba49b2}
+      \strng{fullhashraw}{dda9a6ba90659fbef1b2cc3f5bba49b2}
       \strng{bibnamehash}{7ba173b2ba08a69cc283f9a240e7e85e}
       \strng{authorbibnamehash}{7ba173b2ba08a69cc283f9a240e7e85e}
       \strng{authornamehash}{7ba173b2ba08a69cc283f9a240e7e85e}
       \strng{authorfullhash}{dda9a6ba90659fbef1b2cc3f5bba49b2}
+      \strng{authorfullhashraw}{dda9a6ba90659fbef1b2cc3f5bba49b2}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{labelnamesource}{author}
@@ -430,7 +486,7 @@
       \field{title}{Probing a Community-Based Conversational Storytelling System for Advocacy}
       \field{year}{2023}
     \endentry
-    \entry{heroku2024chatbots}{online}{}
+    \entry{heroku2024chatbots}{online}{}{}
       \name{author}{1}{}{%
         {{hash=1a79417461c9adbe88f8b93e7fad392f}{%
            family={Heroku},
@@ -438,10 +494,12 @@
       }
       \strng{namehash}{1a79417461c9adbe88f8b93e7fad392f}
       \strng{fullhash}{1a79417461c9adbe88f8b93e7fad392f}
+      \strng{fullhashraw}{1a79417461c9adbe88f8b93e7fad392f}
       \strng{bibnamehash}{1a79417461c9adbe88f8b93e7fad392f}
       \strng{authorbibnamehash}{1a79417461c9adbe88f8b93e7fad392f}
       \strng{authornamehash}{1a79417461c9adbe88f8b93e7fad392f}
       \strng{authorfullhash}{1a79417461c9adbe88f8b93e7fad392f}
+      \strng{authorfullhashraw}{1a79417461c9adbe88f8b93e7fad392f}
       \field{sortinit}{H}
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{labelnamesource}{author}
@@ -455,7 +513,7 @@
       \verb https://www.heroku.com/blog/chatbots-with-heroku-terraform/#:~:text=The%20Live%20Agent%20team%20put,and%20responding%20to%20security%20issues
       \endverb
     \endentry
-    \entry{kazi2025llmqa}{inproceedings}{}
+    \entry{kazi2025llmqa}{inproceedings}{}{}
       \name{author}{3}{}{%
         {{hash=8728ab1cf4cc54b69f2ac79344085d0a}{%
            family={Kazi},
@@ -475,10 +533,12 @@
       }
       \strng{namehash}{16bf0f8a027c7bb5199fdb2f15261188}
       \strng{fullhash}{16bf0f8a027c7bb5199fdb2f15261188}
+      \strng{fullhashraw}{16bf0f8a027c7bb5199fdb2f15261188}
       \strng{bibnamehash}{16bf0f8a027c7bb5199fdb2f15261188}
       \strng{authorbibnamehash}{16bf0f8a027c7bb5199fdb2f15261188}
       \strng{authornamehash}{16bf0f8a027c7bb5199fdb2f15261188}
       \strng{authorfullhash}{16bf0f8a027c7bb5199fdb2f15261188}
+      \strng{authorfullhashraw}{16bf0f8a027c7bb5199fdb2f15261188}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{labelnamesource}{author}
@@ -495,7 +555,7 @@
       \verb https://aclanthology.org/2025.indonlp-1.17
       \endverb
     \endentry
-    \entry{khan2020urdunlp}{incollection}{}
+    \entry{khan2020urdunlp}{incollection}{}{}
       \name{author}{4}{}{%
         {{hash=cdcf51a63453f8ec6e179b79b284bc0e}{%
            family={Khan},
@@ -523,10 +583,12 @@
       }
       \strng{namehash}{5b37e1f4be4e54368b961282722071fa}
       \strng{fullhash}{1fe416782f871e6298211c6fae93ae69}
+      \strng{fullhashraw}{1fe416782f871e6298211c6fae93ae69}
       \strng{bibnamehash}{5b37e1f4be4e54368b961282722071fa}
       \strng{authorbibnamehash}{5b37e1f4be4e54368b961282722071fa}
       \strng{authornamehash}{5b37e1f4be4e54368b961282722071fa}
       \strng{authorfullhash}{1fe416782f871e6298211c6fae93ae69}
+      \strng{authorfullhashraw}{1fe416782f871e6298211c6fae93ae69}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{labelnamesource}{author}
@@ -541,7 +603,7 @@
       \verb 10.1007/978-981-15-5232-8_39
       \endverb
     \endentry
-    \entry{kim2023convai}{article}{}
+    \entry{kim2023convai}{article}{}{}
       \name{author}{2}{}{%
         {{hash=b2236af712a294693dcea632d195b1fb}{%
            family={Kim},
@@ -556,10 +618,12 @@
       }
       \strng{namehash}{3c00cc602a24280abbd952109d4bd388}
       \strng{fullhash}{3c00cc602a24280abbd952109d4bd388}
+      \strng{fullhashraw}{3c00cc602a24280abbd952109d4bd388}
       \strng{bibnamehash}{3c00cc602a24280abbd952109d4bd388}
       \strng{authorbibnamehash}{3c00cc602a24280abbd952109d4bd388}
       \strng{authornamehash}{3c00cc602a24280abbd952109d4bd388}
       \strng{authorfullhash}{3c00cc602a24280abbd952109d4bd388}
+      \strng{authorfullhashraw}{3c00cc602a24280abbd952109d4bd388}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{labelnamesource}{author}
@@ -568,7 +632,7 @@
       \field{title}{Neural Conversational Agents: A Comprehensive Review}
       \field{year}{2023}
     \endentry
-    \entry{kumar2022saathi}{inproceedings}{}
+    \entry{kumar2022saathi}{inproceedings}{}{}
       \name{author}{5}{}{%
         {{hash=40faa1bc69980517511d12eb5ab3c8bb}{%
            family={Kumar},
@@ -601,10 +665,12 @@
       }
       \strng{namehash}{310c6c53b474f6222f40c3b88444ed2f}
       \strng{fullhash}{8cdce4d4658ac5ea704db0f3acf71d3a}
+      \strng{fullhashraw}{8cdce4d4658ac5ea704db0f3acf71d3a}
       \strng{bibnamehash}{310c6c53b474f6222f40c3b88444ed2f}
       \strng{authorbibnamehash}{310c6c53b474f6222f40c3b88444ed2f}
       \strng{authornamehash}{310c6c53b474f6222f40c3b88444ed2f}
       \strng{authorfullhash}{8cdce4d4658ac5ea704db0f3acf71d3a}
+      \strng{authorfullhashraw}{8cdce4d4658ac5ea704db0f3acf71d3a}
       \field{sortinit}{K}
       \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
       \field{labelnamesource}{author}
@@ -619,7 +685,31 @@
       \verb 10.1007/978-3-031-09593-1_6
       \endverb
     \endentry
-    \entry{lewis2020rag}{inproceedings}{}
+    \entry{capgemini2024uncertainty}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=4692c2cee4b9ff2148abde1478831171}{%
+           family={Lab},
+           familyi={L\bibinitperiod},
+           given={Capgemini\bibnamedelima Invent},
+           giveni={C\bibinitperiod\bibinitdelim I\bibinitperiod}}}%
+      }
+      \strng{namehash}{4692c2cee4b9ff2148abde1478831171}
+      \strng{fullhash}{4692c2cee4b9ff2148abde1478831171}
+      \strng{fullhashraw}{4692c2cee4b9ff2148abde1478831171}
+      \strng{bibnamehash}{4692c2cee4b9ff2148abde1478831171}
+      \strng{authorbibnamehash}{4692c2cee4b9ff2148abde1478831171}
+      \strng{authornamehash}{4692c2cee4b9ff2148abde1478831171}
+      \strng{authorfullhash}{4692c2cee4b9ff2148abde1478831171}
+      \strng{authorfullhashraw}{4692c2cee4b9ff2148abde1478831171}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Medium}
+      \field{title}{Quantifying LLMs' Uncertainty with Confidence Scores}
+      \field{year}{2024}
+    \endentry
+    \entry{lewis2020rag}{inproceedings}{}{}
       \name{author}{12}{}{%
         {{hash=d2aa4ca344a7388fb2bbb725e0757875}{%
            family={Lewis},
@@ -684,10 +774,12 @@
       }
       \strng{namehash}{e41213d2f7762b77fb6bccc5e658702e}
       \strng{fullhash}{2289eac8378f306e7e62ea73b3eb9746}
+      \strng{fullhashraw}{2289eac8378f306e7e62ea73b3eb9746}
       \strng{bibnamehash}{e41213d2f7762b77fb6bccc5e658702e}
       \strng{authorbibnamehash}{e41213d2f7762b77fb6bccc5e658702e}
       \strng{authornamehash}{e41213d2f7762b77fb6bccc5e658702e}
       \strng{authorfullhash}{2289eac8378f306e7e62ea73b3eb9746}
+      \strng{authorfullhashraw}{2289eac8378f306e7e62ea73b3eb9746}
       \field{sortinit}{L}
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{labelnamesource}{author}
@@ -705,7 +797,7 @@
       \verb https://proceedings.neurips.cc/paper/2020/file/6b493230205f780e1bc26945df7481e5-Paper.pdf
       \endverb
     \endentry
-    \entry{maqbool2025adminbot}{article}{}
+    \entry{maqbool2025adminbot}{article}{}{}
       \name{author}{3}{}{%
         {{hash=e5201277b912661e2a3ca87ac1dbc1f0}{%
            family={Maqbool},
@@ -725,10 +817,12 @@
       }
       \strng{namehash}{f575c51f4abd67fc3e6df66dfea2c411}
       \strng{fullhash}{f575c51f4abd67fc3e6df66dfea2c411}
+      \strng{fullhashraw}{f575c51f4abd67fc3e6df66dfea2c411}
       \strng{bibnamehash}{f575c51f4abd67fc3e6df66dfea2c411}
       \strng{authorbibnamehash}{f575c51f4abd67fc3e6df66dfea2c411}
       \strng{authornamehash}{f575c51f4abd67fc3e6df66dfea2c411}
       \strng{authorfullhash}{f575c51f4abd67fc3e6df66dfea2c411}
+      \strng{authorfullhashraw}{f575c51f4abd67fc3e6df66dfea2c411}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{labelnamesource}{author}
@@ -740,7 +834,7 @@
       \verb 10.1155/acis/4728280
       \endverb
     \endentry
-    \entry{aws2024marketplace}{online}{}
+    \entry{aws2024marketplace}{online}{}{}
       \name{author}{1}{}{%
         {{hash=b29de143329375ec39dc8f2364cb95a4}{%
            family={Marketplace},
@@ -750,10 +844,12 @@
       }
       \strng{namehash}{b29de143329375ec39dc8f2364cb95a4}
       \strng{fullhash}{b29de143329375ec39dc8f2364cb95a4}
+      \strng{fullhashraw}{b29de143329375ec39dc8f2364cb95a4}
       \strng{bibnamehash}{b29de143329375ec39dc8f2364cb95a4}
       \strng{authorbibnamehash}{b29de143329375ec39dc8f2364cb95a4}
       \strng{authornamehash}{b29de143329375ec39dc8f2364cb95a4}
       \strng{authorfullhash}{b29de143329375ec39dc8f2364cb95a4}
+      \strng{authorfullhashraw}{b29de143329375ec39dc8f2364cb95a4}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{labelnamesource}{author}
@@ -767,7 +863,7 @@
       \verb https://aws.amazon.com/marketplace/pp/prodview-my257vllcsdwq#:~:text=Highlights
       \endverb
     \endentry
-    \entry{mohiuddin2023multilingual}{inproceedings}{}
+    \entry{mohiuddin2023multilingual}{inproceedings}{}{}
       \name{author}{3}{}{%
         {{hash=e80d8eba244114852bcd991a38cc939a}{%
            family={Mohiuddin},
@@ -787,10 +883,12 @@
       }
       \strng{namehash}{04ec70c964975c09ecf3bc2f39c4dcca}
       \strng{fullhash}{04ec70c964975c09ecf3bc2f39c4dcca}
+      \strng{fullhashraw}{04ec70c964975c09ecf3bc2f39c4dcca}
       \strng{bibnamehash}{04ec70c964975c09ecf3bc2f39c4dcca}
       \strng{authorbibnamehash}{04ec70c964975c09ecf3bc2f39c4dcca}
       \strng{authornamehash}{04ec70c964975c09ecf3bc2f39c4dcca}
       \strng{authorfullhash}{04ec70c964975c09ecf3bc2f39c4dcca}
+      \strng{authorfullhashraw}{04ec70c964975c09ecf3bc2f39c4dcca}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{labelnamesource}{author}
@@ -802,7 +900,7 @@
       \verb 10.1109/ICOSST60641.2023.10414237
       \endverb
     \endentry
-    \entry{munir2021bablibot}{article}{}
+    \entry{munir2021bablibot}{article}{}{}
       \name{author}{9}{}{%
         {{hash=135eddfe9bd6a6e4e894d9b1cbe8b1ae}{%
            family={Munir},
@@ -852,10 +950,12 @@
       }
       \strng{namehash}{1cf50fa420e56e09c3a64d9adbb3e243}
       \strng{fullhash}{35bdcaf9be1addee3bf4f57aaa06c44f}
+      \strng{fullhashraw}{35bdcaf9be1addee3bf4f57aaa06c44f}
       \strng{bibnamehash}{1cf50fa420e56e09c3a64d9adbb3e243}
       \strng{authorbibnamehash}{1cf50fa420e56e09c3a64d9adbb3e243}
       \strng{authornamehash}{1cf50fa420e56e09c3a64d9adbb3e243}
       \strng{authorfullhash}{35bdcaf9be1addee3bf4f57aaa06c44f}
+      \strng{authorfullhashraw}{35bdcaf9be1addee3bf4f57aaa06c44f}
       \field{sortinit}{M}
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{labelnamesource}{author}
@@ -869,7 +969,7 @@
       \verb 10.1093/eurpub/ckab164.507
       \endverb
     \endentry
-    \entry{openai2023multimodal}{online}{}
+    \entry{openai2023multimodal}{online}{}{}
       \name{author}{1}{}{%
         {{hash=0523b13262b12c215d8009938f5c14f1}{%
            family={OpenAI},
@@ -877,10 +977,12 @@
       }
       \strng{namehash}{0523b13262b12c215d8009938f5c14f1}
       \strng{fullhash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{fullhashraw}{0523b13262b12c215d8009938f5c14f1}
       \strng{bibnamehash}{0523b13262b12c215d8009938f5c14f1}
       \strng{authorbibnamehash}{0523b13262b12c215d8009938f5c14f1}
       \strng{authornamehash}{0523b13262b12c215d8009938f5c14f1}
       \strng{authorfullhash}{0523b13262b12c215d8009938f5c14f1}
+      \strng{authorfullhashraw}{0523b13262b12c215d8009938f5c14f1}
       \field{sortinit}{O}
       \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
       \field{labelnamesource}{author}
@@ -894,7 +996,23 @@
       \verb https://openai.com/index/chatgpt-can-now-see-hear-and-speak/
       \endverb
     \endentry
-    \entry{siddiqi2024bablibot}{article}{}
+    \entry{cyara2023threshold}{misc}{}{}
+      \field{sortinit}{O}
+      \field{sortinithash}{2cd7140a07aea5341f9e2771efe90aae}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Cyara Blog}
+      \field{title}{Optimum Chatbot Confidence Threshold}
+      \field{year}{2023}
+    \endentry
+    \entry{mit2022overconfidence}{article}{}{}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Transactions of the ACL}
+      \field{title}{Reducing Conversational Agents' Overconfidence}
+      \field{year}{2022}
+    \endentry
+    \entry{siddiqi2024bablibot}{article}{}{}
       \name{author}{9}{}{%
         {{hash=6d7943be4237f926aec685e50e9f3d27}{%
            family={Siddiqi},
@@ -944,10 +1062,12 @@
       }
       \strng{namehash}{54fd75075f4dd3ff97f829cab16c7552}
       \strng{fullhash}{a475703c655bad35b5819123f9a5c9b0}
+      \strng{fullhashraw}{a475703c655bad35b5819123f9a5c9b0}
       \strng{bibnamehash}{54fd75075f4dd3ff97f829cab16c7552}
       \strng{authorbibnamehash}{54fd75075f4dd3ff97f829cab16c7552}
       \strng{authornamehash}{54fd75075f4dd3ff97f829cab16c7552}
       \strng{authorfullhash}{a475703c655bad35b5819123f9a5c9b0}
+      \strng{authorfullhashraw}{a475703c655bad35b5819123f9a5c9b0}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{labelnamesource}{author}
@@ -960,7 +1080,7 @@
       \verb 10.1016/j.ijmedinf.2023.105288
       \endverb
     \endentry
-    \entry{singh2024persona}{article}{}
+    \entry{singh2024persona}{article}{}{}
       \name{author}{2}{}{%
         {{hash=535b46081523fc5c5dcfaba2a621d930}{%
            family={Singh},
@@ -975,10 +1095,12 @@
       }
       \strng{namehash}{abc4cd2b3668d916ca1fc65eff5d0152}
       \strng{fullhash}{abc4cd2b3668d916ca1fc65eff5d0152}
+      \strng{fullhashraw}{abc4cd2b3668d916ca1fc65eff5d0152}
       \strng{bibnamehash}{abc4cd2b3668d916ca1fc65eff5d0152}
       \strng{authorbibnamehash}{abc4cd2b3668d916ca1fc65eff5d0152}
       \strng{authornamehash}{abc4cd2b3668d916ca1fc65eff5d0152}
       \strng{authorfullhash}{abc4cd2b3668d916ca1fc65eff5d0152}
+      \strng{authorfullhashraw}{abc4cd2b3668d916ca1fc65eff5d0152}
       \field{sortinit}{S}
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{labelnamesource}{author}
@@ -987,7 +1109,39 @@
       \field{title}{Persona Modeling in Conversational AI: A Survey}
       \field{year}{2024}
     \endentry
-    \entry{wati2024aisupport}{online}{}
+    \entry{thomas2024confidence}{misc}{}{}
+      \name{author}{1}{}{%
+        {{hash=90f648f53147f99c15fa6f46ffa7294f}{%
+           family={Thomas},
+           familyi={T\bibinitperiod},
+           given={John\bibnamedelima Paul},
+           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \strng{namehash}{90f648f53147f99c15fa6f46ffa7294f}
+      \strng{fullhash}{90f648f53147f99c15fa6f46ffa7294f}
+      \strng{fullhashraw}{90f648f53147f99c15fa6f46ffa7294f}
+      \strng{bibnamehash}{90f648f53147f99c15fa6f46ffa7294f}
+      \strng{authorbibnamehash}{90f648f53147f99c15fa6f46ffa7294f}
+      \strng{authornamehash}{90f648f53147f99c15fa6f46ffa7294f}
+      \strng{authorfullhash}{90f648f53147f99c15fa6f46ffa7294f}
+      \strng{authorfullhashraw}{90f648f53147f99c15fa6f46ffa7294f}
+      \field{sortinit}{T}
+      \field{sortinithash}{9af77f0292593c26bde9a56e688eaee9}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Medium}
+      \field{title}{Adding Confidence Score for LLM Results in RAG Chain Scenarios}
+      \field{year}{2024}
+    \endentry
+    \entry{acm2024uncertainty}{article}{}{}
+      \field{sortinit}{U}
+      \field{sortinithash}{6901a00e45705986ee5e7ca9fd39adca}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{ACM Digital Library}
+      \field{title}{Uncertainty Quantification in Large Language Models: A Survey}
+      \field{year}{2024}
+    \endentry
+    \entry{wati2024aisupport}{online}{}{}
       \name{author}{1}{}{%
         {{hash=d7400e56e91bd4654f8c3fb3a5b8c343}{%
            family={WATI},
@@ -995,10 +1149,12 @@
       }
       \strng{namehash}{d7400e56e91bd4654f8c3fb3a5b8c343}
       \strng{fullhash}{d7400e56e91bd4654f8c3fb3a5b8c343}
+      \strng{fullhashraw}{d7400e56e91bd4654f8c3fb3a5b8c343}
       \strng{bibnamehash}{d7400e56e91bd4654f8c3fb3a5b8c343}
       \strng{authorbibnamehash}{d7400e56e91bd4654f8c3fb3a5b8c343}
       \strng{authornamehash}{d7400e56e91bd4654f8c3fb3a5b8c343}
       \strng{authorfullhash}{d7400e56e91bd4654f8c3fb3a5b8c343}
+      \strng{authorfullhashraw}{d7400e56e91bd4654f8c3fb3a5b8c343}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{labelnamesource}{author}
@@ -1012,7 +1168,7 @@
       \verb https://www.wati.io/ai-support-agent/#:~:text=AI%20automatically%20answers%20common%20customer,queries
       \endverb
     \endentry
-    \entry{whatsapp2024trust}{online}{}
+    \entry{whatsapp2024trust}{online}{}{}
       \name{author}{1}{}{%
         {{hash=8b777ebcc5034ce0fe96dd154bcb370e}{%
            family={WhatsApp},
@@ -1020,10 +1176,12 @@
       }
       \strng{namehash}{8b777ebcc5034ce0fe96dd154bcb370e}
       \strng{fullhash}{8b777ebcc5034ce0fe96dd154bcb370e}
+      \strng{fullhashraw}{8b777ebcc5034ce0fe96dd154bcb370e}
       \strng{bibnamehash}{8b777ebcc5034ce0fe96dd154bcb370e}
       \strng{authorbibnamehash}{8b777ebcc5034ce0fe96dd154bcb370e}
       \strng{authornamehash}{8b777ebcc5034ce0fe96dd154bcb370e}
       \strng{authorfullhash}{8b777ebcc5034ce0fe96dd154bcb370e}
+      \strng{authorfullhashraw}{8b777ebcc5034ce0fe96dd154bcb370e}
       \field{sortinit}{W}
       \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
       \field{labelnamesource}{author}
