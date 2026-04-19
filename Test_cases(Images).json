@@ -1,0 +1,92 @@
+[
+    {
+        "id": "Q01",
+        "question": "Can you tell me how to donate for this cause?",
+        "expected_answer": "For general donations, you can use Meezan Bank account 02140100861151 (IBAN: PK35MEZN0002140100861151). For Zakat, use Meezan Bank account 02140101095120 (IBAN: PK94MEZN0002140101095120). Both accounts are at Branch R1 Johar Town, Lahore, SWIFT code MEZNPKKA. You can also donate for Palestine through the same channels or via the Alkhidmat Foundation donation website.",
+        "image_path": "Image1.png"
+    },
+    {
+        "id": "Q02",
+        "question": "Can you tell me more about this cause?",
+        "expected_answer": "Following a 25-month humanitarian crisis in Gaza, Alkhidmat Foundation has launched a massive PKR 15 billion 'Rebuild Gaza' initiative to restore the lives of 2.2 million displaced Palestinians. While we have already delivered over 6,524 tons of life-saving aid, the focus has now shifted to reconstruction—rebuilding residential towers, hospitals, schools, and clean water systems.",
+        "image_path": "Image1.png"
+    },
+    {
+        "id": "Q03",
+        "question": "Can you tell me about the first program mentioned in the picture?",
+        "expected_answer": "The Orphan Care Program by Alkhidmat Foundation supports over 30,000 orphaned and abandoned children by providing quality education, healthcare, and nutritious food. Through the Orphan Family Support Program, children aged 16 or below receive financial assistance for school fees and daily expenses. Key support includes an Educational Kit (PKR 5,000), Monthly Orphan Family Support (PKR 5,500), or Annual Support (PKR 66,000). The program also features a multi-module framework for mental and moral growth, routine health screenings, and interest-free loans for mothers to help them become self-reliant.",
+        "image_path": "Image2.png"
+    },
+    {
+        "id": "Q04",
+        "question": "Can you tell me about the third program mentioned in the picture?",
+        "expected_answer": "Alkhidmat's Islamic Microfinance program, also known as Mawakhat, is based on the principle of Qarz-e-Hasna, providing interest-free loans to help individuals become self-reliant. Key services include Small Business Loans and Income Generated Projects (up to PKR 150,000), as well as Liberation Loans and Loans for Orphan's Mothers (up to PKR 100,000). Between 2012 and 2025, the program has maintained a remarkable 97% recovery rate, managing a loan portfolio of PKR 866 million and supporting over 20,890 beneficiaries across 53 clusters to establish dignified livelihoods.",
+        "image_path": "Image2.png"
+    },
+    {
+        "id": "Q05",
+        "question": "Can you tell me about the Qurbani 2026 initiative shown in this image?",
+        "expected_answer": "The Qurbani Fi Sabilillah 2026 (1447 AH) campaign by Alkhidmat Foundation allows donors to perform their Sunnah sacrifice in remembrance of Prophet Ibrahim (AS). The initiative ensures that fresh meat is distributed to those who need it most, including orphans, widows, refugees, and crisis-affected families across Pakistan, Palestine (Gaza), and other regions. It aims to spread joy and sustenance during the holy days of Dhul Hijjah and Eid ul Adha.",
+        "image_path": "Image4.png"
+    },
+    {
+        "id": "Q06",
+        "question": "What makes Alkhidmat's Qurbani service different or trusted?",
+        "expected_answer": "Alkhidmat Foundation ensures that all sacrifices are 100% Shariah-compliant under the supervision of Islamic scholars. They provide a transparent process for donors, which includes post-Qurbani donor reports to confirm the sacrifice. Additionally, the foundation offers resources such as simple Qurbani guides, spiritual reflections, and specific options for 'Qurbani for Palestine' and 'Qurbani for Pakistan' to make the donor's contribution more impactful.",
+        "image_path": "Image4.png"
+    },
+    {
+        "id": "Q07",
+        "question": "Does Alkhidmat Foundation offer Qurbani services for Palestine this year?",
+        "expected_answer": "Yes, Alkhidmat Foundation is specifically facilitating 'Qurbani for Palestine' as part of the 2026 (1447 AH) campaign. This allows donors to perform their sacrifice for the people of Gaza and other crisis-affected areas. The foundation ensures that the meat is distributed to those in dire need, helping to bring nourishment and the joy of Eid ul Adha to Palestinian families amid the ongoing humanitarian crisis.",
+        "image_path": "Image4.png"
+    },
+    {
+        "id": "Q10",
+        "question": "What program are they talking about in this picture?",
+        "expected_answer": "In this picture, they are discussing the Disaster Management and Flood Relief Program of Alkhidmat. The program involves deploying over 343 specialized volunteers and 11 ambulances to provide immediate aid such as food packages, clean water, and medical care, while planning the long-term rehabilitation of affected families through Alkhidmat's nationwide network of 38 response hubs.",
+        "image_path": "Image5.png"
+    },
+    {
+        "id": "Q11",
+        "question": "What is this program and who is it for?",
+        "expected_answer": "Bano Qabil is an IT scholarship program launched by Alkhidmat Foundation in 2022 to empower Pakistan's youth (64% of whom are under 30) with modern digital skills. It aims to address unemployment by providing free, certified IT courses. Since its launch in Karachi, it has expanded to cities like Lahore and Attock, with over 50,000 students already having completed training in fields like Web Development, Digital Marketing, and Freelancing.",
+        "image_path": "Image6.png"
+    },
+    {
+        "id": "Q13",
+        "question": "I live in Attock.Can i apply?",
+        "expected_answer": "Yes! Alkhidmat has expanded the Bano Qabil program to Attock. There is an upcoming Entry Test scheduled for April 18, 2026. You can secure your future by learning in-demand digital skills for free. To participate, you must register online at banoqabil.org. The program is open to residents across various provinces including Punjab, Sindh, KPK, and Balochistan.",
+        "image_path": "Image6.png"
+    },
+    {
+        "id": "Q14",
+        "question": "What specific IT courses can I choose from during registration?",
+        "expected_answer": "Bano Qabil offers a comprehensive range of specialized tracks. During registration, you can select up to three preferences from a list that includes: Digital Marketing (BQ-001), Amazon Virtual Assistant (VA), Amazon Private Label (PL), Digital Content Creation, E-commerce Development, Cyber Security Fundamentals, Computer & Information Technology, Graphic Designing, Video Editing & Animation, Frontend Development, Web Development, Backend Development, Mobile App Development, Python Programming, and Basic of Data Science. Additionally, the program offers advanced tracks such as DevOps (BQ-013), UI/UX Designing (BQ-010), Game Development (BQ-019), Essentials of Artificial Intelligence (BQ-009), SEO & Google Ads (BQ-032), and Cloud Computing (BQ-016).",
+        "image_path": "Image6.png"
+    },
+    {
+        "id": "Q15",
+        "question": "How can I register for this program?",
+        "expected_answer": "To register, please visit the official Alkhidmat Foundation website at alkhidmat.org. Navigate to the 'Donations' section, then select 'Area of Work', and click on 'Bano Qabil'. Scroll down to find the 'Register' button. This will take you to the registration portal where you must select your province (e.g., Punjab, Sindh) and city. You will then need to fill in your personal information, including your name, email, gender, phone number, and father's name, and select up to three course preferences such as Digital Marketing, UI/UX Designing, or AI.",
+        "image_path": "Image6.png"
+    },
+    {
+        "id": "Q17",
+        "question": "What is this hospital and what is its mission in Tharparkar?",
+        "expected_answer": "This is the Alkhidmat Hospital Tharparkar, a specialized healthcare facility dedicated to improving the health and wellbeing of the 1.5 million people residing across the 2,300 villages of Tharparkar. The hospital focuses on lifting individuals out of hunger and extreme poverty by providing effective vaccines, drugs, diagnostics, and innovative health services to combat the challenges faced in the six talukas—Mithi, Islamkot, Chachro, Dihly, Diplo, and Nagarparkar.",
+        "image_path": "Image7.png"
+    },
+    {
+        "id": "Q18",
+        "question": "How can I contact this Hospital and what area does it cover?",
+        "expected_answer": "You can contact Alkhidmat Hospital Tharparkar via email at info@alkhidmattharparkar.hospital or by calling (021) 36364499. The hospital serves the entire Tharparkar district, which is spread over 22,000 square kilometers. Its operations are critical in providing health services to vulnerable communities that often suffer from varying levels of rainfall and limited resources across the region.",
+        "image_path": "Image7.png"
+    },
+    {
+        "id": "Q19",
+        "question": "How can I find or contact this college?",
+        "expected_answer": "Aghosh College Murree is located at Danna Awain, Murree, Pakistan, 44000. The facility is 'Always Open' for inquiries and visitors. You can reach the administration directly via phone at (051) 2533479 or through email at aghoshalkhidmatmurree2@gmail.com. The campus features specialized blocks, including a dedicated Hostel Block, to provide a supportive and secure learning environment for the students.",
+        "image_path": "Image8.jpeg"
+    }
+]
