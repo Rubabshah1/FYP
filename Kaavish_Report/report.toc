@@ -1,62 +1,84 @@
-\contentsline {chapter}{\numberline {1}Introduction}{5}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Problem Statement}{5}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Proposed Solution}{5}{section.1.2}%
-\contentsline {section}{\numberline {1.3}Intended User}{7}{section.1.3}%
-\contentsline {section}{\numberline {1.4}Project gantt chart and deliverables}{8}{section.1.4}%
-\contentsline {section}{\numberline {1.5}Key Challenges}{10}{section.1.5}%
-\contentsline {chapter}{\numberline {2}Literature Review}{13}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Introduction}{13}{section.2.1}%
-\contentsline {section}{\numberline {2.2}State of the Art in RAG-Based Organizational Assistants}{14}{section.2.2}%
-\contentsline {section}{\numberline {2.3}AI Chatbots in Nonprofits and Civil Society}{15}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Pakistan Context and Local-Language Chatbots}{15}{section.2.4}%
-\contentsline {section}{\numberline {2.5}Similar Work in NGO Service and Donor Assistants}{16}{section.2.5}%
-\contentsline {section}{\numberline {2.6}Multimodal Inputs and Accessibility}{17}{section.2.6}%
-\contentsline {section}{\numberline {2.7}Human-in-the-Loop and Escalation Management}{18}{section.2.7}%
-\contentsline {section}{\numberline {2.8}Staff Coordination and Agent Dashboard}{18}{section.2.8}%
-\contentsline {section}{\numberline {2.9}Analytics and Admin Tools}{19}{section.2.9}%
-\contentsline {section}{\numberline {2.10}Cloud Deployment and Scalability}{20}{section.2.10}%
-\contentsline {section}{\numberline {2.11}Security, Privacy, and Compliance}{20}{section.2.11}%
-\contentsline {section}{\numberline {2.12}Differences Between Existing Work and the Proposed System}{21}{section.2.12}%
-\contentsline {subsection}{\numberline {2.12.1}Multi-Domain NGO Scope Versus Single-Domain Chatbots}{21}{subsection.2.12.1}%
-\contentsline {subsection}{\numberline {2.12.2}Deep RAG Over NGO-Specific Knowledge}{22}{subsection.2.12.2}%
-\contentsline {subsection}{\numberline {2.12.3}Localization to Urdu, Roman Urdu, and Pakistani NGO Practices}{22}{subsection.2.12.3}%
-\contentsline {subsection}{\numberline {2.12.4}Integration With Operational Systems and Human Escalation}{22}{subsection.2.12.4}%
-\contentsline {section}{\numberline {2.13}Conclusion}{23}{section.2.13}%
-\contentsline {chapter}{\numberline {3}Software Requirement Specification (SRS)}{24}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Functional Requirements}{24}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Use Cases}{31}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Non-functional Requirements}{31}{section.3.3}%
-\contentsline {section}{\numberline {3.4}System Diagram}{34}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}Presentation Layer (Client-Side)}{35}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}Application Layer (Backend)}{35}{subsection.3.4.2}%
-\contentsline {subsection}{\numberline {3.4.3}AI/ML Layer}{36}{subsection.3.4.3}%
-\contentsline {subsection}{\numberline {3.4.4}Data Layer (Storage and Retrieval)}{36}{subsection.3.4.4}%
-\contentsline {subsection}{\numberline {3.4.5}Infrastructure Layer (Deployment)}{36}{subsection.3.4.5}%
-\contentsline {subsection}{\numberline {3.4.6}Relationships Between Layers}{37}{subsection.3.4.6}%
-\contentsline {subsection}{\numberline {3.4.7}Flow of Interaction}{37}{subsection.3.4.7}%
-\contentsline {section}{\numberline {3.5}External Interfaces}{38}{section.3.5}%
-\contentsline {subsection}{\numberline {3.5.1}User Interfaces - Wireframes}{38}{subsection.3.5.1}%
-\contentsline {chapter}{\numberline {4}Software Design Specification (SDS)}{42}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Software Design}{42}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}High-level Architecture}{42}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}UML Class Diagram (PlantUML)}{43}{subsection.4.1.2}%
-\contentsline {subsection}{\numberline {4.1.3}Classes and Services}{44}{subsection.4.1.3}%
-\contentsline {subsubsection}{Application-Layer Services}{44}{subsection.4.1.3}%
-\contentsline {subsubsection}{AI/ML classes/services}{46}{subsection.4.1.3}%
-\contentsline {subsubsection}{Data-layer domain models (DB entities)}{47}{subsection.4.1.3}%
-\contentsline {section}{\numberline {4.2}Data Design}{48}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Entities, Attributes, Primary/Foreign Keys, and Cardinalities}{48}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Relational Schema (Core Tables)}{49}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}Indexes and Search}{49}{subsection.4.2.3}%
-\contentsline {subsection}{\numberline {4.2.4}Normalization and Cardinalities Rationale}{50}{subsection.4.2.4}%
-\contentsline {subsection}{\numberline {4.2.5}Technical Details}{50}{subsection.4.2.5}%
-\contentsline {subsubsection}{Data Pipeline}{50}{subsection.4.2.5}%
-\contentsline {subsubsection}{Retrieval Strategy}{51}{Item.30}%
-\contentsline {subsubsection}{Prompt Construction and Generation}{51}{Item.30}%
-\contentsline {subsubsection}{Image Processing Pipeline}{52}{Item.30}%
-\contentsline {subsubsection}{Language Handling}{52}{Item.30}%
-\contentsline {subsubsection}{Monitoring and Quality Control}{52}{Item.30}%
-\contentsline {subsubsection}{Blood Availability Query Processing}{53}{Item.30}%
-\contentsline {subsubsection}{Failure Modes and Mitigations}{53}{Item.36}%
-\contentsline {subsection}{\numberline {4.2.6}Summary}{53}{subsection.4.2.6}%
-\contentsline {chapter}{References}{54}{chapter*.4}%
+\contentsline {chapter}{\numberline {1}Introduction}{11}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Problem Statement}{11}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Proposed Solution}{11}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Intended User}{13}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Project gantt chart and deliverables}{14}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Key Challenges}{16}{section.1.5}%
+\contentsline {chapter}{\numberline {2}Literature Review}{19}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Introduction}{19}{section.2.1}%
+\contentsline {section}{\numberline {2.2}State of the Art in RAG-Based Organizational Assistants}{20}{section.2.2}%
+\contentsline {section}{\numberline {2.3}AI Chatbots in Nonprofits and Civil Society}{21}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Pakistan Context and Local-Language Chatbots}{21}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Similar Work in NGO Service and Donor Assistants}{22}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Multimodal Inputs and Accessibility}{23}{section.2.6}%
+\contentsline {section}{\numberline {2.7}Human-in-the-Loop and Escalation Management}{24}{section.2.7}%
+\contentsline {subsection}{\numberline {2.7.1}Uncertainty Estimation and Confidence Scoring in RAG Systems}{25}{subsection.2.7.1}%
+\contentsline {section}{\numberline {2.8}Staff Coordination and Agent Dashboard}{26}{section.2.8}%
+\contentsline {section}{\numberline {2.9}Analytics and Admin Tools}{26}{section.2.9}%
+\contentsline {section}{\numberline {2.10}Cloud Deployment and Scalability}{27}{section.2.10}%
+\contentsline {section}{\numberline {2.11}Security, Privacy, and Compliance}{28}{section.2.11}%
+\contentsline {section}{\numberline {2.12}Differences Between Existing Work and the Proposed System}{29}{section.2.12}%
+\contentsline {subsection}{\numberline {2.12.1}Multi-Domain NGO Scope Versus Single-Domain Chatbots}{29}{subsection.2.12.1}%
+\contentsline {subsection}{\numberline {2.12.2}Deep RAG Over NGO-Specific Knowledge}{29}{subsection.2.12.2}%
+\contentsline {subsection}{\numberline {2.12.3}Localization to Urdu, Roman Urdu, and Pakistani NGO Practices}{29}{subsection.2.12.3}%
+\contentsline {subsection}{\numberline {2.12.4}Integration With Operational Systems and Human Escalation}{30}{subsection.2.12.4}%
+\contentsline {section}{\numberline {2.13}Conclusion}{30}{section.2.13}%
+\contentsline {chapter}{\numberline {3}Software Requirement Specification (SRS)}{31}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Functional Requirements}{31}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Use Cases}{38}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Non-functional Requirements}{38}{section.3.3}%
+\contentsline {section}{\numberline {3.4}System Diagram}{41}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Presentation Layer (Client-Side)}{42}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Application Layer (Backend)}{42}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}AI/ML Layer}{43}{subsection.3.4.3}%
+\contentsline {subsection}{\numberline {3.4.4}Data Layer (Storage and Retrieval)}{43}{subsection.3.4.4}%
+\contentsline {subsection}{\numberline {3.4.5}Infrastructure Layer (Deployment)}{43}{subsection.3.4.5}%
+\contentsline {subsection}{\numberline {3.4.6}Relationships Between Layers}{44}{subsection.3.4.6}%
+\contentsline {subsection}{\numberline {3.4.7}Flow of Interaction}{44}{subsection.3.4.7}%
+\contentsline {section}{\numberline {3.5}External Interfaces}{45}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}User Interfaces - Wireframes}{45}{subsection.3.5.1}%
+\contentsline {chapter}{\numberline {4}Software Design Specification (SDS)}{49}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Software Design}{49}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}High-level Architecture}{49}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}UML Class Diagram (PlantUML)}{50}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}Classes and Services}{51}{subsection.4.1.3}%
+\contentsline {subsubsection}{Application-Layer Services}{51}{subsection.4.1.3}%
+\contentsline {subsubsection}{AI/ML classes/services}{53}{subsection.4.1.3}%
+\contentsline {subsubsection}{Data-layer domain models (DB entities)}{54}{subsection.4.1.3}%
+\contentsline {section}{\numberline {4.2}Data Design}{55}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Entities, Attributes, Primary/Foreign Keys, and Cardinalities}{55}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Relational Schema (Core Tables)}{56}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Indexes and Search}{56}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Normalization and Cardinalities Rationale}{56}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Technical Details}{57}{subsection.4.2.5}%
+\contentsline {subsubsection}{Data Pipeline}{57}{subsection.4.2.5}%
+\contentsline {subsubsection}{Retrieval Strategy}{58}{Item.30}%
+\contentsline {subsubsection}{Prompt Construction and Generation}{58}{Item.30}%
+\contentsline {subsubsection}{Image Processing Pipeline}{58}{Item.30}%
+\contentsline {subsubsection}{Language Handling}{59}{Item.30}%
+\contentsline {subsubsection}{Monitoring and Quality Control}{59}{Item.30}%
+\contentsline {subsubsection}{Blood Availability Query Processing}{59}{Item.30}%
+\contentsline {subsubsection}{Failure Modes and Mitigations}{60}{Item.36}%
+\contentsline {subsection}{\numberline {4.2.6}Summary}{60}{subsection.4.2.6}%
+\contentsline {chapter}{\numberline {5}Methodology, Experiments and Results}{61}{chapter.5}%
+\contentsline {section}{\numberline {5.1}System Architecture: Agentic RAG and Frontend Integration}{61}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Frontend Architecture and User Interface}{61}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Agentic RAG Reasoning Engine}{62}{subsection.5.1.2}%
+\contentsline {section}{\numberline {5.2}Experimental Setup}{62}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Dataset}{63}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Technical Configuration}{63}{subsection.5.2.2}%
+\contentsline {section}{\numberline {5.3}Results and Performance Analysis}{63}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}RAG Evaluation Metrics}{63}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Accuracy and Hallucination Control}{63}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}Confidence Scoring and Escalation}{64}{subsection.5.3.3}%
+\contentsline {subsection}{\numberline {5.3.4}Latency and Optimization}{64}{subsection.5.3.4}%
+\contentsline {subsection}{\numberline {5.3.5}Multilingual and Multimodal Performance}{64}{subsection.5.3.5}%
+\contentsline {chapter}{\numberline {6}Conclusion and Future Work}{65}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Conclusion}{65}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Future Work}{65}{section.6.2}%
+\contentsline {chapter}{\numberline {7}Reflection}{67}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Learning Reflection}{67}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Team Reflection}{67}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Project Reflection}{68}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Process Reflection}{68}{section.7.4}%
+\contentsline {chapter}{References}{69}{chapter*.7}%
