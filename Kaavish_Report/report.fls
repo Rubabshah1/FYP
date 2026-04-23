@@ -277,57 +277,60 @@ INPUT .\chapters\high_level_architecture.drawio (1).png
 INPUT .\chapters\high_level_architecture.drawio (1).png
 INPUT .\chapters\high_level_architecture.drawio (1).png
 INPUT .\chapters\high_level_architecture.drawio (1).png
-INPUT .\chapters\chat1.png
-INPUT .\chapters\chat1.png
-INPUT .\chapters\chat1.png
-INPUT .\chapters\chat1.png
-INPUT .\chapters\chat1.png
-INPUT .\chapters\chat1.png
-INPUT .\chapters\chat1.png
-INPUT .\chapters\chat2.png
-INPUT .\chapters\chat2.png
-INPUT .\chapters\chat2.png
-INPUT .\chapters\chat2.png
-INPUT .\chapters\chat2.png
-INPUT .\chapters\chat2.png
-INPUT .\chapters\chat2.png
-INPUT .\chapters\userrouted.png
-INPUT .\chapters\userrouted.png
-INPUT .\chapters\userrouted.png
-INPUT .\chapters\userrouted.png
-INPUT .\chapters\userrouted.png
-INPUT .\chapters\userrouted.png
-INPUT .\chapters\userrouted.png
-INPUT .\chapters\Ticket Content 1.png
-INPUT .\chapters\Ticket Content 1.png
-INPUT .\chapters\Ticket Content 1.png
-INPUT .\chapters\Ticket Content 1.png
-INPUT .\chapters\Ticket Content 1.png
-INPUT .\chapters\Ticket Content 1.png
-INPUT .\chapters\Ticket Content 1.png
-INPUT .\chapters\Ticket Content 2.png
-INPUT .\chapters\Ticket Content 2.png
-INPUT .\chapters\Ticket Content 2.png
-INPUT .\chapters\Ticket Content 2.png
-INPUT .\chapters\Ticket Content 2.png
-INPUT .\chapters\Ticket Content 2.png
-INPUT .\chapters\Ticket Content 2.png
-INPUT .\chapters\analytics_dash.png
-INPUT .\chapters\analytics_dash.png
-INPUT .\chapters\analytics_dash.png
-INPUT .\chapters\analytics_dash.png
-INPUT .\chapters\analytics_dash.png
-INPUT .\chapters\analytics_dash.png
-INPUT .\chapters\analytics_dash.png
+INPUT .\chapters\whatsapp_ui.png
+INPUT .\chapters\whatsapp_ui.png
+INPUT .\chapters\whatsapp_ui.png
+INPUT .\chapters\whatsapp_ui.png
+INPUT .\chapters\whatsapp_ui.png
+INPUT .\chapters\whatsapp_ui.png
+INPUT .\chapters\whatsapp_ui.png
+INPUT .\chapters\Staff dashboard.png
+INPUT .\chapters\Staff dashboard.png
+INPUT .\chapters\Staff dashboard.png
+INPUT .\chapters\Staff dashboard.png
+INPUT .\chapters\Staff dashboard.png
+INPUT .\chapters\Staff dashboard.png
+INPUT .\chapters\Staff dashboard.png
+INPUT .\chapters\ticket.png
+INPUT .\chapters\ticket.png
+INPUT .\chapters\ticket.png
+INPUT .\chapters\ticket.png
+INPUT .\chapters\ticket.png
+INPUT .\chapters\ticket.png
+INPUT .\chapters\ticket.png
+INPUT .\chapters\dashboard.png
+INPUT .\chapters\dashboard.png
+INPUT .\chapters\dashboard.png
+INPUT .\chapters\dashboard.png
+INPUT .\chapters\dashboard.png
+INPUT .\chapters\dashboard.png
+INPUT .\chapters\dashboard.png
+INPUT .\chapters\dashboard_1.png
+INPUT .\chapters\dashboard_1.png
+INPUT .\chapters\dashboard_1.png
+INPUT .\chapters\dashboard_1.png
+INPUT .\chapters\dashboard_1.png
+INPUT .\chapters\dashboard_1.png
+INPUT .\chapters\dashboard_1.png
+INPUT .\chapters\RAG_eval.png
+INPUT .\chapters\RAG_eval.png
+INPUT .\chapters\RAG_eval.png
+INPUT .\chapters\RAG_eval.png
+INPUT .\chapters\RAG_eval.png
+INPUT .\chapters\RAG_eval.png
+INPUT .\chapters\RAG_eval.png
+INPUT .\chapters\RAG_eval_1.png
+INPUT .\chapters\RAG_eval_1.png
+INPUT .\chapters\RAG_eval_1.png
+INPUT .\chapters\RAG_eval_1.png
+INPUT .\chapters\RAG_eval_1.png
+INPUT .\chapters\RAG_eval_1.png
+INPUT .\chapters\RAG_eval_1.png
 INPUT .\chapters\sds.tex
 INPUT .\chapters\sds.tex
 INPUT .\chapters\sds.tex
 INPUT .\chapters\sds.tex
 INPUT chapters\sds.tex
-INPUT .\chapters\high_level_architecture.drawio (1).png
-INPUT .\chapters\high_level_architecture.drawio (1).png
-INPUT .\chapters\high_level_architecture.drawio (1).png
-INPUT .\chapters\high_level_architecture.drawio (1).png
 INPUT .\chapters\UML.png
 INPUT .\chapters\UML.png
 INPUT .\chapters\UML.png
@@ -361,6 +364,18 @@ INPUT .\chapters\reflection.tex
 INPUT .\chapters\reflection.tex
 INPUT .\chapters\reflection.tex
 INPUT chapters\reflection.tex
+INPUT .\chapters\appendix-data.tex
+INPUT .\chapters\appendix-data.tex
+INPUT .\chapters\appendix-data.tex
+INPUT .\chapters\appendix-data.tex
+INPUT chapters\appendix-data.tex
+INPUT .\chapters\data_pipeline.png
+INPUT .\chapters\data_pipeline.png
+INPUT .\chapters\data_pipeline.png
+INPUT .\chapters\data_pipeline.png
+INPUT .\chapters\data_pipeline.png
+INPUT .\chapters\data_pipeline.png
+INPUT .\chapters\data_pipeline.png
 INPUT C:\Users\binary\AppData\Local\Programs\MiKTeX\fonts\tfm\public\cm\cmcsc10.tfm
 INPUT report.aux
 INPUT .\titlepage.aux

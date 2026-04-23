@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.1) (preloaded format=pdflatex 2026.2.21)  13 APR 2026 18:45
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (MiKTeX 26.1) (preloaded format=pdflatex 2026.2.21)  24 APR 2026 00:26
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -667,7 +667,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 13.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 13.
-<HU_logo.png, id=295, 313.17pt x 208.78pt>
+<HU_logo.png, id=299, 313.17pt x 208.78pt>
 File: HU_logo.png Graphic file (type png)
 <use HU_logo.png>
 Package pdftex.def Info: HU_logo.png  used on input line 20.
@@ -734,7 +734,7 @@ Overfull \hbox (1.56404pt too wide) in paragraph at lines 62--63
 \OT1/cmr/m/n/12 cam-paigns. The chat-bot pro-vides them with gen-eral up-dates, project overviews,
  []
 
-<chapters/GanttChart.png, id=471, 813.0375pt x 1097.60063pt>
+<chapters/GanttChart.png, id=475, 813.0375pt x 1097.60063pt>
 File: chapters/GanttChart.png Graphic file (type png)
 <use chapters/GanttChart.png>
 Package pdftex.def Info: chapters/GanttChart.png  used on input line 70.
@@ -798,7 +798,7 @@ Overfull \hbox (6.09242pt too wide) in paragraph at lines 101--102
  []
 
 [36] [37]
-<chapters/srs usecase diagram.jpg, id=717, 1172.38pt x 1062.97125pt>
+<chapters/srs usecase diagram.jpg, id=721, 1172.38pt x 1062.97125pt>
 File: chapters/srs usecase diagram.jpg Graphic file (type jpg)
 <use chapters/srs usecase diagram.jpg>
 Package pdftex.def Info: chapters/srs usecase diagram.jpg  used on input line 142.
@@ -875,7 +875,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.3.1}) h
 l.220 \end{longtable}
                       <./chapters/srs usecase diagram.jpg>]
 chapters/srs.tex:220: ignored: Infinite glue shrinkage found in box being split [39]
-<chapters/high_level_architecture.drawio (1).png, id=726, 1437.37pt x 1166.3575pt>
+<chapters/high_level_architecture.drawio (1).png, id=730, 1437.37pt x 1166.3575pt>
 File: chapters/high_level_architecture.drawio (1).png Graphic file (type png)
 <use chapters/high_level_architecture.drawio (1).png>
 Package pdftex.def Info: chapters/high_level_architecture.drawio (1).png  used on input line 226.
@@ -896,64 +896,70 @@ Overfull \hbox (20.0698pt too wide) in paragraph at lines 283--284
  []
 
 [43]
-<chapters/chat1.png, id=746, 3039.355pt x 4622.26875pt>
-File: chapters/chat1.png Graphic file (type png)
-<use chapters/chat1.png>
-Package pdftex.def Info: chapters/chat1.png  used on input line 316.
-(pdftex.def)             Requested size: 171.99922pt x 261.52544pt.
-<chapters/chat2.png, id=747, 2202.72937pt x 4123.15407pt>
-File: chapters/chat2.png Graphic file (type png)
-<use chapters/chat2.png>
-Package pdftex.def Info: chapters/chat2.png  used on input line 317.
-(pdftex.def)             Requested size: 144.05443pt x 269.58728pt.
+<chapters/whatsapp_ui.png, id=750, 1021.56656pt x 658.71094pt>
+File: chapters/whatsapp_ui.png Graphic file (type png)
+<use chapters/whatsapp_ui.png>
+Package pdftex.def Info: chapters/whatsapp_ui.png  used on input line 316.
+(pdftex.def)             Requested size: 430.00462pt x 277.25977pt.
  [44] [45
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
 l.323 \newpage
-               <./chapters/chat1.png> <./chapters/chat2.png (PNG copy)>]
-<chapters/userrouted.png, id=760, 893.58844pt x 457.71pt>
-File: chapters/userrouted.png Graphic file (type png)
-<use chapters/userrouted.png>
-Package pdftex.def Info: chapters/userrouted.png  used on input line 326.
-(pdftex.def)             Requested size: 430.00462pt x 220.25703pt.
-<chapters/Ticket Content 1.png, id=761, 361.35pt x 497.60907pt>
-File: chapters/Ticket Content 1.png Graphic file (type png)
-<use chapters/Ticket Content 1.png>
-Package pdftex.def Info: chapters/Ticket Content 1.png  used on input line 341.
-(pdftex.def)             Requested size: 215.0023pt x 296.07727pt.
-<chapters/Ticket Content 2.png, id=762, 339.51843pt x 239.39438pt>
-File: chapters/Ticket Content 2.png Graphic file (type png)
-<use chapters/Ticket Content 2.png>
-Package pdftex.def Info: chapters/Ticket Content 2.png  used on input line 347.
-(pdftex.def)             Requested size: 215.0023pt x 151.5973pt.
+               <./chapters/whatsapp_ui.png>]
+<chapters/Staff dashboard.png, id=764, 1444.64719pt x 665.48625pt>
+File: chapters/Staff dashboard.png Graphic file (type png)
+<use chapters/Staff dashboard.png>
+Package pdftex.def Info: chapters/Staff dashboard.png  used on input line 326.
+(pdftex.def)             Requested size: 430.00462pt x 198.08362pt.
+<chapters/ticket.png, id=765, 324.46219pt x 615.80063pt>
+File: chapters/ticket.png Graphic file (type png)
+<use chapters/ticket.png>
+Package pdftex.def Info: chapters/ticket.png  used on input line 341.
+(pdftex.def)             Requested size: 215.0023pt x 408.06464pt.
  [46
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3.4}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.350 \end{figure}
-                   <./chapters/userrouted.png>]
-<chapters/analytics_dash.png, id=768, 3403.46532pt x 1720.17656pt>
-File: chapters/analytics_dash.png Graphic file (type png)
-<use chapters/analytics_dash.png>
-Package pdftex.def Info: chapters/analytics_dash.png  used on input line 354.
-(pdftex.def)             Requested size: 387.00153pt x 195.5982pt.
+l.351 
+       <./chapters/Staff dashboard.png>]
+<chapters/dashboard.png, id=771, 1145.78062pt x 644.4075pt>
+File: chapters/dashboard.png Graphic file (type png)
+<use chapters/dashboard.png>
+Package pdftex.def Info: chapters/dashboard.png  used on input line 354.
+(pdftex.def)             Requested size: 387.00153pt x 217.66005pt.
+<chapters/dashboard_1.png, id=772, 1153.30875pt x 645.16031pt>
+File: chapters/dashboard_1.png Graphic file (type png)
+<use chapters/dashboard_1.png>
+Package pdftex.def Info: chapters/dashboard_1.png  used on input line 355.
+(pdftex.def)             Requested size: 387.00153pt x 216.4869pt.
  [47
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3.5}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.358 
-      
+l.359 
+       <./chapters/ticket.png>] [48
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3.6}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.358 
-       <./chapters/Ticket Content 1.png> <./chapters/Ticket Content 2.png>]) [48
+l.361 
+       <./chapters/dashboard.png> <./chapters/dashboard_1.png>]
+<chapters/RAG_eval.png, id=785, 1166.85938pt x 649.67719pt>
+File: chapters/RAG_eval.png Graphic file (type png)
+<use chapters/RAG_eval.png>
+Package pdftex.def Info: chapters/RAG_eval.png  used on input line 364.
+(pdftex.def)             Requested size: 387.00153pt x 215.47467pt.
+<chapters/RAG_eval_1.png, id=786, 1118.67938pt x 657.2053pt>
+File: chapters/RAG_eval_1.png Graphic file (type png)
+<use chapters/RAG_eval_1.png>
+Package pdftex.def Info: chapters/RAG_eval_1.png  used on input line 365.
+(pdftex.def)             Requested size: 387.00153pt x 227.35782pt.
+) [49
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3.7}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
 l.93 \chapter
-             {Software Design Specification (SDS)} <./chapters/analytics_dash.png (PNG copy)>]
+             {Software Design Specification (SDS)} <./chapters/RAG_eval.png> <./chapters/RAG_eval_1.png>]
 Chapter 4.
 
 Overfull \hbox (51.45049pt too wide) in paragraph at lines 93--93
@@ -961,119 +967,124 @@ Overfull \hbox (51.45049pt too wide) in paragraph at lines 93--93
  []
 
 (chapters/sds.tex
-File: chapters/high_level_architecture.drawio (1).png Graphic file (type png)
-<use chapters/high_level_architecture.drawio (1).png>
-Package pdftex.def Info: chapters/high_level_architecture.drawio (1).png  used on input line 8.
-(pdftex.def)             Requested size: 430.00462pt x 348.9311pt.
- [49
-
-]
-<chapters/UML.png, id=784, 1512.65125pt x 1199.48125pt>
+<chapters/UML.png, id=794, 1512.65125pt x 1199.48125pt>
 File: chapters/UML.png Graphic file (type png)
 <use chapters/UML.png>
-Package pdftex.def Info: chapters/UML.png  used on input line 19.
+Package pdftex.def Info: chapters/UML.png  used on input line 12.
 (pdftex.def)             Requested size: 430.00462pt x 340.97719pt.
  [50
+
+] [51
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.23 
-     ] [51
-pdfTeX warning (ext4): destination with the same identifier (name{figure.4.2}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.35 \end{itemize}
+l.28 \end{itemize}
                    <./chapters/UML.png>]
-Overfull \hbox (7.0959pt too wide) in paragraph at lines 50--51
+Overfull \hbox (7.0959pt too wide) in paragraph at lines 43--44
 []\OT1/cmr/bx/n/12 Relationships\OT1/cmr/m/n/12 : calls In-tent-Clas-si-fier, Mul-ti-modal-Pro-ces-sor, RA-GEngine, Data-
  []
 
 
-Overfull \hbox (14.59273pt too wide) in paragraph at lines 58--59
+Overfull \hbox (14.59273pt too wide) in paragraph at lines 51--52
 []\OT1/cmr/bx/n/12 Methods\OT1/cmr/m/n/12 : cre-ateArti-cle(), up-dateArti-cle(), pub-lishK-B-Ver-sion(), set-Guardrails(). 
  []
 
 
-Overfull \hbox (35.3314pt too wide) in paragraph at lines 67--68
+Overfull \hbox (35.3314pt too wide) in paragraph at lines 60--61
 []\OT1/cmr/bx/n/12 Methods\OT1/cmr/m/n/12 : claimTicket(ticketId), postRe-ply(ticketId, mes-sage), up-dateKBFromInter-
  []
 
 [52]
-LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 87.
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 80.
  (C:\Users\binary\AppData\Local\Programs\MiKTeX\tex/latex/base\omscmr.fd
 File: omscmr.fd 2024/11/19 v2.5n Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 87.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 80.
 
-Overfull \hbox (25.16483pt too wide) in paragraph at lines 103--104
+Overfull \hbox (25.16483pt too wide) in paragraph at lines 96--97
 []\OT1/cmr/bx/n/12 Methods\OT1/cmr/m/n/12 : re-trieve(query,k), build-Prompt(context, docs), gen-er-ateAn-swer(prompt)
  []
 
 [53]
-Overfull \hbox (13.65977pt too wide) in paragraph at lines 132--133
+Overfull \hbox (13.65977pt too wide) in paragraph at lines 125--126
 []\OT1/cmr/bx/n/12 Attributes\OT1/cmr/m/n/12 : ticket[]id (PK), ses-sion[]id (FK), sta-tus (Open/InProgress/Resolved),
  []
 
 
-Overfull \hbox (2.07458pt too wide) in paragraph at lines 139--140
+Overfull \hbox (2.07458pt too wide) in paragraph at lines 132--133
 []\OT1/cmr/bx/n/12 Attributes\OT1/cmr/m/n/12 : doc[]id (PK), ti-tle, con-tent, do-main, tags, source[]url, last[]updated,
  []
 
-
-Overfull \hbox (11.84703pt too wide) in paragraph at lines 154--155
-[]\OT1/cmr/bx/n/12 BloodStock\OT1/cmr/m/n/12 : stock[]id, bank[]id (FK), blood[]group, units[]available, last[]updated. 
- []
-
 [54]
-<chapters/db_final.png, id=806, 1765.59625pt x 1023.825pt>
+<chapters/db_final.png, id=816, 1765.59625pt x 1023.825pt>
 File: chapters/db_final.png Graphic file (type png)
 <use chapters/db_final.png>
-Package pdftex.def Info: chapters/db_final.png  used on input line 181.
+Package pdftex.def Info: chapters/db_final.png  used on input line 174.
 (pdftex.def)             Requested size: 430.00462pt x 249.34738pt.
  [55] [56
-pdfTeX warning (ext4): destination with the same identifier (name{figure.4.3}) has been already used, duplicate ignored
+pdfTeX warning (ext4): destination with the same identifier (name{figure.4.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.201 
+l.194 
        <./chapters/db_final.png>]
-Overfull \hbox (6.88669pt too wide) in paragraph at lines 217--218
+Overfull \hbox (6.88669pt too wide) in paragraph at lines 210--212
 \OT1/cmr/m/n/12 com-pre-hen-sive meta-data in-clud-ing do-main clas-si-fi-ca-tion, source URL, and check-
  []
 
-[57] [58] [59])
-Overfull \hbox (0.32841pt too wide) in paragraph at lines 303--96
+[57] [58])
+Overfull \hbox (0.32841pt too wide) in paragraph at lines 296--96
 \OT1/cmr/m/n/12 The de-scribed sys-tem ar-chi-tec-ture im-ple-ments a com-pre-hen-sive Retrieval-Augmented
  []
 
-[60]
+[59]
 Chapter 5.
-(chapters/results.tex [61
+(chapters/results.tex [60
 
-] [62]
+] [61]
 Overfull \hbox (16.4911pt too wide) in paragraph at lines 37--47
  [][] 
  []
 
-[63
+[62
 pdfTeX warning (ext4): destination with the same identifier (name{table.5.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
 l.66     \item \textbf
-                      {Escalation Threshold:} Queries with confidence scores...]) [64]
+                      {Escalation Threshold:} Queries with confidence scores...]) [63]
 Chapter 6.
-(chapters/conclusion.tex [65
+(chapters/conclusion.tex [64
 
 ]
 Overfull \hbox (0.60466pt too wide) in paragraph at lines 16--17
 []\OT1/cmr/bx/n/12 Advanced An-a-lyt-ics: \OT1/cmr/m/n/12 Im-ple-ment-ing pre-dic-tive mod-el-ing on the Ad-min Dash-
  []
 
-) [66]
+) [65]
 Chapter 7.
-(chapters/reflection.tex [67
+(chapters/reflection.tex [66
 
-]) [68]
+]) [67]
+Chapter 8.
+(chapters/appendix-data.tex [68
+
+]
+Overfull \hbox (24.15451pt too wide) in paragraph at lines 39--40
+\OT1/cmr/m/n/12 Document chunks are con-verted into vec-tor em-bed-dings us-ing the \OT1/cmtt/m/n/12 multilingual-e5-base
+ []
+
+[69]
+<chapters/data_pipeline.png, id=888, 569.87906pt x 551.05875pt>
+File: chapters/data_pipeline.png Graphic file (type png)
+<use chapters/data_pipeline.png>
+Package pdftex.def Info: chapters/data_pipeline.png  used on input line 55.
+(pdftex.def)             Requested size: 344.005pt x 332.639pt.
+) [70
+pdfTeX warning (ext4): destination with the same identifier (name{figure.8.1}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.127 \clearpage
+                 <./chapters/data_pipeline.png>]
 Overfull \hbox (5.83655pt too wide) in paragraph at lines 128--128
 []\OT1/cmr/m/it/12 Evaluation Met-rics for Retrieval-Augmented Gen-er-a-tion (RAG) Sys-tems\OT1/cmr/m/n/12 . Geeks-
  []
@@ -1083,15 +1094,15 @@ Overfull \hbox (0.20093pt too wide) in paragraph at lines 128--128
 []\OT1/cmr/m/n/12 W. Fan et al. ``A Sur-vey on RAG Meet-ing LLMs: To-wards Retrieval-Augmented
  []
 
-[69
+[71
 
 
-] [70]
+] [72]
 Overfull \hbox (1.95413pt too wide) in paragraph at lines 128--128
 []\OT1/cmr/m/n/12 M. N. Maq-bool, H. I. Nawaz, and S. A. Ali. ``A Sentence-Level En-coder{Decoder
  []
 
-[71]
+[73]
 Overfull \hbox (2.39804pt too wide) in paragraph at lines 128--128
 \OT1/cmtt/m/n/12 whatsapp . com / trust -[] and -[] safety# : [] : text = Every % 20WhatsApp % 20message %
  []
@@ -1101,29 +1112,29 @@ Overfull \hbox (29.86191pt too wide) in paragraph at lines 128--128
 \OT1/cmtt/m/n/12 2C % 20including % 20messages ,[] delivered % 20to % 20the % 20intended % 20recipient$[]\OT1/cmr/m/n/12 . 
  []
 
-[72] (report.aux (titlepage.aux) (approval.aux))
+[74] (report.aux (titlepage.aux) (approval.aux))
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 5460257A5DC260B7CA7FC8F722467600;14982.
+(rerunfilecheck)             Checksum: 719AF1775C21F15EBF418CC5F0940FA9;15046.
 Package logreq Info: Writing requests to 'report.run.xml'.
 \openout1 = `report.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 19238 strings out of 467866
- 340449 string characters out of 5417841
- 1180319 words of memory out of 5000000
- 47659 multiletter control sequences out of 15000+600000
+ 19257 strings out of 467866
+ 341110 string characters out of 5417841
+ 1180249 words of memory out of 5000000
+ 47679 multiletter control sequences out of 15000+600000
  635042 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 63i,8n,67p,1677b,1482s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 63i,8n,67p,1677b,1480s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\binary\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm1200.pk> <C:\Users\binary\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\tcrm0800.pk><C:/Users/binary/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/binary/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Users/binary/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Users/binary/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/binary/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/binary/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Users/binary/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on report.pdf (73 pages, 4473017 bytes).
+Output written on report.pdf (75 pages, 1789517 bytes).
 PDF statistics:
- 1041 PDF objects out of 1200 (max. 8388607)
- 233 named destinations out of 1000 (max. 500000)
- 645 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1054 PDF objects out of 1200 (max. 8388607)
+ 229 named destinations out of 1000 (max. 500000)
+ 663 words of extra memory for PDF output out of 10000 (max. 10000000)
 
