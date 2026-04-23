@@ -1,14 +1,7 @@
 \section{Software Design}
 
 \subsection{High-level Architecture}
-Five-layer architecture (as in SRS) — here's the component view and interaction flow:
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{chapters/high_level_architecture.drawio (1).png}
-    \caption{High-level system architecture showing the five-layer structure and component interactions}
-    \label{fig:high-level-architecture}
-\end{figure}
+Five-layer architecture (as in SRS) \ref{fig:sysarchitecture}. This high-level system architecture shows the five-layer structure and component interactions.
 
 Flow (short): Client $\rightarrow$ API Gateway $\rightarrow$ Chat Engine $\rightarrow$ (Intent Classifier $\rightarrow$ RAG Retrieval + LLM) $\rightarrow$ Response $\rightarrow$ Presentation. Escalation path sends conversation + context to Human Agent Dashboard; Human updates KB via Admin Service.
 
@@ -147,12 +140,12 @@ The system components and their relationships are shown in the following UML cla
 \item \textbf{Methods}: claimTicket().
 \end{itemize}
 
-\textbf{BloodBank / BloodStock}
+% \textbf{BloodBank / BloodStock}
 
-\begin{itemize}\setlength{\itemsep}{0pt}
-\item \textbf{BloodBank}: bank\_id, name, address, city, coordinates, contact.
-\item \textbf{BloodStock}: stock\_id, bank\_id (FK), blood\_group, units\_available, last\_updated.
-\end{itemize}
+% \begin{itemize}\setlength{\itemsep}{0pt}
+% \item \textbf{BloodBank}: bank\_id, name, address, city, coordinates, contact.
+% \item \textbf{BloodStock}: stock\_id, bank\_id (FK), blood\_group, units\_available, last\_updated.
+% \end{itemize}
 \section{Data Design}
 
 This section presents the normalized relational model, cardinalities, and the core relational schema. The model is designed to conform to third normal form (3NF).
@@ -172,7 +165,7 @@ The primary relationships between entities are summarized as follows:
 
 \item \textbf{KnowledgeArticle (0..n) -- (0..n) Message (reference)}: Messages (bot replies) may reference multiple knowledge articles and vice versa, implemented through a junction table.
 
-\item \textbf{BloodBank (1) -- (0..n) BloodStock}: Each blood bank has multiple blood stock entries (one entry per blood group).
+% \item \textbf{BloodBank (1) -- (0..n) BloodStock}: Each blood bank has multiple blood stock entries (one entry per blood group).
 \end{itemize}
 
 \subsection{Relational Schema (Core Tables)}
@@ -201,7 +194,7 @@ The schema design incorporates the following principles:
 
 \item The \texttt{sessions} table stores transient conversation context, while messages are treated as transactional records that cascade upon session deletion.
 
-\item The \texttt{blood\_stock} table includes a unique constraint on the composite key (\texttt{bank\_id}, \texttt{blood\_group}). This constraint prevents the creation of duplicate rows and simplifies the process of updating stock levels.
+% \item The \texttt{blood\_stock} table includes a unique constraint on the composite key (\texttt{bank\_id}, \texttt{blood\_group}). This constraint prevents the creation of duplicate rows and simplifies the process of updating stock levels.
 
 \item The \texttt{message\_article\_refs} junction table preserves provenance information, explicitly recording which knowledge base articles supported a specific bot response.
 \end{itemize}
@@ -215,7 +208,7 @@ The system implements an end-to-end data pipeline for processing both unstructur
 \begin{enumerate}
     \item \textbf{Web Scraping}: Periodic crawlers extract content from designated websites, parse structured fields, and store raw output with checksums in a staging area.
     \item \textbf{Document Repository}: Verified content is persisted in Google Drive with comprehensive metadata including domain classification, source URL, and checksums.
-    \item \textbf{Structured Data Management}: Blood bank operational data is maintained in a relational database with change tracking and audit logging.
+    % \item \textbf{Structured Data Management}: Blood bank operational data is maintained in a relational database with change tracking and audit logging.
     \item \textbf{Preprocessing}: Text cleaning, language detection, Roman-Urdu normalization, semantic-aware chunking (300–500 tokens), and image OCR processing.
     \item \textbf{Embedding and Indexing}: Document chunks and structured data summaries are converted to embeddings and stored in a vector database with associated metadata.
     \item \textbf{RAG Retrieval and Generation}: Query embedding followed by vector search, result reranking, prompt construction with retrieved context, and LLM generation.
@@ -227,7 +220,7 @@ The retrieval process combines vector similarity search with metadata filtering 
 
 \begin{itemize}\setlength{\itemsep}{0pt}
     \item Initial retrieval of top-k candidate documents using vector similarity
-    \item For blood availability queries, simultaneous retrieval from structured BloodStock database
+    % \item For blood availability queries, simultaneous retrieval from structured BloodStock database
     \item Reranking based on multiple signals: cosine similarity, document recency, domain relevance, and exact match criteria (city, blood group)
     \item Selection of top-n documents for prompt construction
 \end{itemize}
@@ -276,18 +269,18 @@ The system includes comprehensive monitoring and validation mechanisms:
     \item Metrics collection including query latency, knowledge base hit rate, escalation rate, and retrieval precision
 \end{itemize}
 
-\subsubsection{Blood Availability Query Processing}
+% \subsubsection{Blood Availability Query Processing}
 
-Blood availability queries follow a specialized processing path that combines structured database lookup with document retrieval:
+% Blood availability queries follow a specialized processing path that combines structured database lookup with document retrieval:
 
-\begin{enumerate}
-    \item Intent classification identifies blood availability requirement
-    \item Entity extraction determines required blood group and geographic constraints
-    \item Direct structured query against BloodStock table with appropriate filters
-    \item Parallel retrieval of supporting knowledge documents (eligibility criteria, procedural information)
-    \item Response construction including verified stock information with explicit source attribution
-    \item Validation ensuring all numerical claims correspond to authoritative database records
-\end{enumerate}
+% \begin{enumerate}
+%     \item Intent classification identifies blood availability requirement
+%     \item Entity extraction determines required blood group and geographic constraints
+%     \item Direct structured query against BloodStock table with appropriate filters
+%     \item Parallel retrieval of supporting knowledge documents (eligibility criteria, procedural information)
+%     \item Response construction including verified stock information with explicit source attribution
+%     \item Validation ensuring all numerical claims correspond to authoritative database records
+% \end{enumerate}
 
 \subsubsection{Failure Modes and Mitigations}
 

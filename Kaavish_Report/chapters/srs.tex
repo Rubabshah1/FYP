@@ -269,9 +269,9 @@ The proposed system follows a five-layer architecture: Presentation Layer, Appli
 
 \textbf{Components:}
 \begin{itemize}
-    \item \textbf{RAG Knowledge Base:} Stores structured data related to donation, healthcare, and blood services. This database is periodically updated.
+    \item \textbf{RAG Knowledge Base:} Stores structured data related to donation, healthcare, and general services. This database is periodically updated.
     \item \textbf{User Persona Database:} Tracks user profiles, including interaction history, preferences, and persona classification, to provide personalized responses.
-    \item \textbf{Blood Donation Database:} Contains critical data on donor eligibility, blood inventory levels, and bank locations. This database is frequently updated.
+    % \item \textbf{Blood Donation Database:} Contains critical data on donor eligibility, blood inventory levels, and bank locations. This database is frequently updated.
 \end{itemize}
 
 \textbf{Role:} The data layer ensures that the necessary information is available for the application layer to process and retrieve during interactions. It stores both real-time and frequently updated data for accurate responses.
@@ -301,7 +301,7 @@ The proposed system follows a five-layer architecture: Presentation Layer, Appli
 \begin{enumerate}
     \item \textbf{User Interaction} $\rightarrow$ Presentation Layer $\rightarrow$ API Gateway
     \item \textbf{Request Routing} $\rightarrow$ Chat Engine Service $\rightarrow$ AI/ML Layer (Intent Classification \& Response Generation)
-    \item \textbf{Data Retrieval} $\rightarrow$ Data Layer (RAG Knowledge Base, User Persona, and Blood Donation DB)
+    \item \textbf{Data Retrieval} $\rightarrow$ Data Layer (RAG Knowledge Base, User Persona)
     \item \textbf{Response Sent} $\rightarrow$ Presentation Layer $\rightarrow$ User (via WhatsApp or Web Chat)
 \end{enumerate}
 
@@ -313,8 +313,8 @@ This architecture ensures that each layer is responsible for a specific aspect o
 % This section includes our mockup screens and briefly explains them.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.4\textwidth]{chapters/chat1.png}
-    \includegraphics[width=0.335\textwidth]{chapters/chat2.png}
+    \includegraphics[width=1\textwidth]{chapters/whatsapp_ui.png}
+    % \includegraphics[width=0.335\textwidth]{chapters/chat2.png}
     \caption{User Interface using Whatsapp}
     \label{fig:UIuser}
 \end{figure}
@@ -323,7 +323,7 @@ The two wireframes show how users might interact with the AI chatbot. Here, two 
 \newpage
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{chapters/userrouted.png}
+    \includegraphics[width=1\textwidth]{chapters/Staff dashboard.png}
     \caption{Staff Dashboard}
     \label{fig:staffdashboard}
 \end{figure}
@@ -338,26 +338,34 @@ The dashboard includes:
 \end{itemize}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{chapters/Ticket Content 1.png}
+    \includegraphics[width=0.5\textwidth]{chapters/ticket.png}
     \caption{Further Contents in Ticket Content Panel}
     \label{fig:ticketcontent1}
 \end{figure}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.5\textwidth]{chapters/Ticket Content 2.png}
-    \caption{Further Contents in Ticket Content Panel}
-    \label{fig:ticketcontent2}
-\end{figure}
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{chapters/Ticket Content 2.png}
+%     \caption{Further Contents in Ticket Content Panel}
+%     \label{fig:ticketcontent2}
+% \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{chapters/analytics_dash.png}
+    \includegraphics[width=0.9\textwidth]{chapters/dashboard.png}
+    \includegraphics[width=0.9\textwidth]{chapters/dashboard_1.png}
     \caption{Admin's Dashboard - Analytics Monitor}
     \label{fig:analytics}
 \end{figure}
 
 The Analytics Dashboard features real-time tracking of chatbot performance and user activity, including domain-wise query distribution, daily and hourly interaction trends, and key usage metrics like total queries, average session time, and peak hours. It provides detailed insights into escalation rates, comparing AI-handled and human-assisted queries across domains to assess accuracy and efficiency. Additional features include a date selector for reviewing past analytics, visual charts for quick interpretation, and an intuitive, admin-friendly interface aligned with Alkhidmat Foundation’s branding for easy monitoring and performance optimization.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{chapters/RAG_eval.png}
+    \includegraphics[width=0.9\textwidth]{chapters/RAG_eval_1.png}  
+    \caption{Admin's Dashboard - RAG Evaluation}
+    \label{fig:analytics_1}
+\end{figure}
 % \section{External Interfaces}
 
 % We expect every project to have at least of the following subsections. This section must be aligned with your project deliverables. Please consult with your project supervisor regarding which of the following section(s) you should include in your report
