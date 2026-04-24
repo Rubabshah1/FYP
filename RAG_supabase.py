@@ -1171,15 +1171,35 @@ class QueryLangProfile:
         self.output_lang = output_lang
         self.query_urdu_script = query_urdu_script
 
+def normalize_implicit_org_references(query: str) -> str:
+    """
+    Replace first-person pronouns directed at the bot ("you", "your", "you guys")
+    with "Alkhidmat" / "Alkhidmat's" so the query embeds closer to the knowledge base.
+    The original_query is preserved for display; only query_en (used for retrieval) is normalized.
+    """
+    q = query.strip()
+    # order matters: longer phrases first
+    replacements = [
+        (r"\byou guys\b",   "Alkhidmat"),
+        (r"\byour\b",       "Alkhidmat's"),
+        (r"\byou\b",        "Alkhidmat"),
+    ]
+    for pattern, replacement in replacements:
+        q = re.sub(pattern, replacement, q, flags=re.IGNORECASE)
+    return q
+
+
 def build_query_lang_profile(query: str) -> QueryLangProfile:
     q = query.strip()
 
     if is_urdu_script(q) or detect_language(q) == "ur":
         q_en = translate_urdu_to_english(q)
+        q_en = normalize_implicit_org_references(q_en)
         return QueryLangProfile(original_query=q, input_lang="ur", query_en=q_en, output_lang="ur", query_urdu_script=q)
 
     if looks_like_roman_urdu(q):
         q_en = translate_auto_to_english(q)
+        q_en = normalize_implicit_org_references(q_en)
         return QueryLangProfile(
             original_query=q,
             input_lang="roman_ur",
@@ -1188,7 +1208,8 @@ def build_query_lang_profile(query: str) -> QueryLangProfile:
             query_urdu_script=None
         )
 
-    return QueryLangProfile(original_query=q, input_lang="en", query_en=q, output_lang="en", query_urdu_script=None)
+    q_en = normalize_implicit_org_references(q)
+    return QueryLangProfile(original_query=q, input_lang="en", query_en=q_en, output_lang="en", query_urdu_script=None)
 
 # ============ Language Detection ============
 def detect_language(text: str) -> str:
@@ -2281,33 +2302,35 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
             no_answer = "I apologize, but I couldn't find relevant information to answer this question."
         return no_answer, original_query, profile.input_lang, [], {}, domain_classification, selfrag_metrics
 
-    # STEP 3: Assess relevance
+    # STEP 3: Filter by similarity score (no LLM call needed)
+    # Supabase already filters by RELEVANCE_THRESHOLD using the same embedding model,
+    # so every doc here is already semantically validated. A tighter threshold
+    # keeps only the strongest docs without any extra LLM inference.
+    STEP3_SIMILARITY_THRESHOLD = float(os.environ.get("STEP3_SIMILARITY_THRESHOLD", "0.72"))
     if SELFRAG_ENABLE:
-        print(f"\n[SELF-RAG] Step 3: Assessing document relevance...", flush=True)
+        print(f"\n[SELF-RAG] Step 3: Filtering by similarity score (threshold: {STEP3_SIMILARITY_THRESHOLD})...", flush=True)
         relevant_results = []
         relevance_scores = []
 
         for i, result in enumerate(results):
-            is_relevant = critic.assess_relevance(query_for_rag, result['text'])
-            # Use 0.8 as proxy score for relevant (1.0 would be harsh, 0 for irrelevant)
-            relevance_score = 0.8 if is_relevant else 0.0
-            relevance_scores.append(relevance_score)
-
+            sim = result.get('similarity', 0.0)
+            is_relevant = sim >= STEP3_SIMILARITY_THRESHOLD
+            relevance_scores.append(sim)
             if is_relevant:
                 relevant_results.append(result)
-                print(f" ✓ Doc {i+1}: RELEVANT", flush=True)
+                print(f" ✓ Doc {i+1}: RELEVANT (similarity: {sim:.3f})", flush=True)
             else:
-                print(f" ✗ Doc {i+1}: Not relevant", flush=True)
+                print(f" ✗ Doc {i+1}: Filtered out (similarity: {sim:.3f} < {STEP3_SIMILARITY_THRESHOLD})", flush=True)
 
+        # If tighter threshold filtered everything, keep all — they all passed 0.7 already
         if not relevant_results:
-            print(f" ⚠️ No relevant documents found after filtering!", flush=True)
-            no_answer = "I found some documents but they don't seem relevant enough to answer your question accurately."
-            return no_answer, original_query, profile.input_lang, results, {}, domain_classification, selfrag_metrics
+            print(f" ⚠️ Tighter threshold filtered all docs — keeping all {len(results)} (all passed base threshold)", flush=True)
+            relevant_results = results
 
         results = relevant_results
-        avg_relevance = np.mean(relevance_scores) if relevance_scores else 0.0
-        selfrag_metrics['relevance_score'] = float(avg_relevance)
-        print(f" → Average relevance: {avg_relevance:.2f}", flush=True)
+        avg_relevance = float(np.mean(relevance_scores)) if relevance_scores else 0.0
+        selfrag_metrics['relevance_score'] = avg_relevance
+        print(f" → Average similarity: {avg_relevance:.3f}", flush=True)
 
     # Build context
     context_parts = []
@@ -2445,42 +2468,7 @@ Answer (ONLY the final answer, no labels):
             answer_for_critic = translate_auto_to_english(answer)
         except Exception:
             answer_for_critic = answer
-    # AGENTIC STEP 4.5: Evidence Coverage Agent (claim-by-claim verification)
-    if EVIDENCE_COVERAGE_ENABLE:
-        print(f"\n[AGENTIC-RAG] Evidence Coverage Agent: Checking claim-by-claim support...", flush=True)
-        all_covered, unsupported_claims, coverage_score = evidence_agent.check_coverage(
-            answer, context, query_for_rag, 
-            domain=winning_domain,
-            results=results
-        )
-        selfrag_metrics['evidence_coverage'] = coverage_score
-        
-        allow_summary = evidence_agent._is_summary_allowed(query_for_rag, winning_domain)
-        coverage_threshold = 0.3 if allow_summary else 0.4
-        
-        if not all_covered and coverage_score < coverage_threshold:
-            print(f"[AGENTIC-RAG] ⚠️ Low evidence coverage ({coverage_score:.2f}), removing unsupported claims...", flush=True)
-            for claim in unsupported_claims:
-                import re
-                sentences = re.split(r'[.!?]\s+', answer)
-                filtered_sentences = []
-                for sentence in sentences:
-                    contains_unsupported = any(claim.lower() in sentence.lower() for claim in unsupported_claims)
-                    if not contains_unsupported:
-                        filtered_sentences.append(sentence)
-                
-                if filtered_sentences:
-                    answer = '. '.join(filtered_sentences).strip()
-                    if answer and not answer.endswith(('.', '!', '?')):
-                        answer += '.'
-                else:
-                    answer = ""
-            
-            answer = re.sub(r'\s+', ' ', answer).strip()
-            if not answer:
-                answer = "I cannot provide a reliable answer as some claims cannot be verified from the available information."
-
-    # STEP 5: Verify support
+    # STEP 5: Verify support (moved before evidence coverage so the skip logic below works)
     if SELFRAG_ENABLE:
         print(f"\n[SELF-RAG] Step 5: Verifying answer support...", flush=True)
         support_level = critic.verify_support(query_for_rag, answer_for_critic, context)
@@ -2491,6 +2479,45 @@ Answer (ONLY the final answer, no labels):
             print(f" ⚠️ Answer NOT supported by context - rejecting!", flush=True)
             no_answer = "I cannot provide a reliable answer based on the available information."
             return no_answer, original_query, profile.input_lang, results, {}, domain_classification, selfrag_metrics
+
+    # AGENTIC STEP 4.5: Evidence Coverage Agent (claim-by-claim verification)
+    # Skip if verify_support already confirmed full support — no need to check claim-by-claim
+    if EVIDENCE_COVERAGE_ENABLE:
+        if selfrag_metrics.get('support_level') == 'fully_supported':
+            print(f"\n[AGENTIC-RAG] Evidence Coverage: Skipping — answer already fully supported ✅", flush=True)
+            selfrag_metrics['evidence_coverage'] = 1.0
+        else:
+            print(f"\n[AGENTIC-RAG] Evidence Coverage Agent: Checking claim-by-claim support...", flush=True)
+            all_covered, unsupported_claims, coverage_score = evidence_agent.check_coverage(
+                answer, context, query_for_rag,
+                domain=winning_domain,
+                results=results
+            )
+            selfrag_metrics['evidence_coverage'] = coverage_score
+
+            allow_summary = evidence_agent._is_summary_allowed(query_for_rag, winning_domain)
+            coverage_threshold = 0.3 if allow_summary else 0.4
+
+            if not all_covered and coverage_score < coverage_threshold:
+                print(f"[AGENTIC-RAG] ⚠️ Low evidence coverage ({coverage_score:.2f}), removing unsupported claims...", flush=True)
+                for claim in unsupported_claims:
+                    sentences = re.split(r'[.!?]\s+', answer)
+                    filtered_sentences = []
+                    for sentence in sentences:
+                        contains_unsupported = any(claim.lower() in sentence.lower() for claim in unsupported_claims)
+                        if not contains_unsupported:
+                            filtered_sentences.append(sentence)
+
+                    if filtered_sentences:
+                        answer = '. '.join(filtered_sentences).strip()
+                        if answer and not answer.endswith(('.', '!', '?')):
+                            answer += '.'
+                    else:
+                        answer = ""
+
+                answer = re.sub(r'\s+', ' ', answer).strip()
+                if not answer:
+                    answer = "I cannot provide a reliable answer as some claims cannot be verified from the available information."
 
     # STEP 6: Utility
     print(f"\n[SELF-RAG] Step 6: Evaluating answer utility.", flush=True)
@@ -2585,6 +2612,37 @@ Answer (ONLY the final answer, no labels):
     print(f"[TIMING] Total time: {total_time:.2f}s", flush=True)
     if selfrag_metrics.get('embedding_cached'):
         print(f"[AGENTIC-RAG] ✅ Embedding cache hit saved ~0.5-1.0s", flush=True)
+
+    # Print confidence scores (visible for every query, not just CLI)
+    print(f"\n{'='*80}", flush=True)
+    print(f"CONFIDENCE SCORES:", flush=True)
+    print(f"{'='*80}", flush=True)
+    print(f" Combined Confidence   : {confidence_scores.get('combined_confidence', 0):.4f} ⭐", flush=True)
+    print(f" ├─ Retrieval Conf.    : {confidence_scores.get('retrieval_confidence', 0):.4f}", flush=True)
+    print(f" ├─ Avg Token Conf.    : {confidence_scores.get('avg_token_confidence', 0):.4f}", flush=True)
+    print(f" ├─ Weighted Top-K     : {confidence_scores.get('weighted_top_k', 0):.4f}", flush=True)
+    print(f" ├─ Perplexity Score   : {confidence_scores.get('perplexity', 0):.4f}", flush=True)
+    print(f" └─ Entropy Confidence : {confidence_scores.get('entropy_confidence', 0):.4f}", flush=True)
+    combined_disp = confidence_scores.get('combined_confidence', 0)
+    if combined_disp >= 0.7:
+        print(f"✅ High confidence — answer is likely reliable", flush=True)
+    elif combined_disp >= 0.5:
+        print(f"⚠️  Moderate confidence — answer may need verification", flush=True)
+    else:
+        print(f"❌ Low confidence — answer should be verified from sources", flush=True)
+
+    print(f"\n{'─'*80}", flush=True)
+    print(f"SELF-RAG PIPELINE METRICS:", flush=True)
+    print(f"{'─'*80}", flush=True)
+    print(f" Domain relevant    : {'✅' if selfrag_metrics.get('domain_relevant') else '❌'}  {selfrag_metrics.get('domain_relevant')}", flush=True)
+    print(f" Embedding cached   : {'✅' if selfrag_metrics.get('embedding_cached') else '—'}  {selfrag_metrics.get('embedding_cached')}", flush=True)
+    print(f" Retrieval retried  : {'🔄' if selfrag_metrics.get('retrieval_retried') else '—'}  {selfrag_metrics.get('retrieval_retried')}", flush=True)
+    print(f" Follow-up detected : {'🔄' if selfrag_metrics.get('followup_detected') else '—'}  {selfrag_metrics.get('followup_detected')}", flush=True)
+    print(f" Avg doc similarity : {selfrag_metrics.get('relevance_score', 0.0):.3f}", flush=True)
+    print(f" Answer in context  : {'✅' if selfrag_metrics.get('answer_in_context') else '❌'}  {selfrag_metrics.get('answer_in_context')}", flush=True)
+    print(f" Support level      : {selfrag_metrics.get('support_level', 'n/a').upper()}", flush=True)
+    print(f" Evidence coverage  : {selfrag_metrics.get('evidence_coverage', 0.0):.3f}", flush=True)
+    print(f" Utility rating     : {selfrag_metrics.get('utility_rating', 0)}/5", flush=True)
     print(f"{'='*80}\n", flush=True)
     sys.stdout.flush()
 
