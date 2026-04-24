@@ -172,12 +172,18 @@ Examples of RELEVANT queries:
 - "Where is the Alkhidmat hospital?"
 - "How does Aghosh work?" (Alkhidmat program)
 - "Tell me about Mawakhat" (Alkhidmat program)
+- "What are your lab services?"
+- "queries related to offices, donation, donation collection, services of this NGO, impact"
+-
+
 
 Definition of IRRELEVANT:
 A query is IRRELEVANT if:
 - It's about general topics unrelated to Alkhidmat (politics, sports, celebrities, etc.)
 - It's a generic question that could apply to ANY organization
 - It's clearly not about Alkhidmat Foundation or its programs
+- "If its about any celebrity, game, current conditions, weather, politics, religious questions?"
+- "Or if its generic like not specifically about Alkhidmat NGO"
 
 Examples of IRRELEVANT queries:
 - "Best charity in Pakistan" (too generic)
