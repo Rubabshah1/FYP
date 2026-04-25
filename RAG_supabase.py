@@ -1615,7 +1615,7 @@ def add_document_incremental(file_path: str, content: str, category: str, filena
                     print(f"   ⚠️ Failed to insert chunk: {e2}")
     
     print(f"✅ Successfully added document: {filename} ({total_inserted}/{len(rows)} chunks)")
-    return total_inserted > 0
+    return total_inserted
 
 def add_single_file_incremental(file_path: str, content: str, category: str = "general", 
                                 reindex: bool = False) -> bool:
