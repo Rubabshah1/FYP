@@ -834,6 +834,75 @@ function AdminDashboard() {
               </div>
             )}
 
+            {/* Knowledge Base Management */}
+            <div className="bg-white rounded-lg shadow p-6 mb-8">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-gray-800">Knowledge Base Management</h2>
+              </div>
+              <div className="bg-blue-50 border border-blue-100 rounded-lg p-6">
+                <h3 className="text-sm font-semibold text-blue-800 mb-4 uppercase tracking-wider">Upload New Document</h3>
+                <form 
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const file = e.target.elements.kb_file.files[0];
+                    const category = e.target.elements.kb_category.value;
+                    if (!file) {
+                      alert('Please select a file');
+                      return;
+                    }
+                    
+                    const btn = e.target.querySelector('button[type="submit"]');
+                    const originalText = btn.innerText;
+                    btn.disabled = true;
+                    btn.innerText = 'Uploading & Embedding...';
+                    
+                    try {
+                      const result = await api.uploadDocument(file, category);
+                      alert(`Success! ${result.filename} has been added to the KB (${result.chunks} chunks created).`);
+                      e.target.reset();
+                    } catch (err) {
+                      console.error('Upload failed:', err);
+                      alert(err.data?.detail || 'Upload failed. Please check the file type and try again.');
+                    } finally {
+                      btn.disabled = false;
+                      btn.innerText = originalText;
+                    }
+                  }}
+                  className="flex flex-col md:flex-row gap-4 items-end"
+                >
+                  <div className="flex-1 w-full">
+                    <label className="block text-xs font-medium text-gray-500 mb-1 uppercase">Select Document (.txt, .pdf, .docx)</label>
+                    <input
+                      type="file"
+                      name="kb_file"
+                      accept=".txt,.pdf,.docx"
+                      className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer"
+                    />
+                  </div>
+                  <div className="w-full md:w-48">
+                    <label className="block text-xs font-medium text-gray-500 mb-1 uppercase">Category</label>
+                    <select 
+                      name="kb_category"
+                      className="w-full p-2 bg-white border border-gray-300 rounded-lg text-sm"
+                    >
+                      <option value="Health">Health</option>
+                      <option value="Education">Education</option>
+                      <option value="Donation">Donation</option>
+                      <option value="Bano Qabil">Bano Qabil</option>
+                      <option value="Aghosh">Aghosh</option>
+                      <option value="General">General</option>
+                    </select>
+                  </div>
+                  <button
+                    type="submit"
+                    className="w-full md:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm"
+                  >
+                    Upload & Embed
+                  </button>
+                </form>
+              </div>
+            </div>
+
             {/* Tickets table */}
             <div className="bg-white rounded-lg shadow">
               <div className="p-6 border-b border-gray-200">

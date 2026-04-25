@@ -2764,6 +2764,65 @@ async def admin_list_tickets(
     return {"tickets": tickets}
 
 
+@app.post("/admin/kb/upload")
+async def upload_kb_document(
+    file: UploadFile = File(...),
+    category: str = Form("general"),
+    admin: dict = Depends(get_current_admin)
+):
+    """Upload a document to the knowledge base and create embeddings."""
+    filename = file.filename
+    content = ""
+    file_ext = Path(filename).suffix.lower()
+    
+    # Read file content
+    file_bytes = await file.read()
+    
+    if file_ext == ".txt":
+        try:
+            content = file_bytes.decode("utf-8")
+        except UnicodeDecodeError:
+            content = file_bytes.decode("latin-1")
+    elif file_ext == ".pdf":
+        content = rag_module.extract_text_from_pdf(file_bytes)
+    elif file_ext == ".docx":
+        content = rag_module.extract_text_from_docx(file_bytes)
+    else:
+        raise HTTPException(status_code=400, detail=f"Unsupported file type: {file_ext}")
+    
+    if not content.strip():
+        raise HTTPException(status_code=400, detail="Could not extract text from document or document is empty")
+    
+    # Add to KB incrementally
+    # We use a virtual path for the database record
+    virtual_path = f"Uploaded/{category}/{filename}"
+    
+    try:
+        num_chunks = await asyncio.to_thread(
+            rag_module.add_document_incremental,
+            file_path=virtual_path,
+            content=content,
+            category=category,
+            filename=filename,
+            reindex=True
+        )
+        
+        if num_chunks > 0:
+            return {
+                "status": "success",
+                "filename": filename,
+                "category": category,
+                "chunks": num_chunks,
+                "message": f"Successfully added {filename} to knowledge base"
+            }
+        else:
+            raise HTTPException(status_code=500, detail="Failed to add document to knowledge base (no chunks created)")
+            
+    except Exception as e:
+        print(f"[ADMIN-KB-UPLOAD] Error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error processing document: {str(e)}")
+
+
 @app.post("/admin/kb/update")
 async def update_knowledge_base(
     reindex_existing: bool = Query(False, description="Re-index existing documents"),

@@ -273,6 +273,27 @@ async function getEvalReportByLanguage(language) {
   return data;
 }
 
+async function uploadDocument(file, category = 'general') {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('category', category);
+
+  const adminToken = localStorage.getItem('admin_token');
+  const headers = {};
+  if (adminToken) {
+    headers['X-Admin-Token'] = adminToken;
+  }
+
+  const res = await fetch(`${BASE_URL}/admin/kb/upload`, {
+    method: 'POST',
+    headers: headers,
+    body: formData
+  });
+  const data = await res.json();
+  if (!res.ok) return Promise.reject({ status: res.status, data });
+  return data;
+}
+
 export default {
   // Authentication
   sendOTP, verifyOTP, agentLogin, adminLogin,
@@ -281,7 +302,7 @@ export default {
   // Tickets
   createTicket, listTickets, getTicket, assignTicket, getTicketChat, sendAgentMessage, resolveTicket,
   // Admin
-  getAnalytics, adminListTickets,
+  getAnalytics, adminListTickets, uploadDocument,
   // Eval
   getEvalStatus, getEvalReportByLanguage
 };
