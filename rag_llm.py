@@ -90,7 +90,9 @@ def load_llm_default() -> Llama:
 
 def get_llm_for_language(language: Optional[str]) -> Llama:
     if language == "ur" and URDU_LLM_ENABLE:
+        print("[DEBUG] Selecting Urdu-specific local model")
         return load_llm_urdu()
+    print("[DEBUG] Selecting default local model")
     return load_llm_default()
 
 
@@ -155,6 +157,7 @@ def llm_generate(
         top_k = int(os.environ.get("OPENAI_TOP_LOGPROBS", "5"))
 
         try:
+            print(f"[DEBUG] Using OpenAI GPT model: {model_name}")
             completion = client.chat.completions.create(
                 model=model_name,
                 messages=[{"role": "user", "content": prompt}],
@@ -193,6 +196,7 @@ def llm_generate(
     # local llama-cpp
     try:
         model = get_llm_for_language(language)
+        print(f"[DEBUG] Generating response with local Llama model (Language: {language})")
         output = model(
             prompt,
             max_tokens=max_tokens,
