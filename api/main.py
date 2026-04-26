@@ -2433,8 +2433,7 @@ async def chat(
             # generate_answer_selfrag returns (answer, original_query, input_lang, sources, confidence_scores, domain_classification, selfrag_metrics)
             # Pass session_id for conversation memory
             result = await asyncio.to_thread(
-                rag_module.generate_answer_selfrag, final_message, top_k=5, filter_category=None, session_id=str(db_session_id)
-            )
+                rag_module.generate_answer_selfrag, final_message, top_k=5, filter_category=None)
             answer, _, input_lang, sources, confidence_scores, domain_classification, selfrag_metrics = result
             is_urdu = (input_lang == "ur" or input_lang == "roman_ur")
         else:
@@ -2494,51 +2493,98 @@ async def chat(
             domain=query_domain
         )
         
-        # Auto-create ticket if confidence is below threshold (0.5-0.6)
-        # Note: user_requested_agent is already handled above with early return
-        CONFIDENCE_THRESHOLD = 0.70  # Configurable threshold
+        # ------------------------------------------------------------------ #
+        # TICKET CREATION LOGIC                                               #
+        #                                                                     #
+        # A ticket is raised when ANY of these is true:                       #
+#        1. selfrag_metrics['route_to_agent'] = True (RAG explicitly routed) #
+        #    - verify_support returned NO_SUPPORT (hallucination)             #
+        #    - check_answer_in_context returned CANNOT_ANSWER                 #
+        #    - utility too low and evidence not strong                        #
+        #    - no documents found                                             #
+        #    - confidence below SELFRAG_MIN_CONFIDENCE                       #
+        # 2. confidence < CONFIDENCE_THRESHOLD (retrieval score too low)      #
+        #                                                                     #
+        # Domain is taken from domain_classification (donation / healthcare / #
+        # general) so the ticket is routed to the right department agent.     #
+        # ------------------------------------------------------------------ #
+
+        CONFIDENCE_THRESHOLD = float(os.getenv("TICKET_CONFIDENCE_THRESHOLD", "0.70"))
         ticket_created = False
         ticket_id = None
-        final_answer = answer  # Default to original answer
-        
-        # Create ticket if confidence is low (user-requested agent already handled above)
-        should_create_ticket = (
+        final_answer = answer  # default; may be replaced below
+
+        # Check if the RAG pipeline explicitly flagged this for agent routing
+        rag_routed_to_agent = (
+            isinstance(selfrag_metrics, dict) and
+            selfrag_metrics.get("route_to_agent", False)
+        ) if use_selfrag else False
+
+        # Low-confidence signal (works for both selfrag and non-selfrag paths)
+        low_confidence = (
             confidence is not None and confidence < CONFIDENCE_THRESHOLD
-        ) and not has_active_ticket
-        
+        )
+
+        should_create_ticket = (rag_routed_to_agent or low_confidence) and not has_active_ticket
+
         if should_create_ticket:
-            # Create ticket automatically with domain routing
+            ticket_reason = "RAG route_to_agent" if rag_routed_to_agent else f"low confidence ({confidence:.3f})"
+            print(f"[TICKET] Creating ticket — reason: {ticket_reason} | domain: {query_domain}", flush=True)
+
+            # Create ticket with the domain from RAG classification so it routes
+            # to the right department (donation / healthcare / general)
             ticket = create_ticket(response["response_id"], domain=query_domain)
             if ticket:
                 ticket_created = True
                 ticket_id = str(ticket.get("ticket_id"))
                 agent_assigned = ticket.get("agent_id")
                 status = ticket.get("status")
-                print(f"[AUTO-TICKET] Created ticket {ticket_id} for low confidence response (confidence: {confidence:.3f}, domain: {query_domain}, status: {status})")
-                if agent_assigned:
-                    print(f"[AUTO-TICKET] Auto-assigned to agent {agent_assigned}")
-                
-                # Broadcast ticket creation to agents via WebSocket
+                print(
+                    f"[TICKET] Created {ticket_id} "
+                    f"(domain: {query_domain}, status: {status}, "
+                    f"agent: {agent_assigned})",
+                    flush=True
+                )
+
+                # Broadcast to agent dashboard via WebSocket
                 try:
                     await manager.broadcast_ticket_update(ticket_id, "created", {
                         "ticket_id": ticket_id,
                         "status": status,
                         "agent_id": str(agent_assigned) if agent_assigned else None,
-                        "domain": query_domain
+                        "domain": query_domain,
+                        "reason": ticket_reason,
                     })
                 except Exception as e:
                     print(f"[WS] Error broadcasting ticket creation: {e}")
-                
-                # Replace answer with routing message when confidence is low
-                # Translate to Urdu if the user's query was in Urdu
-                routing_message_en = "I don't have enough information to answer this. I am routing you to a human agent."
+
+                # Build a user-facing routing message in the right language
+                # Map domain → human-readable department name
+                _dept_map = {
+                    "donation":   "our Donations team",
+                    "healthcare": "our Healthcare team",
+                    "general":    "a human agent",
+                }
+                _dept = _dept_map.get(
+                    (query_domain or "").lower().split("/")[0],  # handles 'Donors/General' etc.
+                    "a human agent"
+                )
+                # Also handle DB category names like 'Donors', 'Health'
+                if query_domain and query_domain.lower() in ("donors", "donor"):
+                    _dept = "our Donations team"
+                elif query_domain and query_domain.lower() in ("health", "healthcare"):
+                    _dept = "our Healthcare team"
+
+                routing_message_en = (
+                    f"I wasn't able to fully answer your question. "
+                    f"I am routing you to {_dept} — they will respond shortly."
+                )
                 if is_urdu:
                     try:
-                        # Import translation function from RAG module
                         from RAG_supabase import translate_english_to_urdu
                         final_answer = translate_english_to_urdu(routing_message_en)
-                    except Exception as e:
-                        print(f"[WARNING] Failed to translate routing message to Urdu: {e}")
+                    except Exception as _te:
+                        print(f"[WARNING] Translation failed: {_te}")
                         final_answer = routing_message_en
                 else:
                     final_answer = routing_message_en
@@ -2796,6 +2842,64 @@ async def update_knowledge_base(
             status_code=500,
             detail=f"Error updating knowledge base: {str(e)}"
         )
+        
+@app.post("/admin/kb/upload")
+async def upload_kb_document(
+    file: UploadFile = File(...),
+    category: str = Form("general"),
+    admin: dict = Depends(get_current_admin)
+):
+    """Upload a document to the knowledge base and create embeddings."""
+    filename = file.filename
+    content = ""
+    file_ext = Path(filename).suffix.lower()
+    
+    # Read file content
+    file_bytes = await file.read()
+    
+    if file_ext == ".txt":
+        try:
+            content = file_bytes.decode("utf-8")
+        except UnicodeDecodeError:
+            content = file_bytes.decode("latin-1")
+    elif file_ext == ".pdf":
+        content = rag_module.extract_text_from_pdf(file_bytes)
+    elif file_ext == ".docx":
+        content = rag_module.extract_text_from_docx(file_bytes)
+    else:
+        raise HTTPException(status_code=400, detail=f"Unsupported file type: {file_ext}")
+    
+    if not content.strip():
+        raise HTTPException(status_code=400, detail="Could not extract text from document or document is empty")
+    
+    # Add to KB incrementally
+    # We use a virtual path for the database record
+    virtual_path = f"Uploaded/{category}/{filename}"
+    
+    try:
+        num_chunks = await asyncio.to_thread(
+            rag_module.add_document_incremental,
+            file_path=virtual_path,
+            content=content,
+            category=category,
+            filename=filename,
+            reindex=True
+        )
+        
+        if num_chunks > 0:
+            return {
+                "status": "success",
+                "filename": filename,
+                "category": category,
+                "chunks": num_chunks,
+                "message": f"Successfully added {filename} to knowledge base"
+            }
+        else:
+            raise HTTPException(status_code=500, detail="Failed to add document to knowledge base (no chunks created)")
+            
+    except Exception as e:
+        print(f"[ADMIN-KB-UPLOAD] Error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error processing document: {str(e)}")
 
 # ============================================================================
 # EVAL REPORT ENDPOINTS

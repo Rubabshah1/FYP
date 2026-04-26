@@ -152,8 +152,10 @@ You can download it from [Hugging Face](https://huggingface.co/models) or other 
 ### 8. Run the Backend Server
 
 ```bash
-python api_server.py
+python -m api.main
 ```
+#incase this creates problems then run this command :
+
 
 Or using uvicorn directly:
 
