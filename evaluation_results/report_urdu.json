@@ -1,14 +1,14 @@
 {
   "language": "Urdu",
   "language_key": "urdu",
-  "run_at": "2026-03-01T03:31:22.849285",
+  "run_at": "2026-04-30T22:47:43.358406",
   "results": [
     {
       "id": "Q01",
       "question": "میں غزہ کے لیے الخدمت فاؤنڈیشن کو عطیہ کیسے دے سکتا/سکتی ہوں؟",
       "expected_answer": "آپ میزان بینک اکاؤنٹ نمبر 02140100861151 کے ذریعے، کیش پک اپ نمبر 0800-44448 پر کال کر کے، کلیکشن سینٹرز پر جا کر، یا ویب سائٹ alkhidmat.org/donate کے ذریعے ڈیبٹ یا کریڈٹ کارڈ سے عطیہ دے سکتے ہیں۔",
-      "actual_answer": "آپ الخدمت فاؤنڈیشن کے “Rebuild Gaza” کیمپین کے لیے ان طریقوں سے عطیہ دے سکتے/سکتی ہیں:\n\n1) ایزی پیسہ/جاز کیش کے ذریعے  \n- اپنی پسندیدہ ایپ کھولیں  \n- Other Payments (Donations) میں جائیں  \n- “Alkhidmat Foundation” منتخب کریں اور ڈونیٹ کریں\n\n2) چیک/بینک ڈرافٹ کے ذریعے  \n- چیک یا بینک ڈرافٹ “Alkhidmat Foundation Pakistan” کے نام بنوائیں  \n- گھر سے کلیکشن کے لیے 0800 44 44 8 یا 0304 111 4 222 پر کال کریں، الخدمت کا نمائندہ وصول کر لے گا\n\n3) بینک اکاؤنٹ (Meezan Bank) میں جمع کرا کے  \n- Account Title: Al Khidmat Foundation Pakistan  \n- Account No. (PKR): 02140101095120  \n- IBAN: PK94MEZN0002140101095120  \n- SWIFT Code: MEZNPKKA",
-      "rag_time_seconds": 4955.87,
+      "actual_answer": "آپ غزہ کے لیے الخدمت فاؤنڈیشن کو عطیہ دینے کے لیے ان کی ویب سائٹ پر جا سکتے ہیں۔ آپ کو عطیہ کرنے کے لیے درج ذیل لنک پر جانا ہوگا: [alkhidmat.org/rebuild-gaza](https://alkhidmat.org/rebuild-gaza)۔ وہاں آپ کو عطیہ کرنے کے مختلف طریقے ملیں گے، جو آپ کی سہولت کے مطابق ہوں گے۔ آپ کی مدد سے غزہ میں رہنے والے لوگوں کی زندگیوں میں بہتری لانے میں مدد ملے گی۔",
+      "rag_time_seconds": 122.6,
       "contexts_retrieved": 5,
       "rag_rejected": false,
       "scores": {
@@ -26,16 +26,2279 @@
         "Hallucination": true
       },
       "reasons": {
-        "AnswerRelevancy": "Great job! The answer is fully relevant and directly addresses the question without any irrelevant information.",
-        "Faithfulness": "The score is 1.00 because there are no contradictions—great job staying true to the retrieval context!",
-        "ContextualPrecision": "The score is 0.00 because all the top-ranked nodes in the retrieval contexts are irrelevant to the input. For example, the first node only discusses the president's participation in a convention and relief activities, but 'does not mention any donation methods or instructions on how to donate.' Similarly, the second node appeals for public participation but 'does not provide any information about how to donate or specific donation channels.' Since none of the nodes provide the required information about donation methods, the score cannot be higher.",
-        "ContextualRecall": "The score is 0.00 because none of the sentences in the expected output can be attributed to any of the 5 nodes in the retrieval context; the context does not mention donation methods, bank account numbers, phone numbers, collection centers, or the website referenced in the expected output.",
-        "Hallucination": "The score is 0.00 because all factual alignments show the actual output is fully consistent with the context, and there are no contradictions or unsupported claims."
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the user’s question, with no irrelevant statements noted. It directly supports the request, which is great.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because every top-ranked node in retrieval contexts is irrelevant to the user’s question about how to donate. The first node in retrieval contexts only says 'الخدمت فاؤنڈیشن اہل غزہ کے لیے جاری امدادی سرگرمیوں کے ساتھ ساتھ تعمیر نو میں بھی کردار ادا کرے گی' and does not provide donation steps. The second node in retrieval contexts repeats the same general appeal, the third and fourth nodes in retrieval contexts only say 'عوام سے اپیل کی کہ وہ اس نیکی کے کام میں بڑھ چڑھ کر حصہ لیں' without concrete donation instructions, and the fifth node in retrieval contexts discusses '15 ارب روپے سے ’’ری بلڈ غزہ‘‘ مہم کا آغاز' and relief plans rather than donation channels. It is not higher because irrelevant nodes are ranked at the very top, and it is at this score because none of the ranked nodes contain the needed donation method details.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1–5 do not mention the Meezan Bank account number 02140100861151, cash pickup number 0800-44448, collection centers, or the donation website alkhidmat.org/donate, and instead focus on Gaza relief, appeals, volunteers, and rebuilding.",
+        "Hallucination": "The score is 0.00 because the actual output is fully supported by the contexts: they consistently describe Alkhidmat Foundation Pakistan’s Gaza relief and rebuilding efforts, including the Rebuild Gaza campaign, and there are no contradictions."
       },
       "overall_pass": false,
       "metadata": {
-        "combined_confidence": 0.9198595420764633,
+        "combined_confidence": 0.9006630539894104,
         "domain": "donation",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q02",
+      "question": "کیا الخدمت فاؤنڈیشن پاکستان میں ٹیکس سے مستثنیٰ ہے؟",
+      "expected_answer": "جی ہاں، الخدمت فاؤنڈیشن پاکستان ایف بی آر ایکٹ 2(36)c کے تحت ٹیکس سے مستثنیٰ ہے۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 13.29,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response does not address whether Alkhidmat Foundation is tax-exempt in Pakistan at all; it only apologizes, says it cannot answer, and refers the user to a human agent. Since it provides no relevant information on the actual question, the score cannot be higher.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question: the first node discusses projects like 'ڈیزاسٹرمینجمنٹ' and '43کروڑ کے بلاسود قرض' but not tax exemption, the second node again only mentions '30ہزار 840 متاثرہ خاندانوں' and '43کروڑ کے بلاسود قرض', the third node repeats charity details such as 'فوڈ پیکج' and 'بلاسود قرض', and the fourth and fifth nodes only cover health services like '56 ہسپتال' and 'بالکل مفت' facilities. It is not higher because no relevant node appears above these irrelevant nodes—in fact, no relevant node appears at all.",
+        "ContextualRecall": "The score is 0.00 because the only sentence in the expected output is not supported by any node(s) in retrieval context; sentence 1 states that الخدمت فاؤنڈیشن پاکستان is tax-exempt under ایف بی آر ایکٹ 2(36)c, but nodes 1–5 discuss donations, relief activities, interest-free loans, and health services, with no mention of FBR, tax exemption, or section 2(36)c.",
+        "Hallucination": "The score is 0.00 because the actual output is only a refusal/apology with escalation to a human agent and makes no factual claims that contradict the provided contexts."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q03",
+      "question": "الخدمت فاؤنڈیشن کا ہیڈ آفس کہاں واقع ہے؟",
+      "expected_answer": "الخدمت فاؤنڈیشن کا ہیڈ آفس 3 کلومیٹر خیابانِ جناح، لاہور، پنجاب، پاکستان میں واقع ہے۔",
+      "actual_answer": null,
+      "rag_time_seconds": 3616.78,
+      "rag_rejected": false,
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "error": "[Errno 11001] getaddrinfo failed"
+    },
+    {
+      "id": "Q04",
+      "question": "مزید معلومات کے لیے میں الخدمت فاؤنڈیشن سے کیسے رابطہ کر سکتا/سکتی ہوں؟",
+      "expected_answer": "آپ فون نمبر +92 42 3802 0222 پر کال کر کے یا ای میل info@alkhidmat.org پر رابطہ کر سکتے ہیں۔",
+      "actual_answer": "آپ الخدمت فاؤنڈیشن سے مزید معلومات کے لیے مندرجہ ذیل طریقوں سے رابطہ کر سکتے ہیں:\n\nٹیلیفون: 0800 44448  \nای میل: info@ahf.com.pk  \nپتہ: Alkhidmat Complex, 3 Km Khayaban-e-Jinnah, لاہور، پاکستان۔",
+      "rag_time_seconds": 21.13,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response directly addresses how to contact الخدمت فاؤنڈیشن and stays fully relevant to the user’s question, with no irrelevant statements. Great job keeping it clear and on-topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions listed, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the contact question. The first node in retrieval contexts is only about \"Emergency Appeal\" activities in \"جنوبی افریقہ\" and \"اہل غزہ\" and \"does not provide any contact details like a phone number or email such as '+92 42 3802 0222' or 'info@alkhidmat.org'\". The second node in retrieval contexts is a duplicate blog snippet and \"contains no information about how to contact the foundation\". The third and fourth nodes in retrieval contexts are about \"اسپیشل ابیلیٹی کلب\" and \"provide no contact method like '+92 42 3802 0222' or 'info@alkhidmat.org'\". The fifth node in retrieval contexts mentions volunteers and news, but \"does not contain the needed contact details\". The score is not higher because no relevant node appears above these irrelevant nodes, and it is at 0.00 because every ranked node is irrelevant.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context; nodes 1-5 only contain general updates and calls to action, and none provide the phone number +92 42 3802 0222, the email info@alkhidmat.org, or matching contact instructions.",
+        "Hallucination": "The score is 1.00 because the actual output is entirely unsupported by the provided contexts: it gives contact details, while all contexts discuss Alkhidmat Foundation news, events, Gaza relief efforts, the FIMA convention, the Special Ability Club inauguration, and volunteer statistics, with no matching phone number, email, or address."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8709383606910706,
+        "domain": "general",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q05",
+      "question": "میں عطیہ کی رسید کیسے حاصل کر سکتا/سکتی ہوں؟",
+      "expected_answer": "آپ اپنی ٹرانزیکشن سلپ واٹس ایپ نمبر +923000776016 پر بھیج کر عطیہ کی رسید حاصل کر سکتے ہیں۔",
+      "actual_answer": "آپ عطیہ کی رسید حاصل کرنے کے لیے اپنی ٹرانزیکشن سلپ کو ہمارے درج ذیل واٹس ایپ نمبر پر بھیج سکتے ہیں: +923000776016۔",
+      "rag_time_seconds": 28.61,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the user’s question about obtaining a donation receipt, with no irrelevant statements noted—great job staying focused and on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 0.00 because none of the top-ranked nodes in retrieval contexts are relevant to how to obtain a donation receipt. The 1st node in retrieval contexts only has \"generic navigation text like 'Donate', 'Sadaqah', and 'Donate Now'\" and \"does not mention a receipt, 'رسید', WhatsApp, or the number '+923000776016'\". The 2nd and 3rd nodes in retrieval contexts are also irrelevant since they repeat \"generic donation page text\" and \"the same generic content\" without the needed receipt process. The 4th and 5th nodes in retrieval contexts are likewise irrelevant because they are about \"Zakat information and FAQs\" and \"duplicate the Zakat FAQ content,\" not donation receipts. It is not higher because no relevant nodes are ranked above these irrelevant nodes, and it is at 0.00 because every retrieved node is irrelevant.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1–5 do not mention the WhatsApp number +923000776016, sending a transaction slip, or obtaining a donation receipt, and only contain general donation and zakat information.",
+        "Hallucination": "The score is 0.00 because the actual output is fully consistent with the provided context: it stays within the donation/Zakat/Sadaqah topic, adds compatible detail about obtaining a donation receipt, and there are no contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.875031340122223,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q06",
+      "question": "آن لائن عطیہ دینے کے کون سے طریقے دستیاب ہیں؟",
+      "expected_answer": "آپ ڈیبٹ/کریڈٹ کارڈ، آن لائن بینکنگ، بینک ٹرانسفر، جاز کیش، ایزی پیسہ یا ہوم کلیکشن کے ذریعے عطیہ دے سکتے ہیں۔",
+      "actual_answer": "آن لائن عطیہ دینے کے چند طریقے یہ ہیں:\n\n1. **ڈیبٹ/کریڈٹ کارڈ**: آپ دنیا کے کسی بھی کونے سے، کسی بھی وقت، ہماری ویب سائٹ کے ذریعے ڈیبٹ یا کریڈٹ کارڈ کا استعمال کرتے ہوئے عطیہ دے سکتے ہیں۔ \n\n2. **JazzCash**: آپ JazzCash ایپ کے ذریعے عطیہ دے سکتے ہیں۔ ایپ میں جائیں، نیچے سکرول کریں اور \"Donations\" پر ٹیپ کریں، پھر \"Alkhidmat Foundation Pakistan\" منتخب کریں، رقم درج کریں اور عطیہ کریں۔\n\n3. **EasyPaisa**: EasyPaisa ایپ کے ذریعے بھی عطیہ دیا جا سکتا ہے۔ ایپ میں جائیں، نیچے سکرول کریں اور \"Donations\" پر ٹیپ کریں، پھر \"Alkhidmat Foundation Pakistan\" منتخب کریں، رقم درج کریں اور عطیہ کریں۔\n\nآپ ان طریقوں سے آسانی سے آن لائن عطیہ دے سکتے ہیں۔",
+      "rag_time_seconds": 20.75,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question about available online donation methods, with no irrelevant statements noted. Great job keeping it focused and directly on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully faithful to the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question about online donation methods. The first node in retrieval contexts is about \"Media Coverage\" and does not mention donation options like \"ڈیبٹ/کریڈٹ کارڈ\" or \"آن لائن بینکنگ\"; the second node in retrieval contexts similarly only lists \"Media Coverage\" details and \"provides no information about how to donate online or any payment options\"; the third node in retrieval contexts again repeats \"Media Coverage\"; and the fourth and fifth nodes in retrieval contexts discuss \"جاری امدادی سرگرمیوں\" and \"ڈیزاسٹر مینجمنٹ ٹریننگ ورکشاپ\" rather than donation channels. It is not higher because no relevant node appears above these irrelevant nodes, and it is at 0.00 because the ranking contains only irrelevant results.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1-5 do not mention donation methods such as debit/credit card, online banking, bank transfer, JazzCash, Easypaisa, or home collection, and instead only contain media coverage listings and disaster management updates.",
+        "Hallucination": "The score is 1.00 because the actual output is entirely unsupported by the context: it talks about online donation methods (debit/credit card, JazzCash, EasyPaisa), while the context only describes media coverage, relief activity reviews, funding plans, and a disaster management workshop. There are no factual alignments and multiple direct topic contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8738237142562866,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q07",
+      "question": "کیا میں بیرونِ ملک سے الخدمت فاؤنڈیشن کو عطیہ دے سکتا/سکتی ہوں؟",
+      "expected_answer": "جی ہاں، آپ دنیا کے کسی بھی ملک سے ڈیبٹ یا کریڈٹ کارڈ کے ذریعے عطیہ دے سکتے ہیں۔",
+      "actual_answer": "جی ہاں، آپ بیرونِ ملک سے الخدمت فاؤنڈیشن کو عطیہ دے سکتے ہیں۔",
+      "rag_time_seconds": 26.09,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response fully addresses the user’s question about donating to Alkhidmat Foundation from abroad, with no irrelevant statements. Great job staying completely on-topic and relevant.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question. The first node in retrieval contexts only discusses general donations and impact, such as 'الخدمت فاؤنڈیشن کے پراجیکٹس میں اپنامال خرچ کریں', but not donating from abroad. The second node in retrieval contexts again focuses on fundraising examples like 'اہل خیرکیلئے یہ مواقع ہیں' without addressing overseas donations. The third node in retrieval contexts repeats project outcomes like '14ہزار افراد کو 43کروڑ کے بلاسود قرض' and still does not answer the query. The fourth node in retrieval contexts is about 'الخدمت سپیشل ابیلیٹی کلب', and the fifth node in retrieval contexts also stays on those programs instead of donation logistics like 'دنیا کے کسی بھی ملک' or 'ڈیبٹ یا کریڈٹ کارڈ'. It is not higher because no relevant nodes were ranked above these irrelevant nodes, and it is at this score because the retrieved ranking fails to place any useful information for the input.",
+        "ContextualRecall": "The score is 0.00 because the only sentence in the expected output is not supported by any node(s) in retrieval context: nodes 1–5 discuss projects, relief work, loans, and special ability club activities, but none mention donating from any country or using a debit or credit card.",
+        "Hallucination": "The score is 0.00 because the actual output is fully supported by the provided context alignments, and there are no contradictions identified."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8651861786842346,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q08",
+      "question": "الخدمت فاؤنڈیشن کی موجودہ ہنگامی اپیلز کون سی ہیں؟",
+      "expected_answer": "الخدمت فاؤنڈیشن بانو قابل اور فلسطین ایمرجنسی اپیل جیسے منصوبے چلا رہی ہے۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 18.21,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not provide any information about Alkhidmat Foundation’s current emergency appeals. Instead, it only apologized, said it could not answer, and mentioned connecting to a human agent, which does not address the user’s request at all.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 1.00 because the first and second nodes in retrieval contexts are the relevant ones, both pointing to an 'Emergency Appeal' for 'اہل غزہ', so the useful information is ranked at the top. It is not higher only in the sense that lower-ranked nodes are irrelevant, such as the third node about flood and rain relief in 'شمالی علاقہ جات سمیت سندھ اور بلوچستان', the fourth node about 'سیلاب اوربارشوں سے متاثرہ علاقوں', and the fifth node about disaster relief in 'بلوچستان، خیبر پختونخوا ،گلگت بلتستان،سندھ' with 'فوڈ پیکج،ٹینٹ،ترپال'—but since all of these irrelevant nodes appear after the relevant top-ranked nodes, the ranking is perfectly precise.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1-2 mention an Emergency Appeal for اہل غزہ, and nodes 3-5 cover general relief/disaster activities, but none state that الخدمت فاؤنڈیشن is running the specific projects 'بانو قابل' and 'فلسطین ایمرجنسی اپیل' as listed.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims about the context and does not contradict any of the provided information; it is simply an apology/escalation response, so there is no hallucinated content."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "no_support",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q09",
+      "question": "الخدمت فاؤنڈیشن کے بنیادی فوکس ایریاز کیا ہیں؟",
+      "expected_answer": "الخدمت فاؤنڈیشن صحت، تعلیم، ڈیزاسٹر ریلیف، خواتین کی فلاح اور سماجی بہبود کے شعبوں میں خدمات انجام دیتی ہے۔",
+      "actual_answer": "الخدمت فاؤنڈیشن کے بنیادی فوکس ایریاز درج ذیل ہیں:\n\n1. **ہنگامی حالات کا انتظام**: زلزلے، سیلاب، بم دھماکے، اور صحت کے ہنگامی حالات میں فوری امداد، بچاؤ، اور بحالی کی خدمات فراہم کرنا۔\n\n2. **صحت کی خدمات**: ہسپتالوں، کلینکوں، اور موبائل ہیلتھ یونٹس کے ذریعے بنیادی صحت، ہنگامی دیکھ بھال، اور حفاظتی خدمات کی فراہمی۔\n\n3. **تعلیم**: قدرتی آفات کے متاثرہ علاقوں میں عارضی اسکول، اسکالرشپس، اور باقاعدہ تعلیمی اقدامات۔\n\n4. **یتیموں کی دیکھ بھال**: 30,000 سے زائد یتیم بچوں کی مالی معاونت اور حمایت۔\n\n5. **پانی، صفائی اور صحت (WASH)**: پانی اور صفائی کی سہولیات کی فراہمی۔\n\n6. **الخدمت بانو قابیلی پروگرام**: خواتین طلباء کو آئی ٹی مہارتوں سے لیس کرنا تاکہ وہ خود مختاری حاصل کر سکیں۔\n\n7. **تعلیمی امداد اور اسکالرشپس**: لڑکیوں اور خواتین کے لیے تعلیمی اسکالرشپس فراہم کرنا تاکہ وہ مالی رکاوٹوں کے بغیر اپنی تعلیم جاری رکھ سکیں۔\n\n8. **کمیونٹی کی ترقی اور وکالت**: معاشرتی ترقی کے لیے اقدامات کرنا اور عوامی مسائل پر وکالت کرنا۔",
+      "rag_time_seconds": 33.67,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question about الخدمت فاؤنڈیشن کے بنیادی فوکس ایریاز, with no irrelevant statements identified. This indicates a clear and well-focused answer.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 1.00 because all top-ranked nodes in retrieval contexts are relevant, with the first node already providing useful focus areas through 'تعلیم،صحت،رہائش سمیت دیگرضروریات زندگی' and the fourth node adding 'Emergency Appeal' and 'Disaster Management' for disaster relief. It is not higher only because some higher-ranked nodes are partially repetitive rather than expanding coverage much, but since no irrelevant nodes appear above relevant ones, the ranking is excellent.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not fully supported by the nodes in retrieval context: nodes 1–3 mention limited areas like تعلیم، صحت، and رہائش, while nodes 4–5 mention disaster management and امدادی سرگرمیاں, but no node supports the full combined claim, especially خواتین کی فلاح and the broader سماجی بہبود parts.",
+        "Hallucination": "The score is 0.00 because the actual output is fully consistent with the provided contexts, with no contradictions identified. It matches the broad factual themes about Alkhidmat’s work in health, education, orphan care, and emergency relief; any missing event-specific details are omissions, not hallucinations."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8833827137947082,
+        "domain": "healthcare",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 0.7777777777777778,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q10",
+      "question": "میں ذاتی طور پر عطیہ کیسے دے سکتا/سکتی ہوں؟",
+      "expected_answer": "آپ الخدمت فاؤنڈیشن کے کلیکشن سینٹرز یا لاہور میں واقع ہیڈ آفس جا کر عطیہ دے سکتے ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 9.85,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.3333,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.33 because the response does not answer how the user can personally make a donation and instead mainly offers an apology and says it cannot help. It is not higher because it provides no practical guidance, but it is at this score since it still relates indirectly to the user’s request by acknowledging it.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job keeping it faithful.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant, including the 1st node which only says \"Donate\", \"Sadaqah\", and \"Donate Now\" and does not mention giving in person, the 2nd node which gives no information about personally visiting \"کلیکشن سینٹرز\" or the \"ہیڈ آفس\" in لاہور, and the lower-ranked 4th and 5th nodes which are about \"Zakat FAQs\" instead of how to donate personally. It is not higher because there are no relevant nodes ranked above irrelevant nodes, and it is at this score because every ranked node is irrelevant to the input.",
+        "ContextualRecall": "The score is 0.00 because the only sentence in the expected output is not supported by any node(s) in retrieval context: no node mentions collection centers, the Lahore head office, or in-person donation; the available nodes only contain general donation prompts and Zakat FAQs.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims and does not contradict the donation/Zakat context; it is only a fallback apology stating inability to answer and transfer to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q11",
+      "question": "میں فلسطین کے لیے الخدمت فاؤنڈیشن کو عطیہ کیسے دے سکتا/سکتی ہوں؟",
+      "expected_answer": "آپ مخصوص بینک اکاؤنٹس یا ویب سائٹ کے ذریعے فلسطین کے لیے عطیہ دے سکتے ہیں، جن میں جنرل ڈونیشن اور زکوٰۃ کے علیحدہ اکاؤنٹس شامل ہیں۔",
+      "actual_answer": "آپ فلسطین کے لیے الخدمت فاؤنڈیشن کو عطیہ دینے کے لیے ان کی ویب سائٹ پر جا سکتے ہیں۔ آپ کو \"Rebuild Gaza\" مہم کے تحت عطیہ کرنے کا موقع ملے گا۔ براہ کرم اس لنک پر جائیں: alkhidmat.org/rebuild-gaza۔ آپ کا عطیہ گھروں کی تعمیر، بنیادی ڈھانچے کی بحالی، اور غزہ میں فلسطینیوں کو استحکام فراہم کرنے میں مدد کرے گا۔",
+      "rag_time_seconds": 20.95,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.8
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the user’s question, with no irrelevant statements noted. It directly addresses the donation query, so this is a strong and complete relevancy score.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and accurate.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question about how to donate to Alkhidmat Foundation for Palestine. The first node in retrieval contexts only mentions \"Emergency Appeal\" and that \"الخدمت فاؤنڈیشن اہل غزہ کے لیے جاری امدادی سرگرمیوں کے ساتھ ساتھ تعمیر نو میں بھی کردار ادا کرے گی,\" but not donation methods. The second node in retrieval contexts again refers to \"Emergency Appeal\" without \"مخصوص بینک اکاؤنٹس\" or \"ویب سائٹ کے ذریعے.\" The third and fourth nodes in retrieval contexts only include the general appeal \"عوام سے اپیل کی کہ وہ اس نیکی کے کام میں بڑھ چڑھ کر حصہ لیں\" without concrete donation channels, and the fifth node in retrieval contexts discusses relief scale like \"15 ارب روپے سے ’ری بلڈ غزہ‘ مہم کا آغاز\" but still lacks how to donate. It is not higher because no relevant node is ranked above irrelevant ones, and it is at this score because every ranked node fails to answer the donation-method query.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1 and 2 only mention relief activities for اہلِ غزہ/Palestine, and nodes 3 and 4 only contain a general public appeal, but none mention donating through specific bank accounts or a website, or separate general donation and zakat accounts.",
+        "Hallucination": "The score is 0.80 because although the actual output generally aligns with the context about the 'Rebuild Gaza' campaign and reconstruction support, it adds specific donation methods and the URL 'alkhidmat.org/rebuild-gaza,' which are not supported by the provided context. This makes the response largely unsupported in its specific actionable details."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9006630539894104,
+        "domain": "donation",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q12",
+      "question": "میں گھر سے الخدمت فاؤنڈیشن کو عطیہ کیسے دے سکتا/سکتی ہوں؟",
+      "expected_answer": "آپ چیک یا بینک ڈرافٹ بنا کر 0800-44-44-8 یا 0304-111-4-222 پر کال کریں، نمائندہ گھر سے وصول کرے گا۔",
+      "actual_answer": "آپ گھر سے الخدمت فاؤنڈیشن کو عطیہ دینے کے لیے درج ذیل طریقے استعمال کر سکتے ہیں:\n\n1. **آن لائن بینکنگ**: آپ ہماری ویب سائٹ پر جا کر اپنے ڈیبٹ یا کریڈٹ کارڈ کے ذریعے عطیہ کر سکتے ہیں۔ یہ ایک محفوظ اور آسان طریقہ ہے۔ عطیہ کرنے کے لیے یہاں کلک کریں: [alkhidmat.org/donate](https://alkhidmat.org/donate)\n\n2. **بینک ٹرانسفر**: آپ بینک کے ذریعے بھی عطیہ کر سکتے ہیں۔ \n   - **بینک آف پنجاب (تقویٰ اسلامی بینکنگ)**\n   - **اکاؤنٹ عنوان**: Alkhidmat Foundation Pakistan\n   - **اکاؤنٹ نمبر (PKR)**: 5310067845100016\n   - **IBAN**: PK19BPUN5310067845100016\n   - **برانچ**: \n\n3. **ہوم کلیکشن**: آپ اپنے علاقے میں الخدمت فاؤنڈیشن کے رضا کاروں سے رابطہ کر کے گھر پر عطیہ جمع کروا سکتے ہیں۔\n\n4. **بین الاقوامی اکاؤنٹس**: اگر آپ بیرون ملک ہیں تو آپ بین الاقوامی اکاؤنٹس کے ذریعے بھی عطیہ کر سکتے ہیں۔\n\n5. **JazzCash**: آپ اپنے JazzCash ایپ کے ذریعے عطیہ کر سکتے ہیں۔ ایپ میں \"Donations\" پر جائیں، \"Alkhidmat Foundation Pakistan\" منتخب کریں، رقم درج کریں اور عطیہ کریں۔\n\n6. **EasyPaisa**: EasyPaisa ایپ کے ذریعے بھی عطیہ دیا جا سکتا ہے۔ ایپ میں \"Donations\" پر جائیں، \"Alkhidmat Foundation Pakistan\" منتخب کریں، رقم درج کریں اور عطیہ کریں۔\n\nاگر آپ کو عطیہ کی رسید درکار ہے تو براہ کرم اپنی ٹرانزیکشن سلپ کو",
+      "rag_time_seconds": 30.09,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response fully addresses how to donate to Alkhidmat Foundation from home and includes no irrelevant statements—clear, focused, and completely on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job staying faithful to the source.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question. The first node in retrieval contexts only includes general donation language like 'الخدمت فاؤنڈیشن کے پراجیکٹس میں اپنامال خرچ کریں' and does not contain the needed home-donation method 'چیک یا بینک ڈرافٹ' or phone details. The second node in retrieval contexts is again general fundraising text and still lacks 'چیک یا بینک ڈرافٹ' and specific numbers. The third node in retrieval contexts mentions items like 'فوڈ پیکج' and 'بلاسود قرض' but not the home-donation instructions. The fourth and fifth nodes in retrieval contexts are about 'الخدمت سپیشل ابیلیٹی کلب' activities such as 'آئی ٹی اورمینجمنٹ کورسز' and are unrelated. It is not higher because no relevant node appears above irrelevant nodes; it is at this score because every ranked node is irrelevant.",
+        "ContextualRecall": "The score is 0.00 because the only sentence in the expected output is not supported by any node(s) in retrieval context: sentence 1 mentions payment by cheque/bank draft, the phone numbers 0800-44-44-8 and 0304-111-4-222, and home collection by a representative, but nodes 1–5 instead discuss Alkhidmat Foundation projects, relief figures, and special ability club activities, with no matching information.",
+        "Hallucination": "The score is 1.00 because the actual output is entirely unsupported by the provided context: it discusses donation methods and payment options, while the context is about charitable impact statistics, disaster relief, interest-free loans, and the Alkhidmat Special Ability Club. There are no factual alignments and multiple direct topic mismatches."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8881093621253967,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q13",
+      "question": "کیا میں عطیہ بذریعہ کوریئر بھیج سکتا/سکتی ہوں؟",
+      "expected_answer": "جی ہاں، آپ عطیہ بذریعہ کوریئر الخدمت کمپلیکس، 3 کلومیٹر خیابانِ جناح، لاہور بھیج سکتے ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 12.94,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.3333,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.33 because the response is only a generic inability to answer and does not address whether a donation can be sent by courier. Since it fails to provide information relevant to the actual question, the score is low, though it still minimally relates by being framed as a response to the query.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and aligned.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question. The 1st node in retrieval contexts only says \"Donation Summary\" and \"No service selected. Click here to donate,\" the 2nd node repeats \"Donation Summary\" and \"No service selected. Click here to donate,\" and the 3rd, 4th, and 5th nodes likewise contain only \"Donation Summary\" or \"Click here to donate\" without any information about sending donations by courier. The score is not higher because no relevant node appears above these irrelevant nodes—or anywhere in the ranking at all.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1-5 do not mention sending donations by courier or the address 'الخدمت کمپلیکس، 3 کلومیٹر خیابانِ جناح، لاہور' and only contain generic donation summary text.",
+        "Hallucination": "The score is 0.00 because there are no contradictions between the actual output and the provided context; the response is simply unrelated to the context rather than factually conflicting with it."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q14",
+      "question": "میں امریکی ڈالر میں جنرل عطیہ کیسے دے سکتا/سکتی ہوں؟",
+      "expected_answer": "آپ مخصوص مکرمہ یا میزان بینک اکاؤنٹس کے ذریعے امریکی ڈالر میں عطیہ دے سکتے ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 16.08,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.3333,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.33 because the response does not answer how to make a general donation in US dollars and mainly gives an apology/inability statement instead of the requested method. It is not lower only because it still appears to acknowledge the question, but it is far from relevant enough to score higher.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 0.00 because every top-ranked node in retrieval contexts is irrelevant: the 1st node only says \"Donation Summary\" and \"No service selected. Click here to donate\" and does not mention \"امریکی ڈالر\" or \"جنرل عطیہ\"; the 2nd node likewise provides no information about donating \"in US dollars\"; the 3rd node again repeats \"Donation Summary ... No service selected. Click here to donate\"; the 4th node is \"not remotely useful\" for concluding anything about US-dollar donations; and the 5th node contains nothing about \"general donation\", \"US dollars\", or \"bank accounts\". The score is not higher because there are no relevant nodes ranked above irrelevant ones, and it is at this score because all ranked nodes fail to address how to make a general donation in USD.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1–5 do not mention مکرمہ, میزان بینک accounts, امریکی ڈالر, or any donation method, and only contain generic donation summary text.",
+        "Hallucination": "The score is 0.00 because there are no contradictions between the actual output and the context; the response is simply unrelated to the donation UI text rather than conflicting with it."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "no_support",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q15",
+      "question": "میں یتیم، کمیونٹی سروسز یا بانو قابل کے لیے ڈالر میں زکوٰۃ کیسے دوں؟",
+      "expected_answer": "آپ میزان بینک کے مخصوص زکوٰۃ اکاؤنٹ کے ذریعے امریکی ڈالر میں عطیہ دے سکتے ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 33.05,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.3333,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.33 because the response does not address how to give zakat in dollars for orphans, community services, or Bano Qabil, and provides no relevant guidance. It is not lower because it may still be loosely related to the broader topic, but it is far from a useful or direct answer.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant, and even the highest-ranked nodes fail to address the user’s need about giving Zakat in USD. The 1st node in retrieval contexts only discusses general Zakat FAQs like 'Who is required to pay Zakat?' and 'Yes, Zakat is due on business assets...' and does not mention 'ڈالر' or a specific donation account. The 2nd node in retrieval contexts is again general FAQ content such as 'Who is eligible to receive Zakat?' and also lacks any information about giving Zakat 'ڈالر میں'. The 3rd, 4th, and 5th nodes in retrieval contexts only say 'Donation Summary' and 'No service selected. Click here to donate', so they should be ranked lower than any actually relevant node because they provide no usable details for the query.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1–5 do not mention میزان بینک, any specific زکوٰۃ اکاؤنٹ, امریکی ڈالر, or donating through a bank account, and only refer generally to Zakat FAQs and a donation summary.",
+        "Hallucination": "The score is 0.00 because the actual output does not contradict any provided context or visible evidence; it is simply generic and lacks detail, which is not counted as hallucination here."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q16",
+      "question": "میں واش، صحت، تعلیم یا فلسطین کے لیے ڈالر میں عطیہ کیسے دوں؟",
+      "expected_answer": "ان پروگرامز کے لیے مخصوص مکرمہ یا میزان بینک اکاؤنٹس استعمال کیے جا سکتے ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 18.49,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.3333,
+        "Faithfulness": null,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": false,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.33 because the response was largely irrelevant: it only apologized and said it could not answer, without explaining how to donate in dollars to WASH, health, education, or Palestine. It is not lower only because it at least acknowledged the user’s request, but it did not provide the requested donation information.",
+        "Faithfulness": "Error: RetryError[<Future at 0x1ade767d9c0 state=finished raised APIConnectionError>]",
+        "ContextualPrecision": "The score is 0.00 because all 5 nodes in retrieval contexts are irrelevant and none provide the needed information for donating in dollars for WASH, health, education, or Palestine. The 1st node in retrieval contexts only says \"Donation Summary\" and \"No service selected. Click here to donate\" and does not mention \"واش، صحت، تعلیم یا فلسطین\" or donating \"ڈالر میں\"; the 2nd node in retrieval contexts again provides \"no information about specific bank accounts or dollar donations\"; the 3rd node in retrieval contexts is \"unrelated to the expected answer about using 'مکرمہ یا میزان بینک اکاؤنٹس'\"; the 4th node in retrieval contexts \"gives no account details for WASH, health, education, or Palestine\"; and the 5th node in retrieval contexts has \"nothing about dollar donations or specific 'مکرمہ یا میزان بینک اکاؤنٹس'\". It is not higher because there are no relevant nodes ranked above irrelevant ones, and it is at 0.00 because every ranked node is irrelevant.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1–5 only contain donation summary text such as 'No service selected ... to donate' and do not mention پروگرامز, مکرمہ, میزان بینک اکاؤنٹس, or using specific bank accounts.",
+        "Hallucination": "The score is 0.00 because the actual output does not contradict any provided context; it is a generic fallback/escalation response that is unrelated but fully consistent with the donation-page content."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "no_support",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q17",
+      "question": "میں برطانوی پاؤنڈ میں جنرل عطیہ کیسے دے سکتا/سکتی ہوں؟",
+      "expected_answer": "آپ مکرمہ یا میزان بینک کے مخصوص اکاؤنٹس کے ذریعے پاؤنڈ میں عطیہ دے سکتے ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 11.73,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.3333,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.33 because the response only gave an apology and said it could not answer, without providing any useful information about how to make a general donation in British pounds. It is not lower because the reply at least acknowledged the user's request, but it is not higher since it did not actually address the question.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job staying faithful to the source.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question. The first node in retrieval contexts only says \"Donation Summary ... No service selected. Click ... here ... to donate\" and does not mention \"برطانوی پاؤنڈ\", \"جنرل عطیہ\", or any relevant bank-account details; the second node in retrieval contexts likewise provides \"no information about donating in pounds\"; and the third, fourth, and fifth nodes in retrieval contexts repeat \"Donation Summary ... No service selected. Click ... here ... to donate\" without anything about GBP donations or the required account-based method. The score is not higher because no relevant nodes appear above irrelevant nodes—or at all.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1-5 do not mention مکرمہ, میزان بینک, specific accounts, donating in pounds, or any matching donation instructions beyond a generic donation prompt.",
+        "Hallucination": "The score is 0.00 because the actual output does not contradict any of the provided context or visible image evidence. It is generic and uninformative, but it remains fully consistent with the donation summary page showing no service selected and a prompt to donate."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q18",
+      "question": "میں پاؤنڈ میں زکوٰۃ کن پروگرامز کے لیے دے سکتا/سکتی ہوں؟",
+      "expected_answer": "یتیم کفالت، کمیونٹی سروسز، بانو قابل اور صاف پانی کے لیے زکوٰۃ دی جا سکتی ہے۔",
+      "actual_answer": "آپ پاؤنڈ میں زکوٰۃ درج ذیل پروگرامز کے لیے دے سکتے ہیں:\n\n1) **سی ڈلیوری کیس سی سیکشن** - محفوظ سی سیکشن ڈلیوری کی سرپرستی کریں تاکہ ماؤں اور نوزائیدہ بچوں کو اہم زچگی کی صورت حال میں محفوظ رکھا جا سکے۔\n\n2) **الخدمت تعلیمی اسکالرشپس** - ضرورت مند بچوں کی تعلیم کے لیے سالانہ اسکالرشپس فراہم کریں۔\n\nآپ کی زکوٰۃ کا استعمال ان افراد کی مدد کے لیے کیا جائے گا جو غربت، قدرتی آفات، اور اقتصادی مشکلات کا سامنا کر رہے ہیں، جیسے کہ یتیم، بیوہ، اور غریب خاندان۔",
+      "rag_time_seconds": 24.17,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.2,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.8
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the user’s question, with no irrelevant statements noted—great alignment with the input.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job staying faithful to the source.",
+        "ContextualPrecision": "The score is 0.20 because the only relevant node in the retrieval contexts appears at the 5th node, while the 1st, 2nd, 3rd, and 4th nodes are ranked higher despite being irrelevant. For example, the 1st and 2nd nodes in retrieval contexts are just general 'Zakat FAQs' like 'Who is required to pay Zakat?' and do not mention the needed programs, the 3rd node is only a login snippet such as 'Email address or phone number', and the 4th node is a generic charity quote. The score is not lower because the 5th node in retrieval contexts still provides some useful program matches, specifically 'Community Services' and 'Orphan Family Support', which align with 'کمیونٹی سروسز' and 'یتیم کفالت'.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be fully attributed to the nodes in retrieval context: while nodes 1, 2, and 5 relate to یتیم کفالت and کمیونٹی سروسز, there is no support in the retrieval context for بانو قابل or صاف پانی کے لیے زکوٰۃ دی جا سکتی ہے, so the sentence is not sufficiently grounded.",
+        "Hallucination": "The score is 0.80 because although the output loosely matches one context about charity and giving, it mostly conflicts with the provided contexts by discussing specific Zakat-funded programs instead of the actual topics shown, such as Zakat rulings on business assets, a Facebook login page, and a media coverage page."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8719762802124024,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q19",
+      "question": "میں پاؤنڈ میں صحت یا تعلیم کے لیے عطیہ کیسے دوں؟",
+      "expected_answer": "آپ مکرمہ یا میزان بینک اکاؤنٹس کے ذریعے پاؤنڈ میں عطیہ دے سکتے ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 14.02,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": null,
+        "Faithfulness": null,
+        "ContextualPrecision": null,
+        "ContextualRecall": null,
+        "Hallucination": null
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": false,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "Error: RetryError[<Future at 0x1ade76803a0 state=finished raised APIConnectionError>]",
+        "Faithfulness": "Error: RetryError[<Future at 0x1adeb64d3c0 state=finished raised APIConnectionError>]",
+        "ContextualPrecision": "Error: RetryError[<Future at 0x1adeb63a560 state=finished raised APIConnectionError>]",
+        "ContextualRecall": "Error: RetryError[<Future at 0x1adeb65fee0 state=finished raised APIConnectionError>]",
+        "Hallucination": "Error: RetryError[<Future at 0x1adeb672d10 state=finished raised APIConnectionError>]"
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q20",
+      "question": "میں یورو میں جنرل عطیہ کیسے دے سکتا/سکتی ہوں؟",
+      "expected_answer": "یورو میں عطیہ دینے کے لیے مکرمہ یا میزان بینک اکاؤنٹس استعمال کیے جا سکتے ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 10.84,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.3333,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.33 because the response does not answer how to make a general donation in euros and instead only gives an apology/inability message. It earns some credit for at least being related to the user’s request context, but it is not higher because it provides no actual donation instructions or useful details.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and aligned.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant. The first node in retrieval contexts only says \"Donation Summary\" and \"No service selected. Click here to donate,\" which does not mention یورو or جنرل عطیہ. The second node in retrieval contexts is also irrelevant for the same reason, and the third, fourth, and fifth nodes in retrieval contexts likewise repeat \"Donation Summary\" and \"No service selected. Click here to donate\" without useful details. The score is not higher because there are no relevant nodes ranked above irrelevant ones—or present at all.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1-5 only contain general donation summary text and do not mention euro donations or the 'مکرمہ' and 'میزان بینک' accounts referenced in the expected output.",
+        "Hallucination": "The score is 0.00 because the actual output does not contradict the provided context at all; it is merely an unrelated apology/escalation response, so there is no factual conflict or hallucinated claim against the context."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q21",
+      "question": "میں یورو میں زکوٰۃ کن منصوبوں کے لیے دے سکتا/سکتی ہوں؟",
+      "expected_answer": "یتیم، کمیونٹی سروسز، بانو قابل اور صاف پانی کے منصوبوں کے لیے زکوٰۃ دی جا سکتی ہے۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 8.04,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.3333,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.8667,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.33 because the response only weakly addressed the question about which projects zakat can be given to in euros, and included statements that did not answer that topic or provide relevant information. It is not higher because key parts of the output were off-topic, but it is at this score because it still had at least some limited connection to the subject of zakat.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 0.87 because the first and second nodes in retrieval contexts are relevant background on 'Zakat FAQs' and 'Who is eligible to receive Zakat?', and the fifth node in retrieval contexts is especially helpful since it lists 'Community Services' and 'Orphan Family Support', aligning with the asked projects. It is not higher because the third node in retrieval contexts is irrelevant, containing 'Email address or phone number', 'Password', and 'Log in', and the fourth node in retrieval contexts is also irrelevant since 'that which you give for charity, seeking the Countenance of Allah' is too general and does not name specific projects. These irrelevant nodes should have been ranked lower than the relevant nodes, especially since the fifth node contains more directly useful project information.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by the nodes in retrieval context: although nodes 1 and 2 mention یتیم and node 5 mentions کمیونٹی سروسز, none of these nodes say that زکوٰۃ can be given to them, and there is no attribution at all in the retrieval context for بانو قابل or صاف پانی کے منصوبے.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims that contradict any provided context; it is only a generic apology and escalation response, so there is no hallucinated content."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q22",
+      "question": "میں یورو میں صحت یا تعلیم کے لیے عطیہ کیسے دوں؟",
+      "expected_answer": "مخصوص مکرمہ یا میزان بینک اکاؤنٹس کے ذریعے یورو میں عطیہ دیا جا سکتا ہے۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 7.41,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer how to donate in euros for health or education and instead only mentioned contacting a human agent, which is irrelevant to the user’s specific question.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully faithful to the retrieval context—nice job keeping it consistent.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question. The first node in retrieval contexts only discusses 'الخدمت اکیڈمک سکالرشپ' and 'میڈکون 2024' and 'does not mention how to donate یورو میں or any مکرمہ یا میزان بینک اکاؤنٹس'. The second node in retrieval contexts is again general education material and 'provides no information about donating in euros or through specific bank accounts'. The third node in retrieval contexts mentions 'شعبہ صحت' and 'میڈکون 2024' but 'does not state any donation method, currency یورو, or مکرمہ یا میزان بینک اکاؤنٹس'. Since no relevant nodes appear above irrelevant nodes—or at all—the ranking deserves the lowest possible score.",
+        "ContextualRecall": "The score is 0.00 because the only sentence in the expected output is not supported by any node(s) in retrieval context: sentence 1 mentions donating in euros via مخصوص مکرمہ or میزان بینک accounts, but no node provides information about euro donations, مکرمہ, or میزان بینک اکاؤنٹس.",
+        "Hallucination": "The score is 0.00 because the actual output only contains an apology/refusal and makes no factual claims, so it does not contradict any of the provided contexts."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q23",
+      "question": "کیا تمام بین الاقوامی عطیات کے لیے سوئفٹ کوڈ ضروری ہے؟",
+      "expected_answer": "جی ہاں، تمام بین الاقوامی عطیات کے لیے متعلقہ بینک کا سوئفٹ کوڈ لازمی ہے۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 8.23,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not address whether a SWIFT code is required for all international donations at all. Instead, it only gave an apology, said it could not answer, and mentioned connecting to a human agent, which are irrelevant to the user’s question.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and aligned.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question. The first node in retrieval contexts discusses 'الخدمت سپیشل ابیلیٹی کلب' and notes 'اس میں سوئفٹ کوڈ یا بین الاقوامی بینکنگ کا کوئی ذکر نہیں', while the second node in retrieval contexts is also about the same club and says 'متعلقہ بینک کا سوئفٹ کوڈ لازمی ہے' جیسی کوئی معلومات موجود نہیں. Likewise, the third node in retrieval contexts only generally mentions aid and states 'بین الاقوامی عطیات کے لیے سوئفٹ کوڈ' کی لازمی شرط کہیں بیان نہیں ہوئی, and the fourth and fifth nodes in retrieval contexts also lack the needed detail, such as 'سوئفٹ کوڈ لازمی ہے' والی مخصوص معلومات. The score is not higher because there are no relevant nodes ranked above irrelevant nodes; it is at 0.00 since every ranked node is irrelevant.",
+        "ContextualRecall": "The score is 0.00 because the only expected sentence is not supported by any node(s) in retrieval context: sentence 1 says that all international donations require the relevant bank’s SWIFT code, but nodes 1–5 discuss disability club activities and Beirut relief efforts, with no mention of bank details or SWIFT codes.",
+        "Hallucination": "The score is 0.00 because the actual output only contains an apology and handoff message, makes no factual claims, and does not contradict any of the provided contexts."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q24",
+      "question": "میں پاکستانی روپے میں جنرل عطیہ کیسے دے سکتا/سکتی ہوں؟",
+      "expected_answer": "آپ بینک آف پنجاب یا دیگر منظور شدہ بینک اکاؤنٹس کے ذریعے عطیہ دے سکتے ہیں۔",
+      "actual_answer": "آپ پاکستانی روپے میں جنرل عطیہ دینے کے لیے درج ذیل طریقے استعمال کر سکتے ہیں:\n\n1. **JazzCash ایپ**: \n   - اپنی JazzCash ایپ کھولیں۔\n   - نیچے سکرول کریں اور \"Donations\" پر ٹیپ کریں۔\n   - فہرست میں سے \"Alkhidmat Foundation Pakistan\" منتخب کریں۔\n   - رقم درج کریں اور عطیہ کریں۔\n\n2. **EasyPaisa ایپ**: \n   - اپنی EasyPaisa ایپ کھولیں۔\n\n3. **بینک ٹرانسفر**: \n   - آپ براہ راست بینک میں بھی عطیہ کر سکتے ہیں۔ \n   - آپ کے لیے یہ اکاؤنٹ کی تفصیلات ہیں:\n     - **بینک**: Bank of Punjab (Taqwa Islamic Banking)\n     - **اکاؤنٹ ٹائٹل**: Alkhidmat Foundation Pakistan\n     - **اکاؤنٹ نمبر (PKR)**: 5310067845100016\n     - **IBAN**: PK19BPUN5310067845100016\n\n4. **آن لائن بینکنگ**: \n   - آپ ہماری ویب سائٹ پر جا کر اپنے ڈیبٹ یا کریڈٹ کارڈ کے ذریعے بھی عطیہ کر سکتے ہیں۔ \n   - ویب سائٹ: [alkhidmat.org/donate](https://alkhidmat.org/donate)\n\nاگر آپ کو عطیہ کی رسید درکار ہو تو اپنی ٹرانزیکشن سلپ کو ہمارے WhatsApp نمبر +923000776016 پر شیئر کریں۔",
+      "rag_time_seconds": 15.87,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the user's question, with no irrelevant statements noted. It stays focused on how to make a general donation in Pakistani rupees, so this is a strong and on-topic answer.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because every node in the retrieval contexts is irrelevant, starting from the first node onward. The first node in retrieval contexts only says \"Donation Summary\" and \"No service selected. Click here to donate\" and does not mention \"پاکستانی روپے\", \"بینک آف پنجاب\", or approved bank accounts. The second node in retrieval contexts again provides no information about donating via \"بینک آف پنجاب\" or any approved bank accounts, and the third node in retrieval contexts is also just \"Donation Summary ... Click here to donate\" without support for donating in PKR through bank accounts. The fourth and fifth nodes in retrieval contexts are likewise irrelevant, since they contain nothing about Pakistani rupees or approved banks. The score is not higher because there are no relevant nodes ranked above irrelevant nodes; it is at 0.00 because all ranked nodes are irrelevant to the input.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context; nodes 1-5 do not mention بینک آف پنجاب or other approved bank accounts, and only refer generally to donation summary and clicking to donate.",
+        "Hallucination": "The score is 1.00 because the actual output is fully unsupported by the context and directly contradicts it: the context only shows a donation summary stating that no service is selected and to click to donate, while the output invents specific donation methods, banking details, and instructions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8680647730827331,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q25",
+      "question": "میں پاکستانی روپے میں زکوٰۃ کن پروگرامز کے لیے دے سکتا/سکتی ہوں؟",
+      "expected_answer": "آپ یتیم کفالت، کمیونٹی سروسز اور بانو قابل کے لیے زکوٰۃ دے سکتے ہیں۔",
+      "actual_answer": "آپ پاکستانی روپے میں زکوٰۃ درج ذیل پروگرامز کے لیے دے سکتے ہیں:\n\n1) **سی سیکشن کی محفوظ ترسیل** - ماؤں اور نوزائیدہ بچوں کی حفاظت کے لیے۔\n2) **الخدمت تعلیمی اسکالرشپس** - ضرورت مند بچوں کی تعلیم کے لیے۔\n3) **سیلاب متاثرین** - پاکستان میں سیلاب سے متاثرہ افراد کی مدد کے لیے۔\n4) **یتیموں اور بیواؤں کی مدد** - یتیم بچوں اور بیواؤں کی ضروریات کو پورا کرنے کے لیے۔\n5) **غریب خاندانوں کی مدد** - خوراک کی کمی کا شکار خاندانوں کی مدد کے لیے۔\n6) **صحت کی دیکھ بھال** - ضرورت مند افراد کے لیے صحت کی خدمات فراہم کرنے کے لیے۔\n\nآپ اپنی زکوٰۃ ان پروگرامز کے ذریعے الخدمت فاؤنڈیشن کو دے کر ان کی مدد کر سکتے ہیں۔",
+      "rag_time_seconds": 18.95,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.2,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.8
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question about which programs zakat can be given to in Pakistani rupees, with no irrelevant statements lowering its quality—great job staying focused and on-topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.20 because the only relevant node in retrieval contexts appears very late at the fifth node, while the first four nodes are irrelevant and should have been ranked lower. For example, the first node in retrieval contexts only discusses general Zakat topics like 'Who is required to pay Zakat?' and not whether پاکستانی روپے can be given to specific programs, the third node in retrieval contexts is just 'Email address or phone number', 'Password', 'Log in', and the fourth node in retrieval contexts only mentions 'that which you give for charity, seeking the Countenance of Allah' without naming eligible programs. The score is not lower because the fifth node in retrieval contexts does provide partial support by listing 'Community Services' and 'Orphan Family Support', which align with 'کمیونٹی سروسز' and 'یتیم کفالت'.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by the nodes in retrieval context: nodes 1 and 2 mention orphan-related content and node 5 mentions Community Services, but none of these nodes state that Zakat can be given to these programs, and no node mentions بانو قابل at all.",
+        "Hallucination": "The score is 0.80 because, although the actual output loosely aligns with a general charity theme in one context, it mostly contradicts the provided contexts by introducing unsupported Zakat donation program categories and ignoring the actual content, which focuses on Zakat business-asset rules, a Facebook login page, and a media coverage listing."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8719762802124024,
+        "domain": "donation",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q26",
+      "question": "میں پاکستانی روپے میں واش یا صحت کے لیے عطیہ کیسے دوں؟",
+      "expected_answer": "آپ متعلقہ بینک اکاؤنٹس کے ذریعے ان منصوبوں کے لیے عطیہ دے سکتے ہیں۔",
+      "actual_answer": "آپ واش یا صحت کے لیے عطیہ دینے کے لیے درج ذیل طریقے استعمال کر سکتے ہیں:\n\n1. **JazzCash ایپ**:\n   - اپنی ایپ کھولیں۔\n   - نیچے سکرول کریں اور \"Donations\" پر ٹیپ کریں۔\n   - فہرست میں سے \"Alkhidmat Foundation Pakistan\" منتخب کریں۔\n   - رقم درج کریں اور عطیہ کریں۔\n\n2. **EasyPaisa ایپ**:\n\n3. **براہ راست جمع**:\n   - آپ براہ راست بینک میں بھی عطیہ کر سکتے ہیں۔ \n   - اگر آپ بینک آف پنجاب (تکوا اسلامی بینکنگ) کے ذریعے عطیہ دینا چاہتے ہیں تو درج ذیل معلومات استعمال کریں:\n     - اکاؤنٹ کا عنوان: Alkhidmat Foundation Pakistan\n     - اکاؤنٹ نمبر (PKR): 5310067845100016\n     - IBAN: PK19BPUN5310067845100016\n     - شاخ: علامہ اقبال ٹاؤن، لاہور\n\nآپ اپنی پسند کے طریقے سے عطیہ دے سکتے ہیں۔",
+      "rag_time_seconds": 15.89,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the user's question about donating in Pakistani rupees for WASH or health, with no irrelevant statements identified. Great job staying focused and directly on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question. The first node in retrieval contexts only discusses health services and spending, including 'صحت کے شعبے میں بھی خاطر خواہ خدمات' and '9ارب 10 کروڑ روپے خرچ کیے', but not how to donate in Pakistani rupees. The second node in retrieval contexts again focuses on services like '56 ہسپتال' and 'صحت کی معیاری سہولیات بالکل مفت' without donation instructions. The third node in retrieval contexts mentions 'ہیلتھ سروز میں 9ارب 10 کروڑ روپے خرچ کیے' but lacks the needed 'متعلقہ بینک اکاؤنٹس کے ذریعے' details. The fourth node in retrieval contexts says '7ارب 50کروڑ صرف شعبہ صحت پرسالانہ خرچ کررہے ہیں' and the fifth says 'سال2023 میں 21ارب 49کروڑ فلاحی کاموں پر خرچ کئے', but both are also irrelevant since they do not explain how to donate. The score is not higher because no relevant nodes appear above irrelevant nodes; it is at 0.00 because every ranked node is irrelevant.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1–5 discuss Alkhidmat’s health services, spending, hospitals, and a donor conference, but none mention donating to these projects through related bank accounts.",
+        "Hallucination": "The score is 0.00 because the actual output is fully consistent with the contexts: both refer to Alkhidmat Foundation Pakistan and its health-related charitable work, and there are no listed contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8798183798789978,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q27",
+      "question": "صحت یا تعلیم کے لیے زکوٰۃ کن اکاؤنٹس میں دی جا سکتی ہے؟",
+      "expected_answer": "صحت اور تعلیم کے لیے مخصوص اسلامی بینک اکاؤنٹس فراہم کیے گئے ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 6.67,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer which accounts can receive zakat for health or education, and instead gave irrelevant statements that did not address the user’s question at all.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant to which accounts zakat can be given to for health or education. The first node in retrieval contexts only mentions 'الخدمت اکیڈمک سکالرشپ' and 'میڈکون 2024' and does not identify any zakat account details, and the same problem continues in the second node with 'صحت اور تعلیم کے لیے مخصوص اسلامی بینک اکاؤنٹس' still missing. The third node in retrieval contexts says 'مستحق طلباء کی معاونت کا ذریعہ بنیں', the fourth again mentions 'مستحق طلباء کی معاونت', and the fifth refers to support themes and 'Recent Blogs', but all of these irrelevant nodes lack the needed bank account information, so the ranking cannot earn a higher precision score.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1 and 2 mention education support such as scholarships and a medical conference, but no node mentions اسلامی بینک اکاؤنٹس or says dedicated bank accounts were provided for health and education.",
+        "Hallucination": "The score is 0.00 because the actual output only contains an apology/handoff message and makes no factual claims that contradict the provided contexts."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q28",
+      "question": "میں کمیونٹی سروسز کے لیے پاکستانی روپے میں عطیہ کیسے دوں؟",
+      "expected_answer": "آپ میزان یا بینک الفلاح کے اکاؤنٹس کے ذریعے عطیہ دے سکتے ہیں۔",
+      "actual_answer": "آپ کمیونٹی سروسز کے لیے پاکستانی روپے میں عطیہ دینے کے لیے درج ذیل طریقے استعمال کر سکتے ہیں:\n\n1. **JazzCash ایپ**: \n   - اپنی ایپ کھولیں، نیچے سکرول کریں اور \"Donations\" پر ٹیپ کریں۔\n   - \"Alkhidmat Foundation Pakistan\" کو فہرست میں سے منتخب کریں۔\n   - رقم درج کریں اور عطیہ کریں۔\n\n2. **EasyPaisa ایپ**: \n\n3. **براہ راست ڈپازٹ**:\n   - آپ بینک آف پنجاب میں درج ذیل معلومات کے ساتھ براہ راست ڈپازٹ کر سکتے ہیں:\n     - اکاؤنٹ کا عنوان: Alkhidmat Foundation Pakistan\n     - اکاؤنٹ نمبر (PKR): 5310067845100016\n     - IBAN: PK19BPUN5310067845100016\n     - برانچ: علامہ اقبال ٹاؤن، لاہور\n\nآپ ان طریقوں میں سے کسی بھی طریقے کا استعمال کر کے کمیونٹی سروسز کے لیے عطیہ کر سکتے ہیں۔",
+      "rag_time_seconds": 18.52,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the user's question about donating in پاکستانی روپے for community services, with no irrelevant statements noted. Nice and on-topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant to how to donate in پاکستانی روپے. The 1st node talks about minority-community support like 'اقلیتی کمیونٹی کے تہواروں کے موقع پر ہرسال مستحق اور نادارخاندانوں کوفوڈ پیکج' but not donation steps or bank accounts, and the 2nd, 3rd, 4th, and 5th nodes are similarly irrelevant, discussing gift distribution, general charity appeals, or project impact rather than the requested PKR donation method such as 'میزان' or 'بینک الفلاح کے اکاؤنٹس'. It is not higher because no relevant nodes appear above irrelevant nodes—or at all.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1–5 mention Alkhidmat Foundation’s general aid and donation-related information, but none mention donating through میزان or بینک الفلاح accounts.",
+        "Hallucination": "The score is 0.00 because the actual output is fully consistent with the provided contexts: it discusses donating to Alkhidmat Foundation for community services, which aligns with the contexts about supporting Alkhidmat’s charitable and interfaith work, and there are no contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8951025605201721,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q29",
+      "question": "بانو قابل کے لیے پاکستانی روپے میں عطیہ یا زکوٰۃ کیسے دی جائے؟",
+      "expected_answer": "بانو قابل کے لیے مخصوص بینک آف پنجاب یا حبیب میٹرو پولیٹن بینک اکاؤنٹس استعمال کیے جا سکتے ہیں۔",
+      "actual_answer": "بانو قابل کے لیے پاکستانی روپے میں عطیہ دینے کے لیے آپ درج ذیل طریقے اختیار کر سکتے ہیں:\n\n1. **ویب سائٹ کے ذریعے عطیہ**: \n   - الخدمت فاؤنڈیشن کی ویب سائٹ پر جائیں اور \"Donate Now\" پر کلک کریں۔\n\n2. **بینک ٹرانسفر**:\n   - **زکوٰۃ کے لیے**:\n     - اکاؤنٹ ٹائٹل: Alkhidmat foundation Pakistan Zakat\n     - بینک کا نام: Bank of Punjab\n     - اکاؤنٹ نمبر: 3880067845100081\n     - SWIFT CODE: BPUNPKKA002\n     - IBAN: PK16BPUN388006784510008\n\n3. **جاذبہ کے ذریعے عطیہ**:\n   - آپ ایزی پیسہ یا جاز کیش ایپ کے ذریعے بھی عطیہ دے سکتے ہیں۔ ایپ میں جائیں، نیچے سکرول کریں اور \"Donations\" پر ٹیپ کریں، پھر \"Alkhidmat Foundation Pakistan\" منتخب کریں، رقم درج کریں اور عطیہ کریں۔\n\nآپ ان طریقوں میں سے کسی بھی طریقے سے بانو قابل کے لیے عطیہ یا زکوٰۃ دے سکتے ہیں۔",
+      "rag_time_seconds": 21.37,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the user's question about donating or giving zakat to Bano Qabil in Pakistani rupees, with no irrelevant statements noted. Great job staying focused and directly aligned with the request.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question, so no relevant information was prioritized at all. For example, the first node in retrieval contexts discusses 'دیوالی اور کرسمس کے موقع پر بھی تحائف تقسیم' and explicitly lacks 'بانو قابل' or bank account details, while the second node in retrieval contexts mentions 'اقلیتی کمیونٹی کے تہواروں' and 'فوڈ پیکج سمیت دیگر تحائف' instead of donation or zakat account information. This is not higher because even lower-ranked nodes remain irrelevant, such as the third node in retrieval contexts about 'الخدمت ... دیوالی اور کرسمس کے موقع پر بھی تحائف تقسیم', the fourth node in retrieval contexts about 'باہمت ماؤں اور باہمت اورفن بچوں کو تحائف' and 'ظہرانے', and the fifth node in retrieval contexts about 'تحائف اور پودے' and a 'Press Release', none of which should appear above any relevant node about how to donate or give zakat to Bano Qabil in Pakistani rupees.",
+        "ContextualRecall": "The score is 0.00 because the only sentence in the expected output is not supported by any node(s) in retrieval context: sentence 1 mentions 'بانو قابل' and specific 'بینک آف پنجاب یا حبیب میٹرو پولیٹن بینک اکاؤنٹس', while nodes 1–5 discuss unrelated content about 'الخدمت فاؤنڈیشن' and gifts/ceremonies, so nothing can be attributed to the retrieval context.",
+        "Hallucination": "The score is 1.00 because the actual output is completely unrelated to the context: it gives donation instructions for Bano Qabil, while the context is about interfaith harmony and Alkhidmat’s welfare activities for minority and deserving communities. There are no factual alignments and multiple direct topic contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8951025605201721,
+        "domain": "donation",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 0.75,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q30",
+      "question": "واش پروگرام کے لیے پاکستانی روپے میں عطیہ کیسے دوں؟",
+      "expected_answer": "واش پروگرام کے لیے ایم سی بی اسلامک بینک کا مخصوص اکاؤنٹ استعمال کیا جا سکتا ہے۔",
+      "actual_answer": "آپ واش پروگرام کے لیے پاکستانی روپے میں عطیہ دینے کے لیے درج ذیل طریقے استعمال کر سکتے ہیں:\n\n1. **JazzCash ایپ**: \n   - اپنی ایپ کھولیں، نیچے سکرول کریں اور \"Donations\" پر ٹیپ کریں۔\n   - \"Alkhidmat Foundation Pakistan\" کو فہرست میں سے منتخب کریں۔\n   - رقم درج کریں اور عطیہ کریں۔\n\n2. **EasyPaisa ایپ**: \n\n3. **براہ راست جمع**:\n   - آپ براہ راست بینک ٹرانسفر کے ذریعے بھی عطیہ کر سکتے ہیں۔ \n   - بینک کا نام: بینک آف پنجاب (Taqwa Islamic Banking)\n   - اکاؤنٹ کا عنوان: Alkhidmat Foundation Pakistan\n   - اکاؤنٹ نمبر (PKR): 5310067845100016\n   - IBAN: PK19BPUN5310067845100016\n   - برانچ: علامہ اقبال ٹاؤن، لاہور\n\nآپ ان طریقوں میں سے کسی ایک کا انتخاب کر کے واش پروگرام کے لیے عطیہ کر سکتے ہیں۔",
+      "rag_time_seconds": 16.42,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response is fully relevant to the user's question about donating in Pakistani rupees, with no irrelevant statements. It directly addresses the request clearly and appropriately.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully faithful to the retrieval context—nice job keeping it accurate and consistent.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant to the question, and even the highest-ranked nodes are irrelevant. For example, the first node in retrieval contexts discusses healthcare spending like 'ہیلتھ سروز میں 9ارب 10 کروڑ روپے خرچ کیے' instead of how to donate to the WASH program in Pakistani rupees, and the second through fifth nodes in retrieval contexts also remain off-topic with content such as '56 ہسپتال', 'ضرورت منداورمستحق مریضوں کو صحت کی معیاری سہولیات', 'سال2023 میں 21ارب 49کروڑ فلاحی کاموں پر خرچ کئے', and '52ہسپتالوں،50میڈیکل سنٹرز'. The score is not higher because there are no relevant nodes ranked above irrelevant nodes; it is at this score because all ranked nodes are irrelevant.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context; nodes 1-5 discuss health, Alkhidmat Foundation, hospitals, and expenses, but provide no mention of MCB Islamic Bank or using a specific account for the program.",
+        "Hallucination": "The score is 1.00 because the actual output is entirely unsupported by the context: it gives WASH donation methods, app payments, and bank details, while the context only discusses Alkhidmat Foundation’s healthcare services, spending, and hospital network, with no mention of those donation instructions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8951025605201721,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q31",
+      "question": "الخدمت اسلامی مائیکروفنانس کے لیے عطیہ کیسے دوں؟",
+      "expected_answer": "آپ بینک آف پنجاب یا حبیب میٹرو پولیٹن بینک کے ذریعے عطیہ دے سکتے ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 7.99,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.3333,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.33 because the response did not answer how to donate to Alkhidmat Islamic Microfinance and instead only apologized and said it could not help. It is not higher because it provided no relevant donation method or guidance, but it is at this score rather than zero because it was still a direct response to the user.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 0.00 because every node in the retrieval contexts is irrelevant, including the first node with 'الخدمت فاؤنڈیشن بلا تفریق رنگ و نسل اور مذہب خالصتاَ انسانی بنیادوں پر خدمات سرانجام دے رہی ہے', the second node with 'الخدمت نے ترکیہ کے حالیہ زلزلے میں حکومت ترکیہ کی دعوت پروہاں خدمات سرانجام دیں', the third node with 'زلزلہ،سیلاب،کورونا سمیت پاکستان میں کسی بھی ناگہانی آفت میں اپنا موثرکرداراداکیا ہے', the fourth node with 'سالانہ ہزاروں طلبہ کو اعلی تعلیم کیلئے الخدمت اکیڈمک سکالرشپ کی فراہم کی جاتی ہے۔', and the fifth node with 'دیوالی اور کرسمس کے موقع پر بھی تحائف تقسیم کا کام کیا جاتا ہے'. Since none of these nodes provide donation instructions for Islamic microfinance, there are no relevant nodes ranked above irrelevant ones, which is why the score cannot be higher.",
+        "ContextualRecall": "The score is 0.00 because the sentence in the expected output about donating via بینک آف پنجاب or حبیب میٹرو پولیٹن بینک is not supported by any node(s) in retrieval context; the available nodes, including nodes 1–4, only mention الخدمت’s services, education support, and minority outreach, not donation methods or these banks.",
+        "Hallucination": "The score is 0.00 because the actual output only contains an apology for not answering and does not introduce any claims that contradict the provided context."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q32",
+      "question": "تعمیرِ وطن کے لیے پاکستانی روپے میں عطیہ کیسے دیا جائے؟",
+      "expected_answer": "تعمیرِ وطن کے لیے میزان بینک کا مخصوص اکاؤنٹ استعمال کیا جاتا ہے۔",
+      "actual_answer": "تعمیرِ وطن کے لیے پاکستانی روپے میں عطیہ دینے کے لیے آپ درج ذیل طریقے اختیار کر سکتے ہیں:\n\n1. **جازی کیش ایپ**: \n   - اپنی ایپ کھولیں، نیچے سکرول کریں اور \"ڈونیشنز\" پر ٹیپ کریں۔\n   - \"الخدمت فاؤنڈیشن پاکستان\" کو فہرست میں سے منتخب کریں۔\n   - رقم درج کریں اور عطیہ کریں۔\n\n2. **ایزی پیسہ ایپ**: \n\n3. **براہ راست جمع**:\n   - بینک آف پنجاب (تعمیرِ وطن کے لیے):\n     - اکاؤنٹ عنوان: الخدمت فاؤنڈیشن پاکستان\n     - اکاؤنٹ نمبر (PKR): 5310067845100016\n     - IBAN: PK19BPUN5310067845100016\n     - شاخ: علامہ اقبال ٹاؤن، لاہور\n     - SWIFT کوڈ: BPUNPKKA\n\nآپ ان طریقوں میں سے کسی ایک کا استعمال کرتے ہوئے تعمیرِ وطن کے لیے عطیہ کر سکتے ہیں۔",
+      "rag_time_seconds": 15.6,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question about donating in پاکستانی روپے for تعمیرِ وطن, with no irrelevant statements noted—clear and well-focused.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully aligned with the retrieval context. Nice job keeping it faithful and consistent.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question. The first node in retrieval contexts is about 'Aghosh Home' and 'PKR 240,000 / Annual' and 'does not mention تعمیرِ وطن, any donation method, or میزان بینک account details.' The second node in retrieval contexts is another irrelevant duplicate and 'does not provide the needed statement that تعمیرِ وطن کے لیے میزان بینک کا مخصوص اکاؤنٹ استعمال کیا جاتا ہے۔' The third, fourth, and fifth nodes in retrieval contexts also stay focused on orphan support and Aghosh construction, and even the fourth only notes that it 'contains the word تعمیر' but is 'unrelated to the expected output about donating via a specific میزان بینک account for تعمیرِ وطن.' It is at this score because no relevant nodes appear above irrelevant nodes—in fact, no relevant nodes appear at all.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1–5 discuss Aghosh Home donations, locations, and press releases, but none mention 'تعمیرِ وطن' or a specific Meezan Bank account.",
+        "Hallucination": "The score is 1.00 because the actual output is entirely unsupported by the provided context: the context is about Aghosh Homes, their locations, pricing, and expansion details, while the actual output gives unrelated donation methods and bank account information for تعمیرِ وطن. There are no factual alignments and multiple direct topic contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8951025605201721,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q33",
+      "question": "میں یتیم کفالت کے لیے زکوٰۃ کیسے دے سکتا/سکتی ہوں؟",
+      "expected_answer": "آپ میزان یا بینک الفلاح کے مخصوص زکوٰۃ اکاؤنٹس کے ذریعے عطیہ دے سکتے ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 15.56,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.3333,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.33 because the response only apologizes and says it cannot answer, without giving any guidance on how to give zakat for supporting orphans. It is not lower because it at least acknowledges the user’s request, but it cannot be higher since it does not address the actual question.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 0.00 because every node in the retrieval contexts is irrelevant to the user’s question, and none provide the needed method for giving Zakat for orphan sponsorship. The 1st node in retrieval contexts only discusses general Zakat topics like 'Who is required to pay Zakat?' and misses 'میزان' or 'بینک الفلاح کے مخصوص زکوٰۃ اکاؤنٹس'. The 2nd node in retrieval contexts is similarly generic, mentioning 'Yes, Zakat is due on business assets' instead of the donation process through 'مخصوص زکوٰۃ اکاؤنٹس'. The 3rd, 4th, and 5th nodes in retrieval contexts focus on orphan-care scale such as '30ہزاربچوں کی کفالت' and 'آغوش ہومز', but not how to donate Zakat. Since no relevant nodes appear at any rank, the precision cannot be higher, and 0.00 is appropriate.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1-2 only mention general Zakat FAQs, and nodes 3-5 discuss orphan homes, with no mention of donating through MCB/میزان or Bank Alfalah-specific zakat accounts.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims that contradict the provided contexts; it is only an apology and a routing message to a human agent, so it is non-responsive rather than hallucinatory."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "no_support",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q34",
+      "question": "الخدمت فاؤنڈیشن پاکستان کے صدر کون ہیں؟",
+      "expected_answer": "پروفیسر ڈاکٹر حفیظ الرحمٰن الخدمت فاؤنڈیشن پاکستان کے صدر ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 7.51,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response does not provide the factual answer to who the president of Alkhidmat Foundation Pakistan is; instead, it only apologizes, says it cannot answer, and mentions connecting to a human agent, which is irrelevant to the user’s question.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and aligned.",
+        "ContextualPrecision": "The score is 1.00 because every top-ranked node in retrieval contexts is relevant, and the first node already directly answers the question with 'الخدمت فاؤنڈیشن پاکستان کے صدر ڈاکٹرحفیظ الرحمن' and 'ڈاکٹر حفیظ الرحمن، صدر الخدمت فاؤنڈیشن پاکستان'. The second, third, fourth, and fifth nodes in retrieval contexts consistently reinforce the same answer, including 'Alkhidmat Foundation Pakistan President Dr. Hafeezur Rahman'. It is not higher because 1.00 is the maximum, and no irrelevant nodes appear above relevant ones—great ranking overall.",
+        "ContextualRecall": "The score is 1.00 because sentence 1 is fully supported by nodes in retrieval context 1, 2, 3, 4, and 5, which explicitly identify پروفیسر/ڈاکٹر حفیظ الرحمٰن as صدر الخدمت فاؤنڈیشن پاکستان—an exact match, so the recall is complete.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims and only gives an apology and handoff, so it does not contradict any of the provided context."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "general",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q35",
+      "question": "الخدمت فاؤنڈیشن پاکستان کے نائب صدور کون ہیں؟",
+      "expected_answer": "الخدمت کے نائب صدور میں مختلف سینئر اور تجربہ کار شخصیات شامل ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 8.48,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer the question at all; it only gave an apology, said it could not provide the information, and mentioned connecting to a human agent instead of naming the نائب صدور of الخدمت فاؤنڈیشن پاکستان.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question about نائب صدور. The first node in retrieval contexts only says \"یہ متن صرف 'الخدمت فاؤنڈیشن پاکستان کے صدر ڈاکٹرحفیظ الرحمن' کا ذکر کرتا ہے۔ سوال 'نائب صدور' کے بارے میں ہے، جبکہ اس میں نائب صدور کے نام یا ان کی تفصیل موجود نہیں۔\", and the second node in retrieval contexts similarly states \"یہ بھی پہلے متن کی طرح صرف 'الخدمت فاؤنڈیشن پاکستان کے صدر ڈاکٹرحفیظ الرحمن' اور امدادی سرگرمیوں کا ذکر کرتا ہے، 'نائب صدور' سے متعلق کوئی معلومات نہیں دیتا۔\" The same problem continues in the third, fourth, and fifth nodes in retrieval contexts, which discuss the president or relief activities instead of نائب صدور, so irrelevant nodes are ranked at the top and there are no relevant nodes ranked higher.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1–5 do not mention نائب صدور, سینئر اور تجربہ کار شخصیات, or any list of vice presidents, and instead only discuss صدر ڈاکٹرحفیظ الرحمن and activities in South Africa/Cairo.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims and does not contradict any provided context; it is only an apology/handoff message, so there is no hallucinated content."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "general",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q36",
+      "question": "الخدمت فاؤنڈیشن میں اہم انتظامی عہدے دار کون ہیں؟",
+      "expected_answer": "اہم عہدوں میں سیکرٹری جنرل، سیکرٹری فنانس اور مختلف چیف ایگزیکٹو آفیسرز شامل ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 8.38,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.2,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response does not answer the question at all; instead, it only gives an apology, says it cannot provide the information, and suggests connecting to a human agent. Since it provides no relevant details about the key administrative office bearers of Alkhidmat Foundation, the score cannot be higher.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.20 because the first four nodes in retrieval contexts are irrelevant and ranked above the only useful result. For example, the first node in retrieval contexts only mentions 'چیئرمین الخدمت'، 'مرکزی نائب صدر' and 'نیشنل ڈائریکٹر آغوش ہومز' and not the needed 'سیکرٹری جنرل، سیکرٹری فنانس اور مختلف چیف ایگزیکٹو آفیسرز', and the second, third, and fourth nodes in retrieval contexts are similarly irrelevant or repetitive. The score is not lower because the fifth node in retrieval contexts is still relevant, since it explicitly includes 'مرکزی سیکرٹری جنرل' in 'مرکزی سیکرٹری جنرل وچیئرمین ایجوکیشنل پروگرام سیدوقاص جعفری', which partially supports the query.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by the nodes in retrieval context: node 5 only mentions 'مرکزی سیکرٹری جنرل' and does not provide evidence for 'سیکرٹری فنانس' or 'مختلف چیف ایگزیکٹو آفیسرز', so the sentence cannot be attributed to the retrieved context.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims that contradict the provided context; it is only an apology/handoff message and remains fully consistent with the contextual information."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "general",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q37",
+      "question": "خواتین ونگ اور فنانس کی ذمہ داری کس کے پاس ہے؟",
+      "expected_answer": "خواتین ونگ کی جنرل سیکرٹری اور گروپ چیف فنانشل آفیسر مخصوص افراد ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 8.6,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the output does not answer the question at all and only expresses inability to respond, without giving any information about who is responsible for the خواتین ونگ and finance.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output aligns fully with the retrieval context. Nice job keeping it fully faithful.",
+        "ContextualPrecision": "The score is 0.00 because none of the top-ranked nodes in retrieval contexts are relevant to the question. The first node in retrieval contexts only mentions event participants like 'ڈاکٹر صائمہ اسماء' and topics such as 'ذاتی دفاع کی ٹریننگ', the second node in retrieval contexts discusses 'غزہ کی باہمت فلسطینی خواتین', the third node in retrieval contexts again lists attendees like 'انٹرنیشنل باکسرصبیحہ اسلام', and the fourth and fifth nodes in retrieval contexts focus on 'آغوش' and orphan care with names like 'فاروق حبیب'. Since all retrieved nodes are irrelevant and none identify who has 'خواتین ونگ' or 'فنانس کی ذمہ داری', the score cannot be higher, while it remains at 0.00 because no relevant node is ranked above irrelevant ones.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1–5 mention various named individuals and positions, but none identifies 'خواتین ونگ کی جنرل سیکرٹری' or 'گروپ چیف فنانشل آفیسر' as the specific people referenced in the expected output.",
+        "Hallucination": "The score is 0.00 because the actual output is only a refusal/apology and transfer offer, makes no substantive factual claims, and does not contradict any provided context."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "general",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q38",
+      "question": "الخدمت فاؤنڈیشن کا بنیادی مقصد کیا ہے؟",
+      "expected_answer": "الخدمت فاؤنڈیشن سماجی بہبود، صحت، تعلیم اور ہنگامی امداد کے شعبوں میں خدمات فراہم کرتی ہے۔",
+      "actual_answer": "الخدمت فاؤنڈیشن کا بنیادی مقصد پاکستان میں سماجی بہبود کو فروغ دینا ہے، جو ہنگامی حالات کے علاوہ روزمرہ کی زندگی میں بھی شامل ہے۔ یہ زلزلوں، سیلابوں، بم دھماکوں، اور صحت کی ایمرجنسیز میں امداد فراہم کرنے کے لیے پہلے جواب دہندگان میں شامل ہوتی ہے۔ اس کے علاوہ، یہ صحت کی خدمات، تعلیم، یتیموں کی دیکھ بھال، اور خواتین کی ترقی کے پروگرام بھی چلاتی ہے، تاکہ معاشرتی بہتری اور خود انحصاری کو فروغ دیا جا سکے۔",
+      "rag_time_seconds": 18.47,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question, with no irrelevant statements included. Great job staying focused and directly addressing the input.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully faithful to the retrieval context—great job keeping it accurate and consistent.",
+        "ContextualPrecision": "The score is 1.00 because all top-ranked nodes in retrieval contexts are relevant and there are no irrelevant nodes ranked above them. The first node in retrieval contexts supports the answer by stating that الخدمت provides 'تعلیم، صحت، رہائش سمیت دیگر ضروریات زندگی فراہم', and the fourth node in retrieval contexts further strengthens this with 'اہل غزہ کے لیے جاری امدادی سرگرمیوں' and 'Disaster Management'. It is at the highest score since the ranking keeps relevant information first throughout.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be fully attributed to the nodes in retrieval context: nodes 1–3 mention education and health (and related areas like housing), and nodes 4–5 mention relief or disaster management, but no node supports the claim about سماجی بہبود as a general service area or the full organization-wide statement.",
+        "Hallucination": "The score is 0.00 because the actual output is fully consistent with the provided contexts: it matches the foundation’s child welfare, education, health, support, and emergency relief activities at a high level, and there are no listed contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8833827137947082,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q39",
+      "question": "الخدمت کراچی کا رابطہ ایڈریس کیا ہے؟",
+      "expected_answer": "رابطہ ایڈریس: پلاٹ 501، قائدین کالونی، اسلامیہ کالج کے قریب، کراچی۔",
+      "actual_answer": "الخدمت کراچی کا رابطہ ایڈریس ہے:\n\nالخدمت ویلفیئر سوسائٹی کراچی (رجسٹرڈ)  \n504 قائدین کالونی، اسلامیہ کالج کے قریب، کراچی",
+      "rag_time_seconds": 11.27,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question, with no irrelevant statements noted—great job staying directly on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the query, so no relevant node was ranked above irrelevant ones. The first node in retrieval contexts only discusses services like \"پاکستان بھرمیں 55ہسپتالوں\" and does not provide the Karachi contact address. The second node in retrieval contexts again focuses on \"55ہسپتالوں،ہیلتھ سنٹرز\" and explicitly lacks the expected address like \"پلاٹ 501، قائدین کالونی... کراچی\". The third node in retrieval contexts mentions \"الخدمت ہسپتال کوئٹہ\" and \"56 ہسپتال\", which is about healthcare operations rather than the requested Karachi address. The fourth node in retrieval contexts also centers on \"علاج معالجے کی بنیادی اور معیاری سہولیات\" and omits \"پلاٹ 501، قائدین کالونی، اسلامیہ کالج کے قریب، کراچی\". The fifth node in retrieval contexts is likewise irrelevant, containing service details and even \"Combating climate change: 300,000 saplings...\" instead of any contact address. Since every ranked node is irrelevant, the score cannot be higher, but 0.00 is appropriate because there are no relevant nodes placed above irrelevant ones.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1–5 only describe Alkhidmat hospitals/services, and none mention a contact/address field or the address 'پلاٹ 501، قائدین کالونی، اسلامیہ کالج کے قریب، کراچی'.",
+        "Hallucination": "The score is 1.00 because the actual output is entirely unsupported by the context: it gives a specific Karachi contact address, while the context only discusses Alkhidmat Foundation’s healthcare services, hospitals, spending, and related statistics. There are no factual alignments and multiple direct topic contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8956405878067016,
+        "domain": "general",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q40",
+      "question": "الخدمت کراچی کے فون نمبرز کیا ہیں؟",
+      "expected_answer": "فون نمبرز (021) 111-503-504 اور (021) 34915705-09 ہیں۔",
+      "actual_answer": "الخدمت کراچی کے فون نمبرز یہ ہیں:\n\n1. (021) 111 503 504\n2. +92 21 36345131",
+      "rag_time_seconds": 12.88,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the user's question, with no irrelevant statements noted. Great job staying focused and directly on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because every top-ranked node in retrieval contexts is irrelevant to the question, so no relevant information was prioritized at all. The first node in retrieval contexts should have been ranked lower because \"اس متن میں کراچی کے فون نمبرز کا کوئی ذکر نہیں۔ یہ صرف '55ہسپتالوں'، '9ارب 16کروڑروپے' اور خدماتِ صحت کے بارے میں ہے، جبکہ متوقع جواب میں مخصوص نمبر '(021) 111-503-504' اور '(021) 34915705-09' درکار تھے۔\" The second node in retrieval contexts should also be lower because \"یہ دستاویز بھی کراچی کے رابطہ نمبرز نہیں دیتی۔ اس میں 'الخدمت فاؤنڈیشن'، '55ہسپتالوں' اور 'مریضوں کی خدمت' کا ذکر ہے مگر فون نمبر موجود نہیں۔\" The score remains at 0.00 because none of the retrieved nodes contain the needed Karachi phone numbers, so there are no relevant nodes ranked above irrelevant ones.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be supported by any nodes in retrieval context: nodes 1-5 mention Alkhidmat hospitals, spending, and dates, but none contain the phone numbers '(021) 111-503-504' or '(021) 34915705-09'.",
+        "Hallucination": "The score is 1.00 because the actual output is entirely unsupported by the provided context: it gives Alkhidmat Karachi phone numbers, while the context only discusses healthcare services, hospitals, and spending, with no mention of any contact numbers."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8956405878067016,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q41",
+      "question": "پاکستان کی آبادی میں نوجوانوں کی شرح کتنی ہے؟",
+      "expected_answer": "پاکستان کی تقریباً 65 فیصد آبادی 30 سال سے کم عمر افراد پر مشتمل ہے۔",
+      "actual_answer": "That is an irrelevant question.",
+      "rag_time_seconds": 4.75,
+      "rag_rejected": true,
+      "rejection_message": "That is an irrelevant question.",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "irrelevant"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q42",
+      "question": "نوجوانوں کے لیے سب سے بڑا تعلیمی مسئلہ کیا ہے؟",
+      "expected_answer": "اعلیٰ تعلیم کے مواقع کی کمی کے باعث نوجوانوں کی صلاحیتیں ضائع ہو رہی ہیں۔",
+      "actual_answer": "مجھے معلوم نہیں",
+      "rag_time_seconds": 9.73,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question about the biggest educational issue for young people, with no irrelevant statements noted—great job staying focused and on-topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully faithful to the retrieval context—nice job keeping it consistent.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question. The first node in retrieval contexts only discusses general education themes like 'تعلیم کسی بھی قوم کی ترقی کی بنیاد ہے' and 'اسکالرشپ پروگرامز' and does not address 'نوجوانوں کے لیے سب سے بڑا تعلیمی مسئلہ' or 'اعلیٰ تعلیم کے مواقع کی کمی'. The second node in retrieval contexts is also irrelevant since it repeats general points such as 'اسکالرشپ پروگرامز، اور ووکیشنل ٹریننگ سینٹرز' without supporting 'اعلیٰ تعلیم کے مواقع کی کمی'. The third node in retrieval contexts remains irrelevant because it lacks points like 'نوجوانوں کی صلاحیتیں ضائع ہو رہی ہیں' or 'اعلیٰ تعلیم کے مواقع کی کمی'. The fourth node in retrieval contexts mentions '1341اسکالرز کو ... فنانشل سپورٹ' and 'ہر بچے کو تعلیم تک رسائی', but this still does not directly support the core claim 'اعلیٰ تعلیم کے مواقع کی کمی'. The fifth node in retrieval contexts again contains only broad statements like 'تعلیم کے ذریعے نہ صرف غربت کا خاتمہ ممکن ہے' and 'تعلیم صرف کتابوں تک محدود نہیں', so no relevant nodes were ranked above irrelevant ones, which is why the score cannot be higher.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1–5 mention general education topics such as importance, scholarships, schools, skill centers, and access, but they do not state a lack of higher education opportunities or that youth potential is being wasted.",
+        "Hallucination": "The score is 0.00 because the actual output only says 'مجھے معلوم نہیں' and makes no factual claim that contradicts the provided context, so there is no hallucinated content."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.834419846534729,
+        "domain": "healthcare",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q43",
+      "question": "الخدمت کراچی نے نوجوانوں کے لیے کون سا تعلیمی منصوبہ شروع کیا؟",
+      "expected_answer": "الخدمت کراچی نے بانو قابل پروگرام شروع کیا۔",
+      "actual_answer": "الخدمت فاؤنڈیشن نے کراچی میں نوجوانوں کے لیے \"بانو قابل آئی ٹی اسکالرشپ پروگرام\" شروع کیا۔",
+      "rag_time_seconds": 13.2,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response fully addresses the question with no irrelevant statements. It is completely relevant and focused—great job.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job staying faithful to the source.",
+        "ContextualPrecision": "The score is 0.00 because none of the top-ranked nodes in retrieval contexts contain the needed answer about کراچی کے نوجوانوں کے لیے شروع کیا گیا تعلیمی منصوبہ. Instead, the first node in retrieval contexts is about 'آغوش قائم کرنے' and 'تعلیم،صحت،رہائش' for children, the second node in retrieval contexts again discusses 'آغوش' and children's welfare, the third node in retrieval contexts is another repeat about 'آغوش قائم کرنے', the fourth node in retrieval contexts mentions 'الخدمت اکیڈمک سکالرشپ' and 'تعلیم کی آگاہی', and the fifth node in retrieval contexts discusses 'الخدمت اکیڈمک اسکالر' and 'سکل ڈویلپمنٹ سنٹرز'—but none identify 'بانو قابل پروگرام'. Since irrelevant nodes occupy the first through fifth ranks and no relevant node is ranked above them, the precision is at its lowest possible score.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be supported by any node(s) in retrieval context: nodes 1–5 discuss آغوش، تعلیم/اسکالرشپ، and general الخدمت activities, but none mention کراچی or that الخدمت started the بانو قابل پروگرام.",
+        "Hallucination": "The score is 1.00 because the actual output is fully contradicted by the provided context: it claims Alkhidmat launched a 'Bano Qabil IT Scholarship Program' for Karachi youth, while the context is instead about Aghosh homes, child welfare, and existing scholarship/support programs, with no support for the claimed program."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8590002298355103,
+        "domain": "general",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q44",
+      "question": "بانو قابل پروگرام میں کس نوعیت کے کورسز دیے جاتے ہیں؟",
+      "expected_answer": "بانو قابل پروگرام میں جدید آئی ٹی کورسز بالکل مفت فراہم کیے جاتے ہیں۔",
+      "actual_answer": "بانو قابل پروگرام میں خواتین کو آئی ٹی مہارتیں سکھائی جاتی ہیں تاکہ وہ خود مختاری حاصل کر سکیں۔ اس پروگرام کا مقصد خواتین کو گھر سے آن لائن کام کرنے کے قابل بنانا اور ان کی مالی حالت کو بہتر بنانا ہے۔",
+      "rag_time_seconds": 13.6,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response is fully relevant to the question and does not include any irrelevant statements—great job staying directly on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output aligns fully with the retrieval context. Nice job keeping it faithful and consistent.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant to the question, so there are no relevant nodes ranked above irrelevant ones. For example, the 1st node in retrieval contexts discusses \"پرسنل اینڈ پروفیشنل گرومنگ\" and \"پروفیشنل ٹریننگ\" instead of \"بانو قابل پروگرام\" or \"جدید آئی ٹی کورسز,\" and the 4th node in retrieval contexts is about \"میڈکون 2024\" and \"میڈیکل گائیڈلائنز,\" which is also irrelevant. It is not higher because even the top-ranked nodes fail to address what kinds of courses Bano Qabil offers.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1–3 only mention volunteer or professional training, while nodes 4–5 discuss MedCon 2024, and none mention بانو قابل پروگرام, modern IT courses, or that they are completely free.",
+        "Hallucination": "The score is 1.00 because the actual output is entirely unsupported by the provided contexts and directly contradicts them: it discusses the Bano Qabil program teaching women IT skills, while the contexts are about volunteer coordinator training, disaster preparedness, and Medcon 2024 medical conference activities."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8784486413002014,
+        "domain": "healthcare",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q45",
+      "question": "بانو قابل کورسز کا دورانیہ کتنا ہے؟",
+      "expected_answer": "کورسز کا دورانیہ 4 سے 6 ماہ ہے۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 11.64,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.3333,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.33 because the response does not answer the question about Bano Qabil courses' duration and instead gives an apology/inability-to-answer statement. It is not higher because the output lacks the requested information, but it is at this score because it is still loosely related to the query by acknowledging the question.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant to the question. The first node in retrieval contexts only shows FAQ headings and 'does not mention the course duration \"4 سے 6 ماہ\"', the second node in retrieval contexts 'contains no statement about duration being \"4 to 6 months\"', and the third node in retrieval contexts gives question prompts 'without giving any answer about the course duration.' The fourth and fifth nodes in retrieval contexts are irrelevant media coverage, including '15 ماہ ... 15 ارب روپے', and should be ranked lower than any actually relevant node. The score is not higher because no relevant node appears above these irrelevant nodes.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1–3 only show FAQ titles without any course duration, and nodes 4–5 contain unrelated text mentioning '15 ماہ' rather than '4 سے 6 ماہ'.",
+        "Hallucination": "The score is 0.00 because the actual output is only a fallback/apology and escalation message, and it does not make any factual claims that contradict the provided contexts."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q46",
+      "question": "بانو قابل میں کون سے کورسز دستیاب ہیں؟",
+      "expected_answer": "ویب ڈیولپمنٹ، ایپ ڈیولپمنٹ، ڈیجیٹل مارکیٹنگ، گرافک ڈیزائننگ، فری لانسنگ اور ایمیزون ایف بی اے۔",
+      "actual_answer": "That is an irrelevant question.",
+      "rag_time_seconds": 3.58,
+      "rag_rejected": true,
+      "rejection_message": "That is an irrelevant question.",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "irrelevant"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q47",
+      "question": "بانو قابل کا تربیتی سائیکل کتنے عرصے بعد دہرایا جاتا ہے؟",
+      "expected_answer": "یہ سائیکل ہر چھ ماہ بعد دہرایا جاتا ہے۔",
+      "actual_answer": "That is an irrelevant question.",
+      "rag_time_seconds": 3.55,
+      "rag_rejected": true,
+      "rejection_message": "That is an irrelevant question.",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "irrelevant"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q48",
+      "question": "بانو قابل پروگرام میں کتنے افراد نے رجسٹریشن کروائی؟",
+      "expected_answer": "75 ہزار سے زائد امیدواروں نے رجسٹریشن کروائی۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 9.07,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer how many people registered for the Bano Qabil program and instead included unrelated statements, such as mentioning connection to a human agent, which is not relevant to the asked registration count.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and accurate.",
+        "ContextualPrecision": "The score is 0.00 because every node in the retrieval contexts is irrelevant to the query, and even the highest-ranked nodes fail to address 'بانو قابل پروگرام' registration counts. For example, the 1st node in retrieval contexts says \"اس متن میں 'بانو قابل پروگرام' یا رجسٹریشن کی تعداد کا کوئی ذکر نہیں\" and the 2nd node says \"'75 ہزار سے زائد امیدواروں نے رجسٹریشن کروائی' جیسی معلومات موجود نہیں\". Lower-ranked nodes are also irrelevant, such as the 4th node in retrieval contexts, which mentions \"'70ہزارخواتین کو ... رجسٹرڈ کیا'\" but explicitly not for 'بانو قابل پروگرام'. Since no relevant nodes appear above irrelevant nodes—or at all—the score cannot be higher, and it is correctly at 0.00.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be supported by any node(s) in retrieval context: nodes 1–3 only discuss volunteers and training, while nodes 4–5 mention '70 ہزار خواتین ... رجسٹرڈ' rather than '75 ہزار سے زائد امیدواروں نے رجسٹریشن کروائی,' so the key figure and subject do not match.",
+        "Hallucination": "The score is 0.00 because the actual output is only an apology/handoff response and makes no factual claims that contradict the provided context."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "general",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q49",
+      "question": "بانو قابل کے اپٹیٹیوڈ ٹیسٹ کہاں منعقد ہوئے؟",
+      "expected_answer": "یہ ٹیسٹ باغِ جناح گراؤنڈز میں منعقد کیے گئے۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 6.76,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response does not answer where Bano Qabil’s aptitude test was held; it only gives an apology, says it cannot answer, and mentions connecting to a human agent, all of which are irrelevant to the user’s question.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and accurate.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant to the question, and even the highest-ranked nodes are irrelevant. For example, the first node in retrieval contexts only discusses \"سپیشل ابیلیٹی کلب\" and \"does not mention 'بانو قابل' or where 'اپٹیٹیوڈ ٹیسٹ' were held,\" the second node in retrieval contexts is again about \"الخدمت فاؤنڈیشن پاکستان نے سپیشل ابیلیٹی کلب کاافتتاح کردیا\" and has \"nothing about 'بانو قابل کے اپٹیٹیوڈ ٹیسٹ',\" and the fifth node in retrieval contexts is unrelated content about \"آغوش ہوم\" and \"does not mention 'باغِ جناح گراؤنڈز'.\" The score is not higher because there are no relevant nodes ranked above irrelevant nodes; it is at this score because all ranked nodes are irrelevant.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context; specifically, nodes 1–5 discuss الخدمت فاؤنڈیشن پاکستان, سپیشل ابیلیٹی کلب، and attendees, but do not mention tests being held at باغِ جناح گراؤنڈز.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims and does not contradict any of the provided context; it is only an apology/escalation response."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q50",
+      "question": "بانو قابل نوجوانوں کو کس طرح خود مختار بناتا ہے؟",
+      "expected_answer": "یہ پروگرام نوجوانوں کو روزگار اور فری لانسنگ کے قابل بناتا ہے۔",
+      "actual_answer": "بانو قابل پروگرام نوجوانوں کو خود مختار بنانے کے لیے مختلف طریقوں سے کام کرتا ہے۔ یہ پروگرام 100% مفت جدید آئی ٹی کورسز فراہم کرتا ہے، جو نوجوانوں کو ٹیکنالوجی کی حقیقی دنیا میں مہارت حاصل کرنے کے لیے تیار کرتا ہے۔ اس کے ذریعے نوجوان افراد کو وہ مہارتیں فراہم کی جاتی ہیں جو انہیں خود انحصاری کی طرف گامزن کرتی ہیں اور کامیاب کیریئر بنانے میں مدد دیتی ہیں۔\n\nپروگرام کے مختلف مراحل جیسے کہ قابلیت کا ٹیسٹ، انٹرویو، کلاسز، اور گریجویشن، نوجوانوں کی ترقی کے لیے اہم ہیں۔ اس کے علاوہ، خاص طور پر خواتین طلباء کو آئی ٹی مہارتیں فراہم کرکے انہیں گھر سے آن لائن کام کرنے کے قابل بنایا جاتا ہے، جس سے ان کی مالی حیثیت میں بہتری آتی ہے۔ یہ اقدام خواتین کی ترقی کے لیے ایک اہم قدم ہے، جو ایک ایسے معاشرے کی تشکیل کی کوشش کرتا ہے جہاں خوشحالی، ترقی، اور خود مختاری فروغ پائے۔",
+      "rag_time_seconds": 18.03,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.325,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question about how بانو قابل empowers نوجوانوں, with no irrelevant statements noted. Great job staying focused and directly on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job staying faithful to the source.",
+        "ContextualPrecision": "The score is 0.33 because the most relevant nodes in retrieval contexts appear too low: the fourth node says 'بچوں اورنوجوانوں کوبااختیاراورہنرمندبنایاجائے گا' and mentions 'آئی ٹی اورمینجمنٹ کورسز', and the fifth node adds 'تعلیم او رہنرکے ذریعے' support for youth empowerment. However, the first node focuses on 'پرسنل اینڈ پروفیشنل گرومنگ' and not 'روزگار' or 'فری لانسنگ', the second node repeats 'پروفیشنل ٹریننگ' without directly connecting to 'روزگار اور فری لانسنگ', and the third node is about disaster-related training rather than becoming self-reliant. Because these irrelevant nodes in retrieval contexts are ranked 1st, 2nd, and 3rd above the relevant 4th and 5th nodes, the precision is low, though not zero since the lower-ranked nodes still partially answer the question.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1-3 only mention personal/professional training and volunteer or disaster preparedness, while nodes 4-5 mention empowering youth and offering IT and management courses, but none state that the program enables روزگار or فری لانسنگ.",
+        "Hallucination": "The score is 1.00 because the actual output is entirely inconsistent with the provided contexts: it describes the Bano Qabil IT education program, while the contexts are about Alkhidmat volunteer training, disaster preparedness, and the Special Ability Club for children and youth with disabilities. There are no factual alignments and multiple direct contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8729820251464844,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q51",
+      "question": "بانو قابل پروگرام کیا ہے؟",
+      "expected_answer": "بانو قابل الخدمت کراچی کا ایک تعلیمی منصوبہ ہے جو نوجوانوں کو مفت آئی ٹی تربیت فراہم کرتا ہے۔",
+      "actual_answer": "That is an irrelevant question.",
+      "rag_time_seconds": 5.26,
+      "rag_rejected": true,
+      "rejection_message": "That is an irrelevant question.",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "irrelevant"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q52",
+      "question": "آن لائن عطیہ دینے کی ویب سائٹ کون سی ہے؟",
+      "expected_answer": "آپ https://alkhidmat.com/donate/ کے ذریعے آن لائن عطیہ دے سکتے ہیں۔",
+      "actual_answer": "آن لائن عطیہ دینے کی ویب سائٹ یہ ہے: alkhidmat.org/donate",
+      "rag_time_seconds": 11.78,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response directly addresses the user's question with no irrelevant statements—clear, focused, and fully relevant.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question about an online donation website. The first node in retrieval contexts is about \"Media Coverage\" and \"does not mention any donation website or the URL 'https://alkhidmat.com/donate/'\"; the second node in retrieval contexts again includes \"Select Channel\" and \"January 18, 2025\" but has \"nothing about 'آن لائن عطیہ' or a donation link\"; the third node in retrieval contexts is the same \"Media Coverage\" text and \"contains no reference to a website for donating\"; the fourth node in retrieval contexts discusses an \"آن لائن اجلاس\" where \"'آن لائن' here refers to a meeting, not online donation\"; and the fifth node in retrieval contexts is a duplicate that \"does not provide any donation URL or indicate where to donate online.\" The score is not higher because no relevant node appears above irrelevant ones—in fact, no relevant node appears at all.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1–5 do not mention online donation or the URL https://alkhidmat.com/donate/, and nodes 4–5 only refer to an online meeting, not donating online.",
+        "Hallucination": "The score is 0.00 because the actual output is fully consistent with the provided context: the mentioned online donation website is not contradicted by any context, and there are no listed contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8738237142562866,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q53",
+      "question": "کیا آپ آن لائن عطیہ دینے کے طریقہ کار کی رہنمائی کر سکتے ہیں؟",
+      "expected_answer": "Quick Donate پر جا کر رقم، عطیہ کی قسم منتخب کریں، معلومات درج کریں اور ادائیگی مکمل کریں۔",
+      "actual_answer": "جی ہاں، آن لائن عطیہ دینے کے طریقہ کار کی رہنمائی درج ذیل ہے:\n\n1. **ویب سائٹ پر جائیں**: Alkhidmat Foundation کی ویب سائٹ پر جائیں [alkhidmat.org/donate](https://alkhidmat.org/donate)۔\n\n2. **ڈیبٹ یا کریڈٹ کارڈ کا استعمال**: آپ دنیا کے کسی بھی کونے سے، کسی بھی وقت اپنے ڈیبٹ یا کریڈٹ کارڈ کا استعمال کرتے ہوئے عطیہ کر سکتے ہیں۔ یہ ایک آسان اور محفوظ طریقہ ہے۔\n\n3. **JazzCash اور EasyPaisa**: \n   - **JazzCash**: اپنے JazzCash ایپ میں جائیں، نیچے سکرول کریں اور \"Donations\" پر ٹیپ کریں، پھر \"Alkhidmat Foundation Pakistan\" کو منتخب کریں، رقم درج کریں اور عطیہ کریں۔\n   - **EasyPaisa**: EasyPaisa ایپ میں بھی اسی طرح \"Donations\" میں جا کر Alkhidmat Foundation کو منتخب کریں اور رقم درج کریں۔\n\n4. **ٹرانزیکشن سلپ بھیجیں**: عطیہ کی رسید حاصل کرنے کے لیے اپنی ٹرانزیکشن سلپ کو ہمارے WhatsApp نمبر +923000776016 پر بھیجیں۔\n\nیہ طریقے آپ کو آسانی سے آن لائن عطیہ کرنے میں مدد فراہم کریں گے۔",
+      "rag_time_seconds": 18.84,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response fully matches the user's request about guidance for donating online, with no irrelevant statements. Great job keeping it focused and directly helpful.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully faithful to the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant to guiding 'آن لائن عطیہ دینے کے طریقہ کار'. The 1st, 2nd, and 3rd nodes in retrieval contexts are about 'Media Coverage' and the headline '15 ماہ میں ساڑھے 5 ارب روپے...' and do not mention donation steps like 'Quick Donate', entering details, or payment. The 4th and 5th nodes in retrieval contexts discuss 'آن لائن اجلاس', disaster management planning, volunteers, and 'ٹریننگ ورکشاپ', which are also irrelevant to online donation instructions. The score is not higher because there are no relevant nodes ranked above irrelevant nodes, and it is at 0.00 because every retrieved node is irrelevant.",
+        "ContextualRecall": "The score is 0.00 because the only sentence in the expected output is not supported by any node(s) in retrieval context: sentence 1 describes going to Quick Donate, choosing an amount and donation type, entering information, and completing payment, but nodes 1–3 only contain media/category listings and nodes 4–5 cover disaster management meetings and training, with no donation process details.",
+        "Hallucination": "The score is 1.00 because there are no factual alignments and all provided evidence contradicts the actual output: the output gives donation instructions, while the contexts are about media coverage, relief activities, planning meetings, and disaster management training, so the response is completely unsupported by the contexts."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8881093621253967,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q54",
+      "question": "میں کن مقاصد کے لیے الخدمت کو عطیہ دے سکتا/سکتی ہوں؟",
+      "expected_answer": "آپ صحت، تعلیم، یتیم کفالت، غزہ، کمیونٹی سروسز، رمضان پیکجز اور دیگر فلاحی منصوبوں کے لیے عطیہ دے سکتے ہیں۔",
+      "actual_answer": "آپ الخدمت فاؤنڈیشن کو درج ذیل مقاصد کے لیے عطیہ دے سکتے ہیں:\n\n1. **ہنگامی امداد**: زلزلے، سیلاب، بم دھماکوں اور صحت کی ایمرجنسیز کے دوران بچاؤ، امداد اور بحالی کے کاموں کے لیے۔\n\n2. **صحت کی خدمات**: ہسپتالوں، کلینکوں اور موبائل ہیلتھ یونٹس کے ذریعے بنیادی صحت، ایمرجنسی کیئر اور احتیاطی خدمات فراہم کرنے کے لیے۔\n\n3. **تعلیم**: عارضی اسکولوں، اسکالرشپس اور باقاعدہ تعلیمی اقدامات کے ذریعے بچوں کی تعلیم کی بہتری کے لیے۔\n\n4. **یتیموں کی دیکھ بھال**: یتیم بچوں کی مدد کے لیے، جن میں 30,000 سے زیادہ یتیم بچے شامل ہیں، جن کی ماہانہ مدد کی جاتی ہے۔\n\n5. **پانی، صفائی اور حفظان صحت (WASH)**: پانی کی فراہمی اور صفائی ستھرائی کے منصوبوں کے لیے۔\n\n6. **الخدمت بانو قابل پروگرام**: خواتین طلباء کو آئی ٹی مہارتیں فراہم کرنے کے لیے تاکہ وہ خود مختار بن سکیں۔\n\n7. **تعلیمی سپورٹ اور اسکالرشپس**: لڑکیوں اور خواتین کو مالی رکاوٹوں کے بغیر تعلیم حاصل کرنے میں مدد دینے کے لیے۔\n\n8. **کمیونٹی ڈویلپمنٹ اور وکالت**: مقامی کمیونٹیز کی ترقی اور ان کے حقوق کے لیے کام کرنے کے لیے۔\n\nآپ اپنی پسند کے کسی بھی مقصد کے لیے عطیہ دے سکتے ہیں تاکہ الخدمت فاؤنڈیشن کی خدمات کو مزید بہتر بنایا جا سکے۔",
+      "rag_time_seconds": 26.56,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.4778,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response is fully relevant to the user’s question, with no irrelevant statements included. It directly addresses the donation purposes clearly and appropriately.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output aligns fully with the retrieval context. Nice job keeping it accurate and consistent.",
+        "ContextualPrecision": "The score is 0.48 because the first and second nodes in retrieval contexts are irrelevant and should have been ranked lower: they discuss 'الخدمت سپیشل ابیلیٹی کلب', 'آئی ٹی اورمینجمنٹ کورسز', and 'تعلیم او رہنر', instead of donation purposes like 'صحت، تعلیم، یتیم کفالت، غزہ، کمیونٹی سروسز، رمضان پیکجز'. The score is not lower because the third, fourth, and fifth nodes in retrieval contexts are relevant, with the third node supporting 'تعلیم' through 'الخدمت اکیڈمک سکالرشپ' and the fourth and fifth nodes mentioning 'الخدمت فاؤنڈیشن کے پراجیکٹس میں اپنامال خرچ کریں' and 'فوڈ پیکج', which align with charitable donation purposes.",
+        "ContextualRecall": "The score is 0.00 because the sentence in the expected output is not attributable to the nodes in retrieval context: while nodes 1, 2, and 3 mention تعلیم, node 3 mentions medical-related content, and nodes 4 and 5 mention فوڈ/رمضان-type packages, no node in retrieval context supports the complete claim that you can donate to صحت، تعلیم، یتیم کفالت، غزہ، کمیونٹی سروسز، رمضان پیکجز اور دیگر فلاحی منصوبے, nor states this donation-options sentence explicitly.",
+        "Hallucination": "The score is 0.00 because the actual output is fully supported by the contexts: its mentions of education, IT/skills development, scholarships, emergency relief, and community support all align with the provided evidence, and there are no contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8825974822044372,
+        "domain": "donation",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 0.7777777777777778,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q55",
+      "question": "الخدمت کا واش پروگرام کیا ہے؟",
+      "expected_answer": "یہ پروگرام صاف اور سستا پینے کا پانی فراہم کرنے کے لیے ہے۔",
+      "actual_answer": "الخدمت کا واش پروگرام (پانی، صفائی، صحت) اس مسئلے کو حل کرنے کے لیے وقف ہے کہ ضرورت مند کمیونٹیز کو پائیدار پانی کے حل فراہم کیے جائیں۔ اس پروگرام کے تحت، الخدمت فاؤنڈیشن صاف پینے کے پانی کی فراہمی کے لیے مختلف اقدامات کرتی ہے، جیسے بڑے شہروں میں پانی کی فلٹریشن پلانٹس کا قیام، ہاتھ کے پمپ لگانا، شمسی زیر زمین پانی کے پمپ لگانا، اور تھر صحرا، چولستان، بلوچستان، خیبر پختونخوا، گلگت بلتستان اور آزاد جموں و کشمیر کے دور دراز علاقوں میں پانی کی فراہمی کے منصوبے بنانا۔ یہ پروگرام کمیونٹیز کو سالوں تک صاف پانی کا پائیدار ذریعہ فراہم کرنے کے لیے کام کرتا ہے۔",
+      "rag_time_seconds": 15.86,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response fully addresses the question about 'الخدمت کا واش پروگرام' with no irrelevant statements. It stays focused and relevant, so this is an excellent result.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and aligned.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question. The first node in retrieval contexts discusses 'آغوش' and 'یتیم بچوں کی مدد' with 'تعلیم، صحت، رہائش سمیت دیگر ضروریات زندگی فراہم' and explicitly does not mention 'واش پروگرام' or 'صاف اور سستا پینے کا پانی'. The second node in retrieval contexts again focuses on 'بچوں کی مدد', 'تعلیم، صحت، رہائش' and 'اخلاقی تربیت', not the asked topic. The third node in retrieval contexts is also about 'آغوش قائم کرنے کا مقصد' and giving children 'تعلیم، صحت، رہائش', which does not match 'صاف اور سستا پینے کا پانی'. The fourth node in retrieval contexts is about a tree plantation campaign such as 'ایک کروڑ درخت لگانے کا پلان' and 'ماحولیاتی استحکام'; although it mentions 'پودوں کو پانی دینے', that is still irrelevant to the wash program. The fifth node in retrieval contexts likewise discusses 'ایک کروڑ درخت لگانے کا پلان', '10 لاکھ پودے تیار' and 'پودوں کو پانی دینے' rather than the requested program. The score is not higher because no relevant node appears above irrelevant nodes—or at all—while it is at 0.00 because the ranking contains only irrelevant nodes.",
+        "ContextualRecall": "The score is 0.00 because the only sentence in the expected output is not supported by any node(s) in retrieval context: sentence 1 says the program provides صاف اور سستا پینے کا پانی, but nodes 1-5 discuss آغوش، یتیم بچوں کی مدد، اور شجرکاری/پودے لگانا, with no mention of drinking water.",
+        "Hallucination": "The score is 1.00 because the actual output is entirely unsupported by the provided context: it talks about Alkhidmat’s WASH and clean water initiatives, while the context is about Aghosh child support services and a separate tree-planting campaign. With no factual alignments and multiple direct topic mismatches, the response is fully contradictory."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8909701108932495,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q56",
+      "question": "واش پروگرام کے تحت پانی کیسے فراہم کیا جاتا ہے؟",
+      "expected_answer": "فلٹریشن پلانٹس اور واٹر پمپس کے ذریعے۔",
+      "actual_answer": "الکھدمت فاؤنڈیشن کا واش پروگرام (پانی، صفائی، صحت) مختلف اقدامات کے ذریعے صاف پینے کا پانی فراہم کرتا ہے۔ اس میں شامل ہیں:\n\n1. بڑے شہروں میں پانی کی فلٹریشن پلانٹس کا قیام۔\n2. ہینڈ پمپس کی تنصیب۔\n3. شمسی زیر زمین پانی کے پمپس کا قیام۔\n4. تھر Desert، چولستان اور بلوچستان، خیبر پختونخوا، گلگت بلتستان اور آزاد جموں و کشمیر کے دور دراز علاقوں میں پانی کی فراہمی کے منصوبے۔\n\nیہ اقدامات اس بات کو یقینی بناتے ہیں کہ کمیونٹیز کو سالوں تک صاف پانی کی پائیدار فراہمی حاصل ہو۔",
+      "rag_time_seconds": 24.03,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.6
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question about how water is provided under the program, with no irrelevant statements included—great job staying focused and on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant to how water is provided under the WASH program. The 1st node in retrieval contexts focuses on 'متاثرین کوتیارکھانا،فوڈ پیکج، خیمے' and 'میڈیکل ایڈاور مفت ادویات' and does not mention 'فلٹریشن پلانٹس اور واٹر پمپس'. The 2nd node in retrieval contexts similarly discusses 'ریسکیو اورریلیف'، 'فوڈ پیکج' and 'میڈیکل کیمپوں' instead of the water delivery method. The 3rd node in retrieval contexts only mentions 'امدادی سامان'، 'فوڈ پیکج' and 'مفت ادویات'. Even the 4th and 5th nodes in retrieval contexts, while closer because they mention 'صاف پانی کی فراہمی' and '100سے زائد صاف پانی کے منصوبہ جات', are still irrelevant since they do not explain that water is provided through 'فلٹریشن پلانٹس اور واٹر پمپس'. Since no relevant nodes appear anywhere in the ranking, the precision is correctly at 0.00 and cannot be higher.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context; nodes 1-5 do not mention 'فلٹریشن پلانٹس' or 'واٹر پمپس' and only refer generally to clean water projects, so the expected wording is unsupported.",
+        "Hallucination": "The score is 0.60 because the actual output is only partially grounded in the contexts: it aligns with the clean water project context about Alkhidmat providing drinking water, but it conflicts with multiple other contexts that focus on flood relief, rescue operations, and medical aid rather than WASH or long-term water infrastructure."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9051302909851074,
+        "domain": "healthcare",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q57",
+      "question": "الخدمت کا یتیم کفالت پروگرام کس طرح مختلف ہے؟",
+      "expected_answer": "یہ جدید بورڈنگ اسکول سسٹم پر مبنی ہے۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 6.22,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not explain how الخدمت کا یتیم کفالت پروگرام is different at all; instead, it only apologized, said it could not answer, and mentioned connecting to a human agent, which are irrelevant to the user’s question. It is not higher because no useful or related information was provided, and it is at 0.00 since the answer completely failed to address the asked comparison.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—nice job.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the input. The first node in retrieval contexts only mentions 'اٹک میں پہلے آغوش ہوم' and '30ہزاربچوں کی کفالت' and does not explain that the program is different because 'یہ جدید بورڈنگ اسکول سسٹم پر مبنی ہے'. The second and third nodes in retrieval contexts repeat similar unrelated details like 'آغوش ہومز سنٹرز' and '2005کے زلزلے' without answering how it is different, while the fourth and fifth nodes in retrieval contexts are about 'الخدمت سپیشل ابیلیٹی کلب' and 'آئی ٹی اورمینجمنٹ کورسز', which are also irrelevant. Since no relevant nodes appear above irrelevant nodes—or at all—the score cannot be higher.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context; nodes 1–5 discuss آغوش ہومز, یتیم بچوں کی کفالت، اور خصوصی صلاحیتوں سے متعلق سرگرمیوں کا ذکر کرتے ہیں، لیکن جدید بورڈنگ اسکول سسٹم یا اس کے مساوی کسی تصور کا کوئی ذکر نہیں ملتا۔",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims and does not contradict any provided context; it is only a generic apology and handoff message."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q58",
+      "question": "آغوش یتیم مراکز کہاں موجود ہیں؟",
+      "expected_answer": "پاکستان اور ترکی میں کل 11 آغوش مراکز موجود ہیں۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 8.28,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer where Aghosh orphan centers are located; instead, it gave unrelated information and suggested contacting a human agent, which does not address the user’s question at all.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job staying faithful to the source.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant, and the top-ranked results are dominated by irrelevant nodes. For example, the first node in retrieval contexts says 'اس وقت 22آغوش ہومز سنٹرزفنگشنل جبکہ 8آغوش زیرتعمیرہیں' and 'ترکی میں ... آغوش ورکنگ کررہا ہے', which conflicts with the needed answer about locations. The second and third nodes in retrieval contexts repeat the same irrelevant claim, while the fourth and fifth nodes in retrieval contexts only discuss 'راشدآباد سندھ میں الخدمت آغوش ہوم' and '168اورفن بچوں کی گنجائش', which do not provide the overall locations asked for. It is not higher because irrelevant nodes appear from the first node onward, and there are no relevant nodes ranked above them.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1, 2, and 3 mention 22 functional Aghosh centers in Pakistan, 8 under construction, and one operating in Gaziantep, Turkey, but none state that Pakistan and Turkey together have a total of 11 centers.",
+        "Hallucination": "The score is 0.00 because the actual output is only a generic apology/escalation message and makes no factual claims that contradict the provided context."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q59",
+      "question": "یتیم فیملی سپورٹ پروگرام میں کیا سہولت دی جاتی ہے؟",
+      "expected_answer": "بچوں اور ان کے سرپرستوں کو تعلیمی اور طبی معاونت دی جاتی ہے۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 8.85,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer what facility the orphan family support program provides; it only included an apology, said it could not answer, and mentioned connecting to a human agent, all of which are irrelevant to the user’s question.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant. The first node in retrieval contexts only says \"Lean more about Orphan Family Support\" and does not mention \"بچوں اور ان کے سرپرستوں کو تعلیمی اور طبی معاونت دی جاتی ہے.\" The second node in retrieval contexts is also too generic, with \"no detail about 'تعلیمی اور طبی معاونت' or beneficiaries like 'بچوں اور ان کے سرپرستوں'.\" The third, fourth, and fifth nodes in retrieval contexts similarly repeat \"Lean more about Orphan Family Support\" and \"do not contain the specific support described in the expected output,\" so there are no relevant nodes ranked above irrelevant ones, which keeps the score at 0.00 rather than higher.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context; nodes 1-5 only say \"Lean more about Orphan Family Support\" and do not mention بچوں، سرپرستوں، or تعلیمی اور طبی معاونت.",
+        "Hallucination": "The score is 1.00 because there are no factual alignments and the actual output fully contradicts the context: instead of providing information about 'Learn more about Orphan Family Support,' it gives an apology and says the question cannot be answered and the user will be connected to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q60",
+      "question": "کمیونٹی سروسز کیوں ضروری ہیں؟",
+      "expected_answer": "غربت اور بنیادی سہولیات کی کمی کے باعث یہ نہایت ضروری ہیں۔",
+      "actual_answer": "That is an irrelevant question.",
+      "rag_time_seconds": 4.58,
+      "rag_rejected": true,
+      "rejection_message": "That is an irrelevant question.",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "irrelevant"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q61",
+      "question": "الخدمت کون سی کمیونٹی خدمات فراہم کرتی ہے؟",
+      "expected_answer": "فوڈ سینٹرز، وہیل چیئرز اور جنازہ بس سروس۔",
+      "actual_answer": "الخدمت فاؤنڈیشن پاکستان مختلف کمیونٹی خدمات فراہم کرتی ہے، جن میں شامل ہیں:\n\n1. **یتیموں کی دیکھ بھال پروگرام**: یہ پروگرام یتیم بچوں کی حمایت کرتا ہے، جس میں 30,000 سے زائد یتیم بچوں کی ماہانہ مدد شامل ہے۔\n\n2. **WASH**: پانی، صفائی اور حفظان صحت کے منصوبے۔\n\n3. **کمیونٹی خدمات**: مختلف سماجی بہبود کے اقدامات جو کمیونٹی کی بہتری کے لیے کام کرتے ہیں۔\n\n4. **آفات کے انتظام**: زلزلے، سیلاب، بم دھماکوں اور صحت کی ہنگامی صورت حال میں فوری امداد فراہم کرنا۔\n\n5. **صحت کی خدمات**: ہسپتالوں، کلینکوں اور موبائل صحت یونٹس کے ذریعے بنیادی صحت، ایمرجنسی کیئر اور احتیاطی خدمات فراہم کرنا۔\n\n6. **تعلیم**: عارضی اسکولوں کا قیام، اسکالرشپس اور باقاعدہ تعلیمی اقدامات۔\n\nیہ خدمات الخدمت فاؤنڈیشن کی انسانی ہمدردی کی کوششوں کا حصہ ہیں جو ہر روز پاکستان میں سماجی بہبود کے لیے کام کرتی ہیں۔",
+      "rag_time_seconds": 14.37,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response fully addresses the question with no irrelevant statements, making it highly relevant and on point.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the full answer: the first node only mentions \"اقلیتی کمیونٹی کے تہواروں کے موقع پر ہرسال مستحق اور نادارخاندانوں کوفوڈ پیکج سمیت دیگرتحائف فراہم کرتے ہیں\", the second node is a duplicate mentioning \"فوڈ پیکج سمیت دیگرتحائف فراہم کرتے ہیں\", the third node again refers to \"فوڈ پیکج سمیت دیگرتحائف\", the fourth node mentions \"30ہزار 840 متاثرہ خاندانوں کو فوڈ پیکج\", and the fifth node again mentions \"فوڈ پیکج\" plus other aid. These nodes in retrieval contexts should have been ranked lower because they do not mention the needed services \"وہیل چیئرز\" or \"جنازہ بس سروس\" at all, so there are no relevant nodes ranked above irrelevant ones.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 4 and 5 mention only \"فوڈ پیکج\"-related content, while no node mentions \"وہیل چیئرز\" or \"جنازہ بس سروس\", so the full sentence cannot be attributed to the retrieved context.",
+        "Hallucination": "The score is 0.00 because the actual output is consistent with the provided contexts at a broad factual level, and there are no contradictions. It is less specific than the contexts, but the missing details do not make it inaccurate."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8880024790763855,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q62",
+      "question": "مواخات پروگرام کا مقصد کیا ہے؟",
+      "expected_answer": "غریب افراد کو بلاسود قرض فراہم کرنا۔",
+      "actual_answer": "معاف کیجیے، میں آپ کے سوال کا جواب نہیں دے سکا۔ میں آپ کو ایک انسانی ایجنٹ سے منسلک کر رہا ہوں۔",
+      "rag_time_seconds": 8.68,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not address the user’s question about the purpose of the مواخات program at all; it only included an apology, said it could not answer, and mentioned connecting to a human agent, all of which are irrelevant to the asked topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question. The first node in retrieval contexts talks about \"آغوش قائم کرنے\" and helping orphan children with \"تعلیم،صحت،رہائش سمیت دیگرضروریات زندگی,\" the second node in retrieval contexts again discusses \"آغوش\" and \"تعلیم،صحت،رہائش,\" and the third node in retrieval contexts repeats that children are supported through \"تعلیم،صحت،رہائش\"—all of which should be ranked below any node about \"مواخات پروگرام\" and \"بلاسود قرض.\" Likewise, the fourth node in retrieval contexts focuses on \"بین المذاہب یکجہتی\" and \"فوڈ پیکج سمیت دیگرتحائف,\" and the fifth node in retrieval contexts again mentions \"دیوالی اور کرسمس\" and \"تحائف تقسیم,\" so these irrelevant nodes also should be ranked lower. The score remains at this level because no relevant node appears above any irrelevant node at all.",
+        "ContextualRecall": "The score is 0.00 because sentence 1, 'غریب افراد کو بلاسود قرض فراہم کرنا،' is not supported by any node(s) in retrieval context: nodes 1–3 describe services like تعلیم، صحت، and رہائش for orphan/fun children, while nodes 4–5 mention food packages and gifts for needy families, but none mention interest-free loans to poor people.",
+        "Hallucination": "The score is 0.00 because the actual output is only a refusal/apology and does not introduce any factual claims that contradict the provided contexts."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q63",
+      "question": "مواخات پروگرام سے کن کاروباروں کو فائدہ ہوا؟",
+      "expected_answer": "درزی، جنرل اسٹور، رکشہ، فوڈ اسٹال، بیکری اور آن لائن کاروبار۔",
+      "actual_answer": "مواخات پروگرام کے تحت مختلف کاروباروں کو فائدہ ہوا، جن میں شامل ہیں:\n\n1. کھانا پکانے کے کاروبار\n2. کڑھائی کے کاروبار\n3. سلائی کے کاروبار\n4. بیوٹی پارلر\n5. جنرل اسٹورز\n6. تین پہیہ گاڑیوں کے کاروبار\n7. اسٹیشنری کی دکانیں\n\nیہ پروگرام افراد کو باعزت کاروبار شروع کرنے کے وسائل فراہم کرتا ہے، تاکہ وہ پائیدار روزگار حاصل کر سکیں اور معاشرے میں مثبت کردار ادا کر سکیں۔",
+      "rag_time_seconds": 14.64,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response stayed fully focused on the input about which businesses benefited from the مواخات پروگرام, with no irrelevant statements. It directly addressed the topic clearly and appropriately.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question. The 1st node in retrieval contexts talks about 'اقلیتی کمیونٹی کے تہواروں کے موقع پر ہرسال مستحق اور نادارخاندانوں کوفوڈ پیکج سمیت دیگرتحائف فراہم کرتے ہیں', the 2nd node in retrieval contexts is about 'بین المذاہب یکجہتی' and 'دیوالی اور کرسمس کے موقع پر بھی تحائف تقسیم', the 3rd node in retrieval contexts again focuses on 'الخدمت فاؤنڈیشن' and 'تحائف تقسیم', the 4th node in retrieval contexts discusses '1144میڈیکل کیمپ' and 'ہیلتھ کی سہولیات فراہم کی گئیں', and the 5th node in retrieval contexts mentions 'سیف مدر سیف چائلڈ پروگرام'. Since none of these nodes in retrieval contexts mention the مواخات پروگرام or the businesses that benefited from it, there are no relevant nodes ranked above irrelevant nodes, which is why the score is not higher and remains at 0.00.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 mentions businesses like درزی، جنرل اسٹور، رکشہ، فوڈ اسٹال، بیکری اور آن لائن کاروبار, but nodes in retrieval context 1-5 do not mention any of these and instead discuss food packages, gifts, and medical facilities, so the expected output is not supported by the retrieved context.",
+        "Hallucination": "The score is 1.00 because the actual output is completely unsupported by the context: it talks about the مواخات program and business support, while the context is about interfaith harmony, minority welfare, healthcare services, donor efforts, and flood relief under Alkhidmat. There are no factual alignments and multiple direct subject-matter contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.864709448814392,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q64",
+      "question": "آفات کے دوران الخدمت کیا کردار ادا کرتی ہے؟",
+      "expected_answer": "ریلیف اور ریسکیو آپریشنز میں سرگرم کردار ادا کرتی ہے۔",
+      "actual_answer": "آفات کے دوران، الخدمت فاؤنڈیشن پاکستان میں ہنگامی امداد اور بحالی کے کاموں میں اہم کردار ادا کرتی ہے۔ یہ اکثر زلزلے، سیلاب، بم دھماکوں، اور صحت کی ہنگامی صورت حال میں پہلے جواب دہندگان میں شامل ہوتی ہے۔ الخدمت کی جانب سے فوری طور پر امدادی کارروائیاں شروع کی جاتی ہیں، جن میں وسائل کی تیز رفتار فراہمی، تربیت یافتہ رضاکاروں کی بڑی تعداد، اور مکمل طور پر لیس ڈیزاسٹر ریسپونڈر یونٹ شامل ہوتا ہے۔ یہ یونٹ مختلف ہنگامی حالات کا مؤثر طریقے سے انتظام کرنے کے لیے تیار کیا گیا ہے، تاکہ وقت پر اور مؤثر امداد فراہم کی جا سکے۔",
+      "rag_time_seconds": 17.39,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question, with no irrelevant statements included. Great job staying focused and directly addressing the input.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job staying faithful to the source.",
+        "ContextualPrecision": "The score is 1.00 because all top-ranked nodes in retrieval contexts are relevant to the input, and the 1st node directly states \"امدادی سرگرمیاں جاری ہیں\" and \"الخدمت کے رضاکاروں نے پانی میں پھنسے شہریوں کو ریسکیو کیا,\" while the 2nd, 3rd, 4th, and 5th nodes in retrieval contexts consistently reinforce that الخدمت plays an active relief and rescue role during disasters. It is not higher only because 1.00 is already the maximum possible score, and there are no irrelevant nodes ranked above relevant ones.",
+        "ContextualRecall": "The score is 1.00 because sentence 1 is fully supported by nodes in retrieval context: nodes 1 and 2 directly mention الخدمت کی ریلیف سرگرمیاں and شہریوں کو ریسکیو کیا, while nodes 3, 4, and 5 further confirm its active role in relief and rescue operations—great contextual coverage.",
+        "Hallucination": "The score is 0.00 because the actual output is fully supported by the contexts: it consistently matches Alkhidmat Foundation’s documented role in humanitarian aid, disaster management, emergency relief, and response to floods, earthquakes, and health crises, with no contradictions identified."
+      },
+      "overall_pass": true,
+      "metadata": {
+        "combined_confidence": 0.8969476819038391,
+        "domain": "healthcare",
         "selfrag_support": "fully_supported",
         "evidence_coverage": 1.0,
         "retrieval_retried": false

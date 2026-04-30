@@ -1,14 +1,14 @@
 {
   "language": "English",
   "language_key": "english",
-  "run_at": "2026-03-02T07:07:41.565907",
+  "run_at": "2026-04-30T18:42:23.960058",
   "results": [
     {
       "id": "Q01",
       "question": "How can I donate to Alkhidmat Foundation for Gaza?",
       "expected_answer": "You can donate via Meezan Bank account 02140100861151, by calling the cash pick-up number 0800-44448, in-person at Collection Centers, or online using debit/credit cards through their website alkhidmat.org/donate.",
-      "actual_answer": "- Donate via EasyPaisa: open the app → scroll down and tap “Donations” → select “Alkhidmat Foundation Pakistan” → enter amount → donate  \n- Donate via JazzCash: open the app → scroll down and tap “Donations” → select “Alkhidmat Foundation Pakistan” → enter amount → donate  \n- Donate online by debit/credit card at alkhidmat.org/donate  \n- Donate via bank transfer/direct deposit (Bank of Punjab – Taqwa Islamic Banking):  \n  - Account Title: Alkhidmat Foundation Pakistan  \n  - Account No. (PKR): 5310067845100016  \n  - IBAN: PK19BPUN5310067845100016  \n  - Branch: Allama Iqbal Town, Lahore  \n  - SWIFT: BPUNPKKA  \n- For a donation receipt, share your transaction slip on WhatsApp: +923000776016",
-      "rag_time_seconds": 428.46,
+      "actual_answer": "- You can donate to Alkhidmat Foundation for Gaza through the following methods:\n  - **JazzCash App**: Open the app, scroll down, tap \"Donations\", select \"Alkhidmat Foundation Pakistan\", enter the amount, and donate.\n  - **EasyPaisa App**: Open the app, scroll down, tap \"Donations\", select \"Alkhidmat Foundation Pakistan\", enter the amount, and donate.\n  - **Online Banking**: Use your debit or credit card from anywhere in the world on the Alkhidmat website at alkhidmat.org/donate.\n  - **Direct Deposit**: You can make a direct deposit to the Alkhidmat Foundation Pakistan account at Bank of Punjab:\n    - Account Title: Alkhidmat Foundation Pakistan\n    - Account no. (PKR): 5310067845100016\n    - IBAN: PK19BPUN5310067845100016\n  - **Cheques & Bank Drafts**: Make out to “Alkhidmat Foundation Pakistan” and call 0800 44 44 8 or 0304 111 4 222 for collection.",
+      "rag_time_seconds": 46.28,
       "contexts_retrieved": 5,
       "rag_rejected": false,
       "scores": {
@@ -26,15 +26,15 @@
         "Hallucination": true
       },
       "reasons": {
-        "AnswerRelevancy": "The score is 1.00 because the answer was fully relevant and addressed the question directly without any irrelevant information. Great job staying focused and helpful!",
-        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output aligns perfectly with the retrieval context. Great job staying accurate!",
-        "ContextualPrecision": "The score is 0.00 because all the top-ranked nodes in the retrieval contexts are irrelevant—they only discuss Alkhidmat Foundation's work or recommend supporting them, but none provide specific donation methods or instructions. Since no relevant nodes are present, the score cannot be higher.",
-        "ContextualRecall": "The score is 0.00 because none of the nodes in the retrieval context provide the specific donation methods listed in sentence 1 of the expected output; the context only refers to general support or donations to Alkhidmat Foundation without mentioning the detailed channels.",
-        "Hallucination": "The score is 0.00 because all factual alignments show that the actual output is fully consistent with the context, with no contradictions or unsupported information present."
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question about donating to Alkhidmat Foundation for Gaza, with no irrelevant statements noted. It directly stays on topic, which supports the highest score.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—nice job.",
+        "ContextualPrecision": "The score is 0.00 because every node in retrieval contexts ranked from the first node to the fifth node is irrelevant to the input. The first node in retrieval contexts only says you can contribute by 'donating to the Alkhidmat Foundation' for the 'Rebuild Gaza' campaign, but gives no specific donation methods like 'Meezan Bank account 02140100861151', '0800-44448', collection centers, or the website. The second node in retrieval contexts is also irrelevant and is a duplicate that only generally states 'You can support the campaign by donating to the Alkhidmat Foundation' without concrete donation channels. The third, fourth, and fifth nodes in retrieval contexts likewise only recommend Alkhidmat or describe Gaza work, such as 'Alkhidmat Foundation is a commendable choice for donations to Palestine' and 'working closely with local partners,' but provide no actual donation instructions. Since no relevant nodes are ranked above irrelevant nodes, the precision is at the lowest possible score.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1–5 do not provide the specific donation channels listed, including the Meezan Bank account 02140100861151, cash pick-up number 0800-44448, Collection Centers, or online card payments at alkhidmat.org/donate; at most, nodes 1 and 2 only generally mention donating to Alkhidmat Foundation.",
+        "Hallucination": "The score is 0.00 because the actual output fully aligns with the contexts: it consistently recommends donating to the Alkhidmat Foundation for Gaza/Palestine and adds donation methods that do not contradict any provided information, with no contradictions present."
       },
       "overall_pass": false,
       "metadata": {
-        "combined_confidence": 0.9407196180470742,
+        "combined_confidence": 0.9040285110473633,
         "domain": "donation",
         "selfrag_support": "fully_supported",
         "evidence_coverage": 1.0,
@@ -45,31 +45,52 @@
       "id": "Q02",
       "question": "Is Alkhidmat Foundation tax-exempt in Pakistan?",
       "expected_answer": "Yes, Alkhidmat Foundation Pakistan is tax-exempt under FBR Act 2(36)c.",
-      "actual_answer": "I cannot provide a reliable answer as some claims cannot be verified from the available information.",
-      "rag_time_seconds": 142.76,
-      "rag_rejected": true,
-      "rejection_message": "I cannot provide a reliable answer as some claims cannot be verified from the available information.",
-      "scores": {},
-      "passed": {},
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 6.17,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer whether Alkhidmat Foundation is tax-exempt in Pakistan and instead focused on irrelevant procedural content. Since it failed to address the core question at all, the score cannot be higher.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and aligned.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts were irrelevant to the question. The first node in retrieval contexts only discusses 'Disaster Management', 'Health Services', 'Education', and 'Orphan Care Program' and 'does not mention tax status, 'tax-exempt', or 'FBR Act 2(36)c'.' The second node in retrieval contexts is again welfare-focused with 'Disaster Management - Rescue, Relief & Rehabilitation', 'Health Services', and '30,000 orphaned children', with 'no reference to being tax-exempt or any FBR act.' The third node in retrieval contexts 'only describes programs like 'Health Services', 'Education', and 'Orphan Care Program'' and 'provides no evidence' about tax exemption. The fourth and fifth nodes in retrieval contexts say Alkhidmat is a 'non-profit, non-political and autonomous humanitarian organization', but still 'does not state that it is 'tax-exempt' or cite 'FBR Act 2(36)c'.' Since no relevant nodes appear above irrelevant ones—or at all—the score cannot be higher, and it is 0.00 at its current value.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be supported by any node(s) in retrieval context: nodes 1-5 only describe Alkhidmat Foundation Pakistan as a non-profit humanitarian organization and list its services, but do not mention tax-exempt status, FBR, or Act 2(36)c.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims that conflict with the provided context; it only states that the question could not be answered and would be routed to a human agent."
+      },
       "overall_pass": false,
       "metadata": {
-        "combined_confidence": 0.9364627475844763,
-        "domain": "healthcare"
-      },
-      "note": "Self-RAG safety rejection. Not scored."
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
     },
     {
       "id": "Q03",
       "question": "Where is the head office of Alkhidmat Foundation located?",
       "expected_answer": "The head office of Alkhidmat Foundation is located at 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan.",
-      "actual_answer": "Alkhidmat Foundation Head Office is located at 3km Khayaban-e-Jinnah, Lahore, Pakistan.",
-      "rag_time_seconds": 184.91,
+      "actual_answer": "Alkhidmat Foundation Head Office is located at 3km Khayaban-e-Jinnah, Lahore Pakistan.",
+      "rag_time_seconds": 9.15,
       "contexts_retrieved": 5,
       "rag_rejected": false,
       "scores": {
         "AnswerRelevancy": 1.0,
         "Faithfulness": 1.0,
-        "ContextualPrecision": 0.8667,
+        "ContextualPrecision": 1.0,
         "ContextualRecall": 1.0,
         "Hallucination": 0.0
       },
@@ -81,15 +102,15 @@
         "Hallucination": true
       },
       "reasons": {
-        "AnswerRelevancy": "The score is 1.00 because the answer is fully relevant and directly addresses the question without any irrelevant information. Great job staying focused!",
-        "Faithfulness": "The score is 1.00 because there are no contradictions—everything in the actual output aligns perfectly with the retrieval context. Great job!",
-        "ContextualPrecision": "The score is 0.87 because the first two nodes in the retrieval contexts directly provide the head office location, and the fifth node confirms the city and province, all ranked above the irrelevant nodes. However, the third and fourth nodes, which only list questions like 'Where is Alkhidmat Central Office (Head Office) located?' without providing the address, appear before the fifth relevant node. These irrelevant nodes should be ranked lower than all relevant nodes to achieve a perfect score.",
-        "ContextualRecall": "The score is 1.00 because every detail in the expected output is fully supported by the information in the relevant nodes in the retrieval context. Great job!",
-        "Hallucination": "The score is 0.00 because all factual alignments indicate that the actual output is fully consistent with the context, and there are no contradictions or unsupported details."
+        "AnswerRelevancy": "The score is 1.00 because the response directly answers the question about the head office location with no irrelevant information. It is fully relevant and on point.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully faithful to the retrieval context—nice work.",
+        "ContextualPrecision": "The score is 1.00 because every node in the retrieval contexts is relevant and the highest-ranked nodes are especially precise: the first node in retrieval contexts directly gives 'Alkhidmat Foundation Head Office, 3km Khayaban-e-Jinnah, Lahore Pakistan,' and the second and third nodes in retrieval contexts reinforce the same exact address. The fourth and fifth nodes in retrieval contexts are also relevant because they confirm 'Headquarters Lahore, Punjab' and 'Primary Lahore, Punjab 54000, PK'. It is not higher only in the sense that there is no room above a perfect score—there are no irrelevant nodes ranked above relevant ones, so the ranking is ideal.",
+        "ContextualRecall": "The score is 1.00 because sentence 1 is fully supported by nodes in retrieval context: nodes 1, 2, and 3 provide 'Alkhidmat Foundation Head Office, 3km Khayaban-e-Jinnah, Lahore, Pakistan,' and nodes 4 and 5 support 'Lahore, Punjab,' so the full office location is completely covered. Great match.",
+        "Hallucination": "The score is 0.00 because the actual output fully aligns with the provided contexts about the Alkhidmat Foundation Head Office being in Lahore, including the specific address at 3km Khayaban-e-Jinnah, Lahore Pakistan, and there are no contradictions."
       },
       "overall_pass": true,
       "metadata": {
-        "combined_confidence": 0.9396393723311901,
+        "combined_confidence": 0.8883463621139527,
         "domain": "general",
         "selfrag_support": "fully_supported",
         "evidence_coverage": 1.0,
@@ -100,16 +121,54 @@
       "id": "Q04",
       "question": "How can I contact Alkhidmat Foundation for more information?",
       "expected_answer": "You can contact them by phone at +92 42 3802 0222 or by email at info@alkhidmat.org.",
-      "actual_answer": "- Phone: +92 42 3802 0222  \n- Email: info@alkhidmat.org  \n- Address: Alkhidmat Foundation Head Office, 3km Khayaban-e-Jinnah, Lahore, Pakistan  \n- For privacy/data protection or data retention queries:  \n  - Phone: 0800 44448  \n  - Email: digital@alkhidmat.org  \n  - Post: Alkhidmat Foundation Headoffice, 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan",
-      "rag_time_seconds": 320.73,
+      "actual_answer": "- Call: 0800 44448\n- Email: info@ahf.com.pk\n- Visit: Alkhidmat Complex, 3 Km Khayaban-e-Jinnah, Lahore, Pakistan",
+      "rag_time_seconds": 10.14,
       "contexts_retrieved": 5,
       "rag_rejected": false,
       "scores": {
         "AnswerRelevancy": 1.0,
         "Faithfulness": 1.0,
-        "ContextualPrecision": 0.4167,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.8
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response is fully relevant to the question about contacting Alkhidmat Foundation, with no irrelevant statements included. Great job keeping it focused and directly helpful.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 0.00 because every node in the retrieval contexts is irrelevant, including the 1st node with \"contact details for a different entity, 'ALKHIDMAT HEALTH FOUNDATION CONTACT'\", the 2nd node about \"complaints and privacy concerns\" with \"Telephone: 0800 44448\" and \"Email: digital@alkhidmat.org\", the 3rd node which is a duplicate of that privacy contact, and the 4th and 5th nodes which only list regional offices instead of the expected main contact. It is not higher because no relevant node appears above these irrelevant nodes—or anywhere in the ranked retrieval contexts at all.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1-5 do not contain the exact contact details '+92 42 3802 0222' or 'info@alkhidmat.org', instead listing different phone numbers and email addresses such as node 1 ('0800 44448', 'info@ahf.com.pk'), nodes 2-3 ('0800 44448', 'digital@alkhidmat.org'), and nodes 4-5 ('+92 42 35454320-22', 'central.punjab@alkhidmat.org').",
+        "Hallucination": "The score is 0.80 because although the actual output matches one context on the phone number, email, and Lahore address, it conflicts with multiple other contexts that give a different email and mailing address or different regional contact details, so most evidence indicates inconsistency."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8766494512557983,
+        "domain": "general",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q05",
+      "question": "How can I get a donation receipt from Alkhidmat Foundation?",
+      "expected_answer": "You can get a donation receipt by sharing your transaction slip via WhatsApp at +923000776016.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 71.33,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.5,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
         "ContextualRecall": 1.0,
-        "Hallucination": 0.2
+        "Hallucination": 0.0
       },
       "passed": {
         "AnswerRelevancy": true,
@@ -119,55 +178,17 @@
         "Hallucination": true
       },
       "reasons": {
-        "AnswerRelevancy": "Great job! The answer is fully relevant and directly addresses the question without any irrelevant information.",
-        "Faithfulness": "The score is 1.00 because there are no contradictions—everything in the actual output aligns perfectly with the retrieval context. Great job staying faithful to the source!",
-        "ContextualPrecision": "The score is 0.42 because the first and second nodes in the retrieval contexts are irrelevant—they provide contact information for the Data Protection Lead and Team, not the general contact details needed ('info@alkhidmat.org', '+92 42 3802 0222'), as stated in their explanations. These irrelevant nodes are ranked higher than the relevant nodes, which directly provide the correct general contact information and appear at ranks 3 and 4. This lowers the score. However, the relevant nodes are still present and not buried at the very bottom, which is why the score is not even lower.",
-        "ContextualRecall": "The score is 1.00 because every detail in the expected output is fully supported by the 3rd and 4th nodes in the retrieval context, with exact matches for both the phone number and email. Great job!",
-        "Hallucination": "The score is 0.20 because the actual output accurately reflects the head office contact details as in the context, but omits the regional office contact details that are present in the context, resulting in a minor factual omission."
+        "AnswerRelevancy": "The score is 0.50 because the response is only partially relevant and does not actually explain how to obtain a donation receipt from Alkhidmat Foundation. Since it misses the key information the user asked for, the score cannot be higher, but it still earns a mid-level score because it appears at least somewhat related to the topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 1.00 because the first, second, and third nodes in retrieval contexts all provide the exact needed instruction: 'To get donation receipt please share your transaction slip to our following WhatsApp number: +923000776016.' It is at this score because all relevant nodes are ranked before the irrelevant ones. The fourth node in retrieval contexts is correctly lower since it only discusses 'JazzCash App', 'EasyPaisa App', and bank account details and 'does not mention how to get a donation receipt or the WhatsApp instruction,' and the fifth node in retrieval contexts is also correctly lower because it focuses on 'cheques or bank drafts' and 'does not mention donation receipts, transaction slip, or the WhatsApp number +923000776016.' Great ranking overall.",
+        "ContextualRecall": "The score is 1.00 because sentence 1 is fully supported by nodes in retrieval context 1, 2, and 3, which clearly state that a donation receipt can be obtained by sharing the transaction slip via WhatsApp at +923000776016. Great alignment overall.",
+        "Hallucination": "The score is 0.00 because the actual output is only a fallback/routing response and does not introduce any factual claims that contradict the provided contexts."
       },
       "overall_pass": true,
       "metadata": {
-        "combined_confidence": 0.9339167002222082,
-        "domain": "general",
-        "selfrag_support": "uncertain",
-        "evidence_coverage": 1.0,
-        "retrieval_retried": false
-      }
-    },
-    {
-      "id": "Q05",
-      "question": "How can I get a donation receipt from Alkhidmat Foundation?",
-      "expected_answer": "You can get a donation receipt by sharing your transaction slip via WhatsApp at +923000776016.",
-      "actual_answer": "- Share your transaction slip on WhatsApp at +923000776016 to get your donation receipt.",
-      "rag_time_seconds": 163.1,
-      "contexts_retrieved": 5,
-      "rag_rejected": false,
-      "scores": {
-        "AnswerRelevancy": 1.0,
-        "Faithfulness": null,
-        "ContextualPrecision": 1.0,
-        "ContextualRecall": 1.0,
-        "Hallucination": 0.0
-      },
-      "passed": {
-        "AnswerRelevancy": true,
-        "Faithfulness": false,
-        "ContextualPrecision": true,
-        "ContextualRecall": true,
-        "Hallucination": true
-      },
-      "reasons": {
-        "AnswerRelevancy": "The score is 1.00 because the answer was fully relevant and addressed the question directly without any irrelevant information. Great job!",
-        "Faithfulness": "Error: RetryError[<Future at 0x14631850d00 state=finished raised TimeoutError>]",
-        "ContextualPrecision": "The score is 1.00 because the relevant nodes are ranked at the top and provide direct answers, such as 'To get donation receipt please share your transaction slip to our following WhatsApp number: +923000776016'. Irrelevant nodes, like the third node which only describes donation methods and does not mention receipts, are ranked lower, ensuring high contextual precision.",
-        "ContextualRecall": "The score is 1.00 because every part of the expected output is fully supported by the information in the 1st and 2nd nodes in the retrieval context. Great job!",
-        "Hallucination": "The score is 0.00 because all factual alignments confirm that the actual output is fully supported by the provided contexts, with no contradictions present."
-      },
-      "overall_pass": true,
-      "metadata": {
-        "combined_confidence": 0.9359016667832976,
+        "combined_confidence": 0.0,
         "domain": "donation",
-        "selfrag_support": "fully_supported",
+        "selfrag_support": "no_support",
         "evidence_coverage": 1.0,
         "retrieval_retried": false
       }
@@ -176,8 +197,253 @@
       "id": "Q06",
       "question": "What online donation methods are available?",
       "expected_answer": "You can donate online via debit/credit card on the website, online banking, bank transfer, JazzCash, EasyPaisa, or home collection.",
-      "actual_answer": "- Debit/Credit Card (via alkhidmat.org/donate)  \n- JazzCash (through the JazzCash app “Donations” section)  \n- EasyPaisa (through the EasyPaisa app “Donations” section)  \n- Online banking / Bank transfer (including direct deposit)",
-      "rag_time_seconds": 165.39,
+      "actual_answer": "- Pay by Debit/Credit Card through the website\n- JazzCash App\n- EasyPaisa App\n- Online Banking\n- Bank Transfer",
+      "rag_time_seconds": 11.24,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 0.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": false,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question about available online donation methods, with no irrelevant statements detracting from its focus. Nice job keeping it directly on topic.",
+        "Faithfulness": "The score is 0.00 because the actual output gives unsupported payment methods, mentioning Online Banking and specifying Debit/Credit Card, JazzCash App, and EasyPaisa App, while the context only lists Card (Visa/MasterCard), Easypaisa, JazzCash, and Bank Transfer.",
+        "ContextualPrecision": "The score is 1.00 because the most relevant nodes in retrieval contexts are ranked first: the first node clearly says to \"Use the online donation page\" and lists \"Card (Visa/MasterCard), Easypaisa, JazzCash, and Bank Transfer,\" the second node reinforces the same methods, and the third node still supports online options with \"via their official website or bank transfer.\" It is at this top score because the irrelevant nodes appear lower, with the fourth and fifth nodes only saying \"Donation Summary\" and \"Click here to donate\" without method details.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not fully supported by the nodes in retrieval context: nodes 1/2 mention online donation and methods like card, EasyPaisa, JazzCash, and bank transfer, and node 3 mentions the official website or bank transfer, but none of the nodes in retrieval context explicitly mention online banking, debit/credit wording, or home collection.",
+        "Hallucination": "The score is 0.00 because the actual output fully aligns with the provided context: it correctly lists accepted payment methods consistent with the FAQ and does not introduce any contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9040285110473633,
+        "domain": "donation",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q07",
+      "question": "Can I donate internationally to Alkhidmat Foundation?",
+      "expected_answer": "Yes, you can donate from anywhere in the world using debit/credit cards through the Alkhidmat Foundation website.",
+      "actual_answer": "I don't know",
+      "rag_time_seconds": 11.48,
+      "rag_rejected": true,
+      "rejection_message": "I don't know",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8657305121421814,
+        "domain": "donation"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q08",
+      "question": "What emergency appeals does Alkhidmat Foundation currently have?",
+      "expected_answer": "Alkhidmat Foundation currently runs emergency appeals including Bano Qabil and the Palestine Emergency Appeal.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 7.4,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer what emergency appeals Alkhidmat Foundation currently has and instead gave irrelevant support-oriented content. Since it failed to provide any relevant information to the question, it cannot score higher.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job staying faithful to the source.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant, so there are no relevant nodes ranked above irrelevant ones. The 1st node in retrieval contexts only mentions an \"immediate, comprehensive relief operation\" and a \"Disaster Responder unit\" without identifying the current emergency appeals. The 2nd node in retrieval contexts is another duplicate with the same issue. The 3rd node in retrieval contexts discusses broad programs like \"Disaster Management - Rescue, Relief & Rehabilitation\" but not the needed appeals, and the 4th and 5th nodes in retrieval contexts are similarly irrelevant since they mention general services and crises rather than the specific current appeals such as \"Bano Qabil\" or \"the Palestine Emergency Appeal.\"",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1-5 discuss flood relief, disaster response, and general welfare, but none mention Bano Qabil, the Palestine Emergency Appeal, or that these are current emergency appeals.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims that contradict the provided context; it only says the query is being routed to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q09",
+      "question": "What are the main focus areas of Alkhidmat Foundation?",
+      "expected_answer": "Alkhidmat Foundation focuses on humanitarian services including health, education, disaster relief, women philanthropy, and social welfare programs since 1990.",
+      "actual_answer": "Disaster Management, Health Services, Education, Orphan Care Program, WASH.",
+      "rag_time_seconds": 11.95,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.4
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response directly addresses the question about Alkhidmat Foundation’s main focus areas with no irrelevant statements. It is fully relevant and on point.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 1.00 because all top-ranked nodes in retrieval contexts are relevant, with the first node in retrieval contexts directly listing key focus areas like 'Disaster Management - Rescue, Relief & Rehabilitation', 'Health Services', 'Education', and 'everyday social welfare across Pakistan.' The second and third nodes in retrieval contexts reinforce the same relevant areas, while the fourth and fifth nodes in retrieval contexts add support for women-focused work through 'equip female students with IT skills', 'Educational Support and Scholarships', and 'women’s empowerment.' It is not higher only because 1.00 is already perfect—relevant nodes are consistently ranked first, which is great.",
+        "ContextualRecall": "The score is 0.00 because the sentence is not fully attributable to the nodes in retrieval context: while nodes 1/2/3 support Alkhidmat Foundation’s humanitarian focus in social welfare, disaster relief, health, and education, and nodes 4/5 mention women’s development programs, the context does not support the claim 'since 1990' and does not explicitly state 'women philanthropy' as phrased.",
+        "Hallucination": "The score is 0.40 because the actual output is substantially supported by multiple contexts listing Disaster Management, Health Services, Education, Orphan Care Program, and WASH, but it also conflicts with some contexts that instead discuss the Bano Qabil Program, scholarships for girls and women, and community advocacy."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8938537955284118,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q10",
+      "question": "How can I make a donation in-person?",
+      "expected_answer": "You can make an in-person donation at any of Alkhidmat Foundation's Collection Centers or directly at their head office in Lahore.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 12.12,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.5,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.50 because the response is at least somewhat related to donations, but it misses the key part of the question by not explaining how to make an in-person donation. Since it does not directly address the requested in-person process, the score cannot be higher.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 0.00 because every node in the retrieval contexts is irrelevant and none provide the needed in-person donation details. The 1st node in retrieval contexts only says \"Donation Summary\" and \"No service selected. Click here to donate,\" not how to donate in person. The 2nd node in retrieval contexts similarly lacks locations like \"Collection Centers\" or \"head office in Lahore.\" The 3rd, 4th, and 5th nodes in retrieval contexts are also generic donation prompts rather than information about physical donation options. The score is not higher because there are no relevant nodes ranked above irrelevant nodes, and it is at 0.00 because all ranked nodes are irrelevant.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1-5 do not mention making an in-person donation, Collection Centers, a head office, or Lahore, and only reference a donation summary and donating online.",
+        "Hallucination": "The score is 0.00 because the actual output does not introduce any factual claims that contradict the provided context; it only states that the system cannot answer and is routing to a human agent, which is unrelated but fully consistent with the donation-page content shown."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q11",
+      "question": "How can I donate to Alkhidmat Foundation for Palestine?",
+      "expected_answer": "For general donations, you can use Meezan Bank account 02140100861151 (IBAN: PK35MEZN0002140100861151). For Zakat, use Meezan Bank account 02140101095120 (IBAN: PK94MEZN0002140101095120). Both accounts are at Branch R1 Johar Town, Lahore, SWIFT code MEZNPKKA. You can also donate for Palestine through the same channels or via the Alkhidmat Foundation donation website.",
+      "actual_answer": "- You can donate to Palestine through Alkhidmat Foundation.\n- Use the JazzCash App: Go to your App, Scroll Down and Tap \"Donations\", Select \"Alkhidmat Foundation Pakistan\" from the list, Enter Amount and Donate.\n- Use the EasyPaisa App: Go to your App, Scroll Down and Tap \"Donations\", Select \"Alkhidmat Foundation Pakistan\" from the list, Enter Amount and Donate.\n- You can also donate via debit or credit card on the website: alkhidmat.org/donate.",
+      "rag_time_seconds": 11.25,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.25,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question about donating to Alkhidmat Foundation for Palestine, with no irrelevant statements lowering its relevancy—great job staying focused and on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 1.00 because all top-ranked nodes in retrieval contexts are relevant to the input, with the first node already stating 'You can support the campaign by donating to the Alkhidmat Foundation' for Palestine/Gaza, and the second through fifth nodes consistently reinforcing that 'Alkhidmat Foundation is a commendable choice for donations to Palestine.' It is not higher only because 1.00 is the maximum, and the ranking is strong since no irrelevant nodes appear above relevant ones.",
+        "ContextualRecall": "The score is 0.25 because only sentence 4 is partially supported by nodes in retrieval context 1-5, which mention donating to Alkhidmat Foundation for Palestine, though not explicitly its donation website. Sentences 1 and 2 are not supported since nodes 1-5 provide no Meezan Bank account numbers or IBANs, and sentence 3 is also unsupported because nodes 1-5 do not mention Branch R1 Johar Town, Lahore or SWIFT code MEZNPKKA.",
+        "Hallucination": "The score is 0.00 because the actual output fully aligns with the contexts: both say donations to Palestine/Gaza can be made through the Alkhidmat Foundation, and the extra payment methods are additional compatible details, not contradictions."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9040285110473633,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q12",
+      "question": "How can I donate to Alkhidmat Foundation from home?",
+      "expected_answer": "You can donate through cheques or bank drafts made out in favour of 'Alkhidmat Foundation Pakistan'. To have them picked up from your home, call 0800 44 44 8 or 0304 111 4 222 and a representative will collect them.",
+      "actual_answer": "- You can donate through JazzCash App:\n  - Open the App\n  - Scroll Down and Tap \"Donations\"\n  - Select \"Alkhidmat Foundation Pakistan\"\n  - Enter Amount and Donate\n\n- You can donate through EasyPaisa App:\n\n- You can donate online using a debit or credit card from anywhere in the world via the website: alkhidmat.org/donate\n\n- You can also donate through bank transfer, online banking, or home collection by calling 0800 44 44 8 or 0304 111 4 222 for cheque or bank draft collection.",
+      "rag_time_seconds": 16.59,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 0.75,
+        "ContextualPrecision": 0.2,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.2
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the answer appears fully relevant to the question about donating to Alkhidmat Foundation from home, with no irrelevant statements noted—great job staying focused and directly addressing the user's request.",
+        "Faithfulness": "The score is 0.75 because the actual output is mostly faithful, but it incorrectly gives the donation contact number as 0304 111 4 222, while the context says the correct number is 0304 111 4 22 for collection by an Alkhidmat representative.",
+        "ContextualPrecision": "The score is 0.20 because the only clearly relevant node in the retrieval contexts appears at the fifth node, while the first four nodes are ranked higher despite being irrelevant. Those higher-ranked nodes only mention broader options like \"Online Banking\", \"Bank Transfer\", \"Home Collection\", \"Pay by Debit/Credit Card\", \"JazzCash App\", and \"EasyPaisa App\", but they do not give the needed from-home donation instruction about cheque or bank draft pickup and the call numbers. The score is not lower because the fifth node in the retrieval contexts does contain the key evidence: \"You can donate through cheques or bank drafts, simply call at 0800 44 44 8 or 0304 111 4 22 and Alkhidmat's representative will collect it.\"",
+        "ContextualRecall": "The score is 1.00 because sentence 1 is fully attributable to nodes in retrieval context: node 5 states donations can be made through cheques or bank drafts, node 4 identifies the payee as 'Alkhidmat Foundation Pakistan,' and node 5 also provides the home pickup process and contact numbers, so the expected output is completely covered.",
+        "Hallucination": "The score is 0.20 because the actual output is largely consistent with the contexts on donation methods and JazzCash/card donation steps, but it contains a specific factual error in one phone number: it states 0304 111 4 222 instead of the context-supported 0304 111 4 22."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9040285110473633,
+        "domain": "donation",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q13",
+      "question": "Can I send my donation cheque by courier to Alkhidmat Foundation?",
+      "expected_answer": "Yes, you can send your cheque or bank draft by courier to Alkhidmat Complex, 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan.",
+      "actual_answer": "Yes, you can send your cheque by courier to Alkhidmat Complex, 3km Khayaban- e-Jinnah, Lahore, Punjab, Pakistan.",
+      "rag_time_seconds": 10.19,
       "contexts_retrieved": 5,
       "rag_rejected": false,
       "scores": {
@@ -195,15 +461,15 @@
         "Hallucination": true
       },
       "reasons": {
-        "AnswerRelevancy": "The score is 1.00 because the answer was fully relevant and addressed the question directly without any irrelevant information. Great job staying focused and concise!",
-        "Faithfulness": "The score is 1.00 because there are no contradictions—everything in the actual output aligns perfectly with the retrieval context. Great job!",
-        "ContextualPrecision": "The score is 0.70 because the first node in the retrieval contexts is highly relevant, directly listing the online donation methods, and is ranked first. However, irrelevant nodes that only say 'Click here to donate' or are duplicates without specifying online donation methods appear before the second relevant node, which is ranked fifth. These irrelevant nodes, such as the second node ('Click here to donate') and its duplicates (third and fourth nodes), should be ranked lower than the relevant fifth node that implies online donation via the website. The presence of these irrelevant nodes above a relevant one lowers the score from a perfect value.",
-        "ContextualRecall": "The score is 1.00 because all sentences in the expected output are fully supported by the node(s) in retrieval context. Great job!",
-        "Hallucination": "The score is 0.00 because all details in the actual output are fully supported by the context, with no contradictions or unsupported information present."
+        "AnswerRelevancy": "The score is 1.00 because the response is fully relevant to the question and does not include any irrelevant statements. It directly addresses whether a donation cheque can be sent by courier to Alkhidmat Foundation—great job staying on point.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.70 because the 1st node in retrieval contexts is highly relevant, stating, \"You can also send your cheque by courier to: Alkhidmat Complex, 3km Khayaban- e-Jinnah, Lahore, Punjab, Pakistan,\" which strongly supports the answer. However, it is not higher because the 2nd, 3rd, and 4th nodes in retrieval contexts are irrelevant and only discuss options like \"Pay by Debit/Credit Card\", \"JazzCash\", and \"EasyPaisa\" instead of couriering a cheque; these should have been ranked below the 5th node in retrieval contexts, which is also relevant and says, \"You can donate through cheques or bank drafts\" and \"You can also send your cheque by courier.\"",
+        "ContextualRecall": "The score is 1.00 because sentence 1 is fully supported by nodes in retrieval context 1 and 5, which explicitly state that cheques or bank drafts can be sent by courier to Alkhidmat Complex, 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan. Great match.",
+        "Hallucination": "The score is 0.00 because the actual output fully matches the provided context about sending a cheque by courier to Alkhidmat Complex in Lahore, and no contradictions are present."
       },
       "overall_pass": true,
       "metadata": {
-        "combined_confidence": 0.9033418310115475,
+        "combined_confidence": 0.8725960969924926,
         "domain": "donation",
         "selfrag_support": "fully_supported",
         "evidence_coverage": 1.0,
@@ -211,104 +477,514 @@
       }
     },
     {
-      "id": "Q07",
-      "question": "Can I donate internationally to Alkhidmat Foundation?",
-      "expected_answer": "Yes, you can donate from anywhere in the world using debit/credit cards through the Alkhidmat Foundation website.",
-      "actual_answer": "Yes. You can donate internationally using a debit or credit card through Alkhidmat’s website: alkhidmat.org/donate.",
-      "rag_time_seconds": 147.73,
-      "contexts_retrieved": 5,
-      "rag_rejected": false,
-      "scores": {
-        "AnswerRelevancy": 1.0,
-        "Faithfulness": null,
-        "ContextualPrecision": 0.8875,
-        "ContextualRecall": 1.0,
-        "Hallucination": 0.0
-      },
-      "passed": {
-        "AnswerRelevancy": true,
-        "Faithfulness": false,
-        "ContextualPrecision": true,
-        "ContextualRecall": true,
-        "Hallucination": true
-      },
-      "reasons": {
-        "AnswerRelevancy": "The score is 1.00 because the answer was fully relevant and addressed the question directly without any irrelevant information. Great job staying focused and concise!",
-        "Faithfulness": "Error: RetryError[<Future at 0x146328e4eb0 state=finished raised TimeoutError>]",
-        "ContextualPrecision": "The score is 0.89 because most of the top-ranked nodes are highly relevant, directly addressing international donations to Alkhidmat Foundation. However, the third node, ranked 3rd, is less relevant as it only discusses donation methods within Pakistan and does not mention international donations, so it should have been ranked lower than the other nodes that specifically confirm international donation options.",
-        "ContextualRecall": "The score is 1.00 because all parts of the expected output are fully supported by the 4th and 5th nodes in the retrieval context. Great job!",
-        "Hallucination": "The score is 0.00 because all statements in the actual output are fully supported by the context, with no contradictions or unsupported claims."
-      },
-      "overall_pass": true,
-      "metadata": {
-        "combined_confidence": 0.9116814743092035,
-        "domain": "donation",
-        "selfrag_support": "fully_supported",
-        "evidence_coverage": 1.0,
-        "retrieval_retried": false
-      }
-    },
-    {
-      "id": "Q08",
-      "question": "What emergency appeals does Alkhidmat Foundation currently have?",
-      "expected_answer": "Alkhidmat Foundation currently runs emergency appeals including Bano Qabil and the Palestine Emergency Appeal.",
-      "actual_answer": "I cannot provide a reliable answer based on the available information.",
-      "rag_time_seconds": 143.16,
+      "id": "Q14",
+      "question": "How can I make a general USD donation to Alkhidmat Foundation?",
+      "expected_answer": "For general USD donations, you can use Makramah Bank account 1994426252333135802 (IBAN: PK32SUMB9944293330135802) or Meezan Bank account 0100643642 (IBAN: PK40MEZN0002010100643642). Both banks are in Lahore, Pakistan with SWIFT codes SUMBPKKA and MEZNPKKA respectively.",
+      "actual_answer": "I don't know",
+      "rag_time_seconds": 11.79,
       "rag_rejected": true,
-      "rejection_message": "I cannot provide a reliable answer based on the available information.",
+      "rejection_message": "I don't know",
       "scores": {},
       "passed": {},
       "overall_pass": false,
       "metadata": {
-        "combined_confidence": 0.0,
-        "domain": "healthcare"
+        "combined_confidence": 0.9040285110473633,
+        "domain": "donation"
       },
       "note": "Self-RAG safety rejection. Not scored."
     },
     {
-      "id": "Q09",
-      "question": "What are the main focus areas of Alkhidmat Foundation?",
-      "expected_answer": "Alkhidmat Foundation focuses on humanitarian services including health, education, disaster relief, women philanthropy, and social welfare programs since 1990.",
-      "actual_answer": "Disaster management (rescue, relief and rehabilitation), health services, education, orphan care, WASH, the Alkhidmat Bano Qabil Program for female IT skills, and educational support and scholarships for girls and women.",
-      "rag_time_seconds": 185.48,
+      "id": "Q15",
+      "question": "How can I donate Zakat in USD for Orphan/Aghosh, Community Services, or Bano Qabil?",
+      "expected_answer": "For USD Zakat donations, use Meezan Bank account 0100643642 (IBAN: PK40MEZN0002010100643642). You can donate for Orphan/Aghosh, Community Services, or Bano Qabil through this account. SWIFT code: MEZNPKKA.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 10.31,
       "contexts_retrieved": 5,
       "rag_rejected": false,
       "scores": {
-        "AnswerRelevancy": 1.0,
+        "AnswerRelevancy": 0.5,
         "Faithfulness": 1.0,
-        "ContextualPrecision": 1.0,
-        "ContextualRecall": 1.0,
-        "Hallucination": 0.2
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.3333,
+        "Hallucination": 1.0
       },
       "passed": {
         "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": true,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.50 because the response appears only partially relevant and does not provide the specific information asked for about donating Zakat in USD for Orphan/Aghosh, Community Services, or Bano Qabil. It is not lower because it may still relate generally to the topic of donations or Zakat.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and accurate.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in the retrieval contexts are irrelevant to the requested USD Zakat transfer details. The first node in retrieval contexts mentions \"Community Services (Zakat)\", \"Bano Qabil (Zakat)\", and \"SWIFT code: MEZNPKKA\", but gives the wrong account details, and the second node in retrieval contexts repeats the same incorrect information instead of the expected USD Zakat account and IBAN. The third, fourth, and fifth nodes in retrieval contexts are even less useful, since they only provide general material like \"Giving your Zakat to Alkhidmat ensures that your contribution reaches those who need it most\", \"Who is required to pay Zakat?\", or orphan support information without the needed banking details. It is not higher because there are no relevant nodes ranked above irrelevant ones, and it is at 0.00 because every ranked node is irrelevant.",
+        "ContextualRecall": "The score is 0.33 because only sentence 3 is supported by nodes in retrieval context 1/2, which clearly provide the SWIFT code MEZNPKKA. In contrast, sentence 1 is not supported since nodes 1/2 list a different Meezan Bank account and IBAN than 0100643642 / PK40MEZN0002010100643642, and sentence 2 is only partially supported because nodes 1/2 mention Community Services and Bano Qabil under Zakat but do not show Orphan/Aghosh as Zakat through the same account.",
+        "Hallucination": "The score is 1.00 because the actual output fails to provide any of the factual information present in the context and instead only says it cannot answer and will route to a human agent, contradicting the available details on donations, banking, Zakat, projects, and ways to help."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "no_support",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q16",
+      "question": "How can I donate USD for specific programs like Wash, Health, Education, Rebuild Palestine, or Alkhidmat Islamic Microfinance?",
+      "expected_answer": "For USD donations to these programs, use Makramah Bank account 1994426252333135802 (IBAN: PK32SUMB9944293330135802) or Meezan Bank account 0100643642 (IBAN: PK40MEZN0002010100643642). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan).",
+      "actual_answer": "I don't know",
+      "rag_time_seconds": 10.54,
+      "rag_rejected": true,
+      "rejection_message": "I don't know",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9040285110473633,
+        "domain": "donation"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q17",
+      "question": "How can I make a general GBP donation to Alkhidmat Foundation?",
+      "expected_answer": "For general GBP donations, you can use Makramah Bank account 1994426253402135802 (IBAN: PK02SUMB994434020135802) or Meezan Bank account 0100644437 (IBAN: PK12MEZN0002010100644437). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan).",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 11.04,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response does not answer how to make a general GBP donation to Alkhidmat Foundation at all; instead, it includes irrelevant customer-support-related content and provides no useful donation instructions.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant, and the top-ranked results are all irrelevant to making a general GBP donation. The first node in retrieval contexts only mentions methods like \"JazzCash App\" and a PKR \"Bank of Punjab (Taqwa Islamic Banking)\" account and \"does not provide the expected GBP bank accounts, IBANs, or SWIFT codes.\" The second node in retrieval contexts lists \"Online Banking,\" \"Bank Transfer,\" and \"International Accounts\" but \"does not contain the specific GBP account details.\" The third and fourth nodes in retrieval contexts similarly repeat generic donation methods without the required GBP details, and the fifth node in retrieval contexts is unrelated, discussing \"Sponsor an Orphan\" and volunteering. The score is not higher because irrelevant nodes occupy all ranked positions, and it is at 0.00 because there are no relevant nodes ranked above them.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1-5 do not mention the GBP donation accounts, the listed IBANs, or the SWIFT codes, and node 1 instead provides a different PKR Bank of Punjab account while nodes 2-4 only describe donation methods in general.",
+        "Hallucination": "The score is 0.00 because the actual output does not contradict any provided context and introduces no unsupported claims; it is simply less informative and defers to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "no_support",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q18",
+      "question": "How can I donate GBP Zakat for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water?",
+      "expected_answer": "For GBP Zakat donations, use Meezan Bank account 0100644437 (IBAN: PK12MEZN0002010100644437) for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water programs. SWIFT code: MEZNPKKA.",
+      "actual_answer": "I don't know",
+      "rag_time_seconds": 11.97,
+      "rag_rejected": true,
+      "rejection_message": "I don't know",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9040285110473633,
+        "domain": "donation"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q19",
+      "question": "How can I donate GBP for specific programs like Health Collection, Education, Rebuild Palestine, or Alkhidmat Islamic Microfinance?",
+      "expected_answer": "For GBP donations to these programs, you can use Makramah Bank account 1994426253402135802 (IBAN: PK02SUMB994434020135802) or Meezan Bank account 0100644437 (IBAN: PK12MEZN0002010100644437). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan).",
+      "actual_answer": "I don't know",
+      "rag_time_seconds": 10.66,
+      "rag_rejected": true,
+      "rejection_message": "I don't know",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9040285110473633,
+        "domain": "donation"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q20",
+      "question": "How can I make a general EURO donation to Alkhidmat Foundation?",
+      "expected_answer": "For general EURO donations, use Makramah Bank account 1994426254974135802 (IBAN: PK90SUMB9944319740135802) or Meezan Bank account 0100644443 (IBAN: PK44MEZN0002010100644443). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan).",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 8.75,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer how to make a general EURO donation to Alkhidmat Foundation at all; instead, it provided irrelevant handoff-style content with no useful donation information.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job keeping it faithful.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the query. The 1st node in retrieval contexts only includes PKR details like \"Account no. (PKR): 5310067845100016\" and \"IBAN: PK19BPUN5310067845100016,\" not the needed general EURO donation information. The 2nd, 3rd, and 4th nodes in retrieval contexts stay at a general level with items like \"International Accounts,\" \"Pay by Debit/Credit Card,\" and \"JazzCash,\" but still omit the EURO account numbers, IBANs, and SWIFT codes, including \"Makramah Bank account 1994426254974135802\" and \"Meezan Bank account 0100644443.\" The 5th node in retrieval contexts is even less relevant, focusing on \"Sponsor an Orphan\" and volunteering. Since no relevant nodes were ranked above irrelevant nodes, the score cannot be higher.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: none of nodes 1–5 mention EURO donation accounts, the listed IBANs, or the SWIFT codes, and node 1 instead provides a different Bank of Punjab PKR account, which does not match the expected Makramah or Meezan banking details.",
+        "Hallucination": "The score is 0.00 because the actual output is a neutral fallback response that does not introduce any false claims and does not contradict any of the provided contexts."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q21",
+      "question": "How can I donate EURO Zakat for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water?",
+      "expected_answer": "For EURO Zakat donations, use Meezan Bank account 0100644437 (IBAN: PK44MEZN0002010100644443) for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water. SWIFT code: MEZNPKKA.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 7.87,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.5,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.50 because the response is only partially relevant: it relates to donating, but it does not provide the specific information asked for about how to donate EURO Zakat for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water. So it deserves some credit for being on-topic, but not a higher score because it misses the key requested details.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—nice job keeping it accurate and aligned.",
+        "ContextualPrecision": "The score is 1.00 because the relevant nodes in the retrieval contexts are ranked first and second, where the first node includes the exact needed EURO Zakat details like 'Community Services (Zakat) Meezan bank', 'Account no. (EURO): 0100644437', 'IBAN: PK44MEZN0002010100644443', and 'SWIFT code: MEZNPKKA', and the second node repeats the same directly useful banking snippet. It is not higher only because that is already the maximum possible score; the lower-ranked nodes are appropriately placed after the relevant ones since the third node only has general text like 'By giving Zakat, you purify your wealth', the fourth node is about 'Who is required to pay Zakat?', and the fifth node discusses orphan support like 'Whether it’s a small monthly contribution or a one-time donation' rather than the needed EURO banking details.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not fully attributable to the nodes in retrieval context: nodes 1 and 2 only support the Meezan Bank EURO account details for Community Services (Zakat), including account 0100644437, IBAN PK44MEZN0002010100644443, and SWIFT MEZNPKKA, but they do not support applying that same account to Orphan/Aghosh, Bano Qabil, or Clean Water; Orphan/Aghosh is shown separately via Makramah, Bano Qabil appears without matching account details, and Clean Water is not mentioned.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims that conflict with the provided contexts; it only says the question could not be answered and will be routed to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q22",
+      "question": "How can I donate EURO for specific programs like Health Collection, Education, Rebuild Palestine, or Alkhidmat Islamic Microfinance?",
+      "expected_answer": "For EURO donations to these programs, use Makramah Bank account 1994426254974135802 (IBAN: PK90SUMB9944319740135802) or Meezan Bank account 0100644437 (IBAN: PK44MEZN0002010100644443). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan).",
+      "actual_answer": "I don't know",
+      "rag_time_seconds": 12.6,
+      "rag_rejected": true,
+      "rejection_message": "I don't know",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9040285110473633,
+        "domain": "donation"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q23",
+      "question": "Do all international donations require SWIFT codes for bank transfers?",
+      "expected_answer": "Yes, all international donations in USD, GBP, or EURO require using the SWIFT code of the respective bank: SUMBPKKA for Makramah Bank and MEZNPKKA for Meezan Bank.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 8.79,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
         "Faithfulness": true,
         "ContextualPrecision": true,
         "ContextualRecall": true,
         "Hallucination": true
       },
       "reasons": {
-        "AnswerRelevancy": "The score is 1.00 because the answer was fully relevant and addressed the question directly without including any irrelevant information. Great job staying focused!",
-        "Faithfulness": "The score is 1.00 because there are no contradictions—great job staying true to the retrieval context!",
-        "ContextualPrecision": "The score is 1.00 because all relevant nodes are ranked above the irrelevant node. The first four nodes directly address the main focus areas of Alkhidmat Foundation, such as 'health, education, disaster relief, and women philanthropy', while the fifth node, which only discusses a photography workshop and cultural enrichment, is correctly ranked last as it does not mention any main focus areas. Great job keeping the relevant information at the top!",
-        "ContextualRecall": "The score is 1.00 because every part of the expected output is well supported by the nodes in the retrieval context, covering all mentioned services and programs. Great job!",
-        "Hallucination": "The score is 0.20 because the actual output accurately reflects most of the factual details from the context, with only a minor omission regarding workshops and cultural enrichment, resulting in a low but non-zero hallucination score."
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer whether international donations require SWIFT codes for bank transfers at all, and instead gave irrelevant support-related information. Since it failed to address the user’s actual question, it cannot score higher.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 1.00 because all the relevant nodes in retrieval contexts are ranked first through fourth, and the only irrelevant node appears lower at the fifth node in retrieval contexts. The top-ranked nodes directly support the answer with quoted details like 'Account no. (Euro)' and SWIFT codes 'MEZNPKKA' and 'SUMBPKKA' in the first node in retrieval contexts, 'Account no. (USD)' with the same SWIFT codes in the second and third nodes in retrieval contexts, and 'Account no. (GBP)' with 'SUMBPKKA' and 'MEZNPKKA' in the fourth node in retrieval contexts. It is at this score because the irrelevant fifth node in retrieval contexts, which 'mainly discusses PKR accounts' and includes an 'unrelated SWIFT code' 'BPUNPKKA002', is correctly ranked below the relevant nodes. Great ranking overall.",
+        "ContextualRecall": "The score is 1.00 because the full statement is completely supported by nodes in retrieval context: the sentence about international donations in USD, GBP, or EURO is backed by node 2 and node 4 for USD accounts, node 4 for GBP accounts, and node 1 for the EURO account, while the same nodes identify the banks and their SWIFT codes as Makramah Bank with SUMBPKKA and Meezan Bank with MEZNPKKA. Great alignment overall.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims that conflict with the context; it only gives a fallback response saying the question could not be answered and was routed to a human agent."
       },
-      "overall_pass": true,
+      "overall_pass": false,
       "metadata": {
-        "combined_confidence": 0.9194349049186117,
-        "domain": "healthcare",
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "no_support",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q24",
+      "question": "How can I make a general PKR donation to Alkhidmat Foundation?",
+      "expected_answer": "For general PKR donations, you can use Bank of Punjab (Taqwa Islamic Banking) account 5310067845100016 (IBAN: PK19BPUN5310067845100016, SWIFT: BPUNPKKA) or other banks as listed on the Alkhidmat website.",
+      "actual_answer": "- You can donate through JazzCash App: \n  - Go to your App\n  - Scroll Down and Tap \"Donations\"\n  - Select \"Alkhidmat Foundation Pakistan\" from the list\n  - Enter Amount and Donate.\n\n- You can donate through EasyPaisa App:\n\n- You can also make a direct deposit:\n  - Bank of Punjab (Taqwa Islamic Banking)\n  - Account Title: Alkhidmat Foundation Pakistan\n  - Account no. (PKR): 5310067845100016\n  - IBAN: PK19BPUN5310067845100016\n  - Branch: Bank of Punjab\n\n- For cheque or bank draft donations:\n  - Make out to “Alkhidmat Foundation Pakistan”\n  - Call 0800 44 44 8 or 0304 111 4 222 for collection.",
+      "rag_time_seconds": 19.12,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 1.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": false
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response is fully relevant to the question about making a general PKR donation to Alkhidmat Foundation, with no irrelevant statements. It directly addresses the user’s request clearly and appropriately.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job keeping it faithful.",
+        "ContextualPrecision": "The score is 1.00 because all relevant nodes in the retrieval contexts are ranked above the irrelevant one: the first node in retrieval contexts is the strongest match since it explicitly provides 'Bank of Punjab (Taqwa Islamic Banking)', 'Account no. (PKR): 5310067845100016', and 'IBAN: PK19BPUN5310067845100016', while the second, third, and fourth nodes in retrieval contexts still support donation methods through 'Online Banking', 'Bank Transfer', and 'alkhidmat.org/donate'. It is at this top score because the only irrelevant content appears lower, in the fifth node in retrieval contexts, which talks about 'Sponsor an Orphan', volunteering, awareness, and mentorship instead of general PKR donations. Great ranking overall.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not fully attributable to the nodes in retrieval context: node 1 covers the Bank of Punjab (Taqwa Islamic Banking) PKR account number and IBAN, but no node provides the SWIFT code BPUNPKKA or confirms that other banks are listed on the Alkhidmat website for general PKR donations.",
+        "Hallucination": "The score is 1.00 because the actual output includes multiple unsupported details not found in the context, such as the specific bank branch and cheque/bank draft collection phone numbers, while also omitting or incompletely covering context-supported donation methods like EasyPaisa steps and other listed options. Overall, it relies heavily on information outside the provided context."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9040285110473633,
+        "domain": "donation",
         "selfrag_support": "fully_supported",
         "evidence_coverage": 1.0,
         "retrieval_retried": false
       }
     },
     {
-      "id": "Q10",
-      "question": "How can I make a donation in-person?",
-      "expected_answer": "You can make an in-person donation at any of Alkhidmat Foundation's Collection Centers or directly at their head office in Lahore.",
-      "actual_answer": "- Use the home collection option to donate in-person",
-      "rag_time_seconds": 180.42,
+      "id": "Q25",
+      "question": "How can I donate PKR Zakat for Orphan Care, Community Services, or Bano Qabil?",
+      "expected_answer": "For PKR Zakat donations, you can use Meezan Bank account 0101098699, Bank Alfalah account 5527005002305295, Bank of Punjab account 5470067845100026, or Habib Metropolitan Bank account 6998129314714109745. SWIFT codes and IBANs are provided by each bank.",
+      "actual_answer": "- You can donate Zakat for Orphan Care, Community Services, or Bano Qabil through the following methods:\n  - **JazzCash App**: \n    - Open the app, scroll down, tap \"Donations\", select \"Alkhidmat Foundation Pakistan\", enter the amount, and donate.\n  - **EasyPaisa App**: \n  - **Direct Deposit**: \n    - Use the Zakat account at Meezan Bank:\n      - Account Title: Al Khidmat Foundation Pakistan\n      - Account no. (PKR): 02140101095120\n      - IBAN: PK94MEZN0002140101095120\n      - SWIFT code: MEZNPKKA\n  - **Cheques & Bank Drafts**: \n    - Make out to “Alkhidmat Foundation Pakistan” and call 0800 44 44 8 or 0304 111 4 222 for collection.",
+      "rag_time_seconds": 20.53,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 0.7,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.4
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the user’s question about donating PKR Zakat for Orphan Care, Community Services, or Bano Qabil, with no irrelevant statements lowering its relevance. Nice and on point.",
+        "Faithfulness": "The score is 0.70 because the actual output is mostly aligned but contains key banking detail errors: it gives the account title as \"Al Khidmat Foundation Pakistan\" instead of \"Alkhidmat Foundation Pakistan,\" and for Community Services (Zakat) at Meezan bank it lists the wrong account number (02140101095120 instead of 0100644437) and the wrong IBAN (PK94MEZN0002140101095120 instead of PK44MEZN0002010100644443).",
+        "ContextualPrecision": "The score is 0.00 because every top-ranked node in the retrieval contexts is irrelevant to the PKR Zakat donation request. For example, the 1st node in retrieval contexts mentions \"Community Services (Zakat) Meezan bank\" but only gives the EURO account \"0100644437,\" while the 2nd node repeats the same irrelevant banking detail. The 3rd node focuses on projects like \"Delivery Case C-section\" and \"Alkhidmat Academic Scholarships (Annually)\" without any bank names, account numbers, IBANs, or SWIFT codes. The 4th node only provides general FAQs such as \"Who is required to pay Zakat?\" and the 5th node discusses support ideas like \"Sponsor an Orphan\" rather than donation account details. Since no relevant nodes appear above irrelevant ones—or at all—the score cannot be higher, and it is 0.00.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by the nodes in retrieval context: the expected PKR Zakat accounts for Meezan Bank, Bank Alfalah, Bank of Punjab, and Habib Metropolitan Bank with those exact account numbers are not found, and while nodes 1 and 2 include SWIFT/IBAN details, they do not provide the stated PKR Zakat account information. The only partially related detail is a different Meezan Bank 'Community Services (Zakat)' account, which does not match the expected account number.",
+        "Hallucination": "The score is 0.40 because the actual output is broadly aligned with the context on donating Zakat to Alkhidmat-supported causes like orphan care, but it includes materially different bank account/IBAN details and adds payment methods not supported by the provided context, creating notable factual inconsistencies."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9040285110473633,
+        "domain": "donation",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q26",
+      "question": "How can I donate PKR for specific programs like Disaster Management, Health, Education, WASH, or Alkhidmat Islamic Microfinance?",
+      "expected_answer": "For PKR donations to these programs, use Soneri Bank account 20001287371 (Disaster Management), MCB Islamic Bank account 0651000583520002 or 0651000583520004 (Health/WASH), National Bank account 2132003312806715 (Education), Bank of Punjab account 5470067845100015, or Habib Metropolitan Bank account 6998129314714109745 (Alkhidmat Islamic Microfinance). SWIFT codes and IBANs are provided for each bank.",
+      "actual_answer": "- You can donate to specific programs like Disaster Management, Health, Education, WASH, or Alkhidmat Islamic Microfinance through the EasyPaisa App by:\n  - Going to your App\n  - Scrolling down and tapping \"Donations\"\n  - Selecting \"Alkhidmat Foundation Pakistan\" from the list\n  - Entering the amount and donating.\n\n- You can also make a direct deposit to the following account:\n  - **Bank of Punjab (Taqwa Islamic Banking)**\n    - Account Title: Alkhidmat Foundation Pakistan\n    - Account no. (PKR): 5310067845100016\n    - IBAN: PK19BPUN5310067845100016\n    - Branch: Allama Iqbal Town, Lahore\n    - SWIFT code: BPUNPKKA\n\n- For Zakat donations, you can use:\n  - **Bank of Punjab**\n    - Account Title: Alkhidmat foundation Pakistan Zakat\n    - Account Number: 3880067845100081\n    - SWIFT CODE: BPUNPKKA002\n    - IBAN: PK16BPUN388006784510008",
+      "rag_time_seconds": 14.12,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response is fully relevant to the user’s question about donating PKR for specific programs, with no irrelevant statements included. It stays focused and directly addresses the request well.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job staying faithful to the source.",
+        "ContextualPrecision": "The score is 0.00 because every node in the retrieval contexts is irrelevant, and the highest-ranked nodes fail to provide the needed program-specific PKR donation details. For example, the first node in retrieval contexts mentions programs like 'Disaster Management', 'Health', 'Education', 'WASH', and 'Alkhidmat Islamic Microfinance', but only gives 'Bank of Punjab (Taqwa Islamic Banking)' account '5310067845100016', which 'does not match the expected accounts'. The second node in retrieval contexts again shows '5310067845100016' and not the needed program-specific PKR accounts, while the third node in retrieval contexts 'does not provide the expected program-specific PKR donation accounts or their IBANs/SWIFT codes'. The fourth and fifth nodes in retrieval contexts are also irrelevant because they focus on flood relief/Zakat with account '3880067845100081' instead of the requested specific program donation options. The score is not higher because irrelevant nodes appear from the first node onward, with no relevant nodes ranked above them.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1-5 do not provide the listed PKR bank account numbers for Soneri Bank, MCB Islamic Bank, National Bank, Habib Metropolitan Bank, or the stated Bank of Punjab account, and only show limited overlap in program labels plus a different Bank of Punjab account with IBAN/SWIFT details.",
+        "Hallucination": "The score is 0.00 because the actual output fully aligns with the provided contexts, correctly repeating the donation steps and bank/Zakat account details without any contradictions or unsupported claims."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8897882699966431,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q27",
+      "question": "Which bank accounts can I use to donate PKR Zakat for Health or Education programs?",
+      "expected_answer": "For PKR Zakat donations for Health, use MCB Islamic Bank account 0651000583520002. For Education, use National Bank of Pakistan account 2132003312806715 or Bank Islami Pakistan Limited account 0205215724660136. SWIFT codes and IBANs are provided for each.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 10.52,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer which bank accounts can be used for PKR Zakat donations to Health or Education programs at all. Instead, it gave unrelated support/escalation information, so it was entirely irrelevant to the user’s question.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and aligned.",
+        "ContextualPrecision": "The score is 0.00 because every node in the retrieval contexts is irrelevant to the asked PKR Zakat bank accounts for Health or Education. The first node in retrieval contexts mentions \"PKR Zakat account '6998129314714109745' with IBAN 'PK21MPBL9981477140109745' and SWIFT 'MPBLPKKA', but it does not mention the expected Health account 'MCB Islamic Bank account 0651000583520002' or the Education accounts,\" and the second node in retrieval contexts repeats that same irrelevant account. The third node in retrieval contexts gives \"Bank Name: Bank of Punjab\" and \"Account Number: 3880067845100081,\" which \"does not support the expected answer's Health or Education-specific accounts,\" while the fourth node in retrieval contexts repeats that unrelated information. The fifth node in retrieval contexts is still irrelevant because it only provides a \"Zakat Account\" at \"Meezan Bank\" and \"does not mention the expected Education accounts '2132003312806715' or '0205215724660136'.\" Since no relevant nodes appear anywhere, there are no correctly prioritized results, which is why the score cannot be higher.",
+        "ContextualRecall": "The score is 0.00 because none of the sentences in the expected output are grounded in the nodes in retrieval context: sentence 1 is not supported by any node, since no node mentions Health or the MCB Islamic Bank account 0651000583520002; sentence 2 is also not supported, since no node mentions the Education accounts at node(s) in retrieval context, including National Bank of Pakistan 2132003312806715 or Bank Islami Pakistan Limited 0205215724660136, and node 5 only lists a different Meezan Bank education-related account; sentence 3 is unsupported as well because although nodes 1, 3, and 5 mention SWIFT codes and IBANs, they do not correspond to the specific Health and Education accounts named in the expected output.",
+        "Hallucination": "The score is 0.00 because the actual output makes no conflicting factual claims and does not contradict any of the provided contexts; it is only a fallback routing response."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "no_support",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q28",
+      "question": "How can I donate PKR for Community Services in Alkhidmat Foundation?",
+      "expected_answer": "For PKR donations to Community Services, use Meezan Bank account 0101034665 or Bank Alfalah account 55275001586959. SWIFT codes: MEZNPKKA and ALFHPKKA527.",
+      "actual_answer": "- You can donate to Community Services of Alkhidmat Foundation through the EasyPaisa App:\n  - Go to your App\n  - Scroll Down and Tap \"Donations\"\n  - Select \"Alkhidmat Foundation Pakistan\" from the list\n  - Enter Amount and Donate\n\n- You can also make a Direct Deposit:\n  - Bank: Bank of Punjab (Taqwa Islamic Banking)\n  - Account Title: Alkhidmat Foundation Pakistan\n  - Account no. (PKR): 5310067845100016\n  - IBAN: PK19BPUN5310067845100016\n  - Branch: Allama Iqbal Town, Lahore\n  - SWIFT code: BPUNPKKA\n\n- Alternatively, you can visit Alkhidmat's Donation Page on their website and click on \"Donate Now\".",
+      "rag_time_seconds": 18.0,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.5833,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response directly addresses how to donate PKR for Community Services in Alkhidmat Foundation and contains no irrelevant statements. It is fully relevant and on point.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.58 because relevant nodes in the retrieval contexts do appear near the top, but not in the best order. The 1st node in retrieval contexts is irrelevant since it \"mentions donation channels and lists \\\"Community Services\\\", but the banking details shown are for \\\"Bank of Punjab (Taqwa Islamic Banking)\\\" with account no. \\\"5310067845100016\\\", not the expected Meezan Bank or Bank Alfalah details,\" so it should be ranked below the 2nd and 3rd nodes in retrieval contexts, which are relevant because they \"explicitly include \\\"Community Services\\\" and provide one of the expected PKR bank options: \\\"Bank Alfalah\\\" with account no. \\\"5527-5001586959\\\"\" and \"include \\\"Community Services\\\" and the relevant bank section \\\"Bank Alfalah\\\" with account no. \\\"5527-5001586959\\\".\" The score is not lower because the strongest useful results are still ranked 2nd and 3rd, while the clearly irrelevant Palestine-related 4th and 5th nodes in retrieval contexts are placed beneath them.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to the nodes in retrieval context: node 1 only shows 'Community Services,' while nodes 2 and 3 provide partial Bank Alfalah PKR account information (matching 55275001586959) but do not include the Meezan Bank account 0101034665, the SWIFT code MEZNPKKA, or the SWIFT code ALFHPKKA527.",
+        "Hallucination": "The score is 0.00 because all listed facts in the actual output align with the provided contexts, and no contradictions were identified."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8897882699966431,
+        "domain": "donation",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q29",
+      "question": "Which accounts are used for Bano Qabil PKR donations and Zakat?",
+      "expected_answer": "For PKR donations to Bano Qabil, use Bank of Punjab account 5470067845100026 (Zakat) or Habib Metropolitan Bank account 6998129314714109745 (Donation). SWIFT codes: BPUNPKKA and MPBLPKKA.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 12.46,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.3333,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response does not answer which accounts are used for Bano Qabil PKR donations and Zakat at all; instead, it gives irrelevant support-escalation content. Since it provides no requested account details, it cannot score higher.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 0.33 because the only clearly relevant node in the retrieval contexts appears too low: the third node is the first one that helps, since it \"directly mentions 'Bano Qabil' and provides a PKR bank account\". The score is not higher because the first node and second node are ranked above it even though they are irrelevant nodes that \"conflict[] with the expected output,\" and the fourth node and fifth node are also irrelevant nodes because they \"do not mention 'Bano Qabil'\" and are \"unrelated.\" It is at this score rather than lower because there is still one relevant node in the retrieval contexts, but it is outranked by two irrelevant nodes.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by the nodes in retrieval context: node 3 mentions Bano Qabil with a Bank of Punjab PKR account, but the number differs from the expected 5470067845100026, while nodes 1 and 2 mention Habib Metropolitan Bank account 6998129314714109745 and SWIFT code MPBLPKKA. The expected sentence also assigns specific Zakat/Donation purposes and includes BPUNPKKA, which are not established by the retrieved nodes, so the full statement cannot be attributed to the context.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims that conflict with the provided contexts; it is only a fallback message saying the query could not be answered and will be routed to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "no_support",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q30",
+      "question": "How can I donate PKR for WASH programs?",
+      "expected_answer": "For PKR donations to WASH, use MCB Islamic Bank account 0651000583520004. SWIFT code: MUCBPKKA.",
+      "actual_answer": "- You can donate to WASH programs through the JazzCash App by going to your App, scrolling down, tapping \"Donations\", selecting \"Alkhidmat Foundation Pakistan\" from the list, entering the amount, and donating.\n- Alternatively, you can use the EasyPaisa App by going to your App, scrolling down, tapping \"Donations\", selecting \"Alkhidmat Foundation Pakistan\" from the list, entering the amount, and donating.\n- You can also make a direct deposit to the Bank of Punjab with the following details:\n  - Account Title: Alkhidmat Foundation Pakistan\n  - Account no. (PKR): 5310067845100016\n  - IBAN: PK19BPUN5310067845100016\n  - Branch: Allama Iqbal Town, Lahore\n  - SWIFT code: BPUNPKKA",
+      "rag_time_seconds": 12.95,
       "contexts_retrieved": 5,
       "rag_rejected": false,
       "scores": {
@@ -326,16 +1002,1000 @@
         "Hallucination": false
       },
       "reasons": {
-        "AnswerRelevancy": "The score is 1.00 because the answer was fully relevant and addressed the question directly with no irrelevant information. Great job staying focused and helpful!",
-        "Faithfulness": "The score is 1.00 because there are no contradictions listed, indicating the actual output aligns perfectly with the retrieval context. Great job staying accurate!",
-        "ContextualPrecision": "The score is 0.00 because all the top-ranked nodes in the retrieval contexts are irrelevant to the input question. For example, the first node only contains a donation summary and a prompt to click to donate, but does not mention in-person donation or locations. Similarly, the second and third nodes are duplicates and also lack any information about in-person donations. The fourth node discusses receipts and donation programs, and the fifth node discusses wallet payments and campus ambassador programs, but neither mentions in-person donation or physical locations. Since no relevant nodes are present or ranked higher than irrelevant ones, the score is at its lowest.",
-        "ContextualRecall": "The score is 0.00 because none of the nodes in the retrieval context provide information about in-person donations, Collection Centers, or the head office in Lahore as mentioned in sentence 1 of the expected output.",
-        "Hallucination": "The score is 1.00 because the actual output repeatedly references a 'home collection option' for in-person donations, which is not mentioned anywhere in the provided context, indicating complete hallucination."
+        "AnswerRelevancy": "The score is 1.00 because the response fully addresses how to donate PKR for WASH programs and includes no irrelevant information—clear, focused, and completely on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job staying faithful to the source.",
+        "ContextualPrecision": "The score is 0.00 because every node in retrieval contexts is irrelevant, including the first node, which only discusses \"How can I volunteer instead of donating money?\" and \"minimum donation is PKR 200 (dummy)\" without PKR donation instructions for WASH. This is not higher because the second node in retrieval contexts is again irrelevant with \"register as a volunteer\" and no \"MCB Islamic Bank account 0651000583520004\" or \"SWIFT code: MUCBPKKA,\" while the third, fourth, and fifth nodes in retrieval contexts mention \"Alkhidmat Wash Program\" and \"clean water\" but still omit the needed PKR banking details. It is at this score because no relevant nodes appear anywhere in the ranking, so there are no relevant results placed above irrelevant ones.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 3-5 only mention the Alkhidmat WASH program in general and do not provide the PKR bank account number 0651000583520004, while nodes 1-2 discuss unrelated volunteering/minimum donation details. Sentence 2 is also unsupported because no node includes any SWIFT code, and MUCBPKKA does not appear anywhere in the retrieval context.",
+        "Hallucination": "The score is 1.00 because the actual output is fully unsupported by the provided contexts: it invents specific donation/payment methods and bank details, while the contexts are about volunteering, student donation FAQs, and a clean water campaign with advocacy and doubled gifts. There are no factual alignments and multiple direct contradictions."
       },
       "overall_pass": false,
       "metadata": {
-        "combined_confidence": 0.897840203170894,
+        "combined_confidence": 0.8897882699966431,
         "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q31",
+      "question": "How can I donate PKR to Alkhidmat Islamic Microfinance programs?",
+      "expected_answer": "For PKR donations to Alkhidmat Islamic Microfinance, use Bank of Punjab account 5470067845100015 or Habib Metropolitan Bank account 6998129314714109745. SWIFT codes: BPUNPKKA and MPBLPKKA.",
+      "actual_answer": "I don't know",
+      "rag_time_seconds": 10.53,
+      "rag_rejected": true,
+      "rejection_message": "I don't know",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8897882699966431,
+        "domain": "donation"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q32",
+      "question": "Which account should I use for Tameer-e-Watan PKR donations?",
+      "expected_answer": "For Tameer-e-Watan PKR donations, use Meezan Bank account 0100644443. SWIFT code: MEZNPKKA.",
+      "actual_answer": "I don't know",
+      "rag_time_seconds": 12.82,
+      "rag_rejected": true,
+      "rejection_message": "I don't know",
+      "scores": {},
+      "passed": {},
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8705241441726684,
+        "domain": "donation"
+      },
+      "note": "Self-RAG safety rejection. Not scored."
+    },
+    {
+      "id": "Q33",
+      "question": "How can I donate PKR Zakat specifically for Orphan Care?",
+      "expected_answer": "For PKR Zakat for Orphan Care, use Meezan Bank account 0101098699 or Bank Alfalah account 5527005002305295. SWIFT codes: MEZNPKKA and ALFHPKKA.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 14.93,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.325,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer how to donate PKR Zakat specifically for Orphan Care at all; instead, it only mentioned escalating to support, which is irrelevant to the user’s request and provides no actionable donation information.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output aligns fully with the retrieval context. Nice job keeping it completely faithful.",
+        "ContextualPrecision": "The score is 0.33 because the first three nodes in retrieval contexts are irrelevant and are ranked above the only partially relevant results. The 1st node says it discusses general Zakat impact and supports 'orphans, vulnerable families,' but lacks the specific PKR Orphan Care banking details; the 2nd node is general FAQ material mentioning 'Alkhidmat Orphan Case Study-2023' but still does not contain the required PKR Orphan Care account numbers or SWIFT codes; and the 3rd node includes PKR banking details like 'Account no. (PKR): 5470067845100015' and 'SWIFT code: BPUNPKKA,' but it is not specifically for Orphan Care. The score is not lower because the 4th and 5th nodes in retrieval contexts are at least somewhat relevant, as they mention 'Orphan/Aghosh (Donation)' and include the Meezan Bank SWIFT code 'MEZNPKKA,' which partially overlaps with the requested Orphan Care donation information.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 4/5 mention Meezan Bank for 'Community Services (Zakat)' with account 0100644437 and SWIFT code MEZNPKKA, which does not match 'PKR Zakat for Orphan Care' or account 0101098699, and no node provides the Bank Alfalah account 5527005002305295 or SWIFT code ALFHPKKA.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims that conflict with the provided contexts; it only states that no answer was provided and the query is being routed to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q34",
+      "question": "Who is the President of Alkhidmat Foundation Pakistan and what are his roles?",
+      "expected_answer": "Prof. Dr. Hafeez ur Rahman is the President of Alkhidmat Foundation Pakistan. He is also the Convener of Alkhidmat Global Committee and responsible for AHF Coordination.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 10.53,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.2,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the output is entirely irrelevant to the question: instead of identifying the President of Alkhidmat Foundation Pakistan and describing his roles, it gives a support escalation message with no information about the person or responsibilities asked for.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 0.20 because the only relevant information appears very late, in the 5th node in the retrieval contexts, while the 1st, 2nd, 3rd, and 4th nodes are irrelevant and should have been ranked lower. The first three nodes in retrieval contexts only contain question prompts like \"Who is the president of Alkhidmat Foundation Pakistan?\" and \"do not provide the answer or the roles asked for,\" and the 4th node in retrieval contexts has general organization details but \"nothing stating who the president is or that he is 'Convener Alkhidmat Global Committee & AHF Coordination'.\" It is at its current score because the 5th node in retrieval contexts does contain the correct answer, naming \"Prof. Dr. Hafeez ur Rahman\" and his roles as \"President, AKFP & Convener Alkhidmat Global Committee & AHF Coordination\".",
+        "ContextualRecall": "The score is 1.00 because sentence 1 is fully supported by node 5 in the retrieval context, which identifies \"Prof. Dr. Hafeez ur Rahman\" as \"President, AKFP\" (Alkhidmat Foundation Pakistan), and sentence 2 is also fully supported by node 5, which directly states \"Convener Alkhidmat Global Committee & AHF Coordination.\" Great contextual coverage.",
+        "Hallucination": "The score is 0.00 because the actual output is only a fallback response saying it cannot answer and routes to a human agent, and it does not contradict any of the provided contexts."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "general",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q35",
+      "question": "Who are the Vice Presidents of Alkhidmat Foundation Pakistan?",
+      "expected_answer": "The Vice Presidents of Alkhidmat Foundation Pakistan include Mr. M. Abdus Shakoor, Syed Ihsan Ullah Waqas, Dr. M. Mushtaq Ahmed Mangat, Mr. Aijaz Ullah Khan, Mr. Zikrullah Mujahid, Air Marshal (R) Farooq Habib, Mr. Abrar Ahmed Maggu, and A.M. (R) Arshad Mahmood Malik, Ms. Saima Shabbir.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 6.73,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.325,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response does not answer who the Vice Presidents of Alkhidmat Foundation Pakistan are at all; instead, it gives unrelated support/action-oriented content, so it is entirely irrelevant to the question.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and accurate.",
+        "ContextualPrecision": "The score is 0.33 because the most useful nodes in retrieval contexts are ranked too low: the fourth node in retrieval contexts \"directly lists the Vice Presidents, including 'Mr. M. Abdus Shakoor', 'Syed Ihsan Ullah Waqas', 'Dr. M. Mushtaq Ahmed Mangat', 'Mr. Aijaz Ullah Khan', 'Mr. Zikrullah Mujahid', 'Air Marshal (R) Farooq Habib', 'Mr. Abrar Ahmed Maggu', 'A.M. (R) Arshad Mahmood Malik', and 'Ms. Saima Shabbir'\", and the fifth node in retrieval contexts repeats that full list. The score is not higher because the first, second, and third nodes in retrieval contexts are ranked above them even though they only mention \"Vice President Aijaz Ullah Khan\" and \"do not provide the full list of Vice Presidents\" or are \"not useful for deriving the full expected list.\" It is still at 0.33 because the relevant full-list nodes do appear in the ranked results, just only after several irrelevant nodes.",
+        "ContextualRecall": "The score is 1.00 because the full sentence is completely supported by nodes in retrieval context, specifically nodes 4 and 5, which explicitly list all the Vice Presidents named in sentence 1: Mr. M. Abdus Shakoor, Syed Ihsan Ullah Waqas, Dr. M. Mushtaq Ahmed Mangat, Mr. Aijaz Ullah Khan, Mr. Zikrullah Mujahid, Air Marshal (R) Farooq Habib, Mr. Abrar Ahmed Maggu, A.M. (R) Arshad Mahmood Malik, and Ms. Saima Shabbir. Great alignment overall.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims that conflict with the provided context; it only states that the system cannot answer and is routing to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "general",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q36",
+      "question": "Who holds key administrative positions like Secretary General and Chief Executive Officers in Alkhidmat Foundation?",
+      "expected_answer": "Key administrative positions include Mr. Syed Waqas Jafri as Secretary General AKFP, Mr. Mirza Munawar Hussain as Secretary Finance AKFP, and Chief Executive Officers such as Mr. Shahid Iqbal (Bano Qabil Pakistan), Mr. Khubaib Bilal (AKFP), and Mr. Sufyan Ahmad Khan (AHF).",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 9.16,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer who holds key administrative positions in Alkhidmat Foundation at all; instead, it gave unrelated customer-support-style information. Since it provided no relevant names or role details, the score cannot be higher.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—great job staying faithful to the source.",
+        "ContextualPrecision": "The score is 1.00 because the top-ranked nodes in retrieval contexts are all relevant to the query, with the first node explicitly stating 'Secretary General Alkhidmat Syed Waqas Jafri' and the second and third nodes reinforcing the same key administrative position. It is not higher only in the sense that the fourth and fifth nodes in retrieval contexts are irrelevant, since they discuss 'Disaster Management', 'Health Services', 'Education', and 'Orphan Care Program' rather than administrative roles, but they are already ranked below the relevant nodes, so the ranking is perfectly precise.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by the nodes in retrieval context: nodes 1–3 only match 'Mr. Syed Waqas Jafri as Secretary General AKFP,' while the additional claims about 'Mr. Mirza Munawar Hussain as Secretary Finance AKFP' and the CEOs 'Mr. Shahid Iqbal,' 'Mr. Khubaib Bilal,' and 'Mr. Sufyan Ahmad Khan' are not found in any node.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims and does not contradict any of the provided contexts; it is only a fallback response routing to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "general",
+        "selfrag_support": "no_support",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q37",
+      "question": "Who manages the Women Wing and Finance of Alkhidmat Foundation Pakistan?",
+      "expected_answer": "Ms. Samia Salman is the General Secretary of Women Wing Pakistan, and Mr. Ateeque Rasheed is the Group Chief Financial Officer.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 6.96,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer who manages the Women Wing and Finance of Alkhidmat Foundation Pakistan at all, and instead gave an unrelated support escalation message. Since it provided no relevant information to the question, it cannot score higher.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.00 because every node in the retrieval contexts is irrelevant to the question, including the 1st node with 'women's empowerment through microfinance' but no managers, the 2nd node that only says 'empowering women through various initiatives' without identifying who manages Women Wing or Finance, the 3rd node repeating 'Islamic microfinance programs' without the needed names or titles, the 4th node listing general company details and employee names but not 'General Secretary of Women Wing Pakistan' or 'Group Chief Financial Officer', and the 5th node giving only a broad organizational description. It is not higher because no relevant nodes were ranked above these irrelevant nodes, and it is at 0.00 because none of the ranked nodes answer who manages the Women Wing and Finance.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be attributed to any node(s) in retrieval context: nodes 1-3 discuss women empowerment and Islamic microfinance generally, node 4 gives a company profile and employee snippets, and node 5 provides a services overview, but none mention Ms. Samia Salman, the General Secretary of Women Wing Pakistan, Mr. Ateeque Rasheed, or the Group Chief Financial Officer role.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims and does not contradict any of the provided contexts; it is only a fallback response indicating the query was routed to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "general",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q39",
+      "question": "Where is the main contact address of Alkhidmat located?",
+      "expected_answer": "The contact address is Place 501, Quaideen Colony, Near Islamia College, Karachi, Pakistan.",
+      "actual_answer": "Alkhidmat Foundation Head Office, 3km Khayaban-e-Jinnah, Lahore Pakistan",
+      "rag_time_seconds": 10.06,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the answer directly addresses the question about the main contact address of Alkhidmat with no irrelevant information included. Nice and fully relevant response.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 0.00 because every node in the retrieval contexts is irrelevant and none provide the main contact address asked for. The first node in the retrieval contexts gives a different address, \"Alkhidmat Foundation Head Office, 3km Khayaban-e-Jinnah, Lahore Pakistan,\" instead of the expected Karachi address, and the second, third, fourth, and fifth nodes in the retrieval contexts continue repeating similar Lahore-based or privacy-contact addresses like \"Post: Alkhidmat Foundation Headoffice, 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan.\" It is not higher because there are no relevant nodes ranked above irrelevant ones; it is at 0.00 because all ranked nodes are irrelevant to the requested main contact address.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1–5 mention only Lahore addresses (such as '3km Khayaban-e-Jinnah, Lahore Pakistan' or 'Lahore, Punjab, Pakistan'), and none contain 'Place 501, Quaideen Colony, Near Islamia College, Karachi, Pakistan'.",
+        "Hallucination": "The score is 0.00 because the actual output fully matches the provided context on the head office location, with no contradictions and only minor shortening of the same address."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8883463621139527,
+        "domain": "general",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q40",
+      "question": "What contact phone numbers are provided for Alkhidmat?",
+      "expected_answer": "The contact numbers are (021) 111-503-504, +92 21 36345131, and (021) 34915705-09.",
+      "actual_answer": "+92 42 3802 0222  \n+92 91 2263651-52  \n05811-454124  \n+92 51 4906080  \n+92 81 2453967  \n+92 21 36345131  \n+92 42 35454320-22",
+      "rag_time_seconds": 11.87,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.4
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the answer is fully relevant to the question about Alkhidmat’s contact phone numbers and includes no irrelevant information—great job staying completely on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, and the actual output appears fully consistent with the retrieval context—nice job keeping it accurate and aligned.",
+        "ContextualPrecision": "The score is 0.00 because every node in the retrieval contexts is irrelevant, and the highest-ranked results do not provide the needed Alkhidmat contact phone numbers. The first node in the retrieval contexts gives 'Phone +92 42 3802 0222', the second node repeats 'Phone +92 42 3802 0222', the third node again lists 'Phone +92 42 3802 0222', the fourth node provides 'Telephone: 0800 44448', and the fifth node repeats 'Telephone: 0800 44448'. Since no relevant nodes appear at any rank, there is no evidence of relevant information being ranked above irrelevant nodes, which is why the score cannot be higher.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1–5 do not contain the contact numbers '(021) 111-503-504', '+92 21 36345131', or '(021) 34915705-09', and instead only show different numbers such as '+92 42 3802 0222' and '0800 44448'.",
+        "Hallucination": "The score is 0.40 because the output is partially grounded: it correctly includes +92 42 3802 0222 as supported by the contexts, but it misses the complaint contact number 0800 44448 and substitutes other phone numbers instead, creating a notable contradiction."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8971447229385376,
+        "domain": "general",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q43",
+      "question": "What education initiative has Alkhidmat Karachi launched to support youth?",
+      "expected_answer": "Alkhidmat Karachi launched an ambitious education initiative called \"Bano Qabil\" to support Karachi’s youth.",
+      "actual_answer": "Alkhidmat Foundation Karachi has launched the Bano Qabil IT Scholarship Program to support youth.",
+      "rag_time_seconds": 10.41,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response directly answers the question with no irrelevant information, making it fully relevant and well-focused.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and aligned.",
+        "ContextualPrecision": "The score is 1.00 because all top-ranked nodes in retrieval contexts are relevant and consistently identify the initiative as 'Alkhidmat Foundation launched the Bano Qabil IT Scholarship Program in 2022, starting in Karachi.' The first node in retrieval contexts already answers the question directly, and the later nodes reinforce it with the same evidence, including that it aims to 'equip Pakistan's youth with modern IT skills.' It is not higher because 1.00 is the maximum, and there are no irrelevant nodes ranked above relevant ones—great ranking.",
+        "ContextualRecall": "The score is 1.00 because sentence 1 is fully supported by node(s) in retrieval context, especially node 1 (also repeated in nodes 2 and 3 and expanded in nodes 4 and 5), which states that Alkhidmat Foundation launched the Bano Qabil IT Scholarship Program in Karachi and frames it around helping young people, so the phrasing about an ambitious education initiative supporting Karachi’s youth is a faithful paraphrase. Great contextual match.",
+        "Hallucination": "The score is 0.00 because the actual output fully aligns with the context: it correctly states that Alkhidmat Foundation Karachi launched the Bano Qabil IT Scholarship Program to support youth, and there are no contradictions—only less detail than the source."
+      },
+      "overall_pass": true,
+      "metadata": {
+        "combined_confidence": 0.8666744112968445,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q45",
+      "question": "What is the duration of the courses offered under the Bano Qabil program?",
+      "expected_answer": "The courses are 4 to 6 months long.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 8.64,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response does not answer the question about the duration of Bano Qabil courses at all; instead, it provides unrelated support-oriented content, so none of the output is relevant to the user's request.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 0.00 because every top-ranked node in the retrieval contexts is irrelevant to the question about course duration. The 1st node in retrieval contexts only includes FAQ items like 'Are there any prerequisites for the courses?' and updates on registrations, but 'does not mention course duration such as \"4 to 6 months\".' The 2nd node in retrieval contexts is another FAQ-style list that 'gives no answer about how long the courses last, and does not state \"4 to 6 months\".' The 3rd, 4th, and 5th nodes in retrieval contexts discuss '100% free advanced IT courses' and the 'Bano Qabil Journey' stages like 'Aptitude Test', 'Interview', 'Classes', and 'Graduation', but they 'do not provide the duration of the courses' and contain 'nothing about the courses being \"4 to 6 months long\".' The score is not higher because no relevant nodes were ranked above irrelevant nodes; it is 0.00 because all ranked nodes are irrelevant.",
+        "ContextualRecall": "The score is 0.00 because sentence 1, 'The courses are 4 to 6 months long,' is not supported by any node(s) in retrieval context: nodes 1-2 only show FAQ prompts, and nodes 3-5 describe the program journey and free advanced IT courses without mentioning any course duration.",
+        "Hallucination": "The score is 0.00 because the actual output does not contradict any provided context; it is simply less informative and states the user will be routed to a human agent, which is still consistent with the context."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q46",
+      "question": "Which courses can selected students choose from under Bano Qabil?",
+      "expected_answer": "Students can choose from Web Development, App Development, Digital Marketing, Graphic Designing, Freelancing, and Amazon FBA Virtual Assistant.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 9.37,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer which courses selected students can choose from under Bano Qabil at all, and instead gave irrelevant support-oriented information. Since it failed to address the actual question, it cannot score higher.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output aligns fully with the retrieval context. Nice job keeping it accurate and consistent.",
+        "ContextualPrecision": "The score is 1.00 because the first, second, and third nodes in retrieval contexts all contain directly useful course names, including \"Digital Marketing, Graphic Designing, Web Development and Freelancing,\" so the relevant information is ranked at the top. It is not higher only in the sense that the lower-ranked fourth and fifth nodes are irrelevant since they only say \"We got a range of different cources\" or mention \"100% free advanced IT courses\" without listing specific course options, which is exactly why they are correctly placed below the relevant nodes.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not fully supported by the nodes in retrieval context: nodes 1, 2, and 3 mention Digital Marketing, Graphic Designing, Web Development, and Freelancing, but they do not support App Development, Amazon FBA Virtual Assistant, or the exact claim that students can choose from this full list.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims that contradict the context; it only states that the question could not be answered and is being routed to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q48",
+      "question": "How many candidates registered for the Bano Qabil program?",
+      "expected_answer": "More than 75,000 candidates registered through the program's mobile app and website.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 9.54,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer how many candidates registered for the Bano Qabil program at all; instead, it gave unrelated support-oriented content, so it was entirely irrelevant to the question.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 0.00 because none of the nodes in retrieval contexts are relevant to the question, so there are no relevant nodes ranked above irrelevant ones. The 1st, 2nd, and 3rd nodes in retrieval contexts only mention that 'over 50,000 young individuals have completed IT courses through the Bano Qabil Program,' which is about completions rather than registrations. The 4th and 5th nodes in retrieval contexts only state that the program 'aims to equip female students with IT skills for self-reliance' and do not provide the number of registered candidates. Since every retrieved node is irrelevant to 'How many candidates registered for the Bano Qabil program?', the score cannot be higher, and it remains at 0.00.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1–5 do not mention more than 75,000 candidates or registration through a mobile app and website, instead referring to different figures and general program details.",
+        "Hallucination": "The score is 0.00 because the actual output makes no conflicting factual claims and does not contradict any of the provided contexts; it only states that the question could not be answered and was routed to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "general",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q51",
+      "question": "What is the Bano Qabil program?",
+      "expected_answer": "Bano Qabil is an education initiative by Alkhidmat Karachi that offers 100% free advanced IT courses to help Karachi’s youth develop skills for employment and freelancing.",
+      "actual_answer": "The Bano Qabil program is an initiative launched by Alkhidmat Foundation in 2022, aimed at equipping Pakistan's youth with modern IT skills to improve their quality of life and secure respectable employment. It offers free IT courses in Digital Marketing, Graphic Designing, Web Development, and Freelancing, all certified by technical boards. The program started in Karachi and has since expanded to Lahore, with over 50,000 young individuals having completed courses through it.",
+      "rag_time_seconds": 12.64,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response appears fully relevant to the question about the Bano Qabil program, with no irrelevant statements noted. Great job staying focused and directly on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 1.00 because every node in the retrieval contexts is relevant and the highest-ranked nodes already answer the question well: the first node says it is 'The Alkhidmat Bano Qabil Program' offering '100% free advanced IT courses' to empower youth, and later nodes reinforce this with details like 'starting in Karachi' and helping youth 'secure respectable employment.' It is not higher only because 1.00 is already perfect—there are no irrelevant nodes ranked above relevant ones, so the ranking is as precise as it can be.",
+        "ContextualRecall": "The score is 1.00 because sentence 1 is fully supported by nodes in retrieval context: nodes 1/2/3 identify Bano Qabil as an Alkhidmat Karachi education initiative offering 100% free advanced IT courses, and nodes 4/5 support that it began in Karachi and helps youth build IT skills for employment and freelancing. Great contextual coverage.",
+        "Hallucination": "The score is 0.00 because the actual output fully aligns with the provided contexts, and no contradictions were identified."
+      },
+      "overall_pass": true,
+      "metadata": {
+        "combined_confidence": 0.8969832539558411,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q52",
+      "question": "What is the website where I can donate online?",
+      "expected_answer": "You can donate by opening this link:'https://alkhidmat.com/donate/'",
+      "actual_answer": "alkhidmat.org/donate",
+      "rag_time_seconds": 11.0,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the answer directly addresses the user’s question about where to donate online and contains no irrelevant information—nice and fully on-topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 1.00 because all top-ranked nodes in retrieval contexts are relevant to the question, with the 1st node already helping via \"Click here to donate\" and the 2nd through 5th nodes consistently reinforcing that an online donation page exists. There are no irrelevant nodes ranked above relevant ones, so the ranking is perfectly precise—great result.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 cannot be verified from any node(s) in retrieval context: nodes 1-5 only mention a generic 'Click here to donate' under 'Donation Summary' and do not provide the specific URL 'https://alkhidmat.com/donate/' stated in the expected output.",
+        "Hallucination": "The score is 0.00 because the actual output fully aligns with the context: the context mentions 'Click here to donate,' and 'alkhidmat.org/donate' is consistent with a donation link, with no contradictions present."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8792678236961364,
+        "domain": "donation",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q53",
+      "question": "Can you guide me through the process of online donation?",
+      "expected_answer": "To donate online through , first click on Quick Donate and choose whether you want to Give Once or Give Regularly. Next, select your donation amount in PKR by choosing a preset amount (5,000, 10,000, 25,000, or 50,000) or by typing a custom amount. Then select the donation type from the Sadqa/Zakat dropdown and click Donate. You will be directed to a form where you must enter your full name, email address, phone number, country, city, and optional address. Finally, choose a payment method—Pay via Card Online, Direct Bank Transfer, or Collect from Home—and proceed to complete the donation.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 8.58,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not address how to make an online donation at all; instead, it included irrelevant content about support escalation and other non-instructional points, so it provided no useful guidance for the user’s request.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and accurate.",
+        "ContextualPrecision": "The score is 0.00 because every node in retrieval contexts is irrelevant, including the 1st node, which only says \"Donation Summary ... No service selected. Click here to donate\" and lacks the actual process, and the lower-ranked 2nd, 3rd, 4th, and 5th nodes are also irrelevant since they similarly omit key steps like \"Quick Donate,\" choosing \"Give Once\" or \"Give Regularly,\" selecting amounts, entering donor details, or choosing payment methods. Since no relevant nodes appear above irrelevant nodes, the contextual precision cannot be higher.",
+        "ContextualRecall": "The score is 0.00 because none of the sentences in the expected output are supported by any node(s) in retrieval context: sentence 1 is not supported by nodes 1–5 since they do not mention 'Quick Donate,' 'Give Once,' or 'Give Regularly'; sentence 2 is not supported by nodes 1–5 because they contain no PKR amounts or custom amount entry; sentence 3 is not supported by nodes 1–5 because there is no Sadqa/Zakat selection or Donate action; sentence 4 is not supported by nodes 1–5 because no donor form fields are listed; and sentence 5 is not supported by nodes 1–5 because no payment methods are mentioned, only a generic prompt to donate.",
+        "Hallucination": "The score is 0.00 because the actual output does not contradict the provided context at all. It only gives a fallback routing message to a human agent and makes no false or conflicting claims about the donation summary."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q54",
+      "question": "Where can I donate, or for what causes can I donate to Alkhidmat?",
+      "expected_answer": "You can donate through the donation platform of  by using the Quick Donate option to give once or regularly in PKR. Donations can be made for multiple causes, including emergency appeals like rebuilding Gaza, general donations such as Sadaqah and Zakat, orphan care and Aghosh Homes sponsorships, healthcare services (CT scan, MRI, surgeries, ambulances, blood banks, and hospitals), community services like food packages, Dastarkhawan, sewing machines, Ramadan and winter packages, minority welfare, prisoner relief, masjid rehabilitation, and many other humanitarian and social welfare projects.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 8.69,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.325,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response does not answer where someone can donate or what causes they can donate to Alkhidmat; instead, it gives a support escalation message that is irrelevant to the user’s question.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 0.33 because the first three nodes in retrieval contexts are irrelevant nodes ranked too high: the first node focuses only on Palestine, saying \"operations in Gaza focus on delivering essential supplies, funds, and food,\" the second node again is narrowly about Palestine and \"operations in Gaza,\" and the third node is another duplicate about \"Best charity to donate to palestine?\" rather than where to donate generally or the full range of causes. The score is not lower because the fourth and fifth nodes in retrieval contexts are still relevant, as they support at least one valid donation cause with \"accepts donations to fund their orphan care programs, aghosh homes, and educational initiatives,\" but these relevant nodes should have been ranked above the earlier irrelevant ones.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not attributable to any node(s) in retrieval context: nodes 1–5 do not mention a donation platform, the Quick Donate option, or one-time/recurring PKR donations, and while nodes 4–5 only cover limited causes such as orphan care, Aghosh Homes, and education, they do not support the broader list of healthcare, community services, minority welfare, prisoner relief, masjid rehabilitation, and other projects described.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims that conflict with the provided contexts; it only states that it cannot answer and will route the query to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "donation",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q55",
+      "question": "What is the Wash Program of Alkhidmat and why is it important?",
+      "expected_answer": "The Wash Program of  focuses on providing clean and affordable drinking water. It is important because Pakistan is becoming a water-deficient country and ranks 30th among the most water-deficient countries in the world.",
+      "actual_answer": "Alkhidmat Foundation's WASH Program (Water, Sanitation, Hygiene) is committed to providing sustainable water solutions for communities in need. It addresses the critical issue of access to clean drinking water, sanitation facilities, and hygiene kits, especially under crisis conditions. The importance of the WASH Program lies in its focus on ensuring that communities have a sustainable source of clean water for years to come, recognizing the risks of drought, displacement, and disease. With over thirty years of expertise, Alkhidmat understands that simply drilling wells and installing water pumps is not enough to solve the water crisis, making the comprehensive approach of the WASH Program essential for improving public health and community resilience.",
+      "rag_time_seconds": 13.87,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response stays fully focused on explaining Alkhidmat’s WASH Program and its importance, with no irrelevant statements. It directly addresses the input clearly and completely—great job.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job.",
+        "ContextualPrecision": "The score is 1.00 because every node in the retrieval contexts is relevant and the highest-ranked nodes already contain the key information, such as the first node in retrieval contexts stating that \"Alkhidmat Foundation's WASH Program (Water, Sanitation, Hygiene) is committed to addressing this issue by providing sustainable water solutions for communities in need\" and the fourth node in retrieval contexts stating \"WASH: Provision of clean drinking water, sanitation facilities, hygiene kits.\" It is not higher only in the sense that it is already the maximum possible score, and the ranking is excellent since no irrelevant nodes appear above relevant ones.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is only partially reflected by nodes in retrieval context 1-5, which mention sustainable or clean drinking water but do not support the claim about it being affordable, and sentence 2 is not supported at all since no node in retrieval context 1-5 mentions Pakistan being water-deficient or ranking 30th among the most water-deficient countries.",
+        "Hallucination": "The score is 0.00 because the actual output fully aligns with the provided contexts, accurately reflecting the WASH Program’s sustainable water solutions, clean water access, sanitation, hygiene support, and crisis-related risks, with no contradictions identified."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8953908205032348,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q56",
+      "question": "How does Alkhidmat provide clean water under the Wash Program?",
+      "expected_answer": "Alkhidmat runs dozens of water filtration plants in urban areas and installs water pumps in remote regions such as the Thar Desert.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 11.64,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.325,
+        "ContextualRecall": 1.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response does not answer how Alkhidmat provides clean water under the Wash Program at all; instead, it includes irrelevant content and a support escalation statement unrelated to Alkhidmat’s clean water efforts.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 0.33 because the first three nodes in retrieval contexts are irrelevant nodes ranked above the relevant ones. In particular, the first node in retrieval contexts only mentions \"sustainable water solutions for communities in need\" and says \"simply drilling wells and installing water pumps cannot solve the water crisis,\" but it misses the specific answer about \"installing water filtration plants in big cities\" and pumps in the \"far-off areas of Thar Desert.\" The second node in retrieval contexts is again too general, repeating \"sustainable water solutions for communities in need\" without the needed details, and the third node in retrieval contexts similarly only refers to a \"sustainable source of clean water\" without the specific methods. The score is still at 0.33 because the fourth and fifth nodes in retrieval contexts are relevant and clearly provide the answer with \"installing water filtration plants in big cities\" and \"setting up hand pumps, solar submersible water pumps\" in the \"far-off areas of Thar Desert\" and other remote regions.",
+        "ContextualRecall": "The score is 1.00 because sentence 1 is fully supported by nodes in retrieval context, especially node 4 and node 5, which state that Alkhidmat installs water filtration plants in big cities and sets up water pumps in far-off areas such as the Thar Desert. Minor wording differences like \"dozens,\" \"urban areas,\" and \"remote regions\" are consistent paraphrases, so the claim is completely attributable.",
+        "Hallucination": "The score is 0.00 because the actual output makes no factual claims and does not contradict the provided context; it is only a fallback response indicating the query is being routed to a human agent."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "no_support",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q57",
+      "question": "What makes Alkhidmat’s Orphan Care Program different from traditional orphanages?",
+      "expected_answer": "Instead of traditional orphanages, Alkhidmat runs modern, state-of-the-art boarding school systems where orphans receive quality education and care.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 8.75,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response did not answer what makes Alkhidmat’s Orphan Care Program different from traditional orphanages at all; instead, it included unrelated support/escalation content, so it was entirely irrelevant to the question.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and aligned.",
+        "ContextualPrecision": "The score is 0.00 because all top-ranked nodes in retrieval contexts are irrelevant to the question. The 1st node in retrieval contexts only says Alkhidmat 'supports tens of thousands of orphans' and provides 'monthly support,' but not what makes the program different from traditional orphanages. The 2nd node in retrieval contexts again gives the same irrelevant detail and lacks the distinguishing point about 'replacing traditional orphanages with boarding schools.' The 3rd node in retrieval contexts is another duplicate that mentions 'monthly support' for '30,000 orphaned children' without addressing 'Instead of traditional orphanages' or 'quality education and care' in boarding schools. The 4th and 5th nodes in retrieval contexts discuss expansion, '$50 monthly support,' and 'education, healthcare, nutrition, and emotional well-being,' but still miss the key detail about 'modern, state-of-the-art boarding school systems.' Since no relevant nodes appear above irrelevant ones, the score cannot be higher, and it remains at 0.00.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1–5 do not mention replacing traditional orphanages with modern, state-of-the-art boarding school systems or boarding schools at all, and only describe general orphan support such as education, healthcare, nutrition, and emotional well-being.",
+        "Hallucination": "The score is 0.00 because the actual output makes no substantive factual claims and only routes the query to a human agent, so it does not contradict any of the provided contexts."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q58",
+      "question": "What are Aghosh Orphan Centers and where are they located?",
+      "expected_answer": "Aghosh Orphan Centers are Alkhidmat’s boarding schools for orphans. There are 11 centers, including one in Turkey for Syrian refugee children.",
+      "actual_answer": "Aghosh Orphan Centers are part of Alkhidmat Foundation's Aghosh Homes project, which provides a safe and nurturing environment for orphaned and destitute children to thrive and achieve their full potential. The centers are located in various regions of Pakistan, including:\n\n- Punjab: Attock, Gujranwala, Islamabad (Girls), Murree, Rawalpindi, Faisalabad, Sheikhupura (Girls), Sheikhupura (Boys)\n- Sindh: Karachi, Hala, Rashidabad\n- AJ & K: Bagh, Rawalakot\n- KPK: Various locations\n\nThese centers aim to create a family-like setting with trained caregivers who provide individual attention and care to the children.",
+      "rag_time_seconds": 38.1,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.5,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": true,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response directly answers what Aghosh Orphan Centers are and where they are located, with no irrelevant information. Nice and fully on-topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 1.00 because all top-ranked nodes in retrieval contexts are relevant and there are no irrelevant nodes ranked above relevant ones. The first node in retrieval contexts helps explain what Aghosh Orphan Centers are through \"orphan-focused program\" and \"orphaned and destitute children in Pakistan,\" while the fourth node in retrieval contexts adds strong location support with \"PUNJAB ... SINDH ... AJ & K ... Turkey ... KPK\" and places like \"Attock,\" \"Karachi,\" and \"Bagh.\" It is not higher only because 1.00 is already perfect—great ranking overall.",
+        "ContextualRecall": "The score is 0.50 because sentence 1 is partially supported by nodes in retrieval context 3 and 5, which describe Alkhidmat Aghosh Homes as boarding and lodging facilities for orphaned children, aligning with Aghosh Orphan Centers being boarding schools for orphans. However, sentence 2 is not supported, since node 4 mentions Turkey and other counts, but no node in retrieval context states that there are 11 centers or that one in Turkey is specifically for Syrian refugee children.",
+        "Hallucination": "The score is 0.00 because the actual output is fully supported by the provided contexts, matches the key facts about Aghosh Homes, and contains no contradictions or unsupported claims."
+      },
+      "overall_pass": true,
+      "metadata": {
+        "combined_confidence": 0.8825080633163452,
+        "domain": "healthcare",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q59",
+      "question": "What support is provided under the Orphan Family Support Program?",
+      "expected_answer": "The program supports orphan children living with their mother or relatives by providing educational and health support, as well as assistance and education for their mother or guardian.",
+      "actual_answer": "An additional 2,250 orphaned children will receive monthly financial assistance along with support for education, healthcare, nutrition, and emotional well-being. Alkhidmat has already been providing $50 monthly support to each of the 750 sponsored orphans, helping them meet basic needs and maintain stability during unimaginable hardship.",
+      "rag_time_seconds": 45.83,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response is fully relevant to the question and does not include any irrelevant statements. It stays focused on the support provided under the Orphan Family Support Program, which is excellent.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 1.00 because the most relevant nodes in the retrieval contexts are ranked first: the first node and second node both directly mention 'monthly financial assistance' and support for 'education, healthcare, nutrition, and emotional well-being,' which matches the question well. It is not higher than 1.00 because that is already the maximum, and the less useful nodes are correctly pushed lower: the third node only says 'sponsors over 30,000 orphaned children, with monthly support' and adds unrelated areas like 'WASH' and 'Microfinance,' the fourth node is 'too general,' and the fifth node 'repeats the same general information' without the key support details.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by the nodes in retrieval context: nodes 1 and 2 mention orphan sponsorship with education, healthcare, nutrition, emotional well-being, and financial assistance, but they do not state that the children are living with their mother or relatives or that the program provides assistance and education for the mother or guardian.",
+        "Hallucination": "The score is 0.00 because the actual output fully aligns with the provided contexts, accurately repeating the figures about 2,250 additional orphaned children and $50 monthly support for 750 sponsored orphans, with no contradictions identified."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8871523022651673,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q60",
+      "question": "Why are community services an important focus for Alkhidmat?",
+      "expected_answer": "Community services are important because Pakistan faces widespread poverty, lack of basic facilities, and ranks 154th on the Human Development Index, with about 51% of the population deprived of basic necessities.",
+      "actual_answer": "I wasn't able to answer your question. Routing you to a human agent.",
+      "rag_time_seconds": 7.55,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 0.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": false,
+        "Faithfulness": true,
+        "ContextualPrecision": false,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 0.00 because the response does not answer why community services are an important focus for Alkhidmat at all; instead, it includes unrelated support/escalation content, making it entirely irrelevant to the input.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job staying faithful to the source.",
+        "ContextualPrecision": "The score is 0.00 because the retrieval contexts do not place any relevant nodes above irrelevant ones—in fact, all five ranked nodes in retrieval contexts are irrelevant to the specific question. The first node in retrieval contexts only says Alkhidmat is 'woven into everyday social welfare across Pakistan' and lists services, but misses the needed basis about 'widespread poverty' and deprivation. The second node in retrieval contexts mentions 'hospitals, clinics, and mobile health units' and other programs, yet still lacks the key justification. The third, fourth, and fifth nodes in retrieval contexts are also irrelevant for the same reason, including missing details like '154th on the Human Development Index' and '51% of the population deprived of basic necessities'. Since no relevant node appears anywhere in the ranking, the score cannot be higher, and it stays at 0.00.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by any node(s) in retrieval context: nodes 1–5 discuss Alkhidmat’s service areas and activities, but none mention Pakistan’s widespread poverty, lack of basic facilities, HDI rank of 154th, or that 51% of the population is deprived of basic necessities.",
+        "Hallucination": "The score is 0.00 because the actual output makes no conflicting factual claims and only states that the question could not be answered and was routed to a human agent, which does not contradict any of the provided context."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.0,
+        "domain": "healthcare",
+        "selfrag_support": "uncertain",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q61",
+      "question": "What types of community services does Alkhidmat provide?",
+      "expected_answer": "Alkhidmat provides services such as running food centers, distributing wheelchairs, and offering affordable funeral bus services.",
+      "actual_answer": "Alkhidmat provides various community services, including disaster management (rescue, relief, and rehabilitation), health services (hospitals, clinics, and mobile health units), education (temporary schools, scholarships, and regular schooling initiatives), orphan care (supporting over 30,000 orphaned children), and WASH (water, sanitation, and hygiene). Additionally, Alkhidmat engages in community development and advocacy programs that benefit women, promoting gender equality and empowering them in disaster relief and rehabilitation efforts.",
+      "rag_time_seconds": 23.21,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.325,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response is fully relevant to the question about Alkhidmat’s community services, with no irrelevant statements included. Great job keeping it focused and directly on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully faithful to the retrieval context—great job.",
+        "ContextualPrecision": "The score is 0.33 because the most relevant nodes in retrieval contexts were ranked too low: the first, second, and third nodes in retrieval contexts are irrelevant since they only mention \"Disaster Management\", \"Health Services\", \"Education\", and \"Orphan Care Program\" and miss the expected community services like \"running food centers, distributing wheelchairs, and offering affordable funeral bus services.\" The fourth and fifth nodes in retrieval contexts support the query better because they mention \"social welfare programs\" and \"food distribution,\" which partially relates to \"running food centers.\" The score is not higher because the more useful nodes appear after multiple irrelevant ones, but it is still at 0.33 because the later-ranked nodes do contain some partially relevant information.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not supported by the nodes in retrieval context: while node 4 or 5 may align with food-related aid, no node supports the claims about distributing wheelchairs or offering affordable funeral bus services, so the sentence cannot be fully attributed.",
+        "Hallucination": "The score is 0.00 because the actual output fully matches the provided contexts, including Alkhidmat’s services and women-focused community development and advocacy efforts, with no contradictions identified."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8802677631378174,
+        "domain": "healthcare",
+        "selfrag_support": "partially_supported",
+        "evidence_coverage": 0.8,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q62",
+      "question": "What is the purpose of the Mawakhat Program?",
+      "expected_answer": "The Mawakhat Program aims to help low-income individuals by offering small-scale, interest-free loans that are repayable in easy installments.",
+      "actual_answer": "The purpose of the Mawakhat Program is to empower individuals by providing them with the necessary resources to support themselves and their families, fostering entrepreneurship and economic independence within the community. It aims to provide dignified livelihoods to deserving individuals and brave women across Pakistan.",
+      "rag_time_seconds": 12.62,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 0.325,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the answer is fully relevant to the question about the purpose of the Mawakhat Program, with no irrelevant statements included. Great job keeping it focused and on-topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions, so the actual output appears fully consistent with the retrieval context—great job staying faithful to the source.",
+        "ContextualPrecision": "The score is 0.33 because the most relevant nodes in retrieval contexts appear too low in the ranking: the first node in retrieval contexts is irrelevant since it only mentions \"a dignified livelihood\" and that people were \"empowered many by giving them the means to support themselves and their families,\" but not the key purpose of providing loans; the second node in retrieval contexts is also irrelevant because it only says \"dignified livelihoods to thousands of deserving individuals\"; and the third node in retrieval contexts is irrelevant as it repeats \"transforming lives\" and \"providing dignified livelihoods\" without the needed loan purpose. The score is still at 0.33 because the fourth node in retrieval contexts clearly states \"interest-free loan cheques\" and helping people \"kickstart their own small businesses,\" and the fifth node in retrieval contexts reinforces the same purpose, so relevant information is present, just ranked after several irrelevant nodes.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not fully supported by the nodes in retrieval context: nodes 4 and 5 mention interest-free loan cheques and support for deserving individuals to start small businesses, but they do not state that the program targets low-income individuals or that the loans are repayable in easy installments.",
+        "Hallucination": "The score is 0.00 because the actual output is fully supported by the provided contexts, and there are no contradictions or unsupported claims identified."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8760160207748413,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q63",
+      "question": "What types of businesses have benefited from the Mawakhat Program?",
+      "expected_answer": "Beneficiaries have successfully established businesses such as tailoring shops, garment making units, hardware stores, general stores, auto rickshaws, food stalls, bakeries, online clothing businesses, and boutiques.",
+      "actual_answer": "The Mawakhat Program has facilitated the establishment of various businesses, including cooking and embroidery ventures, tailoring businesses, beauty parlors, grocery stores, three-wheeler operations, and stationery shops.",
+      "rag_time_seconds": 11.88,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the answer stayed fully focused on which types of businesses benefited from the Mawakhat Program, with no irrelevant statements. It directly addressed the input clearly and completely.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it faithful and aligned.",
+        "ContextualPrecision": "The score is 1.00 because the most relevant nodes in retrieval contexts are ranked first: the first node directly lists supported business types like 'tailoring businesses', 'grocery stores', and 'three-wheeler operations', and the second node repeats those same useful examples. This score is not lower because the irrelevant nodes only appear afterward—the third, fourth, and fifth nodes are all less useful since they contain general points such as 'empowering women', 'Islamic microfinance initiatives', and 'Access to Financial Resources' without specific business types, so they are correctly ranked below the relevant nodes.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not fully supported by the nodes in retrieval context: only nodes 1 and 2 mention a few business types like tailoring, grocery/general retail, and three-wheeler/auto-rickshaw-related work, while the rest of the sentence adds unsupported businesses such as garment making units, hardware stores, food stalls, bakeries, online clothing businesses, and boutiques.",
+        "Hallucination": "The score is 0.00 because the actual output is fully supported by the context: it matches the listed businesses facilitated by the Alkhidmat Mawakhat Program and introduces no contradictions or unsupported claims."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.8709818840026855,
+        "domain": "healthcare",
+        "selfrag_support": "fully_supported",
+        "evidence_coverage": 1.0,
+        "retrieval_retried": false
+      }
+    },
+    {
+      "id": "Q64",
+      "question": "What role does Alkhidmat play during disasters in Pakistan?",
+      "expected_answer": "Alkhidmat volunteers actively participate in relief and rescue operations during disasters and have worked on major relief efforts such as the 2005 Kashmir earthquake and emergencies in Awaran, Balochistan.",
+      "actual_answer": "Alkhidmat is often among the first responders in earthquakes, floods, bomb blasts, and health emergencies. It has launched a comprehensive relief operation in response to recent fatal floods, mobilizing substantial resources and trained volunteers. A fully-equipped Disaster Responder unit has been deployed to effectively manage and respond to urgent crises, ensuring timely and effective assistance.",
+      "rag_time_seconds": 14.95,
+      "contexts_retrieved": 5,
+      "rag_rejected": false,
+      "scores": {
+        "AnswerRelevancy": 1.0,
+        "Faithfulness": 1.0,
+        "ContextualPrecision": 1.0,
+        "ContextualRecall": 0.0,
+        "Hallucination": 0.0
+      },
+      "passed": {
+        "AnswerRelevancy": true,
+        "Faithfulness": true,
+        "ContextualPrecision": true,
+        "ContextualRecall": false,
+        "Hallucination": true
+      },
+      "reasons": {
+        "AnswerRelevancy": "The score is 1.00 because the response is fully relevant to the question about Alkhidmat’s role during disasters in Pakistan, with no irrelevant statements detracting from its focus. Nice job keeping it directly on topic.",
+        "Faithfulness": "The score is 1.00 because there are no contradictions—the actual output appears fully consistent with the retrieval context. Nice job keeping it accurate and faithful.",
+        "ContextualPrecision": "The score is 1.00 because every top-ranked node in retrieval contexts is relevant to the input, with the first node clearly stating Alkhidmat has 'launched an immediate, comprehensive relief operation,' the second node reinforcing its 'fully-equipped Disaster Responder unit,' and the third through fifth nodes confirming 'Disaster Management - Rescue, Relief & Rehabilitation' and that it is 'often among the first responders.' Since no irrelevant nodes appear above relevant ones, the ranking is perfectly precise—great job.",
+        "ContextualRecall": "The score is 0.00 because sentence 1 is not attributable to the nodes in retrieval context: while nodes 1/2 refer to current flood relief work with trained volunteers and a disaster response unit, and nodes 3/4/5 describe Alkhidmat as responding to disasters like earthquakes and floods, none of these nodes mention the specific relief efforts of the 2005 Kashmir earthquake or emergencies in Awaran, Balochistan.",
+        "Hallucination": "The score is 0.00 because the actual output is fully supported by the provided contexts: it accurately describes Alkhidmat’s flood relief operation, resource and volunteer mobilization, deployment of the Disaster Responder unit, and its role as a frequent first responder, with no contradictions identified."
+      },
+      "overall_pass": false,
+      "metadata": {
+        "combined_confidence": 0.9115979433059692,
+        "domain": "healthcare",
         "selfrag_support": "fully_supported",
         "evidence_coverage": 1.0,
         "retrieval_retried": false
