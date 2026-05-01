@@ -113,6 +113,61 @@
       \verb 10.1109/ICMLC.2006.259164
       \endverb
     \endentry
+    \entry{asai2023selfrag}{article}{}{}
+      \name{author}{6}{}{%
+        {{hash=a0602035e63a56d86a67823386c1a49d}{%
+           family={Asai},
+           familyi={A\bibinitperiod},
+           given={Akari},
+           giveni={A\bibinitperiod}}}%
+        {{hash=9621ce78a8b5476f9ea926664e4a1107}{%
+           family={Wu},
+           familyi={W\bibinitperiod},
+           given={Zeqiu},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=2679ca309489b1dec6dad69e85c8967a}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Yizhong},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=2ea546d9309d9d1a28f69253edac4f94}{%
+           family={Salmani},
+           familyi={S\bibinitperiod},
+           given={Avirup},
+           giveni={A\bibinitperiod}}}%
+        {{hash=1dbd3a5b42828fb2cebd7786488ba425}{%
+           family={Zettlemoyer},
+           familyi={Z\bibinitperiod},
+           given={Luke},
+           giveni={L\bibinitperiod}}}%
+        {{hash=e9dafefb58a6a6e1e496fdf8928b3eeb}{%
+           family={Hajishirzi},
+           familyi={H\bibinitperiod},
+           given={Hannaneh},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{fa96a5b67078795c72e10786b255fb98}
+      \strng{fullhash}{cdc125fa79c69d41cc8b9c8c9fe5b22c}
+      \strng{fullhashraw}{cdc125fa79c69d41cc8b9c8c9fe5b22c}
+      \strng{bibnamehash}{fa96a5b67078795c72e10786b255fb98}
+      \strng{authorbibnamehash}{fa96a5b67078795c72e10786b255fb98}
+      \strng{authornamehash}{fa96a5b67078795c72e10786b255fb98}
+      \strng{authorfullhash}{cdc125fa79c69d41cc8b9c8c9fe5b22c}
+      \strng{authorfullhashraw}{cdc125fa79c69d41cc8b9c8c9fe5b22c}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:2310.11511}
+      \field{title}{Self-{RAG}: Learning to Retrieve, Generate, and Critique through Self-Reflection}
+      \field{year}{2023}
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2310.11511
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2310.11511
+      \endverb
+    \endentry
     \entry{chambers2025pakistan}{online}{}{}
       \name{author}{2}{}{%
         {{hash=57d072c75cab43eb2305f5c460862a94}{%

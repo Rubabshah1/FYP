@@ -51,6 +51,7 @@ from rag_config import (
     RETRIEVAL_RETRY_ENABLE,
     RETRIEVAL_RETRY_MAX_ATTEMPTS,
     RETRIEVAL_RETRY_RELEVANCE_THRESHOLD,
+    ROMAN_URDU_ENABLE,
     ROMAN_URDU_MARKERS,
     SELFRAG_ENABLE,
     SELFRAG_MIN_CONFIDENCE,
@@ -183,7 +184,14 @@ class SelfRAGCritic:
         has_alkhidmat_keyword = any(kw in query_lower for kw in alkhidmat_keywords)
         has_program_keyword = any(p in query_lower for p in alkhidmat_programs)
 
-        if has_program_keyword and not has_alkhidmat_keyword:
+        # Fast-path: if "Alkhidmat" appears in the query, it is ALWAYS relevant —
+        # no GPT call needed. This covers contact/info queries like
+        # "How can I contact Alkhidmat?" that GPT incorrectly marks as generic.
+        if has_alkhidmat_keyword:
+            print(f"[DOMAIN-RELEVANCE] Alkhidmat keyword found — skipping GPT, marking RELEVANT")
+            return True
+
+        if has_program_keyword:
             question_words = ["what", "who", "where", "when", "how", "why", "kya", "kaun", "kahan", "kab"]
             if any(query_lower.startswith(q) for q in question_words) or "?" in query:
                 print(f"[DOMAIN-RELEVANCE] Program keyword in question: '{query}' — likely relevant")
@@ -198,12 +206,13 @@ A query is RELEVANT if it refers to:
 - Alkhidmat Foundation Pakistan by name, OR
 - Alkhidmat's programs/services (Bano Qabil, Aghosh, Mawakhat, donations,
   healthcare, education, disaster relief, volunteering, etc.)
+- Contacting, reaching, or getting information about Alkhidmat Foundation.
 - Even if "Alkhidmat" is not explicitly mentioned, queries about the above programs are RELEVANT.
 
 A query is IRRELEVANT if it is:
-- About unrelated topics (politics, sports, celebrities, weather, general Islamic
-  concepts not tied to Alkhidmat, etc.)
-- Too generic (e.g. "best charity in Pakistan", "free hospitals in Karachi")
+- About completely unrelated topics (politics, sports, celebrities, weather).
+- General Islamic concepts with no connection to Alkhidmat.
+- Too generic with no Alkhidmat context (e.g. "best charity in Pakistan", "free hospitals in Karachi").
 
 When in doubt, choose [RELEVANT].
 
@@ -1549,15 +1558,27 @@ def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400, filter_ca
                               else "براہ کرم 2-3 جملوں میں مختصر خلاصہ دیں۔" if wants_summary
                               else "براہ کرم مکمل اور واضح جواب دیں۔")
         display_question = profile.query_urdu_script or original_query
+        history_block_ur = ""
+        if history:
+            lines = []
+            for turn in history[-6:]:
+                role = "صارف" if turn.get("role") == "user" else "اسسٹنٹ"
+                lines.append(f"{role}: {(turn.get('content') or '').strip()}")
+            history_block_ur = "\nگفتگو:\n" + "\n".join(lines) + "\n"
+ 
         prompt = f"""آپ الخدمت فاؤنڈیشن پاکستان کے لیے ایک مددگار اسسٹنٹ ہیں۔
 {format_instruction}
-صرف نیچے دیے گئے سیاق و سباق کی معلومات استعمال کریں۔ اگر جواب سیاق و سباق میں نہیں تو کہیں: "مجھے معلوم نہیں"
-
+{history_block_ur}
+ہدایات:
+- صرف نیچے دیے گئے سیاق و سباق کی معلومات استعمال کریں۔
+- اگر جواب سیاق و سباق میں نہیں تو صرف لکھیں: "مجھے معلوم نہیں"
+- جواب صرف اردو (نستعلیق) میں دیں — انگریزی یا رومن اردو ہرگز نہ لکھیں۔
+ 
 سیاق و سباق:
 {context}
-
+ 
 سوال: {display_question}
-
+ 
 جواب (صرف اردو میں):
 """
     else:
@@ -1625,10 +1646,72 @@ def _agent_route_response(profile) -> str:
     else:
         return "I wasn't able to answer your question. Routing you to a human agent."
 
+# ============ CONVERSATION MEMORY — QUERY REWRITING ============
+ 
+def rewrite_query_with_history(
+    current_query_en: str,
+    conversation_history: list,
+) -> str:
+    """
+    Rewrites the current (English) retrieval query into a self-contained
+    question using the last few conversation turns.
+ 
+    Implements the LCEL conversational RAG pattern (Harrison Chase, 2024):
+    history-conditioned query rewriting keeps retrieval stable across
+    multi-turn conversations without stuffing raw history into the
+    vector search.
+ 
+    Args:
+        current_query_en:    The English form of the current query
+                             (already translated/transliterated).
+        conversation_history: [{"role": "user"|"assistant", "content": str}, ...]
+                             Ordered oldest-first, most-recent last.
+ 
+    Returns:
+        Rewritten English query, or current_query_en unchanged on failure.
+    """
+    if not conversation_history:
+        return current_query_en
+ 
+    recent = conversation_history[-6:]   # last 3 user + 3 assistant turns
+ 
+    history_text = ""
+    for turn in recent:
+        role = turn.get("role", "user")
+        content = (turn.get("content") or "").strip()
+        label = "User" if role == "user" else "Assistant"
+        history_text += f"{label}: {content}\n"
+ 
+    prompt = f"""Given the conversation history and a follow-up question, rewrite the follow-up question into a fully self-contained English question that can be understood without the history.
+ 
+Rules:
+- Resolve all pronouns and coreferences (e.g. "it", "that program", "there").
+- Output ONLY the rewritten question — no preamble or explanation.
+- Keep it under 25 words if possible.
+- If already self-contained, return it unchanged.
+- Always output English regardless of the follow-up language.
+ 
+Conversation history:
+{history_text.strip()}
+ 
+Follow-up question: {current_query_en}
+ 
+Rewritten standalone question:"""
+ 
+    rewritten = _gpt_call(prompt, max_tokens=60, temperature=0.1)
+    rewritten = (rewritten or "").strip().strip("\"'")
+ 
+    if rewritten:
+        print(f"[MEMORY] Rewritten for retrieval: '{current_query_en}' → '{rewritten}'", flush=True)
+        return rewritten
+ 
+    return current_query_en
+
 # ============ SELF-RAG ANSWER GENERATION ============
 
 def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
-                            filter_category: str = None):
+                              filter_category: str = None,
+                              conversation_history: list = None):
     """
     Multilingual Self-RAG with Agentic AI.
     ALL LLM calls use GPT via _gpt_call / _gpt_generate.
@@ -1651,6 +1734,14 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
     print(f"{'='*80}", flush=True)
 
     profile = build_query_lang_profile(query)
+
+    # ── Conversation memory: rewrite retrieval query ──────────────────
+    history = conversation_history or []
+    if history:
+        rewritten_en = rewrite_query_with_history(profile.query_en, history)
+        profile.query_en = rewritten_en   # direct field assignment — no dataclasses.replace needed
+    # ─────────────────────────────────────────────────────────────────
+
     query_info = analyze_query(profile.original_query)
     query_for_rag = profile.query_en
     original_query = profile.original_query
@@ -1712,13 +1803,18 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
     retrieval_query_en = expand_query_for_retrieval(query_for_rag, winning_domain, query_info)
 
     # STEP 2: Embedding cache + retrieval
+    # Skip cache when conversation memory rewrote the query — the rewritten query
+    # targets a different topic than the previous turn and must not reuse its embedding.
+    _memory_rewrote_query = bool(history) and (retrieval_query_en != profile.original_query)
     print(f"\n[AGENTIC-RAG] Embedding cache check...", flush=True)
-    cached_embedding = find_similar_cached_embedding(retrieval_query_en)
+    cached_embedding = None if _memory_rewrote_query else find_similar_cached_embedding(retrieval_query_en)
     if cached_embedding is not None:
         query_embedding = cached_embedding
         selfrag_metrics['embedding_cached'] = True
         print(f"[AGENTIC-RAG] ✅ Cache hit!", flush=True)
     else:
+        if _memory_rewrote_query:
+            print(f"[AGENTIC-RAG] Cache bypassed — memory-rewritten query needs fresh embedding", flush=True)
         query_embedding = get_embedder().encode([f"query: {retrieval_query_en}"], normalize_embeddings=True)[0]
         cache_query_embedding(retrieval_query_en, query_embedding)
 
@@ -1782,11 +1878,47 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
         can_answer = critic.check_answer_in_context(query_for_rag, context)
         selfrag_metrics['answer_in_context'] = can_answer
         if not can_answer:
-            print(f" ✗ Context cannot answer the query — routing to agent", flush=True)
-            selfrag_metrics['route_to_agent'] = True
-            return (_agent_route_response(profile), original_query, profile.input_lang,
-                    results, {'combined_confidence': 0.0, 'route_to_agent': True}, domain_classification, selfrag_metrics)
-        print(f" ✓ Context can answer the query", flush=True)
+            # Context mismatch — likely a cache/retrieval topic drift. Retry once with
+            # a fresh, domain-specific reformulation before routing to a human agent.
+            print(f" ✗ Context cannot answer — retrying retrieval with fresh query...", flush=True)
+            retry_query = retriever_agent.reformulate_query(
+                query_for_rag, winning_domain, reason="context_mismatch"
+            )
+            retry_embedding = get_embedder().encode([f"query: {retry_query}"], normalize_embeddings=True)[0]
+            cache_query_embedding(retry_query, retry_embedding)
+            retry_results, retry_embedding, retry_doc_embeddings, _ = retriever_agent.retrieve_with_retry(
+                retry_query, winning_domain, top_k=top_k, filter_category=filter_category
+            )
+            if retry_results:
+                retry_context_parts = []
+                for r in retry_results:
+                    chunk = sanitize_chunk_text(r["text"])
+                    if chunk:
+                        if len(chunk) > 1200:
+                            chunk = chunk[:1200].rsplit('\n', 1)[0] + "\n\n[truncated]"
+                        retry_context_parts.append(chunk)
+                retry_context = "\n\n".join(retry_context_parts)
+                can_answer_retry = critic.check_answer_in_context(query_for_rag, retry_context)
+                if can_answer_retry:
+                    print(f" ✅ Retry retrieval succeeded — continuing with new context", flush=True)
+                    results = retry_results
+                    query_embedding = retry_embedding
+                    doc_embeddings = retry_doc_embeddings
+                    context = retry_context
+                    selfrag_metrics['retrieval_retried'] = True
+                    selfrag_metrics['answer_in_context'] = True
+                else:
+                    print(f" ✗ Retry also failed — routing to agent", flush=True)
+                    selfrag_metrics['route_to_agent'] = True
+                    return (_agent_route_response(profile), original_query, profile.input_lang,
+                            results, {'combined_confidence': 0.0, 'route_to_agent': True}, domain_classification, selfrag_metrics)
+            else:
+                print(f" ✗ Retry retrieval returned no results — routing to agent", flush=True)
+                selfrag_metrics['route_to_agent'] = True
+                return (_agent_route_response(profile), original_query, profile.input_lang,
+                        results, {'combined_confidence': 0.0, 'route_to_agent': True}, domain_classification, selfrag_metrics)
+        else:
+            print(f" ✓ Context can answer the query", flush=True)
 
     # Build prompt
     wants_list = query_info['wants_list']
@@ -1812,19 +1944,58 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
 جواب (صرف اردو میں):
 """
     else:
-        format_instruction = ("Provide a clear answer in bullet point format." if wants_list
-                              else "Provide a brief summary in 2-3 sentences." if wants_summary
-                              else "Provide a detailed, comprehensive answer." if wants_detail
-                              else "Provide a clear, complete answer.")
-        prompt = f"""You are a helpful customer support agent for Alkhidmat Foundation Pakistan.
+        # Inject recent conversation turns so the model can reference prior answers
+        history_block = ""
+        if history:
+            lines = []
+            for turn in history[-6:]:
+                role = "User" if turn.get("role") == "user" else "Assistant"
+                lines.append(f"{role}: {(turn.get('content') or '').strip()}")
+            history_block = "\nConversation so far:\n" + "\n".join(lines) + "\n"
+
+        if profile.output_lang == "roman_ur":
+            # Dedicated Roman Urdu prompt — language instruction is the FIRST thing GPT sees,
+            # not a footnote. This dramatically reduces English bleed-through.
+            format_instruction_ru = (
+                "Jawab nuke (bullet points) mein dein." if wants_list
+                else "2-3 jumlon mein mukhtasar jawab dein." if wants_summary
+                else "Mukammal aur tafsili jawab dein." if wants_detail
+                else "Saaf aur mukammal jawab dein."
+            )
+            prompt = f"""Aap Alkhidmat Foundation Pakistan ke liye ek madad-gar assistant hain.
+ZAROORI HUKAM: Sirf Roman Urdu mein jawab dein (Latin haroof mein — koi Urdu/Arabic script nahi).
+Misaal: "Alkhidmat Foundation mein aap online donate kar sakte hain..."
+{format_instruction_ru}
+{history_block}
+AHKAM:
+- Sirf neeche diye gaye malumat se jawab dein.
+- Apni taraf se kuch mat bataein.
+- Agar malumat mojood nahi: "Mujhe maloom nahin" likhein.
+- Sirf jawab likhein, koi label nahi.
+
+Malumat:
+{context}
+
+Sawal: {original_query}
+
+Jawab (Roman Urdu mein):"""
+        else:
+            format_instruction = (
+                "Provide a clear answer in bullet point format." if wants_list
+                else "Provide a brief summary in 2-3 sentences." if wants_summary
+                else "Provide a detailed, comprehensive answer." if wants_detail
+                else "Provide a clear, complete answer."
+            )
+            prompt = f"""You are a helpful customer support agent for Alkhidmat Foundation Pakistan.
 
 {format_instruction}
-
+{history_block}
 CRITICAL INSTRUCTIONS:
-- Use ONLY the information provided in the context below
-- DO NOT answer from general knowledge
+- Use ONLY the information provided in the context below.
+- DO NOT answer from general knowledge.
 - If the answer is not in the context, respond EXACTLY: "I don't know"
-- Return ONLY the direct answer, no labels
+- Return ONLY the direct answer, no labels.
+LANGUAGE RULE: Reply in English only.
 
 Information:
 {context}
@@ -1940,9 +2111,30 @@ Answer:
         if not is_urdu_script(answer):
             answer = translate_english_to_urdu(answer, timeout=15)
     elif profile.output_lang == "roman_ur":
-        protected = protect_brand_terms(answer)
-        answer_ur = translate_english_to_urdu(protected, timeout=15)
-        answer = to_roman_urdu(restore_brand_terms(answer_ur))
+        if not is_urdu_script(answer):
+            # Answer came back in English — convert directly to Roman Urdu via GPT.
+            # The old chain (English→Urdu script→to_roman_urdu) broke silently when
+            # romanize_to_roman_urdu_with_llm failed (gpt-5.2 / local LLM unavailable).
+            roman_prompt = (
+                "Translate the following English text into Roman Urdu "
+                "(Urdu written in Latin/English letters).\n\n"
+                "STRICT RULES:\n"
+                "- Output MUST be in Roman Urdu (Latin letters only). No Urdu/Arabic script.\n"
+                "- Use natural Pakistani Roman Urdu: aap, hain, karein, nahin, hai, ka, ki, ke, mein, se.\n"
+                "- Keep brand names unchanged: Alkhidmat, EasyPaisa, JazzCash, Bank of Punjab.\n"
+                "- Keep phone numbers, URLs, and account numbers exactly as-is.\n"
+                "- Output ONLY the Roman Urdu translation. No labels, no preamble.\n\n"
+                f"English text:\n{answer}\n\nRoman Urdu:"
+            )
+            roman_answer = _gpt_call(roman_prompt, max_tokens=600, temperature=0.2)
+            roman_answer = (roman_answer or "").strip()
+            if roman_answer and not is_urdu_script(roman_answer):
+                answer = roman_answer
+            # else: GPT failed — keep English as readable fallback
+        else:
+            # Answer is already in Urdu script — use existing romanization path
+            protected = protect_brand_terms(answer)
+            answer = to_roman_urdu(restore_brand_terms(protected))
 
     sources = [{"category": r['category'], "filename": r['filename'],
                 "file_path": r['file_path'], "similarity": r['similarity']} for r in results]

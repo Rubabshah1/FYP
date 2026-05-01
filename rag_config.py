@@ -83,10 +83,27 @@ BRAND_TERMS = [
 ]
 
 ROMAN_URDU_MARKERS = {
-    "kya","kyu","kyun","kaise","kesy","kese","kis","kon","ka","ki","ko",
-    "mein","main","mera","meri","mere","hum","ham","aap","ap","tum","yeh",
-    "nahi","nai","han","haan","hai","hain","tha","thi","thay","kr","kar",
-    "karo","kren","karein","krna","hona","hogya","ho","hoga","please","plz",
+    # Question words
+    "kya","kyu","kyun","kaise","kesy","kese","kaisay","kis","kon","kaun","ka","ki","ko",
+    # Pronouns / person markers
+    "mujhe","mujh","meri","mera","mere","hum","ham","aap","ap","tum","yeh","ye","woh","wo",
+    "main","mein","unhe","unka","unki","inhe","inka","inki",
+    # Common verb roots and forms
+    "hai","hain","tha","thi","thay","ho","hoga","hogi","hone","hona","hogya","hogyi",
+    "kr","kar","karo","kren","karein","krna","karna","karta","karti","karte",
+    "chahta","chahti","chahiye","chahye","chahte",
+    "dena","dein","deta","deti","milna","milta","milti","milega","milegi",
+    "jana","janna","jata","jati","jayein","jaein","gaya","gayi",
+    "batao","bataein","batana","bata","pata","samjhao","samjhana",
+    "lena","leta","leti","lijiye","lijye",
+    # Connectors and prepositions
+    "ke","se","par","pe","tak","saath","sath","baad","pehle","phir","aur","ya","lekin","magar",
+    "bare","barey","baarey",
+    # Common adverbs and particles
+    "nahi","nai","nahin","han","haan","bilkul","zaroor","sirf","bas","abhi","ab","pls","plz","please",
+    # Common nouns appearing in Roman Urdu support queries
+    "sahoolat","sahooliat","mosool","madad","maloomat","malumat","jankari",
+    "program","khidmat","ilaaj","sehat","zakat","sadqa","sadaqah","qurbani",
 }
 
 # ============ AGENTIC / CACHE SETTINGS ============
@@ -97,7 +114,7 @@ RETRIEVAL_RETRY_ENABLE = os.environ.get("RETRIEVAL_RETRY_ENABLE", "1").lower() i
 EVIDENCE_COVERAGE_ENABLE = os.environ.get("EVIDENCE_COVERAGE_ENABLE", "1").lower() in ("1", "true", "yes", "y")
 CONVERSATION_MEMORY_ENABLE = os.environ.get("CONVERSATION_MEMORY_ENABLE", "1").lower() in ("1", "true", "yes", "y")
 
-EMBEDDING_CACHE_SIMILARITY_THRESHOLD = float(os.environ.get("EMBEDDING_CACHE_SIMILARITY_THRESHOLD", "0.95"))
+EMBEDDING_CACHE_SIMILARITY_THRESHOLD = float(os.environ.get("EMBEDDING_CACHE_SIMILARITY_THRESHOLD", "0.85"))
 DOMAIN_CENTROID_REUSE_THRESHOLD = float(os.environ.get("DOMAIN_CENTROID_REUSE_THRESHOLD", "0.85"))
 RETRIEVAL_RETRY_MAX_ATTEMPTS = int(os.environ.get("RETRIEVAL_RETRY_MAX_ATTEMPTS", "2"))
 RETRIEVAL_RETRY_RELEVANCE_THRESHOLD = float(os.environ.get("RETRIEVAL_RETRY_RELEVANCE_THRESHOLD", "0.6"))

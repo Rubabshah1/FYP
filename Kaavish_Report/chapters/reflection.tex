@@ -1,28 +1,167 @@
-\section{Learning Reflection}
-This project served as a significant technical milestone for the team, as it was our first time being exposed to and building an \textbf{Agentic Retrieval-Augmented Generation (RAG)} pipeline. We gained extensive hands-on experience in several cutting-edge AI domains:
-\begin{itemize}
-    \item \textbf{Agentic AI \& RAG:} We learned to implement a multi-agent system, including \textbf{Router Agents} to optimize computational overhead and \textbf{Self-RAG Critics} to verify facts.
-    \item \textbf{Classification \& Confidence:} We developed a \textbf{Confidence Scoring Engine} that aggregates retrieval similarity and token probability to ensure response reliability.
-    \item \textbf{Human-in-the-Loop:} We gained insights into designing \textbf{escalation workflows} where the AI flags low-confidence queries for human intervention.
-\end{itemize}
+\section{Reflections}
 
-\section{Team Reflection}
-The collaboration among our four team members was central to our progress. 
-\begin{itemize}
-    \item \textbf{Role Distribution:} Work was divided effectively: \textbf{Samah} led backend and documentation, \textbf{Rubab} focused on the frontend and Agentic Module, \textbf{Yashfeen} managed UX, testing, and model evaluation \& improvement, and \textbf{Fatima} handled data pipeline and image model.
-    \item \textbf{Collaboration:} Coordinating a five-layer architecture required constant communication to ensure the presentation, application, AI/ML, data, and infrastructure layers remained integrated.
-\end{itemize}
+%-----------------------------------------------------------------------
+\subsection{Individual Reflections}
+%-----------------------------------------------------------------------
 
-\section{Project Reflection}
-The project successfully moved Alkhidmat Foundation toward an automated, multilingual communication system.
-\begin{itemize}
-    \item \textbf{Proposed vs. Achieved:} While the \textbf{Agentic RAG engine} and \textbf{Staff Dashboard} are functional, certain operational features were affected by external constraints, such as the Agentic RAG has not been integrated into Whatsapp yet.
-    \item \textbf{Industry Partner Constraints:} The \textbf{Human Escalation} and real-time handoff have not been fully completed as intended due to delays in receiving necessary data and support from the \textbf{industry partner}.
-    \item \textbf{Design Decisions:} We prioritized core domains like \textbf{Healthcare and Donation} to ensure a stable MVP, moving broader domain coverage to future work.
-\end{itemize}
+\subsubsection*{Samah Daniyal}
 
-\section{Process Reflection}
-\begin{itemize}
-    \item \textbf{What Worked Well:} The \textbf{modular five-layer architecture} made the system highly maintainable and allowed for parallel development across the team.
-    \item \textbf{Improvements:} Current end-to-end \textbf{latency} ranges from 30 to 60 seconds. Future iterations must focus on \textbf{embedding caches} and pipeline optimization to bring response times under 10 seconds.
-\end{itemize}
+The most significant technical shift this project produced for me was 
+understanding how agentic workflows fundamentally change what a language model 
+can reliably do. Before this project, I understood RAG as a retrieval mechanism; 
+fetch documents, pass them to a model, generate a response. What I did not 
+appreciate was how much the model's behaviour degrades without explicit 
+regulation at each stage: what gets retrieved, whether it is sufficient, whether 
+the generated output is actually grounded in it. Each component exists because the model, 
+left to itself, will fill gaps with plausible-sounding fabrication. That 
+understanding now shapes how I think about any LLM-based system.
+
+The hardest challenge was not technical. Working with an external industry 
+partner over a full academic year introduced constraints that no amount of 
+engineering can resolve: delayed data access, shifting requirements, and a 
+dependency on an organisation with its own priorities and timelines. Navigating 
+that, managing expectations, adjusting scope without losing the project's core 
+purpose, and maintaining momentum within the team, required a different kind of 
+problem-solving than debugging code. It is a skill I did not expect to develop 
+through a technical FYP, and one I consider more transferable than most of what 
+I built.
+
+The skill I am most confident in now is debugging LLM systems at the theory 
+level. Early in the project, encountering unexpected model behaviour felt 
+opaque, the model produced something wrong and the cause was unclear. By the 
+end, I could trace a failure back to its source: whether it was a retrieval 
+threshold set too low, a prompt structure that allowed parametric leakage, or a 
+language detection edge case the pipeline had not accounted for. That only 
+became possible because I understood the underlying concepts well enough to 
+reason about them, not just run the code.
+
+\vspace{1em}
+\subsubsection*{Rubab Shah}
+
+In this Final Year Project, I worked on the frontend development and the design of the agentic workflow for an AI-powered public chat portal for Alkhidmat Foundation. My role focused on creating a clean, responsive, and user-friendly interface that could serve a diverse audience, including donors, patients, and beneficiaries, while ensuring smooth integration with the backend AI system.
+
+Alongside the frontend, I designed the agentic workflow that governs how the system processes user queries, retrieves relevant information through the RAG pipeline, and generates responses. This required understanding how to structure interactions between the user, the language model, and external data sources, as well as implementing logic for handling different query types and maintaining context.
+
+The learning curve was significant, especially in integrating frontend components with asynchronous AI responses and in shifting from traditional programming to more dynamic, decision-based workflows. However, through continuous iteration and problem-solving, I developed a stronger understanding of full-stack AI systems.
+
+Overall, this experience helped me improve both my technical and analytical skills, while also giving me insight into building practical AI solutions with real-world impact.
+
+\vspace{1em}
+\subsubsection*{Yashfeen Zehra Zaidi}
+
+This project was a fantastic learning curve that allowed me to dive deep into the mechanics 
+of LLMs and Retrieval-Augmented Generation (RAG) for Al-Khidmat. By implementing Agentic AI, 
+I moved beyond simple prompts to create autonomous workflows capable of handling complex 
+queries. I integrated confidence calculation scores to ensure accuracy, which triggers 
+human routing whenever the AI’s certainty is low, maintaining a seamless bridge between 
+automation and manual support. Beyond these technical milestones, the experience truly 
+drove home how much soft skills like clear communication, adaptability, and a strong work 
+ethic impact the final result.
+
+\vspace{1em}
+\subsubsection*{Fatima Dossa}
+
+The entire FYP was a rewarding experience in terms of both understanding best practices in the 
+industry as well as from a research point of view. Collaborating with an industry partner 
+like Alkhidmat and being in constant conversation with both supervisors offered us a unique 
+perspective on how real projects are executed in the industry; how there are hours of project 
+requirement meetings before finalising requirements - and how many different stakeholders are 
+involved from developers to product leads. The research in terms of lit review for our 
+external RAG based chatbot helped us learn what’s happening recently in AI and we did this 
+before implementing any feature from deciding how to categorise domain, confidence calculation, 
+retrieval strategies, building the knowledge base, or chunking.
+
+%-----------------------------------------------------------------------
+\subsection{Team Reflection}
+%-----------------------------------------------------------------------
+
+The team comprised four members, each owning a distinct layer of the system. 
+Samah led backend architecture and documentation. Rubab owned the frontend and 
+the agentic module. Yashfeen managed UX, testing, and model evaluation. Fatima 
+handled the data pipeline and image processing. This division was deliberate: 
+the five-layer architecture — presentation, application, AI/ML, data, and 
+infrastructure — mapped directly onto individual ownership, which reduced 
+coordination overhead during parallel development.
+
+The more demanding challenge was integration. Each layer made assumptions about 
+the layers adjacent to it, and those assumptions did not always hold. The 
+language detection module, for instance, needed to be tightly coupled to both 
+the frontend language state and the backend retrieval strategy — a dependency 
+that only became apparent when testing cross-lingual queries end-to-end. 
+Resolving these integration points required sustained communication across the 
+team rather than isolated problem-solving within each layer.
+
+Working across different approaches to work and different tolerances for 
+ambiguity over a year-long project is its own form of engineering. The team 
+navigated this by maintaining shared ownership of the core evaluation criteria 
+— if the RAG pipeline failed a test case, it was a team problem regardless of 
+whose code was involved. That framing kept collaboration functional even when 
+individual working styles diverged.
+
+%-----------------------------------------------------------------------
+\subsection{Process Reflection}
+%-----------------------------------------------------------------------
+
+\textbf{What worked well.} The modular architecture was the correct structural 
+decision. Because each component — the Router Agent, the Retriever, the 
+Evidence Coverage Agent, the Self-RAG Critic — was implemented as an 
+independent unit with defined inputs and outputs, individual components could 
+be tested, replaced, and debugged without destabilising the rest of the 
+pipeline. When the conversation memory buffer failed (RAG10), the fault was 
+isolated and corrected without touching retrieval or generation logic. That 
+would not have been possible in a monolithic implementation.
+
+\textbf{What could be improved.} End-to-end latency of 15--60 seconds is the 
+system's most significant unresolved limitation. The primary contributors are 
+sequential Self-RAG validation stages (each requiring a model call), CPU-bound 
+local inference for Urdu queries, and post-generation claim verification. These 
+were accepted tradeoffs given the deployment constraints — local inference was 
+necessary to maintain offline capability — but they represent a clear target 
+for future optimisation. Parallelising the Self-RAG validation stages, moving 
+inference to a GPU-enabled server, and streaming partial responses to the 
+frontend would collectively bring response times into an acceptable range for 
+a production chat interface. The embedding cache addresses repeated queries 
+effectively, but does not reduce latency for novel queries, which represent 
+the harder problem.
+
+%-----------------------------------------------------------------------
+\subsection{Plans vs. Achievements}
+%-----------------------------------------------------------------------
+
+\textbf{What was achieved.} The core system — the Agentic RAG engine, the 
+multilingual pipeline, the role-based frontend, the human escalation 
+mechanism, and the admin analytics dashboard — was fully implemented and 
+evaluated. The system handles English, Urdu, and Roman Urdu queries, processes 
+image inputs through the OCR pipeline, enforces factual grounding through 
+claim-level verification, and escalates low-confidence queries to human agents 
+via a ticketing system. These constitute the primary deliverables of the 
+original project proposal.
+
+\textbf{What was not achieved.} WhatsApp integration was specified in the 
+original proposal as the primary deployment channel, on the basis that 
+Alkhidmat Foundation's beneficiaries predominantly communicate through 
+WhatsApp. During the project, the industry partner withdrew this requirement 
+because they were unable to provide access to the WhatsApp Business API — a 
+dependency outside the team's control. The system was consequently deployed as 
+a standalone web portal rather than a WhatsApp-native interface. This does not 
+affect the RAG pipeline or the agentic architecture, but it does limit the 
+system's reach to users who access it through a browser rather than through 
+the messaging platform already embedded in their daily use.
+
+\textbf{What was added.} The agentic layer was not part of the original 
+proposal. The initial design specified a standard RAG pipeline. During the 
+literature review phase, the team identified that standard RAG systems produce 
+unacceptable hallucination rates for a deployment context involving vulnerable 
+users and sensitive queries. The Router Agent, Self-RAG Critic, and Evidence 
+Coverage Agent were added as architectural enhancements in response to that 
+finding — a scope expansion that increased implementation complexity but was 
+necessary to meet the system's core reliability requirement.
+
+\textbf{Design priorities.} The knowledge base was scoped to Healthcare and 
+Donation domains as a deliberate MVP decision. Alkhidmat Foundation operates 
+across 12+ service domains, and building a reliable knowledge base across all 
+of them within the project timeline — particularly given the delays in data 
+access — was not feasible without compromising retrieval quality in every 
+domain. Depth in two domains was prioritised over shallow coverage across all 
+of them. Broader domain expansion is the most immediate opportunity for future 
+development.

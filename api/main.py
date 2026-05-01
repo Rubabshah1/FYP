@@ -1689,6 +1689,27 @@ def convert_numpy_types(obj: Any) -> Any:
     else:
         return obj
 
+
+def _db_write_with_retry(fn, *args, max_attempts: int = 3, delay: float = 1.0, **kwargs):
+    """
+    Retry a Supabase write on transient network errors (ConnectError, getaddrinfo).
+    Returns the result on success, or None after all retries are exhausted.
+    A None return means the DB write failed non-fatally — the answer still reaches the user.
+    """
+    import time
+    for attempt in range(1, max_attempts + 1):
+        try:
+            return fn(*args, **kwargs)
+        except Exception as e:
+            err = str(e)
+            is_network = any(kw in err for kw in ("getaddrinfo", "ConnectError", "ConnectionError", "timeout", "Timeout"))
+            print(f"[DB-RETRY] Attempt {attempt}/{max_attempts} failed: {type(e).__name__}: {e}")
+            if attempt < max_attempts and is_network:
+                time.sleep(delay * attempt)
+            else:
+                print(f"[DB-RETRY] Giving up after {attempt} attempt(s) — answer will still be returned to user.")
+                return None
+
 # ============================================================================
 # WEBSOCKET CONNECTION MANAGER
 # ============================================================================
@@ -2250,7 +2271,7 @@ async def chat(
 
     
     # Create query record (domain will be updated after RAG processing)
-    query_record = create_query(db_session_id, final_message)
+    query_record = _db_write_with_retry(create_query, db_session_id, final_message)
     query_id = query_record["query_id"] if query_record else None
     
     # Check if user message requests human agent
@@ -2386,8 +2407,11 @@ async def chat(
             
             # Update query with general domain
             if query_id:
-                update_query_domain(query_id, query_domain)
-                print(f"[QUERY-DOMAIN] Updated query {query_id} with domain: {query_domain}")
+                try:
+                    update_query_domain(query_id, query_domain)
+                    print(f"[QUERY-DOMAIN] Updated query {query_id} with domain: {query_domain}")
+                except Exception as _uqd_err:
+                    print(f"[ERROR] Failed to update query domain: {_uqd_err}")
             
             # Create a placeholder response for the ticket
             placeholder_response = create_response(
@@ -2432,8 +2456,48 @@ async def chat(
         if use_selfrag:
             # generate_answer_selfrag returns (answer, original_query, input_lang, sources, confidence_scores, domain_classification, selfrag_metrics)
             # Pass session_id for conversation memory
+            # ── Fetch conversation history for memory ──────────────────
+            _conv_history = []
+            try:
+                from supabase_client import get_supabase_client as _get_sb
+                _sb = _get_sb()
+ 
+                _q_rows = (
+                    _sb.table("queries")
+                    .select("content, timestamp")
+                    .eq("session_id", str(db_session_id))
+                    .order("timestamp", desc=True)
+                    .limit(6)
+                    .execute()
+                ).data or []
+ 
+                _r_rows = (
+                    _sb.table("responses")
+                    .select("content, timestamp")
+                    .eq("session_id", str(db_session_id))
+                    .order("timestamp", desc=True)
+                    .limit(6)
+                    .execute()
+                ).data or []
+ 
+                _turns = (
+                    [{"role": "user",      "content": r["content"], "ts": r["timestamp"]} for r in _q_rows] +
+                    [{"role": "assistant", "content": r["content"], "ts": r["timestamp"]} for r in _r_rows]
+                )
+                _turns.sort(key=lambda x: x["ts"])
+                _conv_history = [{"role": t["role"], "content": t["content"]} for t in _turns]
+                print(f"[MEMORY] Loaded {len(_conv_history)} history turns for session {db_session_id}")
+            except Exception as _e:
+                print(f"[MEMORY] History fetch failed (non-fatal): {_e}")
+            # ──────────────────────────────────────────────────────────
+ 
             result = await asyncio.to_thread(
-                rag_module.generate_answer_selfrag, final_message, top_k=5, filter_category=None)
+                rag_module.generate_answer_selfrag,
+                final_message,
+                top_k=5,
+                filter_category=None,
+                conversation_history=_conv_history,
+            )
             answer, _, input_lang, sources, confidence_scores, domain_classification, selfrag_metrics = result
             is_urdu = (input_lang == "ur" or input_lang == "roman_ur")
         else:
@@ -2482,16 +2546,33 @@ async def chat(
         
         # Update query record with domain if it was determined
         if query_id and query_domain:
-            update_query_domain(query_id, query_domain)
-            print(f"[QUERY-DOMAIN] Updated query {query_id} with domain: {query_domain}")
+            try:
+                update_query_domain(query_id, query_domain)
+                print(f"[QUERY-DOMAIN] Updated query {query_id} with domain: {query_domain}")
+            except Exception as _uqd_err:
+                print(f"[ERROR] Failed to update query domain: {_uqd_err}")
         
-        # Create response record with confidence
-        response = create_response(
-            db_session_id, 
-            answer, 
+        # Create response record with confidence (retry on transient network errors)
+        response = _db_write_with_retry(
+            create_response,
+            db_session_id,
+            answer,
             confidence=confidence,
-            domain=query_domain
+            domain=query_domain,
         )
+        if response is None:
+            # DB write failed — return the answer without a response_id rather than 500ing
+            print("[WARNING] create_response failed after retries — returning answer without DB record")
+            return convert_numpy_types({
+                "answer": answer,
+                "sources": sources,
+                "agent_chat": False,
+                "response_id": None,
+                "confidence": confidence,
+                "ticket_id": None,
+                "ocr_text": ocr_text if ocr_text else None,
+                "has_image": bool(image),
+            })
         
         # ------------------------------------------------------------------ #
         # TICKET CREATION LOGIC                                               #
@@ -2579,13 +2660,21 @@ async def chat(
                     f"I wasn't able to fully answer your question. "
                     f"I am routing you to {_dept} — they will respond shortly."
                 )
-                if is_urdu:
+                # Use input_lang (not is_urdu) so Roman Urdu gets its own message,
+                # not an Urdu-script translation.
+                if input_lang == "ur":
                     try:
                         from RAG_supabase import translate_english_to_urdu
                         final_answer = translate_english_to_urdu(routing_message_en)
                     except Exception as _te:
                         print(f"[WARNING] Translation failed: {_te}")
                         final_answer = routing_message_en
+                elif input_lang == "roman_ur":
+                    final_answer = (
+                        f"Main aapke sawal ka mukammal jawab nahi de saka. "
+                        f"Main aapko {_dept.replace('our ', '').replace(' team', ' team')} se connect kar raha hun — "
+                        f"woh jald jawab dein ge."
+                    )
                 else:
                     final_answer = routing_message_en
         
