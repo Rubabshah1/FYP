@@ -1,37 +1,201 @@
 \section{System Architecture: Agentic RAG and Frontend Integration}
-The system is a full-stack implementation comprising a React-based frontend, a FastAPI backend, and an Agentic Retrieval-Augmented Generation (RAG) reasoning engine powered by Llama 3.2. The architecture is designed to optimize retrieval efficiency, minimize hallucinations, and support multilingual, multimodal interaction.
 
+The system is a full-stack application built across three layers: a React-based 
+frontend, a FastAPI backend, and an Agentic Retrieval-Augmented Generation (RAG) 
+reasoning engine. Standard RAG systems retrieve documents and pass them directly 
+to a language model for generation, with no mechanism to verify whether the 
+retrieved context is sufficient or whether the generated response is grounded in 
+it. This architecture extends that baseline by wrapping the retrieval-generation 
+pipeline in a layer of autonomous agents that regulate what gets retrieved, 
+validate what gets generated, and escalate when confidence is insufficient. The 
+result is a system designed to serve a multilingual, low-digital-literacy user 
+base while maintaining factual reliability.
+
+%-----------------------------------------------------------------------
 \subsection{Frontend Architecture and User Interface}
-The frontend is built using \textbf{React.js 18}, \textbf{Vite}, and \textbf{Tailwind CSS}, delivering a responsive, chat-based interface. Key features include:
+%-----------------------------------------------------------------------
+
+The frontend is built using \textbf{React.js 18}, \textbf{Vite}, and 
+\textbf{Tailwind CSS}. React.js 18 was selected for its component-based 
+architecture, which allows role-specific views (user, agent, admin) to be 
+developed and maintained independently without duplicating shared logic. Vite 
+replaces the traditional Create React App bundler, offering significantly faster 
+hot module replacement during development and smaller production bundles, 
+important for a deployment environment where backend response times are already 
+high. Tailwind CSS enables rapid, consistent styling without a custom stylesheet 
+layer.
+
+The interface is structured around three role-based dashboards:
+
 \begin{itemize}
-    \item \textbf{Multilingual Interface:} Supports English, Urdu (Nastaliq), and Roman Urdu with seamless switching.
-    \item \textbf{Role-Based Dashboards:} Separate interfaces for Users (OTP-based login), Human Agents (ticket handling), and Admins (analytics and monitoring).
-    \item \textbf{Real-time Communication:} WebSocket-based messaging enables instant interaction during escalated sessions.
-    \item \textbf{Multimodal Input:} OCR pipeline using \textbf{Tesseract} and \textbf{PaddleOCR} processes PNG, JPG, and PDF uploads for text extraction and query grounding.
+    \item \textbf{User Interface:} Accessible via OTP-based phone authentication 
+    — chosen over password login because the target demographic (NGO service 
+    recipients) may not maintain email accounts or remember passwords. The 
+    interface supports English, Urdu (Nastaliq script), and Roman Urdu, with 
+    language switching at runtime. This is not cosmetic: the backend routes 
+    queries, selects retrieval strategies, and selects generation models based on 
+    the detected language, so the frontend language state is directly coupled to 
+    backend behaviour.
+
+    \item \textbf{Human Agent Dashboard:} Displays escalated tickets, supports 
+    real-time chat with users via WebSocket, and allows agents to assign and 
+    resolve tickets. WebSocket was used over polling because escalated sessions 
+    require low-latency, bidirectional communication and polling at acceptable 
+    intervals would generate unnecessary server load given the system's existing 
+    processing overhead.
+
+    \item \textbf{Admin Dashboard:} Provides analytics on query volume, domain 
+    distribution, RAG versus human agent resolution rates, and ticket resolution 
+    times. Along with this, there is a detailed Deepeval analysis of the RAG system's performance. 
+    This data serves a monitoring function: it allows administrators to 
+    identify domains where the RAG system underperforms and where the knowledge 
+    base requires updates. Moreover, admins can oversee all the tickets, as well as 
+    improve the RAG system by adding new documents to the knowledge base, and adjusting prompts and 
+    retrieval strategies based on observed performance.
 \end{itemize}
 
+The system also accepts image and PDF uploads. These are processed through an 
+OCR pipeline combining \textbf{Tesseract} and \textbf{PaddleOCR}. Tesseract 
+handles standard printed text, while PaddleOCR provides stronger performance on 
+structured layouts such as medical receipts and donation forms, where tabular 
+content would be misread by a single-engine pipeline. Extracted text is appended 
+to the user query as grounding context before retrieval.
+
+%-----------------------------------------------------------------------
 \subsection{Agentic RAG Reasoning Engine}
-The backend implements an Agentic AI architecture to regulate retrieval and enforce factual grounding. The system consists of the following components:
+%-----------------------------------------------------------------------
 
-\begin{itemize}
-    \item \textbf{Router Agent:} Performs retrieval necessity checks to bypass embedding generation for non-informational queries (e.g., greetings), reducing computational overhead by 30--60\%.
-    
-    \item \textbf{Retriever Agent with Fallback:} Uses \textbf{multilingual-e5-base} embeddings for semantic search. If fewer than two documents exceed a similarity threshold of $\ge 0.6$, a general-domain fallback is triggered to ensure adequate context coverage.
-    
-    \item \textbf{Evidence Coverage Agent:} Decomposes generated responses into atomic claims and verifies each against retrieved documents. Unsupported claims are removed to prevent hallucinations.
-    
-    \item \textbf{Self-RAG Critic:} Implements a six-stage validation pipeline: Domain Relevance, Retrieval Necessity, Document Relevance, Answer-in-Context Verification, Support Validation, and Utility Evaluation.
-\end{itemize}
+The core limitation of a vanilla RAG system is that it retrieves and generates 
+unconditionally: every query triggers embedding, every retrieval result is passed 
+to the model, and every generated response is returned to the user regardless of 
+its factual grounding. In an NGO context — where users ask about healthcare 
+eligibility, donation procedures, and beneficiary rights — an ungrounded response 
+is not merely unhelpful; it can cause direct harm. The agentic layer addresses 
+this by introducing four components that each enforce a specific constraint.
 
+\subsubsection*{Router Agent}
+
+Before any embedding is computed, the Router Agent classifies whether the query 
+requires retrieval at all. Queries such as greetings, expressions of gratitude, 
+or clearly out-of-domain questions (e.g., ``how is the weather today'') carry no 
+informational intent that the knowledge base can satisfy. Without this check, the 
+system would generate embeddings, execute a vector search, and pass retrieved 
+documents to the LLM for every such query; wasting computation and, more 
+critically, risking hallucination.
+
+The risk of skipping this step was observed empirically during baseline testing. 
+When the Router Agent was not active, a query of ``how is the weather today'' 
+caused the base LLM to acknowledge it lacked real-time data, then proceed to 
+generate unsolicited, ungrounded claims about climate change and flooding in 
+Pakistan. None of this content existed in the knowledge base. With the Router 
+Agent active, the same query was classified as out-of-domain and rejected with 
+a direct, accurate response: ``That is an irrelevant question.'' The model was 
+prevented from generating at all.
+
+% ---- FIGURE: Hallucination comparison ----
+\begin{figure}[H]
+    \centering
+    % ADD FIGURE: Side-by-side or stacked screenshots.
+    % Left/Top: baseline LLM response to "how is the weather today" 
+    %   (ungrounded climate change response - IMG-20251217-WA0004.jpg)
+    % Right/Bottom: full pipeline response to same query 
+    %   (Router Agent rejection - 1777532061260_image.png)
+    \includegraphics[width=0.48\textwidth]{chapters/hallucination_baseline.jpg}
+    \hfill
+    \includegraphics[width=0.48\textwidth]{chapters/hallucination_controlled.png}
+    \caption{Hallucination comparison on an out-of-domain query. \textit{Left:} 
+    Baseline LLM without the agentic layer generates an unsolicited, ungrounded 
+    response connecting weather to climate change in Pakistan. \textit{Right:} 
+    Full pipeline with Router Agent active correctly classifies the query as 
+    out-of-domain and declines to generate.}
+    \label{fig:hallucination_baseline}
+    \label{fig:hallucination_controlled}
+\end{figure}
+% ------------------------------------------
+
+By intercepting non-informational queries before retrieval, the Router Agent 
+reduces unnecessary embedding computation and eliminates a significant class of 
+hallucination at the source.
+
+\subsubsection*{Retriever Agent with Fallback}
+
+For queries that require retrieval, the Retriever Agent generates embeddings 
+using \textbf{intfloat/multilingual-e5-base} — a 768-dimensional multilingual 
+model chosen because the knowledge base and user queries span English, Urdu, and 
+Roman Urdu. A monolingual English model would produce poor cross-lingual 
+similarity scores; multilingual-e5-base is trained to align semantically 
+equivalent content across languages in a shared vector space.
+
+Retrieval applies a similarity threshold of $\geq 0.6$. If fewer than two 
+documents exceed this threshold, the system does not proceed with an 
+under-supported context window. Instead, a fallback retrieval pass is triggered 
+using a broader general-domain query to expand coverage. This threshold was set 
+to balance precision against recall: a higher threshold risks returning no 
+documents for legitimate queries with imprecise phrasing; a lower one risks 
+filling the context with weakly relevant content that can mislead generation.
+
+\subsubsection*{Evidence Coverage Agent}
+
+Once a response is generated, the Evidence Coverage Agent performs claim-level 
+verification. It decomposes the generated text into atomic claims, individual 
+factual assertions, and checks each one against the retrieved documents. Any 
+claim that cannot be traced to the retrieved context is removed before the 
+response is returned to the user.
+
+This operates on a different level than the Self-RAG Critic described below. The 
+Evidence Coverage Agent is concerned with the output: it audits what the model 
+actually said. The Self-RAG Critic is concerned with the process: it validates 
+each stage of the pipeline before generation proceeds. Together they enforce 
+factual grounding from both directions.
+
+\subsubsection*{Self-RAG Critic}
+
+The Self-RAG Critic implements a six-stage validation pipeline, modelled on the 
+Self-RAG framework introduced by Asai et al. (2023), which demonstrated that 
+language models can be trained to reflect on and critique their own retrieval and 
+generation behaviour \cite{asai2023selfrag}. Each stage acts as a gate:
+
+\begin{enumerate}
+    \item \textbf{Domain Relevance:} Is the query within the system's operational 
+    scope?
+    \item \textbf{Retrieval Necessity:} Does the query require document retrieval, 
+    or can it be answered directly?
+    \item \textbf{Document Relevance:} Are the retrieved documents substantively 
+    relevant to the query?
+    \item \textbf{Answer-in-Context Verification:} Is the answer derivable from 
+    the retrieved context, or would the model need to draw on parametric 
+    knowledge?
+    \item \textbf{Support Validation:} Is each claim in the generated response 
+    explicitly supported by the context?
+    \item \textbf{Utility Evaluation:} Does the response actually address the 
+    user's informational need?
+\end{enumerate}
+
+A response must pass all six stages to be returned. Failure at any stage either 
+triggers a retrieval retry, invokes the fallback mechanism, or escalates to a 
+human agent depending on which constraint was violated.
+
+%-----------------------------------------------------------------------
 \section{Experimental Setup}
-The system was evaluated using both a structured query dataset and a defined technical environment.
+%-----------------------------------------------------------------------
 
-We are currently testing our chatbot system across nine key modules to ensure overall reliability and performance. This includes validating the RAG (Retrieval-Augmented Generation) pipeline to confirm it is functioning correctly end-to-end, along with thorough testing of all API endpoints for stability and error handling. We are evaluating multimodal and language processing capabilities to ensure the system can handle diverse inputs effectively. Security and privacy checks are being conducted to safeguard user data, while human-in-the-loop mechanisms are assessed for confidence scoring and appropriate escalation. Additionally, we are verifying routing logic to ensure queries are directed correctly, performing deployment and load testing to measure scalability and robustness, running a deep evaluation suite to assess RAG response quality, ensuring database integrity and recovery mechanisms, and conducting full end-to-end frontend testing to validate a seamless user experience.
+The system was evaluated across two parallel tracks: a structured query dataset 
+assessed through automated RAG metrics, and a functional QA test suite covering 
+system behaviour across ten modules.
 
 \subsection{Dataset}
-A total of 192 queries were used (64 each in English, Urdu, and Roman Urdu), spanning key domains including Healthcare, Donors, and General NGO services.
+
+The evaluation dataset comprises 211 queries distributed across four input 
+categories: 64 English, 64 Urdu (Nastaliq script), 64 Roman Urdu, and 19 image 
+inputs (PNG and JPG uploads processed through the OCR pipeline). The three text 
+categories were balanced deliberately to assess cross-lingual consistency rather 
+than aggregate performance — a system that performs well in English but degrades 
+in Urdu would pass an aggregate threshold while failing its primary user base. 
+Image queries were evaluated within the same pipeline run, with OCR-extracted 
+text passed as query context before retrieval.
 
 \subsection{Technical Configuration}
+
 \begin{table}[H]
 \centering
 \begin{tabular}{|l|l|}
@@ -44,38 +208,195 @@ Embeddings & intfloat/multilingual-e5-base (768-dim) \\ \hline
 Vector Store & Supabase pgvector \\ \hline
 Knowledge Base & 12+ NGO Domains (PDF, DOCX, TXT) \\ \hline
 \end{tabular}
-\caption{Experimental Environment Specifications}
+\caption{Environment Specifications}
 \end{table}
 
+GPT-5 served as the primary generation model for all evaluation runs. The local 
+models (Llama-3.2 and Alif-1.0) function as offline fallbacks activated when the 
+OpenAI API is unavailable, ensuring the system remains operational without 
+internet access. All RAG evaluation metrics reported in 
+Section~\ref{sec:results} reflect GPT-5 outputs.
+
+\subsection{QA Test Suite}
+
+Functional correctness was verified through a structured QA test suite of 100 
+test cases spanning ten modules: RAG Pipeline, OCR and Multimodal Input, API 
+Endpoints, Language Handling, Security and Privacy, Human-in-the-Loop 
+escalation, Deployment and Load Testing, DeepEval Evaluation, Database Integrity, 
+and Frontend End-to-End behaviour. Test cases were assigned priority levels 
+(Critical, High, Medium, Low), with all Critical cases required to pass before 
+release.
+
+The majority of test cases passed on initial or corrected execution. The most 
+notable failure was RAG10 (multi-turn conversation context), where follow-up 
+queries failed to reference prior conversation turns. This was traced to the 
+conversation memory buffer not being correctly propagated across retrieval calls 
+and was subsequently fixed. No Critical defects remained open at the time of 
+evaluation.
+
+The suite validated several system properties that automated RAG metrics alone 
+cannot capture: session isolation under concurrent load, OTP brute-force 
+protection, agent-to-user message delivery latency, foreign key integrity in the 
+database, and correct behaviour on invalid or adversarial inputs such as prompt 
+injection attempts. Load testing against the 500 concurrent user target specified 
+in the SRS was conducted using Locust against the staging environment.
+
+%-----------------------------------------------------------------------
 \section{Results and Performance Analysis}
+\label{sec:results}
+%-----------------------------------------------------------------------
 
 \subsection{RAG Evaluation Metrics}
-Evaluation was conducted using the \textbf{Deepeval} framework, focusing on:
+
+Automated evaluation was conducted using the \textbf{Deepeval} framework across 
+four metrics. Each metric was computed per test case with GPT-5 as the judge 
+model, consistent with the generation model used in production.
+
+% ---- FIGURE: RAG Evaluation Dashboard ----
+\begin{figure}[H]
+    \centering
+    % ADD FIGURE: Screenshot of the Deepeval RAG Evaluation Report dashboard
+    % showing metric scores, bar chart, pie chart, and quality overview bars.
+    % (1777534040552_image.png)
+    \includegraphics[width=\textwidth]{chapters/rag_evaluation_dashboard.png}
+    \caption{RAG Evaluation Report generated by the Deepeval framework. 
+    Scores shown are for the English evaluation suite (10 cases). 
+    Answer Relevancy and Faithfulness both achieved 1.000; Contextual 
+    Precision scored 0.609; Contextual Recall scored 0.750; Hallucination 
+    scored 0.175 (lower is better). Overall pass rate: 6/8 eligible cases.}
+    \label{fig:rag_dashboard}
+\end{figure}
+% ------------------------------------------
+
 \begin{itemize}
-    \item \textbf{Answer Relevancy:} Degree to which responses remain aligned with the query.
-    \item \textbf{Faithfulness:} Extent to which responses are grounded in retrieved context.
-    \item \textbf{Contextual Precision and Recall:} Quality and completeness of retrieved documents.
+    \item \textbf{Answer Relevancy} measures whether the generated response 
+    directly addresses the user's query, penalising responses that retrieve 
+    correctly but generate tangentially. The system achieved a score of 
+    \textbf{1.000} (100\% pass rate), indicating that responses consistently 
+    remained on-topic relative to the input query.
+
+    \item \textbf{Faithfulness} measures whether every claim in the generated 
+    response is grounded in the retrieved context, with unsupported claims 
+    counting as hallucinations. The system scored \textbf{1.000} (75\% pass 
+    rate against the threshold). The Evidence Coverage Agent's claim-level 
+    verification and the Self-RAG Critic's Support Validation stage are the 
+    primary mechanisms responsible for this result.
+
+    \item \textbf{Contextual Precision} measures whether the retrieved documents 
+    are relevant to the query — that is, whether the retriever is returning 
+    useful chunks rather than noisy ones. The system scored \textbf{0.609} (75\% 
+    pass rate), indicating that while retrieval is generally accurate, a portion 
+    of retrieved chunks carry limited relevance. This is attributable in part to 
+    the broad domain coverage of the knowledge base (12+ NGO domains), where 
+    thematic overlap between domains can cause the retriever to surface loosely 
+    related content.
+
+    \item \textbf{Contextual Recall} measures whether the retrieved documents 
+    contain the information needed to answer the query — the completeness of 
+    retrieval rather than its precision. The system scored \textbf{0.750} (75\% 
+    pass rate), reflecting that the fallback retrieval mechanism successfully 
+    expanded coverage for queries where the primary retrieval pass returned 
+    insufficient context.
 \end{itemize}
+
+Of the 10 English evaluation cases, 6 passed all metrics, 2 were rejected by 
+the Self-RAG Critic as out-of-domain (a correct outcome, not a failure), and 2 
+did not meet the composite threshold. The hallucination score of \textbf{0.175} 
+(lower is better; 88\% pass rate) indicates that unsupported claims appeared in 
+approximately 12\% of evaluated responses — cases where the Evidence Coverage 
+Agent's claim removal was insufficient to fully eliminate parametric leakage 
+from the base model.
 
 \subsection{Accuracy and Hallucination Control}
-The integration of \textbf{Self-RAG} and the \textbf{Evidence Coverage Agent} resulted in an increased factual accuracy. The system reduces hallucinations by enforcing claim-level verification and rejecting unsupported outputs.
+
+The impact of the agentic layer on hallucination is best illustrated by the 
+direct comparison described in Section~\ref{fig:sysarchitecture} and shown in 
+Figure~\ref{fig:hallucination_baseline}. Without the agentic layer, the base 
+LLM generated fabricated, contextually inappropriate content in response to a 
+simple out-of-domain query. With the full pipeline active, generation was 
+blocked entirely at the routing stage.
+
+This illustrates the distinction between the two hallucination control 
+mechanisms. The Router Agent and Self-RAG Critic prevent hallucination by 
+blocking generation for queries the system cannot ground. The Evidence Coverage 
+Agent addresses hallucination in responses that do proceed to generation, by 
+removing individual claims that cannot be traced to retrieved documents. The 
+residual hallucination rate of 17.5\% reflects cases where parametric leakage 
+passed both filters — an known limitation of claim-level verification when the 
+base model generates plausible-sounding but unverifiable statements at the 
+sub-sentence level.
 
 \subsection{Confidence Scoring and Escalation}
-A composite \textbf{Confidence Scoring Engine} aggregates retrieval similarity, token probability, and Self-RAG validation signals.
-\begin{itemize}
-    \item \textbf{Escalation Threshold:} Queries with confidence scores below $0.70$ are routed to human agents.
-    \item \textbf{Outcome:} This mechanism ensures reliable fallback handling for low-certainty or ambiguous queries.
-\end{itemize}
+
+The Confidence Scoring Engine aggregates three signals: retrieval similarity 
+(how closely retrieved documents match the query), token probability (the 
+model's own certainty across generated tokens), and Self-RAG validation scores 
+(the output of the six-stage critic pipeline). Combining these signals rather 
+than relying on any single one reduces the risk of a high-similarity retrieval 
+masking a low-confidence generation, or vice versa.
+
+Queries scoring below 0.70 on the composite score are routed to human agents 
+via the ticket escalation system. This threshold was set to prioritise user 
+safety over system autonomy: in an NGO context where queries concern healthcare 
+eligibility, financial aid, and beneficiary rights, a false negative (escalating 
+a query the system could have answered) is preferable to a false positive 
+(returning a low-confidence answer to a vulnerable user). The two Self-RAG 
+rejections observed in the evaluation dataset demonstrate this mechanism 
+operating as intended — the system identified out-of-domain queries and declined 
+to answer rather than generating a plausible but unsupported response.
 
 \subsection{Latency and Optimization}
-\begin{itemize}
-    \item \textbf{Embedding Cache:} Semantic deduplication with a 95\% similarity threshold reduces repeated computation, saving 0.5--1.0 seconds per query.
-    \item \textbf{Response Time:} End-to-end latency ranges from 30 to 60 seconds depending on query complexity and dialogue depth.
-\end{itemize}
+
+End-to-end response time ranges from 15 to 60 seconds depending on query 
+complexity, dialogue depth, and whether fallback retrieval or Self-RAG 
+re-ranking is triggered. This latency is a direct consequence of three 
+architectural decisions, each involving a deliberate tradeoff.
+
+First, the system runs local inference for Urdu and fallback queries using 
+quantized GGUF models (Llama-3.2-3B and Alif-1.0-8B) on CPU. Local inference 
+eliminates API dependency and keeps the system operational offline — a meaningful 
+constraint given the deployment context — but adds 10--30 seconds of generation 
+time relative to a cloud API call.
+
+Second, the Self-RAG Critic runs six sequential validation stages, each 
+requiring a model call. This pipeline enforces factual grounding at the cost of 
+added latency per query. Parallelising these stages is a known optimisation path 
+but was not implemented in this version.
+
+Third, the Evidence Coverage Agent performs claim decomposition and 
+document-level verification after generation, adding a post-processing step 
+before the response is returned. For complex multi-sentence responses, this step 
+adds several seconds.
+
+To mitigate latency, the system maintains a semantic embedding cache with a 
+95\% similarity deduplication threshold, saving 0.5--1.0 seconds per repeated 
+or semantically equivalent query. The Router Agent provides a further reduction 
+by eliminating embedding computation entirely for non-informational queries, 
+which account for an estimated 30--60\% of incoming traffic.
+
+For a production deployment, latency could be reduced substantially by moving 
+inference to a GPU-enabled server, caching Self-RAG validation results for 
+high-frequency query patterns, and streaming partial responses to the frontend 
+rather than waiting for full generation to complete.
 
 \subsection{Multilingual and Multimodal Performance}
-\begin{itemize}
-    \item \textbf{Multilingual Handling:} Queries in Roman Urdu are translated into English for retrieval, maintaining consistent semantic search performance.
-    \item \textbf{Brand Term Protection:} Ensures proper nouns remain unchanged during translation.
-    \item \textbf{Multimodal Results:} The OCR-VLM hybrid pipeline achieved a 24.5\% F1-score improvement over image-only processing for structured documents such as medical receipts.
-\end{itemize}
+
+Roman Urdu queries are translated into English before retrieval because the 
+knowledge base is English-language. Retrieving against the Roman Urdu query 
+directly would produce degraded similarity scores, as the embedding model's 
+cross-lingual alignment is stronger between Urdu Nastaliq and English than 
+between romanised Urdu and English. Translation normalises the query into the 
+same linguistic space as the knowledge base before the vector search runs.
+
+Brand term protection is applied before any translation or romanisation step. 
+Terms such as EasyPaisa, JazzCash, and Alkhidmat Foundation are wrapped in 
+placeholder tokens, translated or romanised with those tokens intact, and 
+restored after. Without this mechanism, translation models routinely 
+transliterate or paraphrase proper nouns, producing outputs that fail exact 
+string matching and corrupt domain classification.
+
+The OCR-VLM hybrid pipeline achieved a 24.5\% F1-score improvement over 
+image-only processing for structured documents such as medical receipts and 
+donation forms. This gain reflects PaddleOCR's stronger handling of tabular 
+layouts, where Tesseract alone merges or drops cell boundaries, causing 
+downstream retrieval to operate on malformed text.

@@ -47,7 +47,13 @@ def _safe_langdetect(text: str) -> str:
 
 def looks_like_roman_urdu(text: str) -> bool:
     """
-    Heuristic: ascii + contains roman-urdu markers.
+    Three-tier Roman Urdu detection — no manual marker maintenance needed.
+
+    Tier 1 (instant): 2+ marker hits → Roman Urdu.
+    Tier 2 (instant): 1 marker hit in <=8 tokens → Roman Urdu.
+    Tier 3 (GPT):     0 hits, short query (<=6 tokens) → ask GPT.
+                      This is the self-improving tier that handles new vocabulary
+                      and query patterns without any marker edits.
     """
     if not ROMAN_URDU_ENABLE:
         return False
@@ -59,7 +65,32 @@ def looks_like_roman_urdu(text: str) -> bool:
     if not tokens:
         return False
     hits = sum(1 for t in tokens if t in ROMAN_URDU_MARKERS)
-    return (hits >= 2) or (hits >= 1 and len(tokens) <= 6)
+    n = len(tokens)
+
+    # Tier 1 & 2: instant marker-based decision
+    if (hits >= 2) or (hits >= 1 and n <= 8):
+        return True
+
+    # Tier 3: GPT fallback for short ambiguous queries with 0 hits
+    if n > 6:
+        return False
+
+    try:
+        import openai as _oai
+        import os as _os
+        _client = _oai.OpenAI(api_key=_os.environ.get("OPENAI_API_KEY", ""))
+        resp = _client.chat.completions.create(
+            model=_os.environ.get("GPT_MODEL", "gpt-4o-mini"),
+            messages=[{"role": "user", "content": (
+                f"Is this text written in Roman Urdu (Urdu in Latin letters) rather than English?\n"
+                f"Text: {text}\nReply YES or NO only."
+            )}],
+            max_tokens=5,
+            temperature=0.0,
+        )
+        return "YES" in (resp.choices[0].message.content or "").upper()
+    except Exception:
+        return False
 
 
 # -----------------------------
