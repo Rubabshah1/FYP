@@ -3,6 +3,7 @@
 ALKHIDMAT RAG - DeepEval Evaluation Suite
 ==========================================
 Tests the RAG pipeline against DeepEval metrics.
+Supports text-only AND image+text (multimodal) test cases.
 
 HOW TO RUN:
     pip install deepeval
@@ -16,29 +17,42 @@ HOW TO RUN:
     # Roman Urdu
     python test_rag_evaluation.py --language roman --use-openai-judge
 
+    # IMAGE test cases
+    python test_rag_evaluation.py --language images --use-openai-judge
+
     # Quick smoke test (3 cases only)
     python test_rag_evaluation.py --language english --max-cases 3 --use-openai-judge
 
     # Skip specific cases
     python test_rag_evaluation.py --skip Q38 Q39 --use-openai-judge
 
+    # Override image folder (default: C:\\Users\\PC\\fyp\\Test_Images)
+    python test_rag_evaluation.py --language images --image-dir path/to/images --use-openai-judge
+
 OUTPUT FILES (fixed paths, re-running overwrites previous results):
     evaluation_results/report_english.json
     evaluation_results/report_urdu.json
     evaluation_results/report_roman.json
+    evaluation_results/report_images.json
 
-METRICS:
+METRICS (text):
     AnswerRelevancy      -> Is the answer relevant to the question?
     Faithfulness         -> Is the answer grounded in retrieved context?
     ContextualPrecision  -> Are retrieved chunks actually useful?
     ContextualRecall     -> Did retrieval cover what was needed?
     Hallucination        -> Does the answer contain hallucinated facts?
+
+METRICS (image — additional):
+    ImageAnswerRelevancy -> Does the answer address what the image shows?
+    ImageDescriptionQuality -> How well did GPT-4o describe the image for RAG?
+    (These are scored via GPT judge, stored in the report alongside standard metrics)
 """
 
 import os
 import sys
 import json
 import time
+import base64
 import traceback
 from pathlib import Path
 from datetime import datetime
@@ -64,25 +78,46 @@ import logging
 logging.getLogger("sentence_transformers").setLevel(logging.WARNING)
 logging.getLogger("transformers").setLevel(logging.WARNING)
 
+# ── OpenAI (used for image description) ──────────────────────────────────────
+try:
+    import openai
+    from dotenv import load_dotenv
+    load_dotenv()
+    openai.api_key = os.environ.get("OPENAI_API_KEY", "")
+    _OPENAI_AVAILABLE = bool(openai.api_key)
+except ImportError:
+    _OPENAI_AVAILABLE = False
+
 # ============================================================================
-# LANGUAGE CONFIG
+# LANGUAGE / MODE CONFIG
 # Maps --language arg → test case file + fixed output report filename
 # ============================================================================
+DEFAULT_IMAGE_DIR = r"C:\Users\PC\fyp\Test_Images"
+
 LANGUAGE_CONFIG = {
     "english": {
         "test_file":   "Test_cases(English).json",
         "report_name": "report_english.json",
         "label":       "English",
+        "is_image":    False,
     },
     "urdu": {
         "test_file":   "Test_cases(Urdu).json",
         "report_name": "report_urdu.json",
         "label":       "Urdu",
+        "is_image":    False,
     },
     "roman": {
         "test_file":   "Test_cases(Roman).json",
         "report_name": "report_roman.json",
         "label":       "Roman Urdu",
+        "is_image":    False,
+    },
+    "images": {
+        "test_file":   "Test_cases(Images).json",
+        "report_name": "report_images.json",
+        "label":       "Image+Text",
+        "is_image":    True,
     },
 }
 
@@ -153,6 +188,189 @@ class LocalLlamaJudge(DeepEvalBaseLLM):
 
 
 # ============================================================================
+# IMAGE UTILITIES
+# ============================================================================
+
+def encode_image_to_base64(image_path: str) -> Optional[str]:
+    """
+    Read an image file and return its base64-encoded string.
+    Returns None if the file is missing or unreadable.
+    """
+    path = Path(image_path)
+    if not path.exists():
+        print(f"   [IMAGE] File not found: {image_path}")
+        return None
+    try:
+        with open(path, "rb") as f:
+            return base64.b64encode(f.read()).decode("utf-8")
+    except Exception as e:
+        print(f"   [IMAGE] Could not read {image_path}: {e}")
+        return None
+
+
+def get_image_mime_type(image_path: str) -> str:
+    """Return the MIME type based on file extension."""
+    ext = Path(image_path).suffix.lower()
+    return {
+        ".jpg":  "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png":  "image/png",
+        ".gif":  "image/gif",
+        ".webp": "image/webp",
+    }.get(ext, "image/png")
+
+
+def describe_image_with_gpt4v(
+    image_path: str,
+    question: str,
+    model: str = "gpt-4o",
+) -> Tuple[str, str]:
+    """
+    Send the image + question to GPT-4o Vision and get back:
+      - image_description : a detailed description of the image content
+      - augmented_query   : question rephrased with image context embedded
+
+    This description is then used as the query to your text-only RAG pipeline,
+    making it effectively multimodal without modifying RAG_supabase.py at all.
+
+    Returns ("", "") on failure.
+    """
+    if not _OPENAI_AVAILABLE:
+        print("   [IMAGE] OpenAI not available — cannot describe image.")
+        return "", question  # fall back to plain text query
+
+    b64 = encode_image_to_base64(image_path)
+    if b64 is None:
+        return "", question
+
+    mime = get_image_mime_type(image_path)
+
+    system_prompt = (
+        "You are an assistant that describes images for a RAG (Retrieval-Augmented Generation) "
+        "system for Alkhidmat Foundation Pakistan. "
+        "When given an image and a user question, produce TWO outputs separated by '|||':\n"
+        "1. A detailed, factual description of all visible text, logos, numbers, program names, "
+        "   contact details, and key visual elements in the image.\n"
+        "2. A rewritten version of the user's question that incorporates key details seen in the "
+        "   image so it can be used as a standalone search query.\n\n"
+        "Format: <image description>|||<augmented query>\n"
+        "Do NOT include labels like 'Description:' or 'Query:' — just the two parts separated by |||."
+    )
+
+    user_content = [
+        {
+            "type": "image_url",
+            "image_url": {
+                "url": f"data:{mime};base64,{b64}",
+                "detail": "high",
+            },
+        },
+        {
+            "type": "text",
+            "text": f"User question: {question}",
+        },
+    ]
+
+    try:
+        client = openai.OpenAI(api_key=openai.api_key)
+        response = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user",   "content": user_content},
+            ],
+            max_tokens=600,
+            temperature=0.1,
+        )
+        raw = response.choices[0].message.content.strip()
+
+        if "|||" in raw:
+            parts = raw.split("|||", 1)
+            image_description = parts[0].strip()
+            augmented_query   = parts[1].strip()
+        else:
+            # GPT didn't use the separator — treat whole response as description
+            image_description = raw
+            augmented_query   = f"{question} [Image context: {raw[:200]}]"
+
+        return image_description, augmented_query
+
+    except Exception as e:
+        print(f"   [IMAGE] GPT-4o Vision error: {e}")
+        return "", question
+
+
+def score_image_answer_relevancy(
+    question: str,
+    image_description: str,
+    actual_answer: str,
+    expected_answer: str,
+    model: str = "gpt-4o-mini",
+) -> Dict:
+    """
+    Ask GPT to score how well the RAG answer addresses what was visible in the image.
+
+    Returns a dict with:
+        image_answer_relevancy  : float 0.0–1.0
+        image_description_quality : float 0.0–1.0
+        image_judge_reason : str
+    """
+    if not _OPENAI_AVAILABLE or not image_description:
+        return {
+            "image_answer_relevancy":     None,
+            "image_description_quality":  None,
+            "image_judge_reason":         "Skipped: OpenAI unavailable or no image description",
+        }
+
+    prompt = f"""You are evaluating a RAG chatbot for Alkhidmat Foundation Pakistan.
+
+The user uploaded an IMAGE and asked a question. Evaluate the chatbot's response.
+
+USER QUESTION:
+{question}
+
+IMAGE CONTENT (extracted by GPT-4o Vision):
+{image_description}
+
+CHATBOT ANSWER:
+{actual_answer}
+
+EXPECTED ANSWER:
+{expected_answer}
+
+Score the following (respond in JSON only, no markdown):
+{{
+  "image_answer_relevancy": <float 0.0-1.0 — does the answer address what the image shows?>,
+  "image_description_quality": <float 0.0-1.0 — how useful/accurate was the image description for retrieval?>,
+  "reason": "<one sentence explanation>"
+}}"""
+
+    try:
+        client = openai.OpenAI(api_key=openai.api_key)
+        response = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=200,
+            temperature=0.1,
+        )
+        raw = response.choices[0].message.content.strip()
+        # Strip markdown fences if present
+        raw = raw.replace("```json", "").replace("```", "").strip()
+        data = json.loads(raw)
+        return {
+            "image_answer_relevancy":    round(float(data.get("image_answer_relevancy", 0.0)), 4),
+            "image_description_quality": round(float(data.get("image_description_quality", 0.0)), 4),
+            "image_judge_reason":        data.get("reason", ""),
+        }
+    except Exception as e:
+        return {
+            "image_answer_relevancy":    None,
+            "image_description_quality": None,
+            "image_judge_reason":        f"Judge error: {e}",
+        }
+
+
+# ============================================================================
 # LOAD TEST CASES
 # ============================================================================
 def load_test_cases(json_path: str) -> List[Dict]:
@@ -177,9 +395,14 @@ def load_test_cases(json_path: str) -> List[Dict]:
 
 
 # ============================================================================
-# CALL RAG PIPELINE
+# CALL RAG PIPELINE  (text query → answer + contexts)
 # ============================================================================
 def run_rag_query(question: str) -> Tuple[str, List[str], Dict]:
+    """
+    Calls generate_answer_selfrag with a plain-text query.
+    For image test cases the caller passes the GPT-augmented query here,
+    so RAG_supabase.py needs zero modifications.
+    """
     try:
         from RAG_supabase import generate_answer_selfrag, retrieve_from_supabase
     except ImportError as e:
@@ -205,10 +428,10 @@ def run_rag_query(question: str) -> Tuple[str, List[str], Dict]:
         ]
 
     metadata = {
-        "confidence_scores": confidence_scores,
+        "confidence_scores":     confidence_scores,
         "domain_classification": domain_classification,
-        "selfrag_metrics": selfrag_metrics,
-        "sources": sources,
+        "selfrag_metrics":       selfrag_metrics,
+        "sources":               sources,
     }
     return answer, contexts, metadata
 
@@ -249,12 +472,11 @@ def save_results(results: List[Dict], language: str, output_dir: str = "evaluati
     cfg = LANGUAGE_CONFIG.get(language, LANGUAGE_CONFIG["english"])
     output_path = Path(output_dir) / cfg["report_name"]
 
-    # Also store language + run timestamp inside the file itself
     payload = {
-        "language":   cfg["label"],
+        "language":     cfg["label"],
         "language_key": language,
-        "run_at":     datetime.now().isoformat(),
-        "results":    results,
+        "run_at":       datetime.now().isoformat(),
+        "results":      results,
     }
 
     with open(output_path, "w", encoding="utf-8") as f:
@@ -267,12 +489,19 @@ def save_results(results: List[Dict], language: str, output_dir: str = "evaluati
 # ============================================================================
 # PRINT SUMMARY
 # ============================================================================
-def print_summary(results: List[Dict]):
-    metric_names = ["AnswerRelevancy","Faithfulness","ContextualPrecision","ContextualRecall","Hallucination"]
-    aggregate = {m: [] for m in metric_names}
+def print_summary(results: List[Dict], is_image_mode: bool = False):
+    metric_names = [
+        "AnswerRelevancy", "Faithfulness",
+        "ContextualPrecision", "ContextualRecall", "Hallucination",
+    ]
+    image_metric_names = ["ImageAnswerRelevancy", "ImageDescQuality"]
+
+    aggregate  = {m: [] for m in metric_names}
     pass_counts = {m: 0 for m in metric_names}
     rejection_count = sum(1 for r in results if r.get("rag_rejected"))
     error_count     = sum(1 for r in results if r.get("error"))
+
+    img_aggregate = {m: [] for m in image_metric_names}
 
     for r in results:
         if r.get("rag_rejected") or r.get("error"):
@@ -283,51 +512,208 @@ def print_summary(results: List[Dict]):
                 aggregate[m].append(score)
                 if r.get("passed", {}).get(m):
                     pass_counts[m] += 1
+        if is_image_mode:
+            img_scores = r.get("image_scores", {})
+            for k, mk in [("image_answer_relevancy", "ImageAnswerRelevancy"),
+                          ("image_description_quality", "ImageDescQuality")]:
+                v = img_scores.get(k)
+                if v is not None:
+                    img_aggregate[mk].append(v)
 
-    print("\n" + "=" * 115)
-    print("EVALUATION SUMMARY")
-    print("=" * 115)
-    print(f"{'Q#':<6} {'Question':<48} {'AnsRel':>8} {'Faith':>8} {'CtxPre':>8} {'CtxRec':>8} {'Halluc':>8}  Status")
-    print("-" * 115)
+    # ── Header ────────────────────────────────────────────────────────────────
+    col_w = 122 if is_image_mode else 115
+    print("\n" + "=" * col_w)
+    print("EVALUATION SUMMARY" + (" [IMAGE MODE]" if is_image_mode else ""))
+    print("=" * col_w)
+
+    header = f"{'Q#':<6} {'Question':<45} {'AnsRel':>8} {'Faith':>8} {'CtxPre':>8} {'CtxRec':>8} {'Halluc':>8}"
+    if is_image_mode:
+        header += f"  {'ImgRel':>8} {'ImgDesc':>8}"
+    header += "  Status"
+    print(header)
+    print("-" * col_w)
 
     for r in results:
         q_id   = r.get("id", "?")
-        q      = r.get("question", "")[:46]
+        q      = r.get("question", "")[:43]
         scores = r.get("scores", {})
 
-        if r.get("error"):       status = "CRASH"
-        elif r.get("rag_rejected"): status = "REJECTED"
+        if r.get("error"):            status = "CRASH"
+        elif r.get("rag_rejected"):   status = "REJECTED"
+        elif r.get("image_error"):    status = "IMG-ERR"
         else: status = "PASS" if r.get("overall_pass") else "FAIL"
 
-        def fmt(key):
-            v = scores.get(key)
+        def fmt(key, src=scores):
+            v = src.get(key)
             return f"{v:>8.3f}" if v is not None else f"{'N/A':>8}"
 
-        print(f"{q_id:<6} {q:<48}{fmt('AnswerRelevancy')}{fmt('Faithfulness')}{fmt('ContextualPrecision')}{fmt('ContextualRecall')}{fmt('Hallucination')}  {status}")
+        row = f"{q_id:<6} {q:<45}{fmt('AnswerRelevancy')}{fmt('Faithfulness')}{fmt('ContextualPrecision')}{fmt('ContextualRecall')}{fmt('Hallucination')}"
+        if is_image_mode:
+            img_scores = r.get("image_scores", {})
+            row += f"  {fmt('image_answer_relevancy', img_scores)}{fmt('image_description_quality', img_scores)}"
+        row += f"  {status}"
+        print(row)
 
-    print("-" * 115)
+    print("-" * col_w)
+
     total        = len(results)
     scored_total = total - rejection_count - error_count
 
-    print(f"{'AVG':<6} {'':<48}", end="")
+    # ── Averages row ──────────────────────────────────────────────────────────
+    print(f"{'AVG':<6} {'':<45}", end="")
     for m in metric_names:
         vals = aggregate[m]
-        avg = sum(vals)/len(vals) if vals else 0.0
+        avg = sum(vals) / len(vals) if vals else 0.0
         print(f"{avg:>8.3f}", end="")
+    if is_image_mode:
+        print("  ", end="")
+        for mk in image_metric_names:
+            vals = img_aggregate[mk]
+            avg = sum(vals) / len(vals) if vals else 0.0
+            print(f"{avg:>8.3f}", end="")
     print()
 
-    print(f"{'PASS%':<6} {'':<48}", end="")
+    # ── Pass-rate row ─────────────────────────────────────────────────────────
+    print(f"{'PASS%':<6} {'':<45}", end="")
     for m in metric_names:
         rate = (pass_counts[m] / scored_total * 100) if scored_total else 0
         print(f"{rate:>7.1f}%", end="")
+    if is_image_mode:
+        print("  ", end="")
+        for mk in image_metric_names:
+            # image metrics don't have a binary pass threshold; show avg instead
+            vals = img_aggregate[mk]
+            avg = sum(vals) / len(vals) if vals else 0.0
+            print(f"{avg:>8.3f}", end="")
     print()
 
     overall_pass = sum(1 for r in results if r.get("overall_pass", False))
-    print(f"\n{'='*115}")
+    print(f"\n{'='*col_w}")
     print(f"OVERALL PASS   : {overall_pass}/{total}")
     print(f"RAG REJECTIONS : {rejection_count}/{total}")
     print(f"CRASHES        : {error_count}/{total}")
-    print(f"{'='*115}\n")
+    print(f"{'='*col_w}\n")
+
+
+# ============================================================================
+# IMAGE TEST CASE RUNNER
+# ============================================================================
+def run_image_test_case(
+    tc: Dict,
+    image_dir: str,
+    vision_model: str = "gpt-4o",
+    judge_model_name: str = "gpt-4o-mini",
+) -> Dict:
+    """
+    Full pipeline for a single image test case:
+      1. Resolve image path
+      2. GPT-4o Vision → image_description + augmented_query
+      3. RAG pipeline (text query = augmented_query)
+      4. Image-specific scoring (ImageAnswerRelevancy, ImageDescQuality)
+
+    Returns a result dict compatible with the standard text result format,
+    with an additional "image_scores" key.
+    """
+    q_id     = tc.get("id", "?")
+    question = tc["question"]
+    expected = tc["expected_answer"]
+    img_name = tc.get("image_path", "")
+
+    # ── 1. Resolve image path ─────────────────────────────────────────────────
+    image_full_path = str(Path(image_dir) / img_name) if img_name else ""
+    image_exists    = Path(image_full_path).exists() if image_full_path else False
+
+    if not image_exists:
+        print(f"   [IMAGE] ⚠️  Not found: {image_full_path}")
+
+    # ── 2. GPT-4o Vision: describe image + augment query ─────────────────────
+    vision_start = time.time()
+    image_description = ""
+    augmented_query   = question  # fallback: plain question
+
+    if image_exists and _OPENAI_AVAILABLE:
+        print(f"   [IMAGE] Describing with {vision_model}...")
+        image_description, augmented_query = describe_image_with_gpt4v(
+            image_full_path, question, model=vision_model
+        )
+        vision_time = round(time.time() - vision_start, 2)
+        print(f"   [IMAGE] Vision time  : {vision_time}s")
+        print(f"   [IMAGE] Description  : {image_description[:120]}{'...' if len(image_description) > 120 else ''}")
+        print(f"   [IMAGE] Aug. query   : {augmented_query[:120]}{'...' if len(augmented_query) > 120 else ''}")
+    else:
+        vision_time = 0.0
+        if not _OPENAI_AVAILABLE:
+            print("   [IMAGE] OpenAI unavailable — using plain question for RAG")
+
+    # ── 3. RAG pipeline ───────────────────────────────────────────────────────
+    rag_start = time.time()
+    try:
+        actual_answer, contexts, metadata = run_rag_query(augmented_query)
+        rag_time = round(time.time() - rag_start, 2)
+    except Exception as e:
+        print(f"   RAG pipeline crashed: {e}")
+        traceback.print_exc()
+        return {
+            "id": q_id, "question": question, "expected_answer": expected,
+            "image_path": img_name, "image_full_path": image_full_path,
+            "image_description": image_description, "augmented_query": augmented_query,
+            "actual_answer": None,
+            "rag_time_seconds": round(time.time() - rag_start, 2),
+            "vision_time_seconds": vision_time,
+            "rag_rejected": False, "scores": {}, "passed": {},
+            "overall_pass": False, "error": str(e),
+            "image_scores": {},
+            "image_error": False,
+        }
+
+    print(f"   RAG time     : {rag_time}s")
+    print(f"   Contexts     : {len(contexts)} chunks retrieved")
+    print(f"   Answer       : {actual_answer[:120]}{'...' if len(actual_answer) > 120 else ''}")
+
+    # ── 4. Image-specific scores ──────────────────────────────────────────────
+    image_scores = score_image_answer_relevancy(
+        question=question,
+        image_description=image_description,
+        actual_answer=actual_answer,
+        expected_answer=expected,
+        model=judge_model_name,
+    )
+    print(f"   ImgRel       : {image_scores.get('image_answer_relevancy', 'N/A')}")
+    print(f"   ImgDescQual  : {image_scores.get('image_description_quality', 'N/A')}")
+    print(f"   ImgJudge     : {image_scores.get('image_judge_reason', '')[:80]}")
+
+    conf_scores   = metadata.get("confidence_scores", {}) or {}
+    combined_conf = conf_scores.get("combined_confidence", None)
+    if combined_conf is not None:
+        combined_conf = float(combined_conf)
+
+    return {
+        "id": q_id, "question": question, "expected_answer": expected,
+        "image_path": img_name, "image_full_path": image_full_path,
+        "image_description": image_description,
+        "augmented_query": augmented_query,
+        "actual_answer": actual_answer,
+        "rag_time_seconds": rag_time,
+        "vision_time_seconds": vision_time,
+        "contexts_retrieved": len(contexts),
+        "rag_rejected": is_rag_rejection(actual_answer),
+        "scores": {},       # populated by DeepEval loop below
+        "passed": {},
+        "reasons": {},
+        "overall_pass": False,
+        "image_scores": image_scores,
+        "image_error": not image_exists,
+        "metadata": {
+            "combined_confidence": combined_conf,
+            "domain": metadata.get("domain_classification", {}).get("domain"),
+            "selfrag_support": metadata.get("selfrag_metrics", {}).get("support_level"),
+            "evidence_coverage": metadata.get("selfrag_metrics", {}).get("evidence_coverage"),
+            "retrieval_retried": metadata.get("selfrag_metrics", {}).get("retrieval_retried"),
+        },
+        # Store for DeepEval scoring
+        "_actual_answer": actual_answer,
+        "_contexts": contexts,
+    }
 
 
 # ============================================================================
@@ -338,14 +724,23 @@ def run_evaluation(
     max_cases: Optional[int] = None,
     use_local_judge: bool = True,
     skip_ids: Optional[List[str]] = None,
+    image_dir: str = DEFAULT_IMAGE_DIR,
+    vision_model: str = "gpt-4o",
 ):
     cfg = LANGUAGE_CONFIG.get(language)
     if not cfg:
         print(f"Unknown language '{language}'. Choose from: {list(LANGUAGE_CONFIG.keys())}")
         sys.exit(1)
 
+    is_image_mode = cfg["is_image"]
+
     print("\n" + "=" * 80)
     print(f"ALKHIDMAT RAG - DeepEval Evaluation Suite  [{cfg['label']}]")
+    if is_image_mode:
+        print(f"IMAGE DIR: {image_dir}")
+        if not _OPENAI_AVAILABLE:
+            print("⚠️  WARNING: OPENAI_API_KEY not set — image description will be skipped,")
+            print("             RAG will run on plain question text only.")
     print("=" * 80)
 
     all_cases = load_test_cases(cfg["test_file"])
@@ -361,6 +756,7 @@ def run_evaluation(
 
     print(f"Total cases to evaluate: {len(all_cases)}\n")
 
+    # ── Judge setup ───────────────────────────────────────────────────────────
     judge_model = None
     if use_local_judge:
         judge_model = LocalLlamaJudge()
@@ -371,6 +767,9 @@ def run_evaluation(
     metrics = build_metrics(judge_model)
     print(f"Metrics: {[type(m).__name__ for m in metrics]}\n")
 
+    # ── Image-mode judge model name (for GPT scoring call) ───────────────────
+    img_judge_model = "gpt-4o-mini" if not use_local_judge else "gpt-4o-mini"
+
     results = []
 
     for i, tc in enumerate(all_cases):
@@ -380,52 +779,109 @@ def run_evaluation(
 
         print(f"\n{'─'*80}")
         print(f"[{i+1}/{len(all_cases)}] {q_id}: {question[:75]}")
+        if is_image_mode:
+            print(f"   Image: {tc.get('image_path', 'N/A')}")
 
-        rag_start = time.time()
-        try:
-            actual_answer, contexts, metadata = run_rag_query(question)
-            rag_time = round(time.time() - rag_start, 2)
-        except Exception as e:
-            print(f"   RAG pipeline crashed: {e}")
-            traceback.print_exc()
-            results.append({
-                "id": q_id, "question": question, "expected_answer": expected,
-                "actual_answer": None,
-                "rag_time_seconds": round(time.time() - rag_start, 2),
-                "rag_rejected": False, "scores": {}, "passed": {},
-                "overall_pass": False, "error": str(e),
-            })
-            continue
+        # ── IMAGE MODE: run vision + RAG ──────────────────────────────────────
+        if is_image_mode:
+            result = run_image_test_case(
+                tc=tc,
+                image_dir=image_dir,
+                vision_model=vision_model,
+                judge_model_name=img_judge_model,
+            )
 
-        print(f"   RAG time   : {rag_time}s")
-        print(f"   Contexts   : {len(contexts)} chunks retrieved")
-        print(f"   Answer     : {actual_answer[:120]}{'...' if len(actual_answer) > 120 else ''}")
+            if result.get("error"):
+                results.append(result)
+                continue
 
-        rejected = is_rag_rejection(actual_answer)
-        if rejected:
-            print(f"   REJECTED by Self-RAG: '{actual_answer[:80]}'")
-            results.append({
+            actual_answer = result.pop("_actual_answer", result.get("actual_answer", ""))
+            contexts      = result.pop("_contexts", [])
+
+            if is_rag_rejection(actual_answer):
+                result["rag_rejected"]      = True
+                result["rejection_message"] = actual_answer
+                result["note"]              = "Self-RAG safety rejection. Not scored."
+                results.append(result)
+                continue
+
+        # ── TEXT MODE: standard RAG call ──────────────────────────────────────
+        else:
+            rag_start = time.time()
+            try:
+                actual_answer, contexts, metadata = run_rag_query(question)
+                rag_time = round(time.time() - rag_start, 2)
+            except Exception as e:
+                print(f"   RAG pipeline crashed: {e}")
+                traceback.print_exc()
+                results.append({
+                    "id": q_id, "question": question, "expected_answer": expected,
+                    "actual_answer": None,
+                    "rag_time_seconds": round(time.time() - rag_start, 2),
+                    "rag_rejected": False, "scores": {}, "passed": {},
+                    "overall_pass": False, "error": str(e),
+                })
+                continue
+
+            print(f"   RAG time   : {rag_time}s")
+            print(f"   Contexts   : {len(contexts)} chunks retrieved")
+            print(f"   Answer     : {actual_answer[:120]}{'...' if len(actual_answer) > 120 else ''}")
+
+            if is_rag_rejection(actual_answer):
+                print(f"   REJECTED by Self-RAG: '{actual_answer[:80]}'")
+                conf_scores   = metadata.get("confidence_scores", {}) or {}
+                results.append({
+                    "id": q_id, "question": question, "expected_answer": expected,
+                    "actual_answer": actual_answer,
+                    "rag_time_seconds": rag_time,
+                    "rag_rejected": True, "rejection_message": actual_answer,
+                    "scores": {}, "passed": {}, "overall_pass": False,
+                    "metadata": {
+                        "combined_confidence": float(
+                            conf_scores.get("combined_confidence", 0) or 0
+                        ),
+                        "domain": metadata.get("domain_classification", {}).get("domain"),
+                    },
+                    "note": "Self-RAG safety rejection. Not scored.",
+                })
+                continue
+
+            # Build result shell for text mode
+            result = {
                 "id": q_id, "question": question, "expected_answer": expected,
                 "actual_answer": actual_answer, "rag_time_seconds": rag_time,
-                "rag_rejected": True, "rejection_message": actual_answer,
-                "scores": {}, "passed": {}, "overall_pass": False,
-                "metadata": {
-                    "combined_confidence": float(metadata.get("confidence_scores", {}).get("combined_confidence", 0) or 0),
-                    "domain": metadata.get("domain_classification", {}).get("domain"),
-                },
-                "note": "Self-RAG safety rejection. Not scored.",
-            })
-            continue
+                "contexts_retrieved": len(contexts), "rag_rejected": False,
+                "scores": {}, "passed": {}, "reasons": {},
+                "overall_pass": False,
+            }
+            # Attach metadata
+            conf_scores   = metadata.get("confidence_scores", {}) or {}
+            combined_conf = conf_scores.get("combined_confidence", None)
+            result["metadata"] = {
+                "combined_confidence":
+                    float(combined_conf) if combined_conf is not None else None,
+                "domain": metadata.get("domain_classification", {}).get("domain"),
+                "selfrag_support": metadata.get("selfrag_metrics", {}).get("support_level"),
+                "evidence_coverage": metadata.get("selfrag_metrics", {}).get("evidence_coverage"),
+                "retrieval_retried": metadata.get("selfrag_metrics", {}).get("retrieval_retried"),
+            }
 
-        deval_case = build_deepeval_test_case(tc, actual_answer, contexts)
+        # ── DeepEval scoring (shared for both modes) ──────────────────────────
+        deval_case = build_deepeval_test_case(
+            {"question": question, "expected_answer": expected},
+            actual_answer,
+            contexts,
+        )
 
-        scores: Dict[str, Optional[float]] = {}
-        passed: Dict[str, bool]            = {}
-        reasons: Dict[str, str]            = {}
+        scores:  Dict[str, Optional[float]] = {}
+        passed:  Dict[str, bool]            = {}
+        reasons: Dict[str, str]             = {}
 
         for metric in metrics:
             metric_name = type(metric).__name__.replace("Metric", "")
-            if not contexts and metric_name in ("ContextualPrecision","ContextualRecall","Faithfulness","Hallucination"):
+            if not contexts and metric_name in (
+                "ContextualPrecision", "ContextualRecall", "Faithfulness", "Hallucination"
+            ):
                 scores[metric_name]  = None
                 passed[metric_name]  = False
                 reasons[metric_name] = "Skipped: no contexts retrieved"
@@ -436,7 +892,10 @@ def run_evaluation(
                 passed[metric_name]  = metric.is_successful()
                 reasons[metric_name] = metric.reason or ""
                 status = "PASS" if metric.is_successful() else "FAIL"
-                print(f"   [{status}] {metric_name:<25} score={metric.score:.4f} | {(metric.reason or '')[:80]}")
+                print(
+                    f"   [{status}] {metric_name:<25} "
+                    f"score={metric.score:.4f} | {(metric.reason or '')[:80]}"
+                )
             except Exception as e:
                 print(f"   ERROR in {metric_name}: {e}")
                 scores[metric_name]  = None
@@ -446,27 +905,15 @@ def run_evaluation(
         scored_passed = [v for k, v in passed.items() if scores.get(k) is not None]
         overall_pass  = all(scored_passed) if scored_passed else False
 
-        conf_scores   = metadata.get("confidence_scores", {}) or {}
-        combined_conf = conf_scores.get("combined_confidence", None)
-        if combined_conf is not None:
-            combined_conf = float(combined_conf)
+        result["scores"]       = scores
+        result["passed"]       = passed
+        result["reasons"]      = reasons
+        result["overall_pass"] = overall_pass
+        result["actual_answer"] = actual_answer
 
-        results.append({
-            "id": q_id, "question": question, "expected_answer": expected,
-            "actual_answer": actual_answer, "rag_time_seconds": rag_time,
-            "contexts_retrieved": len(contexts), "rag_rejected": False,
-            "scores": scores, "passed": passed, "reasons": reasons,
-            "overall_pass": overall_pass,
-            "metadata": {
-                "combined_confidence": combined_conf,
-                "domain": metadata.get("domain_classification", {}).get("domain"),
-                "selfrag_support": metadata.get("selfrag_metrics", {}).get("support_level"),
-                "evidence_coverage": metadata.get("selfrag_metrics", {}).get("evidence_coverage"),
-                "retrieval_retried": metadata.get("selfrag_metrics", {}).get("retrieval_retried"),
-            },
-        })
+        results.append(result)
 
-    print_summary(results)
+    print_summary(results, is_image_mode=is_image_mode)
     report_path = save_results(results, language)
     return results, report_path
 
@@ -477,12 +924,17 @@ def run_evaluation(
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="Evaluate Alkhidmat RAG pipeline using DeepEval")
+    parser = argparse.ArgumentParser(
+        description="Evaluate Alkhidmat RAG pipeline using DeepEval"
+    )
     parser.add_argument(
         "--language", "-l",
-        choices=["english", "urdu", "roman"],
+        choices=["english", "urdu", "roman", "images"],
         default="english",
-        help="Which test set to evaluate: english | urdu | roman  (default: english)",
+        help=(
+            "Which test set to evaluate: english | urdu | roman | images  "
+            "(default: english)"
+        ),
     )
     parser.add_argument(
         "--max-cases", type=int, default=None,
@@ -496,6 +948,17 @@ if __name__ == "__main__":
         "--skip", nargs="*", default=None,
         help="Question IDs to skip, e.g. --skip Q38 Q39",
     )
+    parser.add_argument(
+        "--image-dir", default=DEFAULT_IMAGE_DIR,
+        help=(
+            f"Directory containing image files for --language images. "
+            f"Default: {DEFAULT_IMAGE_DIR}"
+        ),
+    )
+    parser.add_argument(
+        "--vision-model", default="gpt-4o",
+        help="OpenAI vision model used to describe images (default: gpt-4o)",
+    )
 
     args = parser.parse_args()
 
@@ -504,14 +967,18 @@ if __name__ == "__main__":
         max_cases=args.max_cases,
         use_local_judge=not args.use_openai_judge,
         skip_ids=args.skip,
+        image_dir=args.image_dir,
+        vision_model=args.vision_model,
     )
 
     print(f"Done! Report saved to: {report_path}")
     print(f"(Re-running with --language {args.language} will overwrite this file)")
     print()
     print("NEXT STEPS:")
-    print("  1. High rejection rate (>30%)? Lower SELFRAG_MIN_CONFIDENCE in rag_config.py")
-    print("  2. Low ContextualRecall?        Knowledge base may be missing content")
-    print("  3. Low Faithfulness?            LLM is drifting from retrieved context")
-    print("  4. CtxPrecision/Recall = 0?     Expected answers too specific for sentence matching")
+    print("  1. High rejection rate (>30%)?      Lower SELFRAG_MIN_CONFIDENCE in rag_config.py")
+    print("  2. Low ContextualRecall?             Knowledge base may be missing content")
+    print("  3. Low Faithfulness?                 LLM is drifting from retrieved context")
+    print("  4. CtxPrecision/Recall = 0?          Expected answers too specific for sentence matching")
+    print("  5. Low ImageAnswerRelevancy?         GPT-4o Vision description is weak — try gpt-4o (not mini)")
+    print("  6. Low ImageDescQuality?             Image is low-res or text is hard to extract; consider pre-OCR")
     print()
