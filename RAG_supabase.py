@@ -271,7 +271,7 @@ Answer:"""
         Prevents wasting GPT generation tokens when context is irrelevant.
         Different from verify_support — this runs BEFORE generation.
         """
-        context_preview = context[:1000] + "..." if len(context) > 1000 else context
+        context_preview = context[:300] + "..." if len(context) > 1000 else context
         prompt = f"""Check if the provided context contains information to answer the question.
 
 Question: {query}
@@ -279,11 +279,15 @@ Question: {query}
 Context:
 {context_preview}
 
-Can this question be answered using ONLY the information in the context above?
+Does the context below contain information that is RELEVANT to answering the question?
+Do not check if it answers perfectly — just check if it contains relevant facts.
 
-Respond with ONLY one of:
-[CAN_ANSWER]
-[CANNOT_ANSWER]
+Question: {query}
+Context: {context_preview}
+
+Respond ONLY:
+[CAN_ANSWER] - if context contains relevant information
+[CANNOT_ANSWER] - if context is completely unrelated
 
 Answer:"""
         try:
@@ -532,7 +536,7 @@ Rewritten query:"""
             print(f"[PERSPECTIVE] Reformulation error: {e}")
             return query_en
 
-    def retrieve_with_retry(self, query: str, domain: str, top_k: int = 5,
+    def retrieve_with_retry(self, query: str, domain: str, top_k: int = 8,
                             filter_category: Optional[str] = None) -> Tuple[List[Dict], np.ndarray, List[np.ndarray], bool]:
         MIN_RELEVANT_DOCS = 2
         MIN_AVG_RELEVANCE = 0.6
@@ -868,7 +872,7 @@ class ConfidenceScorer:
     @staticmethod
     def calculate_retrieval_confidence(query_embedding: np.ndarray,
                                        doc_embeddings: List[np.ndarray],
-                                       top_k: int = 5) -> float:
+                                       top_k: int = 8) -> float:
         if not doc_embeddings:
             return 0.0
         sims = [float(cosine_similarity(query_embedding.reshape(1, -1), doc_emb.reshape(1, -1))[0][0])
@@ -1388,7 +1392,7 @@ def build_alkhidmat_rag(zip_path: str, clear_existing: bool = False, incremental
 
 # ============ Retrieval ============
 
-def retrieve_from_supabase(query: str, top_k: int = 5, filter_category: str = None,
+def retrieve_from_supabase(query: str, top_k: int = 8, filter_category: str = None,
                            query_embedding: Optional[np.ndarray] = None) -> Tuple[List[Dict], np.ndarray, List[np.ndarray]]:
     embed_start = time.time()
     if query_embedding is not None:
@@ -1508,7 +1512,7 @@ def clean_llm_response(text: str) -> str:
 
 # ============ Answer Generation (non-selfrag path) ============
 
-def generate_answer(query: str, top_k: int = 5, max_tokens: int = 400, filter_category: str = None):
+def generate_answer(query: str, top_k: int = 8, max_tokens: int = 400, filter_category: str = None):
     """Standard RAG answer generation using GPT."""
     start_time = time.time()
     print(f"[RAG] Processing: {query[:50]}...", flush=True)
@@ -1709,7 +1713,7 @@ Rewritten standalone question:"""
 
 # ============ SELF-RAG ANSWER GENERATION ============
 
-def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
+def generate_answer_selfrag(query: str, top_k: int = 8, max_tokens: int = 400,
                               filter_category: str = None,
                               conversation_history: list = None):
     """
@@ -1875,8 +1879,14 @@ def generate_answer_selfrag(query: str, top_k: int = 5, max_tokens: int = 400,
     # STEP 3.5: Pre-generation gate (GPT)
     if SELFRAG_ENABLE:
         print(f"\n[SELF-RAG] Step 3.5: Pre-generation gate (GPT)...", flush=True)
-        can_answer = critic.check_answer_in_context(query_for_rag, context)
-        selfrag_metrics['answer_in_context'] = can_answer
+        top_sim = results[0].get('similarity', 0) if results else 0
+        if top_sim >= 0.86:
+            print(f" ✓ Skipping gate — top doc similarity is high ({top_sim:.3f})", flush=True)
+            can_answer = True
+            selfrag_metrics['answer_in_context'] = True
+        else:
+            can_answer = critic.check_answer_in_context(query_for_rag, context)
+            selfrag_metrics['answer_in_context'] = can_answer
         if not can_answer:
             # Context mismatch — likely a cache/retrieval topic drift. Retry once with
             # a fresh, domain-specific reformulation before routing to a human agent.
@@ -2035,16 +2045,23 @@ Answer:
     # - Step 3.5 (check_answer_in_context): BEFORE generation — "is the answer findable?"
     # - Step 5 (verify_support): AFTER generation — "did the LLM stay grounded?"
     # They catch different failure modes. Both are intentionally kept.
+    
+    # STEP 5: Post-generation hallucination check (GPT)
     if SELFRAG_ENABLE:
         print(f"\n[SELF-RAG] Step 5: Post-generation support check (GPT)...", flush=True)
         support_level = critic.verify_support(query_for_rag, answer_for_critic, context)
         selfrag_metrics['support_level'] = support_level
         print(f" → Support: {support_level.upper()}", flush=True)
-        if support_level == "no_support":
-            print(f" ⚠️ Answer NOT supported — routing to agent", flush=True)
+        
+        # Only route to agent if NO_SUPPORT *and* retrieval confidence is also low
+        # High retrieval confidence means we found the right docs — trust the answer
+        if support_level == "no_support" and retrieval_conf_early < 0.82:
+            print(f" ⚠️ Answer NOT supported and low retrieval confidence — routing to agent", flush=True)
             selfrag_metrics['route_to_agent'] = True
             return (_agent_route_response(profile), original_query, profile.input_lang,
                     results, {'combined_confidence': 0.0, 'route_to_agent': True}, domain_classification, selfrag_metrics)
+        elif support_level == "no_support":
+            print(f" ⚠️ NO_SUPPORT but retrieval confidence is high ({retrieval_conf_early:.3f}) — proceeding anyway", flush=True)
 
     # STEP 4.5: Evidence coverage (GPT), skipped if fully supported
     if EVIDENCE_COVERAGE_ENABLE:

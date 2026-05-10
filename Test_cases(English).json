@@ -2,7 +2,7 @@
   {
     "id": "Q01",
     "question": "How can I donate to Alkhidmat Foundation for Gaza?",
-    "expected_answer": "You can donate via Meezan Bank account 02140100861151, by calling the cash pick-up number 0800-44448, in-person at Collection Centers, or online using debit/credit cards through their website alkhidmat.org/donate."
+    "expected_answer": "You can donate to the Alkhidmat Foundation for Gaza via multiple channels. Through JazzCash or EasyPaisa, go to the Donations section, select “Alkhidmat Foundation Pakistan,” and complete your payment. You can also donate online using debit/credit cards at alkhidmat.org/donate. For bank transfers, send funds to Bank of Punjab (Account Title: Alkhidmat Foundation Pakistan, Account No. 5310067845100016, IBAN: PK19BPUN5310067845100016). Donations are also accepted via cheques or bank drafts, with pickup arranged through their helpline (0800 44 44 8 or 0304 111 4 222)."
   },
   {
     "id": "Q02",
@@ -17,7 +17,7 @@
   {
     "id": "Q04",
     "question": "How can I contact Alkhidmat Foundation for more information?",
-    "expected_answer": "You can contact them by phone at +92 42 3802 0222 or by email at info@alkhidmat.org."
+    "expected_answer": "You can contact them by phone at +92 42 3802 0222 or by email at info@alkhidmat.org or you can go to our office Alkhidmat Foundation Head Office, 3 Km Khayaban-e-Jinnah, Lahore, Pakistan"
   },
   {
     "id": "Q05",
@@ -27,262 +27,241 @@
   {
     "id": "Q06",
     "question": "What online donation methods are available?",
-    "expected_answer": "You can donate online via debit/credit card on the website, online banking, bank transfer, JazzCash, EasyPaisa, or home collection."
+    "expected_answer": "You can donate online via card on the website, direct bank transfer, JazzCash, EasyPaisa, or home collection or ATM cards"
   },
   {
     "id": "Q07",
     "question": "Can I donate internationally to Alkhidmat Foundation?",
-    "expected_answer": "Yes, you can donate from anywhere in the world using debit/credit cards through the Alkhidmat Foundation website."
+    "expected_answer": "Yes, you can donate internationally to Alkhidmat Foundation. They have USD bank accounts for overseas donors who want to make donations through international bank transfers"
   },
   {
     "id": "Q08",
     "question": "What emergency appeals does Alkhidmat Foundation currently have?",
-    "expected_answer": "Alkhidmat Foundation currently runs emergency appeals including Bano Qabil and the Palestine Emergency Appeal."
+    "expected_answer": "Alkhidmat Foundation has launched an immediate, comprehensive relief operation in response to the devastating floods in Punjab, where 165 people have lost their lives and 220 houses have been damaged. The foundation is focused on gathering and providing essential aid to all affected communities to address their diverse needs as soon as possible."
   },
   {
     "id": "Q09",
     "question": "What are the main focus areas of Alkhidmat Foundation?",
-    "expected_answer": "Alkhidmat Foundation focuses on humanitarian services including health, education, disaster relief, women philanthropy, and social welfare programs since 1990."
+    "expected_answer": "Disaster Management, Health Services, Education, Orphan Care Program, WASH (Water, Sanitation, and Hygiene), Microfinance, Community Services, Educational Support and Scholarships, Community Development and Advocacy, and Empowering Women in Disaster Relief and Rehabilitation."
   },
   {
     "id": "Q10",
-    "question": "How can I make a donation in-person?",
-    "expected_answer": "You can make an in-person donation at any of Alkhidmat Foundation's Collection Centers or directly at their head office in Lahore."
-  }
-  ,
+    "question": "How can I donate to Alkhidmat Foundation for Palestine?",
+    "expected_answer": "Visit the online donation website: alkhidmat.org/donate, Choose the option to 'Donate to Palestine' available on the site. You can also use EasyPaisa by selecting 'Donate to Palestine' in the app. Alternatively, you can make a cheque/draft payable to 'Alkhidmat Foundation Pakistan' and send it to Alkhidmat Complex, 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan."
+  },
   {
     "id": "Q11",
-    "question": "How can I donate to Alkhidmat Foundation for Palestine?",
-    "expected_answer": "For general donations, you can use Meezan Bank account 02140100861151 (IBAN: PK35MEZN0002140100861151). For Zakat, use Meezan Bank account 02140101095120 (IBAN: PK94MEZN0002140101095120). Both accounts are at Branch R1 Johar Town, Lahore, SWIFT code MEZNPKKA. You can also donate for Palestine through the same channels or via the Alkhidmat Foundation donation website."
+    "question": "How can I donate to Alkhidmat Foundation from home?",
+    "expected_answer": "To donate through Alkhidmat Foundation Pakistan, open the official donation website at alkhidmat.org/donate. Click on the 'Quick Donate' option to start the donation process. Choose whether you want to 'Give Once' or 'Give Regularly'. Select the donation amount in PKR by choosing a preset amount or entering a custom amount manually. Choose the donation category or donation type from the Sadqa/Zakat dropdown menu. Click the 'Donate' button to continue. Fill in the donor information form by entering details such as Full Name, Email Address, Phone Number, Country, City, and optional Address information. Select a payment method, including Pay via Card Online, Direct Bank Transfer, or Collect from Home. Complete the payment and checkout process to successfully submit the donation. After completing the process, you may be connected with a human support agent for further assistance or confirmation."
   },
   {
     "id": "Q12",
-    "question": "How can I donate to Alkhidmat Foundation from home?",
-    "expected_answer": "You can donate through cheques or bank drafts made out in favour of 'Alkhidmat Foundation Pakistan'. To have them picked up from your home, call 0800 44 44 8 or 0304 111 4 222 and a representative will collect them."
-  },
-  {
-    "id": "Q13",
     "question": "Can I send my donation cheque by courier to Alkhidmat Foundation?",
     "expected_answer": "Yes, you can send your cheque or bank draft by courier to Alkhidmat Complex, 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan."
   },
   {
+    "id": "Q13",
+    "question": "how can i donate in usd",
+    "expected_answer": "For General Donations, send a USD international wire transfer to the following account: Bank: Makramah Bank Limited. Account Title: Alkhidmat Foundation Pakistan. Account No (USD): 1994426252333135802. IBAN: PK32SUMB9944293330135802. SWIFT Code: SUMBPKKA. For Zakat donations or Orphan/Aghosh support, send a USD wire transfer to: Bank: Meezan Bank. Account No (USD): 0100643642. IBAN: PK40MEZN0002010103642. SWIFT Code: MEZNPKKA. After completing the bank transfer, share your transaction slip or payment proof on WhatsApp at +92 300 077 6016 for donation verification and confirmation."
+  },
+  {
     "id": "Q14",
-    "question": "How can I make a general USD donation to Alkhidmat Foundation?",
-    "expected_answer": "For general USD donations, you can use Makramah Bank account 1994426252333135802 (IBAN: PK32SUMB9944293330135802) or Meezan Bank account 0100643642 (IBAN: PK40MEZN0002010100643642). Both banks are in Lahore, Pakistan with SWIFT codes SUMBPKKA and MEZNPKKA respectively."
+    "question": "how can i donate in gbp?",
+    "expected_answer": "For General Donations, send a GBP international wire transfer to the following account: Bank: Makramah Bank Limited. Account Title: Alkhidmat Foundation Pakistan. Account No (GBP): 1994426253402135802. IBAN: PK02SUMB994434020135802. SWIFT Code: SUMBPKKA. For Zakat donations or Orphan/Aghosh support, send a GBP wire transfer to: Bank: Meezan Bank. Account No (GBP): 0100644437. IBAN: PK12MEZN0002010100644437. SWIFT Code: MEZNPKKA. After completing the bank transfer, share your transaction slip or payment proof on WhatsApp at +92 300 077 6016 for donation verification and confirmation."
   },
   {
     "id": "Q15",
-    "question": "How can I donate Zakat in USD for Orphan/Aghosh, Community Services, or Bano Qabil?",
-    "expected_answer": "For USD Zakat donations, use Meezan Bank account 0100643642 (IBAN: PK40MEZN0002010100643642). You can donate for Orphan/Aghosh, Community Services, or Bano Qabil through this account. SWIFT code: MEZNPKKA."
+    "question": "How can I make a general USD donation to Alkhidmat Foundation?",
+    "expected_answer": "To make a general USD donation to Alkhidmat Foundation Pakistan, send an international wire transfer to the following account: Bank: Makramah Bank Limited. Account Title: Alkhidmat Foundation Pakistan. Account No (USD): 1994426252333135802. IBAN: PK32SUMB9944293330135802. SWIFT Code: SUMBPKKA. This account can be used for general charity donations, Palestine relief, healthcare, education, community services, Bano Qabil, clean water projects, and Islamic microfinance support. Alternatively, donors can visit the official online donation website at alkhidmat.org/donate and complete the online donation process using available digital payment methods."
   },
   {
     "id": "Q16",
-    "question": "How can I donate USD for specific programs like Wash, Health, Education, Rebuild Palestine, or Alkhidmat Islamic Microfinance?",
-    "expected_answer": "For USD donations to these programs, use Makramah Bank account 1994426252333135802 (IBAN: PK32SUMB9944293330135802) or Meezan Bank account 0100643642 (IBAN: PK40MEZN0002010100643642). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan)."
-  },
-  {
-    "id": "Q17",
     "question": "How can I make a general GBP donation to Alkhidmat Foundation?",
     "expected_answer": "For general GBP donations, you can use Makramah Bank account 1994426253402135802 (IBAN: PK02SUMB994434020135802) or Meezan Bank account 0100644437 (IBAN: PK12MEZN0002010100644437). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan)."
   },
   {
-    "id": "Q18",
+    "id": "Q17",
     "question": "How can I donate GBP Zakat for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water?",
     "expected_answer": "For GBP Zakat donations, use Meezan Bank account 0100644437 (IBAN: PK12MEZN0002010100644437) for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water programs. SWIFT code: MEZNPKKA."
   },
   {
-    "id": "Q19",
+    "id": "Q18",
     "question": "How can I donate GBP for specific programs like Health Collection, Education, Rebuild Palestine, or Alkhidmat Islamic Microfinance?",
-    "expected_answer": "For GBP donations to these programs, you can use Makramah Bank account 1994426253402135802 (IBAN: PK02SUMB994434020135802) or Meezan Bank account 0100644437 (IBAN: PK12MEZN0002010100644437). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan)."
+    "expected_answer": "To donate GBP through Alkhidmat Foundation Pakistan for specific humanitarian and welfare programs such as Health Collection, Education, Rebuild Palestine, Community Services, Bano Qabil, Clean Water/WASH projects, Orphan/Aghosh support, or Alkhidmat Islamic Microfinance, send your international wire transfer to the following account: Bank: Meezan Bank. Account Title: Alkhidmat Foundation Pakistan. Account No (GBP): 0100644437. IBAN: PK12MEZN0002010100644437. Branch: R1 Johar Town, Lahore. SWIFT Code: MEZNPKKA. After completing the transfer, you may share your payment proof or transaction slip with Alkhidmat Foundation Pakistan for verification and donation confirmation. You are now chatting with a human agent."
+  },
+  {
+    "id": "Q19",
+    "question": "How can I make a general EURO donation to Alkhidmat Foundation?",
+    "expected_answer": "To make a general EURO donation to Alkhidmat Foundation Pakistan, send an international wire transfer to the following account: Bank: Makramah Bank Limited. Account Title: Alkhidmat Foundation Pakistan. Account No (EURO): 1994426254974135802. IBAN: PK90SUMB9944319740135802. Branch: Allama Iqbal Town Kashmir Block, Lahore. SWIFT Code: SUMBPKKA. This EURO account can be used for general charity donations, Palestine relief, healthcare, education, community services, Bano Qabil, clean water and WASH projects, and Islamic microfinance support through Alkhidmat Foundation Pakistan."
   },
   {
     "id": "Q20",
-    "question": "How can I make a general EURO donation to Alkhidmat Foundation?",
-    "expected_answer": "For general EURO donations, use Makramah Bank account 1994426254974135802 (IBAN: PK90SUMB9944319740135802) or Meezan Bank account 0100644443 (IBAN: PK44MEZN0002010100644443). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan)."
+    "question": "How can I donate EURO Zakat for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water?",
+    "expected_answer": "To donate Zakat in EURO through Alkhidmat Foundation Pakistan for Orphan/Aghosh support, Community Services, Bano Qabil, Clean Water/WASH projects, Palestine relief, healthcare, education, or Islamic microfinance programs, send your international wire transfer to the following account: Bank: Meezan Bank. Account Title: Alkhidmat Foundation Pakistan. Account No (EURO): 0100644443. IBAN: PK44MEZN0002010100644443. Branch: R1 Johar Town, Lahore. SWIFT Code: MEZNPKKA."
   },
   {
     "id": "Q21",
-    "question": "How can I donate EURO Zakat for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water?",
-    "expected_answer": "For EURO Zakat donations, use Meezan Bank account 0100644437 (IBAN: PK44MEZN0002010100644443) for Orphan/Aghosh, Community Services, Bano Qabil, or Clean Water. SWIFT code: MEZNPKKA."
-  },
-  {
-    "id": "Q22",
     "question": "How can I donate EURO for specific programs like Health Collection, Education, Rebuild Palestine, or Alkhidmat Islamic Microfinance?",
     "expected_answer": "For EURO donations to these programs, use Makramah Bank account 1994426254974135802 (IBAN: PK90SUMB9944319740135802) or Meezan Bank account 0100644437 (IBAN: PK44MEZN0002010100644443). SWIFT codes: SUMBPKKA (Makramah) and MEZNPKKA (Meezan)."
   },
   {
+    "id": "Q22",
+    "question": "How can I make a general PKR donation to Alkhidmat Foundation?",
+    "expected_answer": "Open the official donation website: alkhidmat.org/donate. Click on 'Quick Donate'. Choose one of the following donation options: Give Once or Give Regularly. Select the donation amount in PKR by choosing a preset amount or entering a custom amount manually. Select the donation type from the Sadqa/Zakat dropdown menu. Click the 'Donate' button to continue. Fill in the donor information form, including Full Name, Email Address, Phone Number, Country, City, and optional Address details. Choose one of the available payment methods: Pay via Card Online, Direct Bank Transfer, or Collect from Home. Complete the payment process to successfully submit the donation."
+  },
+  {
     "id": "Q23",
-    "question": "Do all international donations require SWIFT codes for bank transfers?",
-    "expected_answer": "Yes, all international donations in USD, GBP, or EURO require using the SWIFT code of the respective bank: SUMBPKKA for Makramah Bank and MEZNPKKA for Meezan Bank."
+    "question": "How can I donate PKR Zakat for Orphan Care, Community Services, or Bano Qabil?",
+    "expected_answer": "You can donate PKR Zakat for Orphan Care, Community Services, or Bano Qabil through the following methods: Online: Use your debit or credit card at alkhidmat.org/donate — available globally, 24/7. JazzCash: Open the JazzCash App, go to Donations, select 'Alkhidmat Foundation Pakistan', and enter the donation amount. EasyPaisa: Open the EasyPaisa App, go to Donations, select 'Alkhidmat Foundation Pakistan', and enter the donation amount. Home Collection: Call 0800 44 44 8 or 0304 111 4 222 to request cheque or draft collection from your doorstep. Cheque or Draft: Make the cheque payable to 'Alkhidmat Foundation Pakistan' and send it via courier to Alkhidmat Complex, 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan." 
   },
   {
     "id": "Q24",
-    "question": "How can I make a general PKR donation to Alkhidmat Foundation?",
-    "expected_answer": "For general PKR donations, you can use Bank of Punjab (Taqwa Islamic Banking) account 5310067845100016 (IBAN: PK19BPUN5310067845100016, SWIFT: BPUNPKKA) or other banks as listed on the Alkhidmat website."
+    "question": "What is the bank account for sadqah donation?",
+    "expected_answer":"Account Title: Alkhidmat Foundation Pakistan. Bank Name: Meezan Bank. Account Number: 02430101034665. SWIFT CODE: MEZNPKKA. IBAN: PK11MEZN0002430101034665."
   },
   {
     "id": "Q25",
-    "question": "How can I donate PKR Zakat for Orphan Care, Community Services, or Bano Qabil?",
-    "expected_answer": "For PKR Zakat donations, you can use Meezan Bank account 0101098699, Bank Alfalah account 5527005002305295, Bank of Punjab account 5470067845100026, or Habib Metropolitan Bank account 6998129314714109745. SWIFT codes and IBANs are provided by each bank."
+    "question": "what is the bank account for zakat donation?",
+    "expected_answer": "Account Title: Alkhidmat Foundation Pakistan Zakat. Bank Name: Bank of Punjab. Account Number: 3880067845100081. SWIFT CODE: BPUNPKKA002. IBAN: PK16BPUN388006784510008."
   },
   {
     "id": "Q26",
-    "question": "How can I donate PKR for specific programs like Disaster Management, Health, Education, WASH, or Alkhidmat Islamic Microfinance?",
-    "expected_answer": "For PKR donations to these programs, use Soneri Bank account 20001287371 (Disaster Management), MCB Islamic Bank account 0651000583520002 or 0651000583520004 (Health/WASH), National Bank account 2132003312806715 (Education), Bank of Punjab account 5470067845100015, or Habib Metropolitan Bank account 6998129314714109745 (Alkhidmat Islamic Microfinance). SWIFT codes and IBANs are provided for each bank."
+    "question": "what are alkhidmat's bank account details for donation?",
+    "expected_answer":"Meezan Bank — Account Title: Alkhidmat Health Foundation. Account Number: 0253-0113092335. Soneri Bank — Account Title: Al Khidmat Foundation Pakistan. Account Number (PKR): 20001256999. IBAN: PK17SONE0000120001256999. SWIFT: SONEPKKALHR. For Zakat: Account Title: Alkhidmat Foundation Pakistan Zakat. Bank Name: Bank of Punjab. Account Number: 3880067845100081. SWIFT CODE: BPUNPKKA002. IBAN: PK16BPUN388006784510008. For Sadaqah: Account Title: Alkhidmat Foundation Pakistan. Bank Name: Meezan Bank. Account Number: 02430101034665. SWIFT CODE: MEZNPKKA. IBAN: PK11MEZN0002430101034665."
   },
   {
     "id": "Q27",
-    "question": "Which bank accounts can I use to donate PKR Zakat for Health or Education programs?",
-    "expected_answer": "For PKR Zakat donations for Health, use MCB Islamic Bank account 0651000583520002. For Education, use National Bank of Pakistan account 2132003312806715 or Bank Islami Pakistan Limited account 0205215724660136. SWIFT codes and IBANs are provided for each."
+    "question": "Which Alkhidmat hospital in Karachi has a blood bank?",
+    "expected_answer": "Alkhidmat Diagnostic Center & Blood Bank Karachi - II-A, 7/3,4,5 Near Enquiry Office, Opp. Model Park, Nazimabad, Karachi."
   },
   {
     "id": "Q28",
-    "question": "How can I donate PKR for Community Services in Alkhidmat Foundation?",
-    "expected_answer": "For PKR donations to Community Services, use Meezan Bank account 0101034665 or Bank Alfalah account 55275001586959. SWIFT codes: MEZNPKKA and ALFHPKKA527."
+    "question": "What are the hospitals of Alkhidmat in Karachi and their addresses?",
+    "expected_answer": "Alkhidmat Fareeda Yaqoob Hospital Karachi - C-1 Ext. Phase - III, Gulshan-e-Hadeed Bin Qasim Town, Karachi. Alkhidmat Hospital Korangi Karachi - House No. N-11, N-13, Korangi No. 3/5, Karachi. Alkhidmat Hospital Nazimabad Karachi - II-A, 7/3,4,5 Near Enquiry Office, Opp. Model Park, Nazimabad, Karachi. Alkhidmat Hospital Orangi Town Karachi - Opp. Police Station, Sector No. 5, Orangi Town, Karachi. Alkhidmat Hospital Shah Faisal Karachi - Resham Gali, Shah Faisal Colony No. 1, Karachi. Alkhidmat Hospital Malir Karachi - C-14,15, Kausar Town, Malir Ext. Colony No. 1, Karachi. Alkhidmat Hospital Sakhi Hassan Karachi - ST-5, Block J, North Nazimabad, Karachi. Alkhidmat Hospital North Karachi - ST-60, Sector 11/A, Jama-e-Masjid Alhuda, North Karachi. Alkhidmat Maternity Center Noman Masijd Karachi. Alkhidmat Medical Center Gulbahar Karachi. Alkhidmat Sajida Clinic Karachi. Alkhidmat Clinic Paposh Nagar Karachi. Alkhidmat Medical Center Teen Talwar Karachi. Alkhidmat Dr. Abdul Salam Medical Center Karachi."
   },
   {
     "id": "Q29",
-    "question": "Which accounts are used for Bano Qabil PKR donations and Zakat?",
-    "expected_answer": "For PKR donations to Bano Qabil, use Bank of Punjab account 5470067845100026 (Zakat) or Habib Metropolitan Bank account 6998129314714109745 (Donation). SWIFT codes: BPUNPKKA and MPBLPKKA."
+    "question": "How many diagnostic labs and collection centers does Alkhidmat operate?",
+    "expected_answer": "116"
   },
   {
     "id": "Q30",
-    "question": "How can I donate PKR for WASH programs?",
-    "expected_answer": "For PKR donations to WASH, use MCB Islamic Bank account 0651000583520004. SWIFT code: MUCBPKKA."
+    "question": "How many ambulances does Alkhidmat have in Sindh?",
+    "expected_answer": "48"
   },
   {
     "id": "Q31",
-    "question": "How can I donate PKR to Alkhidmat Islamic Microfinance programs?",
-    "expected_answer": "For PKR donations to Alkhidmat Islamic Microfinance, use Bank of Punjab account 5470067845100015 or Habib Metropolitan Bank account 6998129314714109745. SWIFT codes: BPUNPKKA and MPBLPKKA."
+    "question": "How many hospitals does Alkhidmat operate in total?",
+    "expected_answer": "45"
   },
   {
     "id": "Q32",
-    "question": "Which account should I use for Tameer-e-Watan PKR donations?",
-    "expected_answer": "For Tameer-e-Watan PKR donations, use Meezan Bank account 0100644443. SWIFT code: MEZNPKKA."
+    "question": "What do alkhidmat volunteers do?",
+    "expected_answer": "Alkhidmat volunteers engage in various activities including disaster management by providing rescue, relief, and rehabilitation in emergencies such as earthquakes, floods, and health crises. They assist in health services by supporting hospitals, clinics, and mobile health units. Volunteers also help in education by establishing temporary schools in disaster zones and providing scholarships. They support the Orphan Care Program by aiding over 30,000 orphaned children, and they contribute to WASH initiatives by providing clean drinking water and sanitation facilities. Additionally, volunteers participate in community services aimed at poverty alleviation and livelihood support, and they help with microfinance initiatives to empower vulnerable families."
   },
   {
     "id": "Q33",
-    "question": "How can I donate PKR Zakat specifically for Orphan Care?",
-    "expected_answer": "For PKR Zakat for Orphan Care, use Meezan Bank account 0101098699 or Bank Alfalah account 5527005002305295. SWIFT codes: MEZNPKKA and ALFHPKKA."
+    "question": "Who can become a volunteer?",
+    "expected_answer": "Alkhidmat Foundation Pakistan encourages youth and community members who are passionate about humanitarian work, social welfare, community service, and helping others to become volunteers. The organization especially promotes volunteerism among the youth of Pakistan."
   },
   {
     "id": "Q34",
-    "question": "Who is the President of Alkhidmat Foundation Pakistan and what are his roles?",
-    "expected_answer": "Prof. Dr. Hafeez ur Rahman is the President of Alkhidmat Foundation Pakistan. He is also the Convener of Alkhidmat Global Committee and responsible for AHF Coordination."
+    "question": "what is the link for being a volunteer?",
+    "expected_answer": "https://docs.google.com/forms/d/e/1FAIpQLSdNGfhJq0TtqjC3jYK_EdYzmTug1PyuJOTWLdXRPxOef_xGOg/viewform"
   },
   {
     "id": "Q35",
-    "question": "Who are the Vice Presidents of Alkhidmat Foundation Pakistan?",
-    "expected_answer": "The Vice Presidents of Alkhidmat Foundation Pakistan include Mr. M. Abdus Shakoor, Syed Ihsan Ullah Waqas, Dr. M. Mushtaq Ahmed Mangat, Mr. Aijaz Ullah Khan, Mr. Zikrullah Mujahid, Air Marshal (R) Farooq Habib, Mr. Abrar Ahmed Maggu, and A.M. (R) Arshad Mahmood Malik, Ms. Saima Shabbir."
+    "question": "how can i become a volunteer at alkhidmat",
+    "expected_answer": "Open the official volunteer registration form: Registration Form Link. Fill in the required personal and contact information.. Submit the form for volunteer enrollment.After registration, you may be contacted regarding training sessions, campaigns, activities, or humanitarian projects."
   },
   {
     "id": "Q36",
-    "question": "Who holds key administrative positions like Secretary General and Chief Executive Officers in Alkhidmat Foundation?",
-    "expected_answer": "Key administrative positions include Mr. Syed Waqas Jafri as Secretary General AKFP, Mr. Mirza Munawar Hussain as Secretary Finance AKFP, and Chief Executive Officers such as Mr. Shahid Iqbal (Bano Qabil Pakistan), Mr. Khubaib Bilal (AKFP), and Mr. Sufyan Ahmad Khan (AHF)."
-  },
-  {
-    "id": "Q37",
-    "question": "Who manages the Women Wing and Finance of Alkhidmat Foundation Pakistan?",
-    "expected_answer": "Ms. Samia Salman is the General Secretary of Women Wing Pakistan, and Mr. Ateeque Rasheed is the Group Chief Financial Officer."
-  },
-  {
-    "id": "Q39",
     "question": "Where is the main contact address of Alkhidmat located?",
     "expected_answer": "The contact address is Place 501, Quaideen Colony, Near Islamia College, Karachi, Pakistan."
   },
   {
-    "id": "Q40",
+    "id": "Q37",
     "question": "What contact phone numbers are provided for Alkhidmat?",
-    "expected_answer": "The contact numbers are (021) 111-503-504, +92 21 36345131, and (021) 34915705-09."
+    "expected_answer": "+92 91 2263651-52 (Khyber Pakhtunkhwa), 05811-454124 (Gilgit Baltistan), +92 51 4906080 (Azad Jammu & Kashmir), +92 81 2453967 (Balochistan),+92 21 36345131 (Sindh),+92 42 35454320-22 (Central Punjab),+92 61 6510088 (South Punjab),(051) 5765605 (North Punjab)"
   },
   {
-  "id": "Q43",
-  "question": "What education initiative has Alkhidmat Karachi launched to support youth?",
-  "expected_answer": "Alkhidmat Karachi launched an ambitious education initiative called \"Bano Qabil\" to support Karachi’s youth."
+  "id": "Q38",
+  "question": "how many bano qabil IT centres are there and where?",
+  "expected_answer": "Bano Qabil operates through more than 120 IT training centers across Pakistan, including locations in Punjab (such as Lahore), Sindh (including Karachi where the program was first launched), Khyber Pakhtunkhwa, Balochistan, Gilgit Baltistan, and Azad Jammu and Kashmir."
+  },
+  {
+    "id": "Q39",
+    "question": "What is the duration of the courses offered under the Bano Qabil program?",
+    "expected_answer": "The courses are 3 months long."
+  },
+  {
+    "id": "Q40",
+    "question": "what is the selection process in bano qabil",
+    "expected_answer": "The selection process in Bano Qabil consists of five stages: registration, aptitude test, interview, classes, and graduation. Students first register on the official website or Facebook page. After registration, shortlisted students take a mandatory aptitude test. Those who pass the test are then called for an interview. Students who successfully clear both the aptitude test and the interview are enrolled in their chosen IT course."
+  },
+  {
+    "id": "Q41",
+    "question": "How many candidates registered for the Bano Qabil program?",
+    "expected_answer": "More than 1.2 million students have registered for the Bano Qabil program."
+  },
+  {
+    "id": "Q42",
+    "question": "can you explain what is bano qabil program?",
+    "expected_answer": "Bano Qabil is a free IT scholarship and youth empowerment program launched by Alkhidmat Foundation Pakistan in 2022. It aims to provide Pakistani youth with free modern IT education, digital skills training, freelancing skills, and employment opportunities. Initially launched in Karachi, the program has expanded to Lahore and other cities across Pakistan due to a strong response from students. To date, more than 1.2 million students have registered, and over 50,000 graduates have completed IT courses through the program. Bano Qabil is one of Pakistan's largest initiatives for free IT scholarships and youth skill development. The official website for more information is https://www.alkhidmat.org/banoqabil."
+  },
+  {
+    "id": "Q43",
+    "question": "What is the website where I can donate online?",
+    "expected_answer": "alkhidmat.org/donate"
+  },
+  {
+    "id": "Q44",
+    "question": "Can you guide me through the process of online donation?",
+    "expected_answer": "To donate online through , go to the link alkhidmat.org/donate then click on Quick Donate and choose whether you want to Give Once or Give Regularly. Next, select your donation amount in PKR by choosing a preset amount (5,000, 10,000, 25,000, or 50,000) or by typing a custom amount. Then select the donation type from the Sadqa/Zakat dropdown and click Donate. You will be directed to a form where you must enter your full name, email address, phone number, country, city, and optional address. Finally, choose a payment method—Pay via Card Online, Direct Bank Transfer, or Collect from Home—and proceed to complete the donation."
   },
   {
     "id": "Q45",
-    "question": "What is the duration of the courses offered under the Bano Qabil program?",
-    "expected_answer": "The courses are 4 to 6 months long."
+    "question": "Where can I donate, or for what causes can I donate to Alkhidmat?",
+    "expected_answer": "You can donate to Alkhidmat for various causes, including sponsoring an orphan, supporting orphan care programs, aghosh homes, educational initiatives, disaster management, health services, and the WASH program. Whether it's a small monthly contribution or a one-time donation, every bit counts in helping those in need."
   },
   {
     "id": "Q46",
-    "question": "Which courses can selected students choose from under Bano Qabil?",
-    "expected_answer": "Students can choose from Web Development, App Development, Digital Marketing, Graphic Designing, Freelancing, and Amazon FBA Virtual Assistant."
+    "question": "What is the Wash Program of Alkhidmat and why is it important?",
+    "expected_answer": "Alkhidmat Foundation's WASH Program (Water, Sanitation, Hygiene) is committed to addressing the water crisis by providing sustainable water solutions for communities in need. It is important because it ensures that communities have a sustainable source of clean water for years to come, recognizing the risks of drought, displacement, and disease. The program includes initiatives such as installing water filtration plants in big cities, setting up hand pumps, solar submersible water pumps, and clean water supply schemes to water wells in remote areas like the Thar Desert, Cholistan, and hilly regions of Balochistan, Khyber Pakhtunkhwa, Gilgit-Baltistan, and Azad Jammu & Kashmir. Additionally, it provides sanitation facilities and hygiene kits, especially under crisis conditions, thereby contributing to the overall health and well-being of vulnerable populations."
+  },
+  {
+    "id": "Q47",
+    "question": "how does alkhidmat help people through Wash program?",
+    "expected_answer": "Alkhidmat helps people through the WASH program by providing clean drinking water, sanitation facilities, and hygiene kits, especially under crisis conditions. The program includes initiatives such as installing water filtration plants in big cities, setting up hand pumps, solar submersible water pumps, and clean water supply schemes to water wells in remote areas like the Thar Desert, Cholistan, and hilly regions of Balochistan, Khyber Pakhtunkhwa, Gilgit-Baltistan, and Azad Jammu & Kashmir. This ensures that communities have a sustainable source of clean water for years to come, contributing to their overall health and well-being."
   },
   {
     "id": "Q48",
-    "question": "How many candidates registered for the Bano Qabil program?",
-    "expected_answer": "More than 75,000 candidates registered through the program's mobile app and website."
+    "question": "What are Aghosh Orphan Centers and where are they located?",
+    "expected_answer": "Aghosh Orphan Centers are Alkhidmat's boarding schools for orphans. There are 11 centers, including one in Turkey for Syrian refugee children."
+  },
+  {
+    "id": "Q49",
+    "question": "What support is provided under the Orphan Family Support Program?",
+    "expected_answer": "Under the Orphan Family Support Program, an additional 2,250 orphaned children will receive monthly financial assistance along with support for education, healthcare, nutrition, and emotional well-being. Alkhidmat has already been providing $50 monthly support to each of the 750 sponsored orphans, helping them meet basic needs and maintain stability during unimaginable hardship."
+  },
+  {
+    "id": "Q50",
+    "question": "What types of community services does Alkhidmat provide?",
+    "expected_answer": "Alkhidmat provides community services that include poverty alleviation, livelihood support, capacity building in local communities, disaster management, health services, education, orphan care, WASH (provision of clean drinking water and sanitation facilities), and microfinance to empower vulnerable families and promote self-dependency."
   },
   {
     "id": "Q51",
-    "question": "What is the Bano Qabil program?",
-    "expected_answer": "Bano Qabil is an education initiative by Alkhidmat Karachi that offers 100% free advanced IT courses to help Karachi’s youth develop skills for employment and freelancing."
+    "question": "What is the purpose of the Mawakhat Program?",
+    "expected_answer": "The purpose of the Mawakhat Program is to empower individuals by providing them with the necessary resources to kickstart their own small businesses, fostering entrepreneurship and economic independence within the community. It aims to provide dignified livelihoods to deserving individuals and brave women across Pakistan, enabling them to support themselves and their families with pride and independence."
   },
   {
     "id": "Q52",
-    "question": "What is the website where I can donate online?",
-    "expected_answer": "You can donate by opening this link:'https://alkhidmat.com/donate/'"
+    "question": "What types of businesses have benefited from the Mawakhat Program?",
+    "expected_answer": "Businesses supported through the Mawakhat Program include tailoring and embroidery services, cooking ventures, beauty salons, grocery shops, stationery stores, and three-wheeler transport businesses."
   },
   {
     "id": "Q53",
-    "question": "Can you guide me through the process of online donation?",
-    "expected_answer": "To donate online through , first click on Quick Donate and choose whether you want to Give Once or Give Regularly. Next, select your donation amount in PKR by choosing a preset amount (5,000, 10,000, 25,000, or 50,000) or by typing a custom amount. Then select the donation type from the Sadqa/Zakat dropdown and click Donate. You will be directed to a form where you must enter your full name, email address, phone number, country, city, and optional address. Finally, choose a payment method—Pay via Card Online, Direct Bank Transfer, or Collect from Home—and proceed to complete the donation."
-  },
-  {
-    "id": "Q54",
-    "question": "Where can I donate, or for what causes can I donate to Alkhidmat?",
-    "expected_answer": "You can donate through the donation platform of  by using the Quick Donate option to give once or regularly in PKR. Donations can be made for multiple causes, including emergency appeals like rebuilding Gaza, general donations such as Sadaqah and Zakat, orphan care and Aghosh Homes sponsorships, healthcare services (CT scan, MRI, surgeries, ambulances, blood banks, and hospitals), community services like food packages, Dastarkhawan, sewing machines, Ramadan and winter packages, minority welfare, prisoner relief, masjid rehabilitation, and many other humanitarian and social welfare projects."
-  },
-  {
-    "id": "Q55",
-    "question": "What is the Wash Program of Alkhidmat and why is it important?",
-    "expected_answer": "The Wash Program of  focuses on providing clean and affordable drinking water. It is important because Pakistan is becoming a water-deficient country and ranks 30th among the most water-deficient countries in the world."
-  },
-  {
-    "id": "Q56",
-    "question": "How does Alkhidmat provide clean water under the Wash Program?",
-    "expected_answer": "Alkhidmat runs dozens of water filtration plants in urban areas and installs water pumps in remote regions such as the Thar Desert."
-  },
-  {
-    "id": "Q57",
-    "question": "What makes Alkhidmat’s Orphan Care Program different from traditional orphanages?",
-    "expected_answer": "Instead of traditional orphanages, Alkhidmat runs modern, state-of-the-art boarding school systems where orphans receive quality education and care."
-  },
-  {
-    "id": "Q58",
-    "question": "What are Aghosh Orphan Centers and where are they located?",
-    "expected_answer": "Aghosh Orphan Centers are Alkhidmat’s boarding schools for orphans. There are 11 centers, including one in Turkey for Syrian refugee children."
-  },
-  {
-    "id": "Q59",
-    "question": "What support is provided under the Orphan Family Support Program?",
-    "expected_answer": "The program supports orphan children living with their mother or relatives by providing educational and health support, as well as assistance and education for their mother or guardian."
-  },
-  {
-    "id": "Q60",
-    "question": "Why are community services an important focus for Alkhidmat?",
-    "expected_answer": "Community services are important because Pakistan faces widespread poverty, lack of basic facilities, and ranks 154th on the Human Development Index, with about 51% of the population deprived of basic necessities."
-  },
-  {
-    "id": "Q61",
-    "question": "What types of community services does Alkhidmat provide?",
-    "expected_answer": "Alkhidmat provides services such as running food centers, distributing wheelchairs, and offering affordable funeral bus services."
-  },
-  {
-    "id": "Q62",
-    "question": "What is the purpose of the Mawakhat Program?",
-    "expected_answer": "The Mawakhat Program aims to help low-income individuals by offering small-scale, interest-free loans that are repayable in easy installments."
-  },
-  {
-    "id": "Q63",
-    "question": "What types of businesses have benefited from the Mawakhat Program?",
-    "expected_answer": "Beneficiaries have successfully established businesses such as tailoring shops, garment making units, hardware stores, general stores, auto rickshaws, food stalls, bakeries, online clothing businesses, and boutiques."
-  },
-  {
-    "id": "Q64",
     "question": "What role does Alkhidmat play during disasters in Pakistan?",
-    "expected_answer": "Alkhidmat volunteers actively participate in relief and rescue operations during disasters and have worked on major relief efforts such as the 2005 Kashmir earthquake and emergencies in Awaran, Balochistan."
+    "expected_answer": "Alkhidmat plays a crucial role during disasters in Pakistan by being among the first responders in situations such as earthquakes, floods, bomb blasts, and health emergencies. The foundation has launched immediate, comprehensive relief operations that span the entire country, mobilizing substantial resources and trained volunteers. A fully-equipped Disaster Responder unit is deployed to effectively manage and respond to urgent crises, providing timely and effective assistance. After the immediate relief phase, Alkhidmat also focuses on rehabilitation efforts, which include rebuilding homes, establishing medical camps and temporary schools, and restoring livelihoods through interest-free loans and microfinance schemes."
   }
 ]

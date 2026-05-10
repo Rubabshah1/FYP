@@ -397,3 +397,16 @@ The system automatically detects Apple Silicon and enables GPU acceleration.
 - Use Supabase Row Level Security (RLS) policies
 
 **Note**: This is a Final Year Project (FYP) for Alkhidmat Foundation. For questions or issues, please refer to the project documentation or contact the development team.
+
+
+# Basic
+python test_rag_evaluation.py --language images --use-openai-judge
+
+# Custom image folder
+python test_rag_evaluation.py --language images --image-dir "C:\path\to\images" --use-openai-judge
+
+# Quick smoke test (3 cases)
+python test_rag_evaluation.py --language images --max-cases 3 --use-openai-judge
+
+# Use gpt-4o-mini for vision (cheaper, slightly less accurate)
+python test_rag_evaluation.py --language images --vision-model gpt-4o-mini --use-openai-judge

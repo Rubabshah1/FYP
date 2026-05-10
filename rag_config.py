@@ -61,7 +61,7 @@ ROMAN_URDU_MAX_TOKENS = int(os.environ.get("ROMAN_URDU_MAX_TOKENS", "260"))
 ROMAN_URDU_PAK_VERBIAGE = os.environ.get("ROMAN_URDU_PAK_VERBIAGE", "1").lower() in ("1", "true", "yes", "y")
 
 # ============ CHUNKING / RETRIEVAL ============
-CHUNK_SIZE = int(os.environ.get("CHUNK_SIZE", "800"))
+CHUNK_SIZE = int(os.environ.get("CHUNK_SIZE", "1500"))
 CHUNK_OVERLAP = int(os.environ.get("CHUNK_OVERLAP", "200"))
 RELEVANCE_THRESHOLD = float(os.environ.get("RELEVANCE_THRESHOLD", "0.7"))
 
@@ -80,6 +80,8 @@ BRAND_TERMS = [
     "Alkhidmat Foundation",
     "Bank of Punjab",
     "Taqwa Islamic Banking",
+    "Bano Qabil",
+    "Mawakhat"
 ]
 
 ROMAN_URDU_MARKERS = {

@@ -1,287 +1,267 @@
 [
-{
-    "id": "Q01",
-    "question": "Main Gaza ke liye Alkhidmat Foundation ko kaise donate kar sakta hoon?",
-    "expected_answer": "Aap Meezan Bank account 02140100861151 ke zariye donate kar sakte hain, cash pick-up number 0800-44448 par call karke, Collection Centers par jaa kar, ya online debit/credit card ke zariye unki website alkhidmat.org/donate se."
-},
-{
-    "id": "Q02",
-    "question": "Kya Alkhidmat Foundation Pakistan mein tax-exempt hai?",
-    "expected_answer": "Haan, Alkhidmat Foundation Pakistan FBR Act 2(36)c ke tehat tax-exempt hai."
-},
-{
-    "id": "Q03",
-    "question": "Alkhidmat Foundation ka head office kahan hai?",
-    "expected_answer": "Alkhidmat Foundation ka head office 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan mein hai."
-},
-{
-    "id": "Q04",
-    "question": "Main Alkhidmat Foundation se mazeed maloomat ke liye kaise rabta kar sakta hoon?",
-    "expected_answer": "Aap unse phone +92 42 3802 0222 par ya email info@alkhidmat.org par raabta kar sakte hain."
-},
-{
-    "id": "Q05",
-    "question": "Main Alkhidmat Foundation se donation receipt kaise hasil kar sakta hoon?",
-    "expected_answer": "Aap apna transaction slip WhatsApp par +923000776016 bhej kar donation receipt le sakte hain."
-},
-{
-    "id": "Q06",
-    "question": "Kaunse online donation tareeqay dastiyab hain?",
-    "expected_answer": "Aap website par debit/credit card, online banking, bank transfer, JazzCash, EasyPaisa, ya home collection ke zariye donate kar sakte hain."
-},
-{
-    "id": "Q07",
-    "question": "Kya main internationally Alkhidmat Foundation ko donate kar sakta hoon?",
-    "expected_answer": "Haan, aap duniya ke kisi bhi kone se debit/credit cards ke zariye Alkhidmat Foundation ki website se donate kar sakte hain."
-},
-{
-    "id": "Q08",
-    "question": "Alkhidmat Foundation ke abhi kaunse emergency appeals chal rahe hain?",
-    "expected_answer": "Alkhidmat Foundation abhi emergency appeals jaise ke Bano Qabil aur Palestine Emergency Appeal chala rahi hai."
-},
-{
-    "id": "Q09",
-    "question": "Alkhidmat Foundation ke main focus areas kya hain?",
-    "expected_answer": "Alkhidmat Foundation ka focus humanitarian services par hai, jaise ke health, education, disaster relief, women philanthropy, aur social welfare programs, 1990 se."
-},
-{
-    "id": "Q10",
-    "question": "Main in-person donation kaise kar sakta hoon?",
-    "expected_answer": "Aap in-person donation kisi bhi Alkhidmat Foundation ke Collection Center par ya directly unke head office Lahore mein jaa kar kar sakte hain."
-},
-{
-    "id": "Q11",
-    "question": "Main Palestine ke liye Alkhidmat Foundation ko kaise donate kar sakta hoon?",
-    "expected_answer": "General donations ke liye, Meezan Bank account 02140100861151 (IBAN: PK35MEZN0002140100861151) use karein. Zakat ke liye Meezan Bank account 02140101095120 (IBAN: PK94MEZN0002140101095120) use karein. Dono accounts Branch R1 Johar Town, Lahore mein hain, SWIFT code: MEZNPKKA. Aap Palestine ke liye unhi channels ya donation website se donate kar sakte hain."
-},
-{
-    "id": "Q12",
-    "question": "Main ghar se Alkhidmat Foundation ko kaise donate kar sakta hoon?",
-    "expected_answer": "Aap cheques ya bank drafts jo 'Alkhidmat Foundation Pakistan' ke naam par hon ke zariye donate kar sakte hain. Ghar se pick-up ke liye 0800 44 44 8 ya 0304 111 4 222 par call karein, representative aapke ghar se collect kar lega."
-},
-{
-    "id": "Q13",
-    "question": "Kya main apna donation cheque courier se Alkhidmat Foundation bhej sakta hoon?",
-    "expected_answer": "Haan, aap apna cheque ya bank draft courier ke zariye Alkhidmat Complex, 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan bhej sakte hain."
-},
-{
-    "id": "Q14",
-    "question": "Main general USD donation Alkhidmat Foundation ko kaise kar sakta hoon?",
-    "expected_answer": "General USD donations ke liye Makramah Bank account 1994426252333135802 (IBAN: PK32SUMB9944293330135802) ya Meezan Bank account 0100643642 (IBAN: PK40MEZN0002010100643642) use karein. Dono banks Lahore, Pakistan mein hain, SWIFT codes: SUMBPKKA (Makramah) aur MEZNPKKA (Meezan)."
-},
-{
-    "id": "Q15",
-    "question": "Main USD Zakat Orphan/Aghosh, Community Services, ya Bano Qabil ke liye kaise donate kar sakta hoon?",
-    "expected_answer": "USD Zakat donations ke liye Meezan Bank account 0100643642 (IBAN: PK40MEZN0002010100643642) use karein. Aap Orphan/Aghosh, Community Services, ya Bano Qabil ke liye donate kar sakte hain. SWIFT code: MEZNPKKA."
-},
-{
-    "id": "Q16",
-    "question": "Main USD specific programs jaise ke Wash, Health, Education, Rebuild Palestine, ya Alkhidmat Islamic Microfinance ke liye kaise donate kar sakta hoon?",
-    "expected_answer": "In programs ke USD donations ke liye Makramah Bank account 1994426252333135802 (IBAN: PK32SUMB9944293330135802) ya Meezan Bank account 0100643642 (IBAN: PK40MEZN0002010100643642) use karein. SWIFT codes: SUMBPKKA (Makramah) aur MEZNPKKA (Meezan)."
-},
-{
-    "id": "Q17",
-    "question": "Main general GBP donation Alkhidmat Foundation ko kaise kar sakta hoon?",
-    "expected_answer": "General GBP donations ke liye Makramah Bank account 1994426253402135802 (IBAN: PK02SUMB994434020135802) ya Meezan Bank account 0100644437 (IBAN: PK12MEZN0002010100644437) use karein. SWIFT codes: SUMBPKKA (Makramah) aur MEZNPKKA (Meezan)."
-},
-{
-    "id": "Q18",
-    "question": "Main GBP Zakat Orphan/Aghosh, Community Services, Bano Qabil, ya Clean Water ke liye kaise donate kar sakta hoon?",
-    "expected_answer": "GBP Zakat donations ke liye Meezan Bank account 0100644437 (IBAN: PK12MEZN0002010100644437) use karein for Orphan/Aghosh, Community Services, Bano Qabil, ya Clean Water. SWIFT code: MEZNPKKA."
-},
-{
-    "id": "Q19",
-    "question": "Main GBP specific programs jaise Health Collection, Education, Rebuild Palestine, ya Alkhidmat Islamic Microfinance ke liye kaise donate kar sakta hoon?",
-    "expected_answer": "In programs ke liye GBP donations Makramah Bank account 1994426253402135802 (IBAN: PK02SUMB994434020135802) ya Meezan Bank account 0100644437 (IBAN: PK12MEZN0002010100644437) se kar sakte hain. SWIFT codes: SUMBPKKA (Makramah) aur MEZNPKKA (Meezan)."
-},
-{
-    "id": "Q20",
-    "question": "Main general EURO donation Alkhidmat Foundation ko kaise kar sakta hoon?",
-    "expected_answer": "General EURO donations ke liye Makramah Bank account 1994426254974135802 (IBAN: PK90SUMB9944319740135802) ya Meezan Bank account 0100644443 (IBAN: PK44MEZN0002010100644443) use karein. SWIFT codes: SUMBPKKA (Makramah) aur MEZNPKKA (Meezan)."
-},
-{
-    "id": "Q21",
-    "question": "Main EURO Zakat Orphan/Aghosh, Community Services, Bano Qabil, ya Clean Water ke liye kaise donate kar sakta hoon?",
-    "expected_answer": "EURO Zakat donations ke liye Meezan Bank account 0100644437 (IBAN: PK44MEZN0002010100644443) use karein for Orphan/Aghosh, Community Services, Bano Qabil, ya Clean Water. SWIFT code: MEZNPKKA."
-},
-{
-    "id": "Q22",
-    "question": "Main EURO specific programs jaise Health Collection, Education, Rebuild Palestine, ya Alkhidmat Islamic Microfinance ke liye kaise donate kar sakta hoon?",
-    "expected_answer": "In programs ke liye EURO donations Makramah Bank account 1994426254974135802 (IBAN: PK90SUMB9944319740135802) ya Meezan Bank account 0100644437 (IBAN: PK44MEZN0002010100644443) se kar sakte hain. SWIFT codes: SUMBPKKA (Makramah) aur MEZNPKKA (Meezan)."
-},
-{
-    "id": "Q23",
-    "question": "Kya saari international donations ke liye bank transfer mein SWIFT code zaroori hai?",
-    "expected_answer": "Haan, saari international donations USD, GBP, ya EURO mein SWIFT code ke zariye ki jati hain: SUMBPKKA (Makramah Bank) aur MEZNPKKA (Meezan Bank)."
-},
-{
-    "id": "Q24",
-    "question": "Main general PKR donation Alkhidmat Foundation ko kaise kar sakta hoon?",
-    "expected_answer": "General PKR donations ke liye Bank of Punjab (Taqwa Islamic Banking) account 5310067845100016 (IBAN: PK19BPUN5310067845100016, SWIFT: BPUNPKKA) ya website par listed other banks use karein."
-},
-{
-    "id": "Q25",
-    "question": "Main PKR Zakat Orphan Care, Community Services, ya Bano Qabil ke liye kaise donate kar sakta hoon?",
-    "expected_answer": "PKR Zakat donations ke liye Meezan Bank account 0101098699, Bank Alfalah account 5527005002305295, Bank of Punjab account 5470067845100026, ya Habib Metropolitan Bank account 6998129314714109745 use karein. SWIFT codes aur IBAN har bank ke liye available hain."
-},
-{
-    "id": "Q26",
-    "question": "Main PKR specific programs jaise Disaster Management, Health, Education, WASH, ya Alkhidmat Islamic Microfinance ke liye kaise donate kar sakta hoon?",
-    "expected_answer": "Disaster Management ke liye Soneri Bank account 20001287371, Health/WASH ke liye MCB Islamic Bank account 0651000583520002 ya 0651000583520004, Education ke liye National Bank account 2132003312806715, Alkhidmat Islamic Microfinance ke liye Bank of Punjab account 5470067845100015 ya Habib Metropolitan Bank account 6998129314714109745 use karein. SWIFT codes aur IBAN har bank ke liye available hain."
-},
-{
-    "id": "Q27",
-    "question": "Health ya Education programs ke liye PKR Zakat ke liye kaunse accounts use honge?",
-    "expected_answer": "Health ke liye MCB Islamic Bank account 0651000583520002 aur Education ke liye National Bank of Pakistan account 2132003312806715 ya Bank Islami Pakistan Limited account 0205215724660136 use karein. SWIFT codes aur IBAN available hain."
-},
-{
-    "id": "Q28",
-    "question": "Community Services ke liye PKR donations kaise diye ja sakte hain?",
-    "expected_answer": "Community Services ke liye PKR donations Meezan Bank account 0101034665 ya Bank Alfalah account 55275001586959 se kiye ja sakte hain. SWIFT codes: MEZNPKKA aur ALFHPKKA527."
-},
-{
-    "id": "Q29",
-    "question": "Bano Qabil PKR donations aur Zakat ke liye kaunse accounts hain?",
-    "expected_answer": "Bano Qabil ke liye PKR donations ke liye Bank of Punjab account 5470067845100026 (Zakat) ya Habib Metropolitan Bank account 6998129314714109745 (Donation) use karein. SWIFT codes: BPUNPKKA aur MPBLPKKA."
-},
-{
-    "id": "Q30",
-    "question": "WASH programs ke liye PKR donations kaise diye ja sakte hain?",
-    "expected_answer": "WASH programs ke liye PKR donations MCB Islamic Bank account 0651000583520004 se kiye ja sakte hain. SWIFT code: MUCBPKKA."
-},
-{
-    "id": "Q31",
-    "question": "Alkhidmat Islamic Microfinance programs ke liye PKR donations kaise diye ja sakte hain?",
-    "expected_answer": "Alkhidmat Islamic Microfinance ke liye PKR donations Bank of Punjab account 5470067845100015 ya Habib Metropolitan Bank account 6998129314714109745 se kiye ja sakte hain. SWIFT codes: BPUNPKKA aur MPBLPKKA."
-},
-{
-    "id": "Q32",
-    "question": "Tameer-e-Watan PKR donations ke liye kaunse account use karna chahiye?",
-    "expected_answer": "Tameer-e-Watan ke liye PKR donations Meezan Bank account 0100644443 se kiye ja sakte hain. SWIFT code: MEZNPKKA."
-},
-{
-    "id": "Q33",
-    "question": "Orphan Care ke liye PKR Zakat kaise donate karein?",
-    "expected_answer": "Orphan Care ke liye PKR Zakat Meezan Bank account 0101098699 ya Bank Alfalah account 5527005002305295 se di ja sakti hai. SWIFT codes: MEZNPKKA aur ALFHPKKA."
-},
-{
-    "id": "Q34",
-    "question": "Alkhidmat Foundation Pakistan ke President kaun hain aur unke kya roles hain?",
-    "expected_answer": "Prof. Dr. Hafeez ur Rahman Alkhidmat Foundation Pakistan ke President hain. Wo Alkhidmat Global Committee ke Convener bhi hain aur AHF Coordination ke zimmedar hain."
-},
-{
-    "id": "Q35",
-    "question": "Alkhidmat Foundation Pakistan ke Vice Presidents kaun hain?",
-    "expected_answer": "Vice Presidents mein Mr. M. Abdus Shakoor, Syed Ihsan Ullah Waqas, Dr. M. Mushtaq Ahmed Mangat, Mr. Aijaz Ullah Khan, Mr. Zikrullah Mujahid, Air Marshal (R) Farooq Habib, Mr. Abrar Ahmed Maggu, A.M. (R) Arshad Mahmood Malik, aur Ms. Saima Shabbir shamil hain."
-},
-{
-    "id": "Q36",
-    "question": "Secretary General aur Chief Executive Officers ke key administrative positions kaun sambhalte hain?",
-    "expected_answer": "Key administrative positions mein Mr. Syed Waqas Jafri (Secretary General AKFP), Mr. Mirza Munawar Hussain (Secretary Finance AKFP), aur Chief Executive Officers jaise Mr. Shahid Iqbal (Bano Qabil Pakistan), Mr. Khubaib Bilal (AKFP), aur Mr. Sufyan Ahmad Khan (AHF) shamil hain."
-},
-{
-    "id": "Q37",
-    "question": "Women Wing aur Finance ko kaun manage karta hai Alkhidmat Foundation Pakistan mein?",
-    "expected_answer": "Ms. Samia Salman Women Wing Pakistan ki General Secretary hain, aur Mr. Ateeque Rasheed Group Chief Financial Officer hain."
-},
-{
-    "id": "Q39",
-    "question": "Alkhidmat ka main contact address kahan hai?",
-    "expected_answer": "Contact address: Place 501, Quaideen Colony, Near Islamia College, Karachi, Pakistan."
-},
-{
-    "id": "Q40",
-    "question": "Alkhidmat ke liye contact phone numbers kya hain?",
-    "expected_answer": "Contact numbers: (021) 111-503-504, +92 21 36345131, aur (021) 34915705-09."
-},
-{
-    "id": "Q43",
-    "question": "Alkhidmat Karachi ne youth ko support karne ke liye kaunsa education initiative launch kiya?",
-    "expected_answer": "Alkhidmat Karachi ne youth ko support karne ke liye 'Bano Qabil' education initiative launch kiya."
-},
-{
-    "id": "Q45",
-    "question": "Bano Qabil program ke courses ki duration kya hai?",
-    "expected_answer": "Courses 4 se 6 months ke hote hain."
-},
-{
-    "id": "Q46",
-    "question": "Bano Qabil ke under selected students kaunse courses choose kar sakte hain?",
-    "expected_answer": "Students Web Development, App Development, Digital Marketing, Graphic Designing, Freelancing, aur Amazon FBA Virtual Assistant choose kar sakte hain."
-},
-{
-    "id": "Q48",
-    "question": "Bano Qabil program ke liye kitne candidates register huye?",
-    "expected_answer": "Program ke mobile app aur website ke zariye 75,000 se zyada candidates register huye."
-},
-{
-    "id": "Q51",
-    "question": "Bano Qabil program kya hai?",
-    "expected_answer": "Bano Qabil Alkhidmat Karachi ka education initiative hai jo 100% free advanced IT courses provide karta hai taake youth skills develop kar sake employment aur freelancing ke liye."
-},
-{
-    "id": "Q52",
-    "question": "Main online donate karne ke liye kaunsi website use karoon?",
-    "expected_answer": "Aap ye link open karke donate kar sakte hain: 'https://alkhidmat.com/donate/'"
-},
-{
-    "id": "Q53",
-    "question": "Kya aap mujhe online donation process guide kar sakte hain?",
-    "expected_answer": "Online donate karne ke liye, pehle Quick Donate par click karein aur Decide karein Give Once ya Give Regularly. Next, PKR amount select karein preset amounts (5,000, 10,000, 25,000, 50,000) ya custom type karke. Phir Sadqa/Zakat dropdown select karein aur Donate par click karein. Form mein full name, email, phone, country, city aur optional address enter karein. Finally payment method choose karein—Card Online, Direct Bank Transfer, ya Collect from Home—and donation complete karein."
-},
-{
-    "id": "Q54",
-    "question": "Main kahan donate kar sakta hoon ya kaunse causes ke liye Alkhidmat ko donate kar sakta hoon?",
-    "expected_answer": "Aap Quick Donate option se ek martaba ya regular PKR donation de sakte hain. Causes mein emergency appeals (rebuilding Gaza), general donations (Sadaqah/Zakat), orphan care aur Aghosh Homes sponsorships, healthcare services (CT scan, MRI, surgeries, ambulances, blood banks, hospitals), community services (food packages, Dastarkhawan, sewing machines, Ramadan aur winter packages), minority welfare, prisoner relief, masjid rehabilitation aur bohot se humanitarian aur social welfare projects shamil hain."
-},
-{
-    "id": "Q55",
-    "question": "Alkhidmat ka Wash Program kya hai aur ye kyun important hai?",
-    "expected_answer": "Wash Program clean aur affordable drinking water provide karta hai. Ye important hai kyun ke Pakistan water-deficient country ban raha hai aur duniya ke 30th most water-deficient countries mein shamil hai."
-},
-{
-    "id": "Q56",
-    "question": "Alkhidmat Wash Program ke zariye clean water kaise provide karta hai?",
-    "expected_answer": "Alkhidmat urban areas mein water filtration plants chalata hai aur remote regions jaise Thar Desert mein water pumps install karta hai."
-},
-{
-    "id": "Q57",
-    "question": "Alkhidmat ka Orphan Care Program traditional orphanages se kaise different hai?",
-    "expected_answer": "Traditional orphanages ke bajaye, Alkhidmat modern boarding school system chalata hai jahan orphans ko quality education aur care milti hai."
-},
-{
-    "id": "Q58",
-    "question": "Aghosh Orphan Centers kya hain aur kahan hain?",
-    "expected_answer": "Aghosh Orphan Centers Alkhidmat ke boarding schools hain orphans ke liye. Total 11 centers hain, including Turkey mein Syrian refugee children ke liye."
-},
-{
-    "id": "Q59",
-    "question": "Orphan Family Support Program ke under kya support provide ki jati hai?",
-    "expected_answer": "Program un orphans ko support karta hai jo apni mother ya relatives ke saath rehte hain, educational aur health support ke saath unki mother/guardian ke liye assistance aur education provide karta hai."
-},
-{
-    "id": "Q60",
-    "question": "Community services Alkhidmat ke liye kyun important focus hain?",
-    "expected_answer": "Community services important hain kyun ke Pakistan mein poverty widespread hai, basic facilities ki kami hai, aur Human Development Index mein 154th rank hai, aur population ka 51% basic necessities se deprived hai."
-},
-{
-    "id": "Q61",
-    "question": "Alkhidmat kaunse types ke community services provide karta hai?",
-    "expected_answer": "Alkhidmat food centers, wheelchairs distribution, aur affordable funeral bus services provide karta hai."
-},
-{
-    "id": "Q62",
-    "question": "Mawakhat Program ka purpose kya hai?",
-    "expected_answer": "Mawakhat Program low-income individuals ke liye small interest-free loans offer karta hai jo easy installments mein repay hote hain."
-},
-{
-    "id": "Q63",
-    "question": "Kaunse businesses Mawakhat Program se benefit hua hain?",
-    "expected_answer": "Beneficiaries ne tailoring shops, garment making units, hardware stores, general stores, auto rickshaws, food stalls, bakeries, online clothing businesses aur boutiques establish kiye hain."
-},
-{
-    "id": "Q64",
-    "question": "Disasters ke doran Alkhidmat ka kya role hai Pakistan mein?",
-    "expected_answer": "Alkhidmat volunteers relief aur rescue operations mein actively participate karte hain aur 2005 Kashmir earthquake aur Awaran, Balochistan emergencies mein major relief efforts kiye hain."
-}
-]
+    {
+      "id": "Q01",
+      "question": "Main Gaza ke liye Alkhidmat Foundation ko donation kaise de sakta hun?",
+      "expected_answer": "Aap Gaza ke liye Alkhidmat Foundation ko kai tariqon se donate kar sakte hain. JazzCash ya EasyPaisa ke zariye, Donations section mein jayen, 'Alkhidmat Foundation Pakistan' select karen aur payment mukammal karen. Aap alkhidmat.org/donate par debit/credit card se online bhi donate kar sakte hain. Bank transfer ke liye, Bank of Punjab mein raqam bhejen (Account Title: Alkhidmat Foundation Pakistan, Account No: 5310067845100016, IBAN: PK19BPUN5310067845100016). Cheque ya bank draft ke zariye bhi donation qabool ki jati hai, aur helpline (0800 44 44 8 ya 0304 111 4 222) ke zariye ghar se collection ka bandobast kiya ja sakta hai."
+    },
+    {
+      "id": "Q02",
+      "question": "Kya Alkhidmat Foundation Pakistan mein tax se mustasna hai?",
+      "expected_answer": "Ji haan, Alkhidmat Foundation Pakistan FBR Act 2(36)c ke tahat tax se mustasna hai."
+    },
+    {
+      "id": "Q03",
+      "question": "Alkhidmat Foundation ka head office kahan waqe hai?",
+      "expected_answer": "Alkhidmat Foundation ka head office 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan mein waqe hai."
+    },
+    {
+      "id": "Q04",
+      "question": "Main mazeed malumat ke liye Alkhidmat Foundation se kaise rabta kar sakta hun?",
+      "expected_answer": "Aap +92 42 3802 0222 par phone kar sakte hain ya info@alkhidmat.org par email kar sakte hain, ya hamare daftar Alkhidmat Foundation Head Office, 3 Km Khayaban-e-Jinnah, Lahore, Pakistan aa sakte hain."
+    },
+    {
+      "id": "Q05",
+      "question": "Main Alkhidmat Foundation se donation ki raseed kaise hasil kar sakta hun?",
+      "expected_answer": "Aap apni transaction slip WhatsApp number +923000776016 par share kar ke donation ki raseed hasil kar sakte hain."
+    },
+    {
+      "id": "Q06",
+      "question": "Online donation ke kaunse tareeqe dastiyab hain?",
+      "expected_answer": "Aap website par card, seedha bank transfer, JazzCash, EasyPaisa, ghar se collection ya ATM card ke zariye online donate kar sakte hain."
+    },
+    {
+      "id": "Q07",
+      "question": "Kya main internationally Alkhidmat Foundation ko donate kar sakta hun?",
+      "expected_answer": "Ji haan, aap internationally Alkhidmat Foundation ko donate kar sakte hain. Un ke paas bairoon mulk muqeem atiya dehandagan ke liye USD bank accounts mojood hain jo international bank transfer ke zariye donate kar sakte hain."
+    },
+    {
+      "id": "Q08",
+      "question": "Alkhidmat Foundation ki is waqt kaunsi hungami appeals jari hain?",
+      "expected_answer": "Alkhidmat Foundation ne Punjab mein tabahkun sailab ke jawab mein fori aur jameh imdadi operation shuru kiya hai, jis mein 165 afraad janen ganwa chuke hain aur 220 makaan nuqsan mein aaye hain. Foundation tamam mutasira communities ko har mumkin imdad faraham karne par tawajja markooz kiye hue hai."
+    },
+    {
+      "id": "Q09",
+      "question": "Alkhidmat Foundation ke bunyadi shubahjaat kya hain?",
+      "expected_answer": "Alkhidmat Foundation ke bunyadi shubahjaat mein Disaster Management, sehat ki khidmaat, taleem, yateem nigahdaasht program, WASH (pani, safai aur hifzaan-e-sehat), microfinance, community services, taleemi maawnat aur wazaif, community development aur advocacy, aur aafaat mein khawateen ko baakhtiyar banana shaamil hain."
+    },
+    {
+      "id": "Q10",
+      "question": "Main Palestine ke liye Alkhidmat Foundation ko donate kaise kar sakta hun?",
+      "expected_answer": "Online donation website alkhidmat.org/donate par jayen aur 'Donate to Palestine' ka option select karen. Aap EasyPaisa app mein bhi 'Donate to Palestine' select kar sakte hain. Is ke ilawa, 'Alkhidmat Foundation Pakistan' ke naam par cheque ya draft bana kar Alkhidmat Complex, 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan bhej sakte hain."
+    },
+    {
+      "id": "Q11",
+      "question": "Main ghar baithe Alkhidmat Foundation ko donate kaise kar sakta hun?",
+      "expected_answer": "Sarkari donation website alkhidmat.org/donate kholein. 'Quick Donate' option par click karen. 'Give Once' ya 'Give Regularly' select karen. PKR mein donation ki raqam select karen ya khud daakhil karen. Sadqa/Zakat dropdown menu se donation ki qisam select karen. 'Donate' button par click karen. Apna mukammal naam, email, phone number, mulk, shehar aur pata darj karen. Payment ka tareeqa select karen: online card, seedha bank transfer, ya ghar se collection. Payment mukammal karen."
+    },
+    {
+      "id": "Q12",
+      "question": "Kya main apna donation cheque courier ke zariye Alkhidmat Foundation ko bhej sakta hun?",
+      "expected_answer": "Ji haan, aap apna cheque ya bank draft courier ke zariye Alkhidmat Complex, 3km Khayaban-e-Jinnah, Lahore, Punjab, Pakistan bhej sakte hain."
+    },
+    {
+      "id": "Q13",
+      "question": "Main USD mein donate kaise kar sakta hun?",
+      "expected_answer": "Aam donation ke liye, darj zail account par USD international wire transfer bhejen: Bank: Makramah Bank Limited. Account Title: Alkhidmat Foundation Pakistan. Account No (USD): 1994426252333135802. IBAN: PK32SUMB9944293330135802. SWIFT Code: SUMBPKKA. Zakat ya Aghosh/yateem nigahdaasht ke liye: Bank: Meezan Bank. Account No (USD): 0100643642. IBAN: PK40MEZN0002010100643642. SWIFT Code: MEZNPKKA. Transfer ke baad apni transaction slip WhatsApp number +92 300 077 6016 par share karen."
+    },
+    {
+      "id": "Q14",
+      "question": "Main GBP mein donate kaise kar sakta hun?",
+      "expected_answer": "Aam donation ke liye, darj zail account par GBP international wire transfer bhejen: Bank: Makramah Bank Limited. Account Title: Alkhidmat Foundation Pakistan. Account No (GBP): 1994426253402135802. IBAN: PK02SUMB994434020135802. SWIFT Code: SUMBPKKA. Zakat ya Aghosh/yateem nigahdaasht ke liye: Bank: Meezan Bank. Account No (GBP): 0100644437. IBAN: PK12MEZN0002010100644437. SWIFT Code: MEZNPKKA. Transfer ke baad apni transaction slip WhatsApp number +92 300 077 6016 par share karen."
+    },
+    {
+      "id": "Q15",
+      "question": "Main Alkhidmat Foundation ko USD mein aam donation kaise de sakta hun?",
+      "expected_answer": "Alkhidmat Foundation Pakistan ko USD mein aam donation dene ke liye, darj zail account par international wire transfer bhejen: Bank: Makramah Bank Limited. Account Title: Alkhidmat Foundation Pakistan. Account No (USD): 1994426252333135802. IBAN: PK32SUMB9944293330135802. SWIFT Code: SUMBPKKA. Yeh account aam donation, Palestine imdaad, sehat, taleem, community services, Bano Qabil, saaf pani aur Islamic microfinance ke liye istemal kiya ja sakta hai. Aap alkhidmat.org/donate par bhi online donate kar sakte hain."
+    },
+    {
+      "id": "Q16",
+      "question": "Main Alkhidmat Foundation ko GBP mein aam donation kaise de sakta hun?",
+      "expected_answer": "Aam GBP donation ke liye, aap Makramah Bank account number 1994426253402135802 (IBAN: PK02SUMB994434020135802) ya Meezan Bank account number 0100644437 (IBAN: PK12MEZN0002010100644437) istemal kar sakte hain. SWIFT codes: SUMBPKKA (Makramah) aur MEZNPKKA (Meezan)."
+    },
+    {
+      "id": "Q17",
+      "question": "Main Aghosh/yateem nigahdaasht, community services, Bano Qabil ya saaf pani ke liye GBP Zakat kaise de sakta hun?",
+      "expected_answer": "GBP Zakat donation ke liye, Meezan Bank account number 0100644437 (IBAN: PK12MEZN0002010100644437) istemal karen. SWIFT Code: MEZNPKKA."
+    },
+    {
+      "id": "Q18",
+      "question": "Main sehat, taleem, Palestine ki tameer-e-nau ya Islamic microfinance ke liye GBP mein donate kaise kar sakta hun?",
+      "expected_answer": "In makhsoos programs ke liye GBP donation dene ke liye, darj zail account par international wire transfer bhejen: Bank: Meezan Bank. Account Title: Alkhidmat Foundation Pakistan. Account No (GBP): 0100644437. IBAN: PK12MEZN0002010100644437. Branch: R1 Johar Town, Lahore. SWIFT Code: MEZNPKKA."
+    },
+    {
+      "id": "Q19",
+      "question": "Main Alkhidmat Foundation ko EURO mein aam donation kaise de sakta hun?",
+      "expected_answer": "Alkhidmat Foundation Pakistan ko EURO mein aam donation dene ke liye, darj zail account par international wire transfer bhejen: Bank: Makramah Bank Limited. Account Title: Alkhidmat Foundation Pakistan. Account No (EURO): 1994426254974135802. IBAN: PK90SUMB9944319740135802. Branch: Allama Iqbal Town Kashmir Block, Lahore. SWIFT Code: SUMBPKKA. Yeh EURO account aam donation, Palestine imdaad, sehat, taleem, community services, Bano Qabil, saaf pani aur Islamic microfinance ke liye istemal kiya ja sakta hai."
+    },
+    {
+      "id": "Q20",
+      "question": "Main Aghosh/yateem nigahdaasht, community services, Bano Qabil ya saaf pani ke liye EURO Zakat kaise de sakta hun?",
+      "expected_answer": "EURO Zakat donation ke liye, darj zail account par international wire transfer bhejen: Bank: Meezan Bank. Account Title: Alkhidmat Foundation Pakistan. Account No (EURO): 0100644443. IBAN: PK44MEZN0002010100644443. Branch: R1 Johar Town, Lahore. SWIFT Code: MEZNPKKA."
+    },
+    {
+      "id": "Q21",
+      "question": "Main sehat, taleem, Palestine ki tameer-e-nau ya Islamic microfinance ke liye EURO mein donate kaise kar sakta hun?",
+      "expected_answer": "In programs ke liye EURO donation ke liye, Makramah Bank account number 1994426254974135802 (IBAN: PK90SUMB9944319740135802) ya Meezan Bank account number 0100644443 (IBAN: PK44MEZN0002010100644443) istemal karen. SWIFT codes: SUMBPKKA (Makramah) aur MEZNPKKA (Meezan)."
+    },
+    {
+      "id": "Q22",
+      "question": "Main PKR mein Alkhidmat Foundation ko aam donation kaise de sakta hun?",
+      "expected_answer": "Sarkari donation website alkhidmat.org/donate kholein. 'Quick Donate' par click karen. 'Give Once' ya 'Give Regularly' select karen. PKR mein donation ki raqam select karen ya khud daakhil karen. Sadqa/Zakat dropdown menu se donation ki qisam select karen. 'Donate' button par click karen. Apna naam, email, phone number, mulk, shehar aur pata darj karen. Payment ka tareeqa select karen: online card, seedha bank transfer, ya ghar se collection. Payment mukammal karen."
+    },
+    {
+      "id": "Q23",
+      "question": "Main yateem nigahdaasht, community services ya Bano Qabil ke liye PKR Zakat kaise de sakta hun?",
+      "expected_answer": "Aap yateem nigahdaasht, community services ya Bano Qabil ke liye PKR Zakat darj zail tariqon se de sakte hain: Online: alkhidmat.org/donate par debit ya credit card se, 24/7 dastiyab. JazzCash: App kholein, Donations mein jayen, 'Alkhidmat Foundation Pakistan' select karen aur raqam daakhil karen. EasyPaisa: App kholein, Donations mein jayen, 'Alkhidmat Foundation Pakistan' select karen aur raqam daakhil karen. Ghar se collection: 0800 44 44 8 ya 0304 111 4 222 par call karen. Cheque ya draft: 'Alkhidmat Foundation Pakistan' ke naam par bana kar Alkhidmat Complex, 3km Khayaban-e-Jinnah, Lahore bhejen."
+    },
+    {
+      "id": "Q24",
+      "question": "Sadqah donation ke liye bank account kya hai?",
+      "expected_answer": "Account Title: Alkhidmat Foundation Pakistan. Bank ka Naam: Meezan Bank. Account Number: 02430101034665. SWIFT CODE: MEZNPKKA. IBAN: PK11MEZN0002430101034665."
+    },
+    {
+      "id": "Q25",
+      "question": "Zakat donation ke liye bank account kya hai?",
+      "expected_answer": "Account Title: Alkhidmat Foundation Pakistan Zakat. Bank ka Naam: Bank of Punjab. Account Number: 3880067845100081. SWIFT CODE: BPUNPKKA002. IBAN: PK16BPUN388006784510008."
+    },
+    {
+      "id": "Q26",
+      "question": "Donation ke liye Alkhidmat ke bank account ki tafsilaat kya hain?",
+      "expected_answer": "Meezan Bank — Account Title: Alkhidmat Health Foundation. Account Number: 0253-0113092335. Soneri Bank — Account Title: Al Khidmat Foundation Pakistan. Account Number (PKR): 20001256999. IBAN: PK17SONE0000120001256999. SWIFT: SONEPKKALHR. Zakat ke liye: Account Title: Alkhidmat Foundation Pakistan Zakat. Bank: Bank of Punjab. Account Number: 3880067845100081. SWIFT CODE: BPUNPKKA002. IBAN: PK16BPUN388006784510008. Sadaqah ke liye: Account Title: Alkhidmat Foundation Pakistan. Bank: Meezan Bank. Account Number: 02430101034665. SWIFT CODE: MEZNPKKA. IBAN: PK11MEZN0002430101034665."
+    },
+    {
+      "id": "Q27",
+      "question": "Karachi mein kis Alkhidmat hospital mein blood bank hai?",
+      "expected_answer": "Alkhidmat Diagnostic Center aur Blood Bank Karachi — II-A, 7/3,4,5 nazdik Enquiry Office, muqabil Model Park, Nazimabad, Karachi."
+    },
+    {
+      "id": "Q28",
+      "question": "Karachi mein Alkhidmat ke hospital kaunse hain aur unke pate kya hain?",
+      "expected_answer": "Alkhidmat Fareeda Yaqoob Hospital Karachi — C-1 Ext. Phase III, Gulshan-e-Hadeed Bin Qasim Town, Karachi. Alkhidmat Hospital Korangi Karachi — Makan No. N-11, N-13, Korangi No. 3/5, Karachi. Alkhidmat Hospital Nazimabad Karachi — II-A, 7/3,4,5 nazdik Enquiry Office, muqabil Model Park, Nazimabad, Karachi. Alkhidmat Hospital Orangi Town Karachi — Muqabil Police Station, Sector No. 5, Orangi Town, Karachi. Alkhidmat Hospital Shah Faisal Karachi — Resham Gali, Shah Faisal Colony No. 1, Karachi. Alkhidmat Hospital Malir Karachi — C-14,15, Kausar Town, Malir Ext. Colony No. 1, Karachi. Alkhidmat Hospital Sakhi Hassan Karachi — ST-5, Block J, North Nazimabad, Karachi. Alkhidmat Hospital North Karachi — ST-60, Sector 11/A, Jama-e-Masjid Alhuda, North Karachi. Alkhidmat Maternity Center Noman Masjid Karachi. Alkhidmat Medical Center Gulbahar Karachi. Alkhidmat Sajida Clinic Karachi. Alkhidmat Clinic Paposh Nagar Karachi. Alkhidmat Medical Center Teen Talwar Karachi. Alkhidmat Dr. Abdul Salam Medical Center Karachi."
+    },
+    {
+      "id": "Q29",
+      "question": "Alkhidmat kitni tashkheesi laboratories aur collection centers chalati hai?",
+      "expected_answer": "116"
+    },
+    {
+      "id": "Q30",
+      "question": "Sindh mein Alkhidmat ke paas kitni ambulancein hain?",
+      "expected_answer": "48"
+    },
+    {
+      "id": "Q31",
+      "question": "Alkhidmat kul kitne hospitals chalati hai?",
+      "expected_answer": "45"
+    },
+    {
+      "id": "Q32",
+      "question": "Alkhidmat razakaar kya karte hain?",
+      "expected_answer": "Alkhidmat razakaar mukhtalif sargarmiyyon mein hissa lete hain jin mein disaster management mein zalzalon, sailabon aur sehat ki hungami soorat-e-haal mein imdadi kaarvaiyan shamil hain. Woh hospitals, clinics aur mobile health units mein maawnat karte hain. Razakaar taleem mein bhi madad karte hain jaise ke aafat zadah ilaqon mein aarzi schools qaim karna aur wazaif faraham karna. Woh 30,000 se zaid yateem bachon ki madad karte hain aur WASH iqdamaat mein saaf pani aur safai ki suhulatein faraham karte hain. Is ke ilawa woh community services aur microfinance iqdamaat mein bhi hissa lete hain."
+    },
+    {
+      "id": "Q33",
+      "question": "Razakaar kaun ban sakta hai?",
+      "expected_answer": "Alkhidmat Foundation Pakistan aise naujawanon aur community ke afraad ki himmat afzai karti hai jo insani khidmat, samaji falaah, community service aur doosron ki madad ke jazbe se sarshaar hon. Yeh idara khaas tor par Pakistan ke naujawanon mein razakarana khidmat ko farogh deta hai."
+    },
+    {
+      "id": "Q34",
+      "question": "Razakaar banne ka link kya hai?",
+      "expected_answer": "https://docs.google.com/forms/d/e/1FAIpQLSdNGfhJq0TtqjC3jYK_EdYzmTug1PyuJOTWLdXRPxOef_xGOg/viewform"
+    },
+    {
+      "id": "Q35",
+      "question": "Main Alkhidmat mein razakaar kaise ban sakta hun?",
+      "expected_answer": "Sarkari razakaar registration form kholein. Apni zaati aur rabta malumat darj karen. Form jama karwaen. Registration ke baad, aap ko training sessions, muhimmat, sargarmiyyon ya insani khidmat ke mansobon ke hawaale se rabta kiya ja sakta hai."
+    },
+    {
+      "id": "Q36",
+      "question": "Alkhidmat ka markazi rabta pata kahan hai?",
+      "expected_answer": "Rabta pata: 501, Quaideen Colony, nazdik Islamia College, Karachi, Pakistan."
+    },
+    {
+      "id": "Q37",
+      "question": "Alkhidmat ke liye kaunse rabta phone numbers diye gaye hain?",
+      "expected_answer": "+92 91 2263651-52 (Khyber Pakhtunkhwa), 05811-454124 (Gilgit Baltistan), +92 51 4906080 (Azad Jammu & Kashmir), +92 81 2453967 (Balochistan), +92 21 36345131 (Sindh), +92 42 35454320-22 (Central Punjab), +92 61 6510088 (South Punjab), (051) 5765605 (North Punjab)."
+    },
+    {
+      "id": "Q38",
+      "question": "Bano Qabil ke kitne IT centres hain aur kahan hain?",
+      "expected_answer": "Bano Qabil Pakistan bhar mein 120 se zaid IT training marakiz ke zariye kaam karta hai, jin mein Punjab (Lahore samet), Sindh (Karachi jahan program ka aghaz hua), Khyber Pakhtunkhwa, Balochistan, Gilgit Baltistan aur Azad Jammu & Kashmir mein maqamaat shamil hain."
+    },
+    {
+      "id": "Q39",
+      "question": "Bano Qabil program ke tahat courses kitne arse ke hote hain?",
+      "expected_answer": "Courses 3 maah ke hote hain."
+    },
+    {
+      "id": "Q40",
+      "question": "Bano Qabil mein intikhab ka amal kya hai?",
+      "expected_answer": "Bano Qabil mein intikhab ka amal paanch marahil par mushtamil hai: registration, ahliyat ka test, interview, classes aur graduation. Talib ilm pehle sarkari website ya Facebook page par register karte hain. Registration ke baad, shortlist kiye gaye talib ilm ek laazmi ahliyat test dete hain. Test pass karne walon ko interview ke liye bulaya jata hai. Jo talib ilm dono marahil kamyabi se mukammal karte hain, unhen apne muntakhib IT course mein daakhil kar liya jata hai."
+    },
+    {
+      "id": "Q41",
+      "question": "Bano Qabil program mein kitne umeedwaaron ne registration karayi?",
+      "expected_answer": "Bano Qabil program mein 1.2 million se zaid talib ilmon ne registration karayi hai."
+    },
+    {
+      "id": "Q42",
+      "question": "Kya aap Bano Qabil program ke baare mein bata sakte hain?",
+      "expected_answer": "Bano Qabil ek muft IT wazifa aur naujawanon ko baakhtiyar banane ka program hai jise Alkhidmat Foundation Pakistan ne 2022 mein shuru kiya. Is ka maqsad Pakistani naujawanon ko muft jadeed IT taleem, digital mahaaraten, freelancing ki training aur rozgaar ke mawaqe faraham karna hai. Karachi se shuru ho kar yeh program Lahore aur doosre shahron tak phail chuka hai. Ab tak 1.2 million se zaid talib ilmon ne registration karayi hai aur 50,000 se zaid graduates IT courses mukammal kar chuke hain. Mazeed malumat ke liye: https://www.alkhidmat.org/banoqabil."
+    },
+    {
+      "id": "Q43",
+      "question": "Online donate karne ki website kaunsi hai?",
+      "expected_answer": "alkhidmat.org/donate"
+    },
+    {
+      "id": "Q44",
+      "question": "Kya aap online donation ke amal mein meri rahnumai kar sakte hain?",
+      "expected_answer": "Online donate karne ke liye alkhidmat.org/donate par jayen. 'Quick Donate' par click karen aur 'Give Once' ya 'Give Regularly' select karen. PKR mein donation ki raqam select karen (5,000, 10,000, 25,000, ya 50,000) ya khud daakhil karen. Sadqa/Zakat dropdown se donation ki qisam select karen aur 'Donate' par click karen. Apna naam, email, phone number, mulk, shehar aur pata darj karen. Phir payment ka tareeqa select karen: online card, seedha bank transfer, ya ghar se collection, aur donation mukammal karen."
+    },
+    {
+      "id": "Q45",
+      "question": "Main kahan ya kin maqasid ke liye Alkhidmat ko donate kar sakta hun?",
+      "expected_answer": "Aap Alkhidmat ko yateem kafaalat, yateem nigahdaasht program, Aghosh homes, taleemi iqdamaat, disaster management, sehat ki khidmaat aur WASH program samet mukhtalif maqasid ke liye donate kar sakte hain."
+    },
+    {
+      "id": "Q46",
+      "question": "Alkhidmat ka WASH program kya hai aur yeh kyun aham hai?",
+      "expected_answer": "Alkhidmat Foundation ka WASH program (pani, safai aur hifzaan-e-sehat) pani ke bohran se nipTne ke liye communities ko payidar pani ke hal faraham karne ke liye waqf hai. Yeh aham hai kyunki yeh khushk saali, naqal makani aur bimari ke khatron se bachate hue communities ko barson tak saaf pani ki payidar farahami yaqeeni banata hai. Program mein bare shahron mein water filtration plants, hand pumps, shamsyi toanaai se chalne wale pumps aur door daraaz ilaqon mein saaf pani ki farahami ke mansoobe shamil hain."
+    },
+    {
+      "id": "Q47",
+      "question": "Alkhidmat WASH program ke zariye logon ki kaise madad karti hai?",
+      "expected_answer": "Alkhidmat WASH program ke zariye logon ko saaf peene ka pani, safai ki suhulatein aur hifzaan-e-sehat kits faraham karti hai, khaas tor par bohrani soorat-e-haal mein. Program mein bare shahron mein water filtration plants, hand pumps, shamsyi toanaai se chalne wale pumps aur Thar, Cholistan, Balochistan, Khyber Pakhtunkhwa, Gilgit Baltistan aur Azad Jammu & Kashmir ke door daraaz ilaqon mein saaf pani ki farahami ke mansoobe shamil hain."
+    },
+    {
+      "id": "Q48",
+      "question": "Aghosh yateem marakiz kya hain aur yeh kahan waqe hain?",
+      "expected_answer": "Aghosh yateem marakiz Alkhidmat ke yateem bachon ke liye boarding schools hain. 11 marakiz hain, jin mein Shami panah gazeenon ke bachon ke liye Turkey mein ek markaz bhi shamil hai."
+    },
+    {
+      "id": "Q49",
+      "question": "Yateem Family Support Program ke tahat kya madad faraham ki jati hai?",
+      "expected_answer": "Yateem Family Support Program ke tahat izafi 2,250 yateem bachon ko mahana maali maawnat ke saath taleem, sehat, ghizaiyat aur jazbati behbood ki suhulatein faraham ki jaengi. Alkhidmat pehle se 750 kafaalat shuda yateem bachon mein se har ek ko $50 mahana imdaad de rahi hai."
+    },
+    {
+      "id": "Q50",
+      "question": "Alkhidmat kaunsi community services faraham karti hai?",
+      "expected_answer": "Alkhidmat community services mein ghurbat ka khaatma, zariya-e-maash ki maawnat, maqami communities mein salahiyat saazi, disaster management, sehat ki khidmaat, taleem, yateem nigahdaasht, WASH (saaf peene ka pani aur safai ki suhulatein) aur microfinance shamil hain."
+    },
+    {
+      "id": "Q51",
+      "question": "Mawakhat program ka maqsad kya hai?",
+      "expected_answer": "Mawakhat program ka maqsad afraad ko apna chhota karobaar shuru karne ke liye zaroori wasail faraham karna hai taake community mein karobaari jazbe aur maashi khudmukhtaari ko farogh diya ja sake. Is ka hadaf Pakistan bhar mein mustahiq afraad aur baahimmat khawateen ko baizzat rozgaar faraham karna hai."
+    },
+    {
+      "id": "Q52",
+      "question": "Mawakhat program se kaunse karobaaron ko faida hua hai?",
+      "expected_answer": "Mawakhat program ke zariye maawnat yaafta karobaaron mein darzi aur kaDhai ki khidmaat, khana pakane ke karobaar, beauty salons, kiraana ki dukaanein, stationery ki dukaanein aur three-wheeler transport ke karobaar shamil hain."
+    },
+    {
+      "id": "Q53",
+      "question": "Alkhidmat Pakistan mein aafaat ke dauran kya kirdaar ada karti hai?",
+      "expected_answer": "Alkhidmat Pakistan mein aafaat ke dauran aham kirdaar ada karti hai aur zalzalon, sailabon, bomb dhamakon aur sehat ki hungami soorat-e-haal mein sab se pehle imdaad faraham karne walon mein shamil hoti hai. Foundation poore mulk mein fori aur jameh imdadi operations shuru karti hai aur mukammal lais Disaster Responder unit tayenaat karti hai. Fori imdaad ke baad Alkhidmat bahali ke kaamon par bhi tawajja deti hai jin mein makaanon ki tameer-e-nau, medical camps aur aarzi schools ka qiyam aur sood se pak qarzon aur microfinance ke zariye zariya-e-maash ki bahali shamil hain."
+    }
+  ]
