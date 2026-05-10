@@ -1,10 +1,14 @@
 # ocr_utils.py (Tesseract version)
+import os
 import pytesseract
 from PIL import Image
 import io
 
 # Point pytesseract to your Tesseract installation on D:
-pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract" #for macos, change accordingly for windows
+if os.path.exists("D:/tesseract/tesseract.exe"):
+    pytesseract.pytesseract.tesseract_cmd = "D:/tesseract/tesseract.exe" #for windows, change accordingly for macos
+elif os.path.exists("/opt/homebrew/bin/tesseract"):
+    pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract" #for macos, change accordingly for windows
 
 def extract_text_from_image(image_bytes: bytes, lang: str = "eng") -> str:
     """
