@@ -30,11 +30,11 @@ const METRIC_NAMES = [
 ];
 
 const METRIC_META = {
-  AnswerRelevancy:    { short: 'AnsRel',  color: '#3B82F6', lowerBetter: false, threshold: 0.5  },
-  Faithfulness:       { short: 'Faith',   color: '#10B981', lowerBetter: false, threshold: 0.5  },
-  ContextualPrecision:{ short: 'CtxPre',  color: '#8B5CF6', lowerBetter: false, threshold: 0.3  },
-  ContextualRecall:   { short: 'CtxRec',  color: '#F59E0B', lowerBetter: false, threshold: 0.3  },
-  Hallucination:      { short: 'Halluc',  color: '#EF4444', lowerBetter: true,  threshold: 0.4  },
+  AnswerRelevancy: { short: 'AnsRel', color: '#3B82F6', lowerBetter: false, threshold: 0.5 },
+  Faithfulness: { short: 'Faith', color: '#10B981', lowerBetter: false, threshold: 0.5 },
+  ContextualPrecision: { short: 'CtxPre', color: '#8B5CF6', lowerBetter: false, threshold: 0.3 },
+  ContextualRecall: { short: 'CtxRec', color: '#F59E0B', lowerBetter: false, threshold: 0.3 },
+  Hallucination: { short: 'Halluc', color: '#EF4444', lowerBetter: true, threshold: 0.4 },
 };
 
 function isMetricPass(metric, score) {
@@ -50,8 +50,8 @@ function scoreColorClass(metric, score) {
 }
 
 function computeEvalSummary(results) {
-  const agg   = {};
-  const pass  = {};
+  const agg = {};
+  const pass = {};
   METRIC_NAMES.forEach(m => { agg[m] = []; pass[m] = 0; });
 
   let rejections = 0, errors = 0, overallPass = 0;
@@ -59,7 +59,7 @@ function computeEvalSummary(results) {
 
   results.forEach(r => {
     if (r.rag_rejected) { rejections++; return; }
-    if (r.error)        { errors++;     return; }
+    if (r.error) { errors++; return; }
     if (r.overall_pass) overallPass++;
     METRIC_NAMES.forEach(m => {
       const s = r.scores?.[m];
@@ -87,10 +87,10 @@ function computeEvalSummary(results) {
 // ─── Status badge ─────────────────────────────────────────────────────────────
 function StatusBadge({ r }) {
   const { label, cls } =
-    r.error        ? { label: 'CRASH',    cls: 'bg-gray-100 text-gray-600'    } :
-    r.rag_rejected ? { label: 'REJECTED', cls: 'bg-amber-100 text-amber-700'  } :
-    r.overall_pass ? { label: 'PASS',     cls: 'bg-emerald-100 text-emerald-700' } :
-                     { label: 'FAIL',     cls: 'bg-red-100 text-red-700'      };
+    r.error ? { label: 'CRASH', cls: 'bg-gray-100 text-gray-600' } :
+      r.rag_rejected ? { label: 'REJECTED', cls: 'bg-amber-100 text-amber-700' } :
+        r.overall_pass ? { label: 'PASS', cls: 'bg-emerald-100 text-emerald-700' } :
+          { label: 'FAIL', cls: 'bg-red-100 text-red-700' };
   return (
     <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${cls}`}>{label}</span>
   );
@@ -116,7 +116,7 @@ function RowDetail({ r }) {
               <p className="text-gray-800">{r.actual_answer}</p>
             </div>
           )}
-          {r.reasons && Object.entries(r.reasons).some(([,v]) => v) && (
+          {r.reasons && Object.entries(r.reasons).some(([, v]) => v) && (
             <div className="md:col-span-2">
               <p className="font-semibold text-gray-600 mb-2">Metric Reasons</p>
               <div className="space-y-1">
@@ -151,9 +151,9 @@ function RowDetail({ r }) {
 
 // ─── Evaluation Tab ───────────────────────────────────────────────────────────
 const LANG_CONFIG = {
-  english: { label: 'English',    flag: '🇬🇧', color: 'blue'   },
-  urdu:    { label: 'Urdu',       flag: '🇵🇰', color: 'green'  },
-  roman:   { label: 'Roman Urdu', flag: '📝',  color: 'blue' },
+  english: { label: 'English', color: 'blue' },
+  urdu: { label: 'Urdu', color: 'green' },
+  roman: { label: 'Roman Urdu', color: 'blue' },
 };
 
 function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSelectLang }) {
@@ -167,31 +167,31 @@ function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSel
 
   const barData = summary
     ? METRIC_NAMES.map(m => ({
-        name: METRIC_META[m].short,
-        score: summary.avgs[m] !== null ? parseFloat(summary.avgs[m].toFixed(3)) : 0,
-        fill: METRIC_META[m].color,
-      }))
+      name: METRIC_META[m].short,
+      score: summary.avgs[m] !== null ? parseFloat(summary.avgs[m].toFixed(3)) : 0,
+      fill: METRIC_META[m].color,
+    }))
     : [];
 
   const outcomeData = summary
     ? [
-        { name: 'Pass',     value: summary.overallPass,                         fill: '#10B981' },
-        { name: 'Fail',     value: summary.scoredCount - summary.overallPass,   fill: '#EF4444' },
-        { name: 'Rejected', value: summary.rejections,                          fill: '#F59E0B' },
-        { name: 'Error',    value: summary.errors,                              fill: '#9CA3AF' },
-      ].filter(d => d.value > 0)
+      { name: 'Pass', value: summary.overallPass, fill: '#10B981' },
+      { name: 'Fail', value: summary.scoredCount - summary.overallPass, fill: '#EF4444' },
+      { name: 'Rejected', value: summary.rejections, fill: '#F59E0B' },
+      { name: 'Error', value: summary.errors, fill: '#9CA3AF' },
+    ].filter(d => d.value > 0)
     : [];
 
   const filteredRows = currentData
     ? currentData.filter(r => {
-        const matchSearch = !searchTerm || r.question?.toLowerCase().includes(searchTerm.toLowerCase());
-        const status =
-          r.error        ? 'crash'    :
+      const matchSearch = !searchTerm || r.question?.toLowerCase().includes(searchTerm.toLowerCase());
+      const status =
+        r.error ? 'crash' :
           r.rag_rejected ? 'rejected' :
-          r.overall_pass ? 'pass'     : 'fail';
-        const matchStatus = statusFilter === 'all' || status === statusFilter;
-        return matchSearch && matchStatus;
-      })
+            r.overall_pass ? 'pass' : 'fail';
+      const matchStatus = statusFilter === 'all' || status === statusFilter;
+      return matchSearch && matchStatus;
+    })
     : [];
 
   return (
@@ -203,18 +203,17 @@ function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSel
           {Object.entries(LANG_CONFIG).map(([lang, cfg]) => {
             const status = evalStatus[lang];
             const isActive = evalLang === lang;
-            const hasData  = status?.exists;
+            const hasData = status?.exists;
             return (
               <button
                 key={lang}
                 onClick={() => onSelectLang(lang)}
-                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all border-2 ${
-                  isActive
-                    ? 'bg-blue-600 text-white border-blue-600 shadow-md'
-                    : hasData
-                      ? 'bg-white text-gray-700 border-gray-200 hover:border-blue-400 hover:text-blue-700'
-                      : 'bg-gray-50 text-gray-400 border-dashed border-gray-200 hover:border-gray-300'
-                }`}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all border-2 ${isActive
+                  ? 'bg-blue-600 text-white border-blue-600 shadow-md'
+                  : hasData
+                    ? 'bg-white text-gray-700 border-gray-200 hover:border-blue-400 hover:text-blue-700'
+                    : 'bg-gray-50 text-gray-400 border-dashed border-gray-200 hover:border-gray-300'
+                  }`}
               >
                 <span className="text-base">{cfg.flag}</span>
                 <span>{cfg.label}</span>
@@ -257,8 +256,8 @@ function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSel
       {evalLoading && (
         <div className="flex items-center justify-center py-20 text-gray-400">
           <svg className="animate-spin w-6 h-6 mr-3" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
           </svg>
           Loading report…
         </div>
@@ -275,10 +274,10 @@ function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSel
           {/* ── Top stat cards ── */}
           <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-4 gap-4 mb-6">
             {[
-              { label: 'Total Cases',      value: summary.total,                              color: 'text-gray-800'   },
-              { label: 'Overall Pass',     value: `${summary.overallPass} / ${summary.scoredCount}`, color: 'text-emerald-600' },
-              { label: 'Self-RAG Rejected',value: summary.rejections,                         color: 'text-amber-500'  },
-              { label: 'Crashes / Errors', value: summary.errors,                             color: 'text-red-500'    },
+              { label: 'Total Cases', value: summary.total, color: 'text-gray-800' },
+              { label: 'Overall Pass', value: `${summary.overallPass} / ${summary.scoredCount}`, color: 'text-emerald-600' },
+              { label: 'Self-RAG Rejected', value: summary.rejections, color: 'text-amber-500' },
+              { label: 'Crashes / Errors', value: summary.errors, color: 'text-red-500' },
             ].map(({ label, value, color }) => (
               <div key={label} className="bg-white rounded-xl shadow p-5">
                 <p className="text-xs text-gray-500 mb-1">{label}</p>
@@ -290,9 +289,9 @@ function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSel
           {/* ── Per-metric score cards ── */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
             {METRIC_NAMES.map(m => {
-              const avg  = summary.avgs[m];
+              const avg = summary.avgs[m];
               const pass = isMetricPass(m, avg);
-              const pct  = summary.scoredCount > 0
+              const pct = summary.scoredCount > 0
                 ? ((summary.pass[m] / summary.scoredCount) * 100).toFixed(0)
                 : 0;
               const borderColor = pass === null ? 'border-gray-200' : pass ? 'border-emerald-400' : 'border-red-400';
@@ -419,11 +418,10 @@ function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSel
                   <button
                     key={s}
                     onClick={() => setStatusFilter(s)}
-                    className={`px-3 py-1 text-xs rounded-lg font-medium transition-colors ${
-                      statusFilter === s
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
+                    className={`px-3 py-1 text-xs rounded-lg font-medium transition-colors ${statusFilter === s
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
                   >
                     {s.charAt(0).toUpperCase() + s.slice(1)}
                   </button>
@@ -439,7 +437,7 @@ function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSel
                     <th className="px-4 py-3 text-left">Question</th>
                     {METRIC_NAMES.map(m => (
                       <th key={m} className="px-3 py-3 text-center whitespace-nowrap"
-                          title={m}>
+                        title={m}>
                         {METRIC_META[m].short}
                       </th>
                     ))}
@@ -460,9 +458,8 @@ function EvalTab({ evalStatus, evalLang, evalData, evalLoading, evalError, onSel
                       <React.Fragment key={r.id || i}>
                         <tr
                           onClick={() => setExpandedRow(isExpanded ? null : (r.id || i))}
-                          className={`cursor-pointer border-t border-gray-50 transition-colors ${
-                            isExpanded ? 'bg-blue-50' : 'hover:bg-gray-50'
-                          }`}
+                          className={`cursor-pointer border-t border-gray-50 transition-colors ${isExpanded ? 'bg-blue-50' : 'hover:bg-gray-50'
+                            }`}
                         >
                           <td className="px-4 py-3 font-mono text-xs text-gray-500">
                             {r.id || `Q${i + 1}`}
@@ -510,23 +507,39 @@ const COLORS_PIE = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
 function AdminDashboard() {
   // ── Existing state ──
-  const [analytics, setAnalytics]           = useState(null);
-  const [tickets, setTickets]               = useState([]);
+  const [analytics, setAnalytics] = useState(null);
+  const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
-  const [loading, setLoading]               = useState(true);
-  const [filter, setFilter]                 = useState('all');
-  const [timeRange, setTimeRange]           = useState('daily');
-  const loadingRef                          = useRef(false);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
+  const [timeRange, setTimeRange] = useState('daily');
+  const loadingRef = useRef(false);
 
   // ── Tab state ──
-  const [activeTab, setActiveTab]           = useState('analytics'); // 'analytics' | 'evaluation'
+  const [activeTab, setActiveTab] = useState('analytics'); // 'analytics' | 'evaluation' | 'settings'
 
   // ── Evaluation state ──
-  const [evalLang, setEvalLang]             = useState('english');  // 'english' | 'urdu' | 'roman'
-  const [evalStatus, setEvalStatus]         = useState({});         // {english:{exists,run_at,...}, ...}
-  const [evalData, setEvalData]             = useState({});         // {english:[...], urdu:[...], roman:[...]}
-  const [evalLoading, setEvalLoading]       = useState(false);
-  const [evalError, setEvalError]           = useState(null);
+  const [evalLang, setEvalLang] = useState('english');  // 'english' | 'urdu' | 'roman'
+  const [evalStatus, setEvalStatus] = useState({});         // {english:{exists,run_at,...}, ...}
+  const [evalData, setEvalData] = useState({});         // {english:[...], urdu:[...], roman:[...]}
+  const [evalLoading, setEvalLoading] = useState(false);
+  const [evalError, setEvalError] = useState(null);
+
+  // ── Settings state ──
+  const [settingsPrompt, setSettingsPrompt] = useState('');
+  const [settingsGuardrails, setSettingsGuardrails] = useState('');
+  const [promptSaving, setPromptSaving] = useState(false);
+  const [promptSaved, setPromptSaved] = useState(false);
+  const [guardrailsSaving, setGuardrailsSaving] = useState(false);
+  const [guardrailsSaved, setGuardrailsSaved] = useState(false);
+  const [settingsLoading, setSettingsLoading] = useState(false);
+
+  // ── KB Documents state ──
+  const [kbDocuments, setKbDocuments] = useState([]);
+  const [kbLoading, setKbLoading] = useState(false);
+  const [kbDeleting, setKbDeleting] = useState(null); // file_path being deleted
+  const [kbSortField, setKbSortField] = useState('filename');
+  const [kbSortDirection, setKbSortDirection] = useState('asc');
 
   // ── Auth guard ──
   useEffect(() => {
@@ -612,6 +625,22 @@ function AdminDashboard() {
         }
       });
     }
+    if (activeTab === 'settings') {
+      setSettingsLoading(true);
+      api.getAdminSettings()
+        .then(cfg => {
+          setSettingsPrompt(cfg.instruction_prompt || '');
+          setSettingsGuardrails(cfg.guardrails || '');
+        })
+        .catch(err => console.error('Failed to load settings:', err))
+        .finally(() => setSettingsLoading(false));
+      // Load KB documents
+      setKbLoading(true);
+      api.listKBDocuments()
+        .then(res => setKbDocuments(res.documents || []))
+        .catch(err => console.error('Failed to load KB documents:', err))
+        .finally(() => setKbLoading(false));
+    }
   }, [activeTab]);                              // eslint-disable-line
 
   useEffect(() => {
@@ -640,12 +669,12 @@ function AdminDashboard() {
     window.location.reload();
   }
 
-  const timeData      = analytics?.queries_over_time?.[timeRange] || [];
+  const timeData = analytics?.queries_over_time?.[timeRange] || [];
   const ragVsHumanData = analytics?.rag_vs_human
     ? [
-        { name: 'RAG Answered',   value: analytics.rag_vs_human.rag_responses   || 0 },
-        { name: 'Human Answered', value: analytics.rag_vs_human.human_responses  || 0 },
-      ]
+      { name: 'RAG Answered', value: analytics.rag_vs_human.rag_responses || 0 },
+      { name: 'Human Answered', value: analytics.rag_vs_human.human_responses || 0 },
+    ]
     : [];
 
   // ── Loading gate ──
@@ -656,6 +685,28 @@ function AdminDashboard() {
       </div>
     );
   }
+
+  // ── KB Sorting ──
+  const sortedKbDocuments = [...kbDocuments].sort((a, b) => {
+    let valA = a[kbSortField];
+    let valB = b[kbSortField];
+
+    if (typeof valA === 'string') valA = valA.toLowerCase();
+    if (typeof valB === 'string') valB = valB.toLowerCase();
+
+    if (valA < valB) return kbSortDirection === 'asc' ? -1 : 1;
+    if (valA > valB) return kbSortDirection === 'asc' ? 1 : -1;
+    return 0;
+  });
+
+  const handleKbSort = (field) => {
+    if (kbSortField === field) {
+      setKbSortDirection(prev => prev === 'asc' ? 'desc' : 'asc');
+    } else {
+      setKbSortField(field);
+      setKbSortDirection('asc');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -671,23 +722,30 @@ function AdminDashboard() {
                 <div className="flex gap-2 mt-1.5">
                   <button
                     onClick={() => setActiveTab('analytics')}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
-                      activeTab === 'analytics'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${activeTab === 'analytics'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
                   >
                     Analytics & Tickets
                   </button>
                   <button
                     onClick={() => setActiveTab('evaluation')}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
-                      activeTab === 'evaluation'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${activeTab === 'evaluation'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
                   >
                     RAG Evaluation
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('settings')}
+                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${activeTab === 'settings'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                  >
+                    Settings
                   </button>
                 </div>
               </div>
@@ -768,8 +826,8 @@ function AdminDashboard() {
                         <YAxis tick={{ fontSize: 12 }} />
                         <Tooltip /><Legend />
                         <Line type="monotone" dataKey="total" stroke="#3B82F6" strokeWidth={2} name="Total Queries" />
-                        <Line type="monotone" dataKey="rag"   stroke="#10B981" strokeWidth={2} name="RAG Answered"  />
-                        <Line type="monotone" dataKey="human" stroke="#F59E0B" strokeWidth={2} name="Human Answered"/>
+                        <Line type="monotone" dataKey="rag" stroke="#10B981" strokeWidth={2} name="RAG Answered" />
+                        <Line type="monotone" dataKey="human" stroke="#F59E0B" strokeWidth={2} name="Human Answered" />
                       </LineChart>
                     </ResponsiveContainer>
                   ) : (
@@ -834,74 +892,7 @@ function AdminDashboard() {
               </div>
             )}
 
-            {/* Knowledge Base Management */}
-            <div className="bg-white rounded-lg shadow p-6 mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-gray-800">Knowledge Base Management</h2>
-              </div>
-              <div className="bg-blue-50 border border-blue-100 rounded-lg p-6">
-                <h3 className="text-sm font-semibold text-blue-800 mb-4 uppercase tracking-wider">Upload New Document</h3>
-                <form 
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    const file = e.target.elements.kb_file.files[0];
-                    const category = e.target.elements.kb_category.value;
-                    if (!file) {
-                      alert('Please select a file');
-                      return;
-                    }
-                    
-                    const btn = e.target.querySelector('button[type="submit"]');
-                    const originalText = btn.innerText;
-                    btn.disabled = true;
-                    btn.innerText = 'Uploading & Embedding...';
-                    
-                    try {
-                      const result = await api.uploadDocument(file, category);
-                      alert(`Success! ${result.filename} has been added to the KB (${result.chunks} chunks created).`);
-                      e.target.reset();
-                    } catch (err) {
-                      console.error('Upload failed:', err);
-                      alert(err.data?.detail || 'Upload failed. Please check the file type and try again.');
-                    } finally {
-                      btn.disabled = false;
-                      btn.innerText = originalText;
-                    }
-                  }}
-                  className="flex flex-col md:flex-row gap-4 items-end"
-                >
-                  <div className="flex-1 w-full">
-                    <label className="block text-xs font-medium text-gray-500 mb-1 uppercase">Select Document (.txt, .pdf, .docx)</label>
-                    <input
-                      type="file"
-                      name="kb_file"
-                      accept=".txt,.pdf,.docx"
-                      className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer"
-                    />
-                  </div>
-                  <div className="w-full md:w-48">
-                    <label className="block text-xs font-medium text-gray-500 mb-1 uppercase">Category</label>
-                    <select 
-                      name="kb_category"
-                      className="w-full p-2 bg-white border border-gray-300 rounded-lg text-sm"
-                    >
-                      <option value="Health">Health</option>
-                      <option value="Education">Education</option>
-                      <option value="Donation">Donation</option>
-                      <option value="Bano Qabil">Bano Qabil</option>
-                      <option value="Aghosh">Aghosh</option>
-                      <option value="General">General</option>
-                    </select>
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full md:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm"
-                  >
-                    Upload & Embed
-                  </button>
-                </form>
-              </div>
-            </div>
+
 
             {/* Tickets table */}
             <div className="bg-white rounded-lg shadow">
@@ -919,11 +910,10 @@ function AdminDashboard() {
                     </button>
                   </div>
                   <div className="flex gap-2">
-                    {[['all','blue'],['active','yellow'],['in_progress','blue'],['resolved','green']].map(([f, c]) => (
+                    {[['all', 'blue'], ['active', 'yellow'], ['in_progress', 'blue'], ['resolved', 'green']].map(([f, c]) => (
                       <button key={f} onClick={() => setFilter(f)}
-                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                          filter === f ? `bg-${c}-600 text-white` : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        }`}>
+                        className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${filter === f ? `bg-${c}-600 text-white` : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}>
                         {f === 'in_progress' ? 'In Progress' : f.charAt(0).toUpperCase() + f.slice(1)}
                       </button>
                     ))}
@@ -931,23 +921,21 @@ function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="divide-y divide-gray-200">
+              <div className="divide-y divide-gray-200 max-h-[600px] overflow-y-auto">
                 {tickets.length === 0 ? (
                   <div className="p-8 text-center text-gray-500">No tickets found</div>
                 ) : (
                   tickets.map(ticket => (
                     <div key={ticket.ticket_id} onClick={() => setSelectedTicket(ticket)}
-                      className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${
-                        selectedTicket?.ticket_id === ticket.ticket_id ? 'bg-blue-50 border-l-4 border-l-blue-600' : ''
-                      }`}>
+                      className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${selectedTicket?.ticket_id === ticket.ticket_id ? 'bg-blue-50 border-l-4 border-l-blue-600' : ''
+                        }`}>
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <span className="text-sm font-semibold text-gray-800">#{ticket.ticket_id.slice(0, 8)}</span>
-                            <span className={`px-2 py-0.5 text-xs rounded-full ${
-                              ticket.status === 'active' ? 'bg-yellow-100 text-yellow-800' :
+                            <span className={`px-2 py-0.5 text-xs rounded-full ${ticket.status === 'active' ? 'bg-yellow-100 text-yellow-800' :
                               ticket.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
-                              'bg-green-100 text-green-800'}`}>
+                                'bg-green-100 text-green-800'}`}>
                               {ticket.status}
                             </span>
                           </div>
@@ -978,10 +966,9 @@ function AdminDashboard() {
                     <div>
                       <label className="text-sm font-medium text-gray-500">Status</label>
                       <div className="mt-1">
-                        <span className={`px-3 py-1 text-sm rounded-full ${
-                          selectedTicket.status === 'active'      ? 'bg-yellow-100 text-yellow-800' :
+                        <span className={`px-3 py-1 text-sm rounded-full ${selectedTicket.status === 'active' ? 'bg-yellow-100 text-yellow-800' :
                           selectedTicket.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
-                          'bg-green-100 text-green-800'}`}>
+                            'bg-green-100 text-green-800'}`}>
                           {selectedTicket.status}
                         </span>
                       </div>
@@ -1020,6 +1007,243 @@ function AdminDashboard() {
               </div>
             )}
           </>
+        )}
+
+        {/* ════════════════════ SETTINGS TAB ════════════════════ */}
+        {activeTab === 'settings' && (
+          <div className="max-w-3xl mx-auto space-y-8">
+            <h2 className="text-2xl font-bold text-gray-800">System Settings</h2>
+
+            {settingsLoading ? (
+              <div className="text-gray-500">Loading settings…</div>
+            ) : (
+              <>
+                {/* Instruction Prompt */}
+                <div className="bg-white rounded-xl shadow p-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-1">Instruction Prompt</h3>
+                  <p className="text-sm text-gray-500 mb-3">This is the system-level instruction given to the AI before every conversation.</p>
+                  <textarea
+                    rows={7}
+                    value={settingsPrompt}
+                    onChange={e => { setSettingsPrompt(e.target.value); setPromptSaved(false); }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
+                    placeholder="Enter system instruction prompt…"
+                  />
+                  <div className="mt-3 flex items-center gap-4">
+                    <button
+                      disabled={promptSaving}
+                      onClick={async () => {
+                        setPromptSaving(true);
+                        setPromptSaved(false);
+                        try {
+                          await api.saveAdminSettings({ instruction_prompt: settingsPrompt });
+                          setPromptSaved(true);
+                          setTimeout(() => setPromptSaved(false), 3000);
+                        } catch (err) {
+                          alert(err.data?.detail || 'Failed to save prompt.');
+                        } finally {
+                          setPromptSaving(false);
+                        }
+                      }}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-sm font-semibold shadow-sm"
+                    >
+                      {promptSaving ? 'Saving…' : 'Save Prompt'}
+                    </button>
+                    {promptSaved && (
+                      <span className="text-green-600 font-semibold text-sm flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+                        Saved!
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Guardrails */}
+                <div className="bg-white rounded-xl shadow p-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-1">Guardrails</h3>
+                  <p className="text-sm text-gray-500 mb-3">Rules the AI must follow. One rule per line.</p>
+                  <textarea
+                    rows={8}
+                    value={settingsGuardrails}
+                    onChange={e => { setSettingsGuardrails(e.target.value); setGuardrailsSaved(false); }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
+                    placeholder="Enter guardrail rules…"
+                  />
+                  <div className="mt-3 flex items-center gap-4">
+                    <button
+                      disabled={guardrailsSaving}
+                      onClick={async () => {
+                        setGuardrailsSaving(true);
+                        setGuardrailsSaved(false);
+                        try {
+                          await api.saveAdminSettings({ guardrails: settingsGuardrails });
+                          setGuardrailsSaved(true);
+                          setTimeout(() => setGuardrailsSaved(false), 3000);
+                        } catch (err) {
+                          alert(err.data?.detail || 'Failed to save guardrails.');
+                        } finally {
+                          setGuardrailsSaving(false);
+                        }
+                      }}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors text-sm font-semibold shadow-sm"
+                    >
+                      {guardrailsSaving ? 'Saving…' : 'Save Guardrails'}
+                    </button>
+                    {guardrailsSaved && (
+                      <span className="text-green-600 font-semibold text-sm flex items-center gap-1">
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+                        Saved!
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Knowledge Base Upload */}
+                <div className="bg-white rounded-xl shadow p-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-1">Knowledge Base</h3>
+                  <p className="text-sm text-gray-500 mb-4">Upload new documents (.txt, .pdf, .docx) to expand the AI's knowledge base.</p>
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      const file = e.target.elements.kb_file.files[0];
+                      const category = e.target.elements.kb_category.value;
+                      if (!file) { alert('Please select a file'); return; }
+                      const btn = e.target.querySelector('button[type="submit"]');
+                      const original = btn.innerText;
+                      btn.disabled = true; btn.innerText = 'Uploading & Embedding…';
+                      try {
+                        const result = await api.uploadDocument(file, category);
+                        alert(`✅ ${result.filename} added to KB (${result.chunks} chunks).`);
+                        e.target.reset();
+                        // Refresh the document list after upload
+                        api.listKBDocuments()
+                          .then(res => setKbDocuments(res.documents || []))
+                          .catch(() => { });
+                      } catch (err) {
+                        alert(err.data?.detail || 'Upload failed.');
+                      } finally {
+                        btn.disabled = false; btn.innerText = original;
+                      }
+                    }}
+                    className="flex flex-col md:flex-row gap-4 items-end"
+                  >
+                    <div className="flex-1">
+                      <label className="block text-xs font-medium text-gray-500 mb-1 uppercase">Select Document</label>
+                      <input type="file" name="kb_file" accept=".txt,.pdf,.docx"
+                        className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer" />
+                    </div>
+                    <div className="w-full md:w-48">
+                      <label className="block text-xs font-medium text-gray-500 mb-1 uppercase">Category</label>
+                      <select name="kb_category" className="w-full p-2 bg-white border border-gray-300 rounded-lg text-sm">
+                        <option value="Health">Health</option>
+                        <option value="Education">Education</option>
+                        <option value="Donation">Donation</option>
+                        <option value="Bano Qabil">Bano Qabil</option>
+                        <option value="Aghosh">Aghosh</option>
+                        <option value="General">General</option>
+                      </select>
+                    </div>
+                    <button type="submit"
+                      className="w-full md:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium shadow-sm">
+                      Upload &amp; Embed
+                    </button>
+                  </form>
+                </div>
+
+                {/* Knowledge Base Documents List */}
+                <div className="bg-white rounded-xl shadow p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-800">Existing Documents</h3>
+                      <p className="text-sm text-gray-500">Documents currently indexed in the knowledge base. Deleting removes all chunks and embeddings.</p>
+                    </div>
+                    <span className="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                      {kbDocuments.length} document{kbDocuments.length !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+
+                  {kbLoading ? (
+                    <div className="flex items-center justify-center py-10 text-gray-400">
+                      <svg className="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                      </svg>
+                      Loading documents…
+                    </div>
+                  ) : kbDocuments.length === 0 ? (
+                    <div className="text-center py-10 text-gray-400">
+                      <p className="text-4xl mb-2">📭</p>
+                      <p className="text-sm">No documents in the knowledge base yet.</p>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto max-h-[400px] overflow-y-auto relative rounded-lg border border-gray-100">
+                      <table className="w-full text-sm">
+                        <thead className="bg-gray-50 sticky top-0 z-10 shadow-sm">
+                          <tr className="border-b border-gray-200 text-left">
+                            <th
+                              className="px-4 py-3 font-semibold text-gray-600 cursor-pointer hover:bg-gray-200 transition-colors"
+                              onClick={() => handleKbSort('filename')}
+                            >
+                              Filename <span className="inline-block w-4 text-center">{kbSortField === 'filename' ? (kbSortDirection === 'asc' ? '↑' : '↓') : ''}</span>
+                            </th>
+                            <th
+                              className="px-4 py-3 font-semibold text-gray-600 cursor-pointer hover:bg-gray-200 transition-colors"
+                              onClick={() => handleKbSort('category')}
+                            >
+                              Category <span className="inline-block w-4 text-center">{kbSortField === 'category' ? (kbSortDirection === 'asc' ? '↑' : '↓') : ''}</span>
+                            </th>
+                            <th
+                              className="px-4 py-3 font-semibold text-gray-600 text-center cursor-pointer hover:bg-gray-200 transition-colors"
+                              onClick={() => handleKbSort('chunks')}
+                            >
+                              Chunks <span className="inline-block w-4 text-center">{kbSortField === 'chunks' ? (kbSortDirection === 'asc' ? '↑' : '↓') : ''}</span>
+                            </th>
+                            <th className="px-4 py-3 font-semibold text-gray-600 text-right">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {sortedKbDocuments.map((doc) => (
+                            <tr key={doc.file_path} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                              <td className="px-4 py-3">
+                                <div className="font-medium text-gray-800">{doc.filename}</div>
+                                <div className="text-xs text-gray-400 truncate max-w-xs" title={doc.file_path}>{doc.file_path}</div>
+                              </td>
+                              <td className="px-4 py-3">
+                                <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                                  {doc.category}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 text-center font-mono text-gray-600">{doc.chunks}</td>
+                              <td className="px-4 py-3 text-right">
+                                <button
+                                  disabled={kbDeleting === doc.file_path}
+                                  onClick={async () => {
+                                    if (!confirm(`Delete "${doc.filename}" and all its ${doc.chunks} chunks?\n\nThis cannot be undone.`)) return;
+                                    setKbDeleting(doc.file_path);
+                                    try {
+                                      await api.deleteKBDocument(doc.file_path);
+                                      setKbDocuments(prev => prev.filter(d => d.file_path !== doc.file_path));
+                                    } catch (err) {
+                                      alert(err.data?.detail || 'Failed to delete document.');
+                                    } finally {
+                                      setKbDeleting(null);
+                                    }
+                                  }}
+                                  className="px-3 py-1.5 text-xs font-medium rounded-lg transition-colors bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  {kbDeleting === doc.file_path ? 'Deleting…' : '🗑️ Delete'}
+                                </button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
         )}
 
         {/* ════════════════════ EVALUATION TAB ════════════════════ */}

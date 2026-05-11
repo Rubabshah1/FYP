@@ -1253,6 +1253,35 @@ def delete_document_by_path(file_path: str) -> bool:
         print(f"⚠️ Delete error: {e}")
         return False
 
+def list_knowledge_base_documents():
+    """List all unique documents in the knowledge base."""
+    supabase = get_supabase_client()
+    try:
+        # Fetch only necessary columns to identify unique documents
+        res = supabase.table("documents").select("file_path, filename, category").execute()
+        if not res.data:
+            return []
+        
+        docs = {}
+        for row in res.data:
+            path = row['file_path']
+            if path not in docs:
+                docs[path] = {
+                    "file_path": path,
+                    "filename": row['filename'],
+                    "category": row['category'],
+                    "chunks": 0
+                }
+            docs[path]["chunks"] += 1
+            
+        # Convert dict to sorted list by filename
+        result = list(docs.values())
+        result.sort(key=lambda x: x['filename'].lower())
+        return result
+    except Exception as e:
+        print(f"⚠️ List error: {e}")
+        return []
+
 def add_document_incremental(file_path: str, content: str, category: str, filename: str,
                              reindex: bool = False) -> bool:
     supabase = get_supabase_client()

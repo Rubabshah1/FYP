@@ -160,7 +160,7 @@ python -m api.main
 Or using uvicorn directly:
 
 ```bash
-uvicorn api_server:app --reload --host 0.0.0.0 --port 8000
+uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 The API will be available at `http://localhost:8000`
