@@ -77,15 +77,21 @@ const MessageItem = memo(({ message }) => {
           }}
         >
           {loading && !isUser ? (
-            <div className="flex items-center gap-1.5 py-0.5">
+            <div className="flex flex-col gap-1.5 py-0.5">
+              <span className="text-sm text-gray-600 italic">{messageContent || 'Okay, wait — let me check… 🔍'}</span>
               <div className="flex gap-1">
-                <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                <div className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
               </div>
             </div>
           ) : (actualRole === 'assistant' || actualRole === 'agent') ? (
             <div className="text-sm leading-relaxed">
+              {isAgent && (
+                <div className="flex items-center gap-1 mb-1">
+                  <span className="px-1.5 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-bold rounded uppercase tracking-wider">Agent</span>
+                </div>
+              )}
               {msgImageUrl && (
                 <div className="mb-2">
                   <img

@@ -35,11 +35,33 @@ async function sendOTP(phoneNumber) {
   return data;
 }
 
+async function updateUserName(name) {
+  const res = await fetch(`${BASE_URL}/auth/user/name`, {
+    method: 'PATCH',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ name })
+  });
+  const data = await res.json();
+  if (!res.ok) return Promise.reject({ status: res.status, data });
+  return data;
+}
+
 async function verifyOTP(phoneNumber, otp) {
   const res = await fetch(`${BASE_URL}/auth/user/verify-otp`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ phone_number: phoneNumber, otp })
+  });
+  const data = await res.json();
+  if (!res.ok) return Promise.reject({ status: res.status, data });
+  return data;
+}
+
+async function firebaseLogin(idToken) {
+  const res = await fetch(`${BASE_URL}/auth/user/firebase-login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id_token: idToken })
   });
   const data = await res.json();
   if (!res.ok) return Promise.reject({ status: res.status, data });
@@ -294,15 +316,61 @@ async function uploadDocument(file, category = 'general') {
   return data;
 }
 
+async function listKBDocuments() {
+  const res = await fetch(`${BASE_URL}/admin/kb/documents`, {
+    headers: getAuthHeaders()
+  });
+  const data = await res.json();
+  if (!res.ok) return Promise.reject({ status: res.status, data });
+  return data; // { documents: [...], total: N }
+}
+
+async function deleteKBDocument(filePath) {
+  const res = await fetch(`${BASE_URL}/admin/kb/documents`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ file_path: filePath })
+  });
+  const data = await res.json();
+  if (!res.ok) return Promise.reject({ status: res.status, data });
+  return data;
+}
+
+// ============================================================================
+// ADMIN SETTINGS ENDPOINTS
+// ============================================================================
+
+async function getAdminSettings() {
+  const res = await fetch(`${BASE_URL}/admin/settings`, {
+    headers: getAuthHeaders()
+  });
+  const data = await res.json();
+  if (!res.ok) return Promise.reject({ status: res.status, data });
+  return data;
+}
+
+async function saveAdminSettings(settings) {
+  const res = await fetch(`${BASE_URL}/admin/settings`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(settings)
+  });
+  const data = await res.json();
+  if (!res.ok) return Promise.reject({ status: res.status, data });
+  return data;
+}
+
 export default {
   // Authentication
-  sendOTP, verifyOTP, agentLogin, adminLogin,
+  sendOTP, verifyOTP, firebaseLogin, agentLogin, adminLogin, updateUserName,
   // Chat
   createChat, sendChatMessage, sendChatMessageWithImage, getChatHistory,
   // Tickets
   createTicket, listTickets, getTicket, assignTicket, getTicketChat, sendAgentMessage, resolveTicket,
   // Admin
-  getAnalytics, adminListTickets, uploadDocument,
+  getAnalytics, adminListTickets, uploadDocument, getAdminSettings, saveAdminSettings,
+  // Knowledge Base
+  listKBDocuments, deleteKBDocument,
   // Eval
   getEvalStatus, getEvalReportByLanguage
 };

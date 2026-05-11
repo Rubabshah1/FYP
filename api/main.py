@@ -1632,7 +1632,7 @@ import os
 import json
 from pathlib import Path
 from typing import Optional, Tuple, Any, Dict, List
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import numpy as np
 
 # img processing imports 
@@ -1666,6 +1666,27 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Initialize Firebase Admin SDK
+import firebase_admin
+from firebase_admin import credentials, auth as firebase_auth
+
+fb_svc_path = os.getenv("FIREBASE_SERVICE_ACCOUNT_PATH")
+# Fallback to the specific file provided if env var is missing or invalid
+if not fb_svc_path or not os.path.exists(fb_svc_path):
+    potential_path = os.path.join(os.path.dirname(__file__), "fypp-ea6b9-firebase-adminsdk-fbsvc-1f21963d6d.json")
+    if os.path.exists(potential_path):
+        fb_svc_path = potential_path
+
+if fb_svc_path and os.path.exists(fb_svc_path):
+    try:
+        cred = credentials.Certificate(fb_svc_path)
+        firebase_admin.initialize_app(cred)
+        print(f"[FIREBASE] Initialized with service account: {fb_svc_path}")
+    except Exception as e:
+        print(f"[FIREBASE] Initialization error: {e}")
+else:
+    print("[FIREBASE] SERVICE ACCOUNT NOT FOUND. Firebase login will be disabled.")
 
 # In-memory session storage (in production, use Redis or JWT tokens)
 user_sessions: dict = {}  # {session_token: {"user_id": user_id, "db_session_id": db_session_id}}
@@ -1737,6 +1758,7 @@ class ConnectionManager:
         print(f"[WS] User disconnected: {session_id}")
     
     async def send_to_user(self, session_id: str, message: dict):
+        print(f"[DEBUG-WS] Attempting to send to user: {session_id}")
         if session_id in self.user_connections:
             disconnected = []
             for websocket in self.user_connections[session_id]:
@@ -1749,6 +1771,9 @@ class ConnectionManager:
             # Remove disconnected websockets
             for ws in disconnected:
                 self.user_connections[session_id].remove(ws)
+            print(f"[DEBUG-WS] Successfully sent to user: {session_id}")
+        else:
+            print(f"[DEBUG-WS] User {session_id} not connected")
     
     async def connect_agent(self, websocket: WebSocket, agent_id: str):
         await websocket.accept()
@@ -1812,6 +1837,10 @@ class OTPRequest(BaseModel):
 class OTPVerifyRequest(BaseModel):
     phone_number: str
     otp: str
+
+
+class FirebaseLoginRequest(BaseModel):
+    id_token: str
 
 
 class AgentLoginRequest(BaseModel):
@@ -2003,6 +2032,119 @@ async def _startup():
     except Exception as e:
         print(f"[STARTUP]   Could not pre-load embedding model: {e}", flush=True)
 
+    # ── Auto-resolve inactive tickets background task ────────────────────────
+    asyncio.create_task(_auto_resolve_inactive_tickets())
+    print("[STARTUP] ✓ Auto-resolve background task started", flush=True)
+
+
+async def _auto_resolve_inactive_tickets():
+    """
+    Background task: every 5 minutes, resolve tickets where the user
+    and agent have not replied for >= 15 minutes (configurable via AUTO_RESOLVE_MINUTES env).
+    """
+    INACTIVITY_MINUTES = int(os.getenv("AUTO_RESOLVE_MINUTES", "15"))
+    CHECK_INTERVAL_SECONDS = 300  # 5 minutes
+
+    print(f"[AUTO-RESOLVE] Background task running (threshold={INACTIVITY_MINUTES}min, check every {CHECK_INTERVAL_SECONDS}s)")
+    while True:
+        await asyncio.sleep(CHECK_INTERVAL_SECONDS)
+        try:
+            from supabase_client import get_supabase_client
+            supabase = get_supabase_client()
+            if not supabase:
+                continue
+
+            # Robust timezone-aware threshold
+            now_utc = datetime.now(timezone.utc)
+            inactivity_delta = timedelta(minutes=INACTIVITY_MINUTES)
+
+            # Find in_progress / active tickets with no recent activity
+            # Optimized: Fetch session_id via responses join in one query
+            open_tickets_result = await asyncio.to_thread(
+                lambda: supabase.table("tickets")
+                .select("ticket_id, status, responses(session_id)")
+                .in_("status", ["active", "in_progress"])
+                .execute()
+            )
+
+            open_tickets = open_tickets_result.data or []
+            if open_tickets:
+                print(f"[AUTO-RESOLVE] Checking {len(open_tickets)} open tickets...")
+
+            for t in open_tickets:
+                ticket_id = t["ticket_id"]
+                try:
+                    # Extract session_id from the joined response
+                    responses_data = t.get("responses")
+                    session_id = None
+                    if isinstance(responses_data, list) and responses_data:
+                        session_id = responses_data[0].get("session_id")
+                    elif isinstance(responses_data, dict):
+                        session_id = responses_data.get("session_id")
+                    
+                    if not session_id:
+                        continue
+
+                    # Check last activity in this session (User Query or Agent Response)
+                    # 1. Last User Query
+                    q_res = await asyncio.to_thread(
+                        lambda: supabase.table("queries")
+                        .select("timestamp")
+                        .eq("session_id", str(session_id))
+                        .order("timestamp", desc=True)
+                        .limit(1)
+                        .execute()
+                    )
+                    
+                    # 2. Last Agent Response
+                    r_res = await asyncio.to_thread(
+                        lambda: supabase.table("responses")
+                        .select("timestamp")
+                        .eq("session_id", str(session_id))
+                        .order("timestamp", desc=True)
+                        .limit(1)
+                        .execute()
+                    )
+
+                    last_activity_ts = None
+                    times = []
+                    if q_res.data:
+                        times.append(q_res.data[0].get("timestamp"))
+                    if r_res.data:
+                        times.append(r_res.data[0].get("timestamp"))
+                    
+                    if not times:
+                        # No activity found (should not happen for a valid ticket), so we skip it
+                        continue
+                        
+                    # Parse latest timestamp string to aware datetime
+                    latest_str = max(times)
+                    # Handle ISO format (supports 'Z' or '+00:00')
+                    latest_dt = datetime.fromisoformat(latest_str.replace('Z', '+00:00'))
+                    
+                    # Compare
+                    if (now_utc - latest_dt) > inactivity_delta:
+                        print(f"[AUTO-RESOLVE] Resolving ticket {ticket_id} (inactive since {latest_dt})")
+                        await asyncio.to_thread(resolve_ticket, str(ticket_id))
+
+                        # Broadcast to agents
+                        await manager.broadcast_ticket_update(str(ticket_id), "resolved", {
+                            "ticket_id": str(ticket_id),
+                            "status": "resolved",
+                            "reason": "auto_resolved_inactivity"
+                        })
+
+                        # Notify user to return to AI
+                        await manager.send_to_user(str(session_id), {
+                            "type": "ticket_resolved",
+                            "ticket_id": str(ticket_id),
+                            "message": "Your support ticket has been closed due to inactivity. You are back with the AI assistant!"
+                        })
+                except Exception as te:
+                    print(f"[AUTO-RESOLVE] Error processing ticket {ticket_id}: {te}")
+        except Exception as e:
+            print(f"[AUTO-RESOLVE] Loop error: {e}")
+
 
 @app.get("/health")
 def health():
@@ -2015,11 +2157,99 @@ def health():
 
 @app.post("/auth/user/send-otp")
 async def send_otp(req: OTPRequest):
-    """Send OTP to phone number."""
+    """Send OTP to phone number via Twilio (SMS/WhatsApp) or terminal fallback."""
     otp = generate_otp(req.phone_number)
-    # In production, send OTP via SMS service
-    print(f"OTP for {req.phone_number}: {otp}")  # For development only
-    return {"message": "OTP sent", "otp": otp}  # Remove otp in production
+
+    # ── Twilio integration ───────────────────────────────────────────────────
+    TWILIO_SID   = os.getenv("TWILIO_ACCOUNT_SID")
+    TWILIO_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+    TWILIO_FROM  = os.getenv("TWILIO_PHONE_FROM")   # e.g. '+1XXXXXXXXXX' or 'whatsapp:+14155238886'
+    TWILIO_USE_WHATSAPP = os.getenv("TWILIO_USE_WHATSAPP", "false").lower() in ("1", "true", "yes")
+
+    if TWILIO_SID and TWILIO_TOKEN and TWILIO_FROM:
+        try:
+            from twilio.rest import Client as TwilioClient
+            client = TwilioClient(TWILIO_SID, TWILIO_TOKEN)
+            to_number = req.phone_number
+            if TWILIO_USE_WHATSAPP:
+                from_val = TWILIO_FROM if TWILIO_FROM.startswith("whatsapp:") else f"whatsapp:{TWILIO_FROM}"
+                to_val   = to_number  if to_number.startswith("whatsapp:")  else f"whatsapp:{to_number}"
+            else:
+                from_val = TWILIO_FROM
+                to_val   = to_number
+            client.messages.create(
+                body=f"Your Alkhidmat verification code is: {otp}. Valid for 10 minutes.",
+                from_=from_val,
+                to=to_val
+            )
+            print(f"[OTP] Sent via Twilio {'WhatsApp' if TWILIO_USE_WHATSAPP else 'SMS'} to {req.phone_number}")
+        except ImportError:
+            print("[OTP] Twilio library not installed (pip install twilio). Falling back to terminal.")
+            print(f"[OTP-DEV] OTP for {req.phone_number}: {otp}")
+        except Exception as e:
+            print(f"[OTP] Twilio send failed: {e}. Falling back to terminal.")
+            print(f"[OTP-DEV] OTP for {req.phone_number}: {otp}")
+    else:
+        # Development fallback — print to terminal
+        print(f"[OTP-DEV] OTP for {req.phone_number}: {otp}")
+        print("[OTP-DEV] Set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_FROM to enable real delivery.")
+
+    # Never expose OTP in API response (security)
+    return {"message": "OTP sent successfully"}
+
+
+@app.post("/auth/user/firebase-login")
+async def firebase_login_endpoint(req: FirebaseLoginRequest):
+    """
+    Verify Firebase ID token and create/login user.
+    Frontend sends the ID token after successful phone auth.
+    """
+    try:
+        # Verify the ID token
+        decoded_token = await asyncio.to_thread(firebase_auth.verify_id_token, req.id_token)
+        phone_number = decoded_token.get("phone_number")
+        
+        if not phone_number:
+            raise HTTPException(status_code=400, detail="Phone number not found in Firebase token")
+        
+        # Get or create user in our DB
+        # Wrapping in to_thread because these are blocking DB calls
+        user = await asyncio.to_thread(get_user_by_phone, phone_number)
+        if not user:
+            user = await asyncio.to_thread(create_user, phone_number)
+            print(f"[AUTH] Created new user for phone: {phone_number}")
+        
+        # Create new session for this login
+        session = await asyncio.to_thread(create_session, user["id"])
+        db_session_id = str(session["session_id"])
+        
+        # Use database session_id as the session token
+        session_token = db_session_id
+        
+        # Store in memory for quick lookup
+        user_sessions[session_token] = {
+            "user_id": user["id"],
+            "db_session_id": db_session_id
+        }
+        
+        # Get all chat history for this user (across all sessions)
+        chat_history = await asyncio.to_thread(get_user_chat_history, user["id"])
+        
+        print(f"[AUTH] Firebase login successful for {phone_number}, session: {db_session_id}")
+        
+        return {
+            "message": "Login successful",
+            "session_id": session_token,
+            "user": {
+                "id": user["id"],
+                "phone_number": user["phone_number"],
+                "name": user.get("name")
+            },
+            "chat_history": chat_history
+        }
+    except Exception as e:
+        print(f"[AUTH] Firebase login error: {e}")
+        raise HTTPException(status_code=401, detail=f"Authentication failed: {str(e)}")
 
 
 @app.post("/auth/user/verify-otp")
@@ -2051,19 +2281,45 @@ async def verify_otp_endpoint(req: OTPVerifyRequest):
     chat_history = get_user_chat_history(user["id"])
     
     return {
-        "session_id": session_token,  # This is now the database session_id (UUID)
-        "user_id": str(user["id"]),
-        "session": {
-            "session_id": str(session["session_id"]),
-            "started_at": session.get("started_at") or None
+        "message": "Login successful",
+        "session_id": session_token,
+        "user": {
+            "id": user["id"],
+            "phone_number": user["phone_number"],
+            "name": user.get("name")
         },
-        "chat_history": chat_history  # Include all previous messages
+        "chat_history": chat_history
     }
 
+# ── Optional: persist user name ─────────────────────────────────────────────
+class UserNameRequest(BaseModel):
+    name: str
 
-# ============================================================================
-# AGENT AUTHENTICATION ENDPOINTS
-# ============================================================================
+@app.patch("/auth/user/name")
+async def update_user_name(
+    req: UserNameRequest,
+    session_token: Optional[str] = Header(None, alias="X-Session-ID")
+):
+    """Update the user's display name."""
+    if not session_token:
+        raise HTTPException(status_code=401, detail="Session required")
+    db_session_id, err = resolve_session_id(session_token)
+    if not db_session_id:
+        raise HTTPException(status_code=401, detail=err or "Invalid session")
+    db_session = get_session(db_session_id)
+    if not db_session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    user_id = db_session["user_id"]
+    # Best-effort update — graceful fail if column doesn't exist
+    try:
+        from supabase_client import get_supabase_client
+        sb = get_supabase_client()
+        sb.table("users").update({"name": req.name}).eq("id", str(user_id)).execute()
+        print(f"[USER-NAME] Updated name for user {user_id}: '{req.name}'")
+    except Exception as e:
+        print(f"[USER-NAME] Could not persist name to DB (non-fatal): {e}")
+    return {"status": "ok", "name": req.name}
+
 
 @app.post("/auth/agent/login")
 async def agent_login(req: AgentLoginRequest):
@@ -2180,14 +2436,53 @@ async def create_chat(session_token: Optional[str] = Header(None, alias="X-Sessi
     
     user_id = db_session["user_id"]
     
+    # Fetch user info for name
+    user_info = get_user_by_id(user_id)
+    user_name = user_info.get("name") if user_info else None
+    
     # Get all chat history for this user (across all sessions)
     chat_history = get_user_chat_history(user_id)
     
+    # ── Check for active tickets across all user sessions ──────────────────
+    from supabase_client import get_supabase_client
+    supabase = get_supabase_client()
+    
+    is_agent_chat = False
+    active_ticket_id = None
+    
+    try:
+        # Get all sessions for this user to check for active tickets globally
+        user_sessions_res = await asyncio.to_thread(
+            lambda: supabase.table("sessions").select("session_id").eq("user_id", str(user_id)).execute()
+        )
+        user_session_ids = [str(s["session_id"]) for s in (user_sessions_res.data or [])]
+        
+        if user_session_ids:
+            # Query tickets that belong to any response in any of the user's sessions
+            active_ticket_query = await asyncio.to_thread(
+                lambda: supabase.table("tickets")
+                .select("ticket_id, status, responses!inner(session_id)")
+                .in_("responses.session_id", user_session_ids)
+                .in_("status", ["active", "in_progress"])
+                .limit(1)
+                .execute()
+            )
+            
+            if active_ticket_query.data:
+                is_agent_chat = True
+                active_ticket_id = str(active_ticket_query.data[0]["ticket_id"])
+                print(f"[CREATE-CHAT] User {user_id} has active ticket {active_ticket_id}")
+    except Exception as _e:
+        print(f"[CREATE-CHAT] Active ticket check error (non-fatal): {_e}")
+
     return {
         "session_id": session_token,  # Return the token that was sent (could be UUID or old format)
         "db_session_id": str(db_session_id),
         "user_id": str(user_id),
-        "chat_history": chat_history  # Include all previous messages
+        "user_name": user_name,       # Include the stored name
+        "chat_history": chat_history, # Include all previous messages
+        "is_agent_chat": is_agent_chat,
+        "active_ticket_id": active_ticket_id
     }
 
 
@@ -2245,12 +2540,12 @@ async def chat(
         raise HTTPException(status_code=401, detail=error_msg or "Invalid or expired session. Please login again.")
     
     # Get or verify session
-    db_session = get_session(db_session_id)
+    db_session = await asyncio.to_thread(get_session, db_session_id)
     if not db_session:
         raise HTTPException(status_code=404, detail="Session not found")
     
     # Update session activity
-    update_session_activity(db_session_id)
+    await asyncio.to_thread(update_session_activity, db_session_id)
     
     # add image_processing step
     final_message = message.strip()
@@ -2271,7 +2566,13 @@ async def chat(
 
     
     # Create query record (domain will be updated after RAG processing)
-    query_record = _db_write_with_retry(create_query, db_session_id, final_message)
+    # Wrapping in to_thread because it involves DB write and possible retries
+    query_record = await asyncio.to_thread(
+        _db_write_with_retry, 
+        create_query, 
+        db_session_id, 
+        final_message
+    )
     query_id = query_record["query_id"] if query_record else None
     
     # Check if user message requests human agent
@@ -2364,21 +2665,55 @@ async def chat(
         return matched
     
     try:
-        # Check if user has an active ticket for this session
+        # ── Optimized Active Ticket Check ──────────────────────────────────────
         from supabase_client import get_supabase_client
         supabase = get_supabase_client()
-        # Check for active tickets linked to responses in this session
-        active_responses = supabase.table("responses").select("response_id").eq(
-            "session_id", db_session_id
-        ).execute()
-        response_ids = [r["response_id"] for r in (active_responses.data or [])]
         
+        # Use a single join query to find if this session has an active ticket.
+        # Wrapping in to_thread because supabase.execute() is blocking.
         has_active_ticket = False
-        if response_ids:
-            active_tickets = supabase.table("tickets").select("ticket_id").in_(
-                "response_id", response_ids
-            ).in_("status", ["active", "in_progress"]).execute()
-            has_active_ticket = len(active_tickets.data) > 0 if active_tickets.data else False
+        active_ticket_id = None
+        assigned_agent_id = None
+        
+        try:
+            # Get all sessions for this user to check for active tickets across sessions
+            user_id = db_session["user_id"]
+            user_sessions_res = await asyncio.to_thread(
+                lambda: supabase.table("sessions").select("session_id").eq("user_id", str(user_id)).execute()
+            )
+            user_session_ids = [str(s["session_id"]) for s in (user_sessions_res.data or [])]
+            
+            if user_session_ids:
+                # Query tickets that belong to any response in any of the user's sessions
+                active_ticket_query = await asyncio.to_thread(
+                    lambda: supabase.table("tickets")
+                    .select("ticket_id, agent_id, status, responses!inner(session_id)")
+                    .in_("responses.session_id", user_session_ids)
+                    .in_("status", ["active", "in_progress"])
+                    .limit(1)
+                    .execute()
+                )
+                
+                if active_ticket_query.data:
+                    has_active_ticket = True
+                    active_ticket_id = str(active_ticket_query.data[0]["ticket_id"])
+                    assigned_agent_id = active_ticket_query.data[0].get("agent_id")
+                    print(f"[AGENT-CHECK] Found active ticket {active_ticket_id} for user {user_id} across sessions")
+        except Exception as _e:
+            print(f"[AGENT-CHECK] Optimized check failed: {_e}, falling back to legacy check")
+            # Legacy fallback if join fails (schema dependent)
+            active_responses = await asyncio.to_thread(
+                lambda: supabase.table("responses").select("response_id").eq("session_id", db_session_id).execute()
+            )
+            response_ids = [r["response_id"] for r in (active_responses.data or [])]
+            if response_ids:
+                active_tickets = await asyncio.to_thread(
+                    lambda: supabase.table("tickets").select("ticket_id, agent_id").in_("response_id", response_ids).in_("status", ["active", "in_progress"]).limit(1).execute()
+                )
+                if active_tickets.data:
+                    has_active_ticket = True
+                    active_ticket_id = str(active_tickets.data[0]["ticket_id"])
+                    assigned_agent_id = active_tickets.data[0].get("agent_id")
         
         # Check if user explicitly requested human agent
         user_requested_agent = is_human_agent_request(final_message)
@@ -2408,20 +2743,21 @@ async def chat(
             # Update query with general domain
             if query_id:
                 try:
-                    update_query_domain(query_id, query_domain)
+                    await asyncio.to_thread(update_query_domain, query_id, query_domain)
                     print(f"[QUERY-DOMAIN] Updated query {query_id} with domain: {query_domain}")
                 except Exception as _uqd_err:
                     print(f"[ERROR] Failed to update query domain: {_uqd_err}")
             
             # Create a placeholder response for the ticket
-            placeholder_response = create_response(
+            placeholder_response = await asyncio.to_thread(
+                create_response,
                 db_session_id,
                 f"User requested to chat with human agent: {final_message}",
                 confidence=1.0,  # High confidence since it's an explicit request
                 domain=query_domain
             )
             # Create ticket immediately with domain for better routing
-            ticket = create_ticket(placeholder_response["response_id"], domain=query_domain)
+            ticket = await asyncio.to_thread(create_ticket, placeholder_response["response_id"], domain=query_domain)
             if ticket:
                 ticket_id = str(ticket.get("ticket_id"))
                 agent_assigned = ticket.get("agent_id")
@@ -2451,34 +2787,73 @@ async def chat(
                     "ticket_id": None
                 }
         
+        if has_active_ticket and not user_requested_agent:
+            print(f"[AGENT-CHAT] User has active ticket — forwarding message to agent, skipping RAG")
+            print(f"[DEBUG-CHAT] Active ticket found: {active_ticket_id} for user: {db_session['user_id']}")
+            # Routing to agent
+            print(f"[DEBUG-CHAT] Routing user message to agent {assigned_agent_id or 'unassigned'}")
+            
+            # Broadcast the user's message to the assigned agent's WebSocket
+            if active_ticket_id:
+                try:
+                    msg_payload = {
+                        "type": "new_message",
+                        "ticket_id": active_ticket_id,
+                        "message": {
+                            "role": "user",
+                            "sender": "user",
+                            "content": final_message,
+                            "timestamp": datetime.now().isoformat(),
+                        }
+                    }
+                    if assigned_agent_id:
+                        await manager.send_to_agent(str(assigned_agent_id), msg_payload)
+                    else:
+                        # Broadcast to all agents if not yet assigned
+                        await manager.broadcast_ticket_update(active_ticket_id, "user_message", msg_payload)
+                    print(f"[AGENT-CHAT] Forwarded user message to agent for ticket {active_ticket_id}")
+                except Exception as _e:
+                    print(f"[AGENT-CHAT] WebSocket forward error (non-fatal): {_e}")
+
+            # Return an ack — the agent will reply via their dashboard
+            return {
+                "answer": "",          # Empty: agent will respond via WS push
+                "sources": [],
+                "agent_chat": True,
+                "response_id": None,
+                "confidence": 1.0,
+                "ticket_id": active_ticket_id
+            }
+
         # Process with RAG (use Self-RAG if enabled)
         use_selfrag = getattr(rag_module, 'SELFRAG_ENABLE', False)
         if use_selfrag:
-            # generate_answer_selfrag returns (answer, original_query, input_lang, sources, confidence_scores, domain_classification, selfrag_metrics)
-            # Pass session_id for conversation memory
-            # ── Fetch conversation history for memory ──────────────────
+            # ── Fetch conversation history for memory (Optimized) ──────────────────
             _conv_history = []
             try:
                 from supabase_client import get_supabase_client as _get_sb
                 _sb = _get_sb()
- 
-                _q_rows = (
-                    _sb.table("queries")
+                # Fetch queries and responses concurrently to minimize latency
+                _q_task = asyncio.to_thread(
+                    lambda: _sb.table("queries")
                     .select("content, timestamp")
                     .eq("session_id", str(db_session_id))
                     .order("timestamp", desc=True)
-                    .limit(6)
+                    .limit(5)
                     .execute()
-                ).data or []
- 
-                _r_rows = (
-                    _sb.table("responses")
+                )
+                _r_task = asyncio.to_thread(
+                    lambda: _sb.table("responses")
                     .select("content, timestamp")
                     .eq("session_id", str(db_session_id))
                     .order("timestamp", desc=True)
-                    .limit(6)
+                    .limit(5)
                     .execute()
-                ).data or []
+                )
+                
+                _q_res, _r_res = await asyncio.gather(_q_task, _r_task)
+                _q_rows = _q_res.data or []
+                _r_rows = _r_res.data or []
  
                 _turns = (
                     [{"role": "user",      "content": r["content"], "ts": r["timestamp"]} for r in _q_rows] +
@@ -2606,7 +2981,30 @@ async def chat(
             confidence is not None and confidence < CONFIDENCE_THRESHOLD
         )
 
-        should_create_ticket = (rag_routed_to_agent or low_confidence) and not has_active_ticket
+        # ── Off-topic domain guard: skip ticket for irrelevant queries ─────
+        NON_SERVICE_DOMAINS = {
+            "weather", "sports", "entertainment", "cooking", "technology",
+            "news", "politics", "geography", "science", "mathematics",
+            "history", "music", "movies", "games", "travel"
+        }
+        def _is_off_topic(domain: Optional[str], msg: str) -> bool:
+            if domain and domain.lower().split("/")[0].strip() in NON_SERVICE_DOMAINS:
+                return True
+            # Keyword-level heuristic for common off-topic queries
+            lower_msg = msg.lower()
+            off_topic_signals = [
+                "weather", "temperature", "forecast", "rain", "sunny",
+                "cricket", "football", "match score", "who won",
+                "recipe", "cook", "movie", "song", "music",
+                "capital of", "president of", "prime minister of",
+            ]
+            return any(sig in lower_msg for sig in off_topic_signals)
+
+        is_off_topic_query = _is_off_topic(query_domain, final_message)
+        if is_off_topic_query:
+            print(f"[TICKET] Skipping ticket — off-topic query: domain='{query_domain}', msg='{final_message[:60]}'")
+
+        should_create_ticket = (rag_routed_to_agent or low_confidence) and not has_active_ticket and not is_off_topic_query
 
         if should_create_ticket:
             ticket_reason = "RAG route_to_agent" if rag_routed_to_agent else f"low confidence ({confidence:.3f})"
@@ -2771,23 +3169,54 @@ async def list_tickets_endpoint(
     unassigned: bool = Query(False, description="Show only unassigned tickets"),
     agent: dict = Depends(get_current_agent)
 ):
-    """List all tickets (for agent dashboard)."""
-    # If unassigned=True, show unassigned tickets, otherwise show agent's tickets
-    if unassigned:
-        tickets = list_tickets(unassigned_only=True)
-    else:
-        tickets = list_tickets(status=status, agent_id=str(agent["agent_id"]))
+    """List all tickets (for agent dashboard), enriched with user phone number."""
+    # Fetch both assigned and unassigned tickets concurrently
+    assigned_task = asyncio.to_thread(list_tickets, status=status, agent_id=str(agent["agent_id"]))
+    unassigned_task = asyncio.to_thread(list_tickets, status=status, agent_id=None, unassigned_only=True)
     
-    # Separate assigned vs unassigned
-    assigned = [t for t in tickets if t.get("is_assigned", False)]
-    unassigned_list = [t for t in tickets if not t.get("is_assigned", False)]
+    assigned, unassigned_list = await asyncio.gather(assigned_task, unassigned_task)
     
+    # Combine them for the frontend
+    tickets = assigned + unassigned_list
+
     return {
         "tickets": tickets,
         "assigned": assigned,
         "unassigned": unassigned_list,
         "total": len(tickets)
     }
+
+
+def _enrich_tickets_with_phone(tickets: list) -> list:
+    """Add phone_number to each ticket by looking up user via session."""
+    try:
+        from supabase_client import get_supabase_client
+        supabase = get_supabase_client()
+        if not supabase:
+            return tickets
+        for ticket in tickets:
+            try:
+                response = ticket.get("response")
+                session_id = None
+                if isinstance(response, dict):
+                    session_id = response.get("session_id")
+                elif isinstance(response, list) and response:
+                    session_id = response[0].get("session_id")
+                if not session_id:
+                    ticket["phone_number"] = None
+                    continue
+                session_row = supabase.table("sessions").select("user_id").eq("session_id", str(session_id)).limit(1).execute()
+                user_id = session_row.data[0]["user_id"] if session_row.data else None
+                if not user_id:
+                    ticket["phone_number"] = None
+                    continue
+                user_row = supabase.table("users").select("phone_number").eq("id", str(user_id)).limit(1).execute()
+                ticket["phone_number"] = user_row.data[0].get("phone_number") if user_row.data else None
+            except Exception as _e:
+                ticket["phone_number"] = None
+    except Exception as _e:
+        print(f"[PHONE-ENRICH] Failed (non-fatal): {_e}")
+    return tickets
 
 
 @app.get("/tickets/{ticket_id}")
@@ -2862,10 +3291,10 @@ async def resolve_ticket_endpoint(
     ticket_id: str,
     agent: dict = Depends(get_current_agent)
 ):
-    """Mark a ticket as resolved."""
+    """Mark a ticket as resolved and notify the user to return to AI chat."""
     if not resolve_ticket(ticket_id):
         raise HTTPException(status_code=404, detail="Ticket not found")
-    
+
     # Broadcast ticket resolution to all agents
     try:
         await manager.broadcast_ticket_update(ticket_id, "resolved", {
@@ -2874,7 +3303,27 @@ async def resolve_ticket_endpoint(
         })
     except Exception as e:
         print(f"[WS] Error broadcasting ticket resolution: {e}")
-    
+
+    # Notify the user's session so the frontend routes back to AI
+    try:
+        ticket = get_ticket(ticket_id)
+        if ticket:
+            response = ticket.get("response")
+            session_id = None
+            if isinstance(response, dict):
+                session_id = response.get("session_id")
+            elif isinstance(response, list) and response:
+                session_id = response[0].get("session_id")
+            if session_id:
+                await manager.send_to_user(str(session_id), {
+                    "type": "ticket_resolved",
+                    "ticket_id": ticket_id,
+                    "message": "Your conversation with the agent has ended. You are now back with the AI assistant."
+                })
+                print(f"[WS] Sent ticket_resolved event to user session {session_id}")
+    except Exception as e:
+        print(f"[WS] Error sending ticket_resolved to user: {e}")
+
     return {"status": "resolved", "ticket_id": ticket_id}
 
 
@@ -2897,6 +3346,66 @@ async def admin_list_tickets(
     """List all tickets (for admin)."""
     tickets = list_tickets(status=status)
     return {"tickets": tickets}
+
+
+# ============================================================================
+# ADMIN SETTINGS ENDPOINTS
+# ============================================================================
+
+ADMIN_CONFIG_FILE = Path(".admin_config.json")
+DEFAULT_ADMIN_CONFIG = {
+    "instruction_prompt": (
+        "You are the Alkhidmat Foundation AI assistant. "
+        "Help users with information about Al-Khidmat's services including healthcare, education, donations, and orphan care. "
+        "Be compassionate, clear, and helpful. Always respond in the same language the user writes in."
+    ),
+    "guardrails": (
+        "1. Only answer questions relevant to Alkhidmat Foundation services.\n"
+        "2. Do not provide medical diagnoses or legal advice.\n"
+        "3. Always recommend consulting a professional for medical emergencies.\n"
+        "4. Do not share personal information of users.\n"
+        "5. Keep responses respectful and culturally appropriate."
+    )
+}
+
+def _load_admin_config() -> dict:
+    """Load admin settings from disk, using defaults if not found."""
+    try:
+        if ADMIN_CONFIG_FILE.exists():
+            data = json.loads(ADMIN_CONFIG_FILE.read_text(encoding="utf-8"))
+            # Merge with defaults for any missing keys
+            return {**DEFAULT_ADMIN_CONFIG, **data}
+    except Exception as e:
+        print(f"[ADMIN-CONFIG] Error loading config: {e}")
+    return dict(DEFAULT_ADMIN_CONFIG)
+
+def _save_admin_config(config: dict):
+    """Save admin settings to disk."""
+    ADMIN_CONFIG_FILE.write_text(json.dumps(config, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+class AdminSettingsRequest(BaseModel):
+    instruction_prompt: Optional[str] = None
+    guardrails: Optional[str] = None
+
+
+@app.get("/admin/settings")
+async def get_admin_settings(admin: dict = Depends(get_current_admin)):
+    """Get current admin configuration (instruction prompt + guardrails)."""
+    return _load_admin_config()
+
+
+@app.post("/admin/settings")
+async def save_admin_settings(req: AdminSettingsRequest, admin: dict = Depends(get_current_admin)):
+    """Save admin configuration (instruction prompt and/or guardrails)."""
+    config = _load_admin_config()
+    if req.instruction_prompt is not None:
+        config["instruction_prompt"] = req.instruction_prompt
+    if req.guardrails is not None:
+        config["guardrails"] = req.guardrails
+    _save_admin_config(config)
+    print(f"[ADMIN-CONFIG] Settings updated by admin {admin.get('admin_id')}")
+    return {"status": "saved", "config": config}
 
 
 @app.post("/admin/kb/upload")
@@ -2990,6 +3499,40 @@ async def update_knowledge_base(
             status_code=500,
             detail=f"Error updating knowledge base: {str(e)}"
         )
+
+
+@app.get("/admin/kb/documents")
+async def list_kb_documents(admin: dict = Depends(get_current_admin)):
+    """List all unique documents currently in the knowledge base."""
+    try:
+        docs = await asyncio.to_thread(rag_module.list_knowledge_base_documents)
+        return {"documents": docs, "total": len(docs)}
+    except Exception as e:
+        print(f"[ADMIN-KB-LIST] Error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error listing documents: {str(e)}")
+
+
+class KBDeleteRequest(BaseModel):
+    file_path: str
+
+
+@app.delete("/admin/kb/documents")
+async def delete_kb_document(req: KBDeleteRequest, admin: dict = Depends(get_current_admin)):
+    """Delete a document and all its embeddings from the knowledge base."""
+    if not req.file_path:
+        raise HTTPException(status_code=400, detail="file_path is required")
+    try:
+        success = await asyncio.to_thread(rag_module.delete_document_by_path, req.file_path)
+        if success:
+            print(f"[ADMIN-KB-DELETE] Admin {admin.get('admin_id')} deleted: {req.file_path}")
+            return {"status": "deleted", "file_path": req.file_path}
+        else:
+            raise HTTPException(status_code=500, detail="Failed to delete document")
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ADMIN-KB-DELETE] Error: {e}")
+        raise HTTPException(status_code=500, detail=f"Error deleting document: {str(e)}")
         
 @app.post("/admin/kb/upload")
 async def upload_kb_document(
@@ -3121,8 +3664,8 @@ async def send_agent_message(ticket_id: str, req: MessageRequest, agent: dict = 
     """Send a message in agent chat. Stores message in database."""
     from supabase_client import get_supabase_client
     
-    # Get ticket to find the session
-    ticket = get_ticket(ticket_id)
+    # Get ticket to find the session (wrapped in to_thread to avoid blocking)
+    ticket = await asyncio.to_thread(get_ticket, ticket_id)
     if not ticket:
         raise HTTPException(status_code=404, detail="Ticket not found")
     
@@ -3142,18 +3685,7 @@ async def send_agent_message(ticket_id: str, req: MessageRequest, agent: dict = 
     if not session_id:
         raise HTTPException(status_code=404, detail="Session not found")
     
-    # Store agent message as a response in the database
-    # Agent messages are stored as responses with sender='agent'
-    agent_response = create_response(
-        session_id,
-        req.message,
-        confidence=1.0,  # Agent messages have high confidence
-        domain=None  # Domain already set on ticket
-    )
-    
-    print(f"[AGENT-MESSAGE] Agent {agent.get('agent_id')} sent message to ticket {ticket_id}, stored as response {agent_response.get('response_id')}")
-    
-    # Broadcast message to user via WebSocket
+    # Broadcast message to user via WebSocket IMMEDIATELY for speed
     try:
         await manager.send_to_user(str(session_id), {
             "type": "new_message",
@@ -3162,17 +3694,29 @@ async def send_agent_message(ticket_id: str, req: MessageRequest, agent: dict = 
                 "sender": "agent",
                 "content": req.message,
                 "timestamp": datetime.now().isoformat(),
-                "response_id": str(agent_response.get("response_id"))
+                "response_id": None # Will be stored in DB next
             }
         })
-        print(f"[WS] Broadcasted agent message to user session {session_id}")
+        print(f"[WS] Broadcasted agent message to user session {session_id} (pre-storage)")
     except Exception as e:
         print(f"[WS] Error broadcasting agent message: {e}")
+
+    # Store agent message as a response in the database
+    # Wrapped in to_thread because DB write is slow/blocking
+    agent_response = await asyncio.to_thread(
+        create_response,
+        session_id,
+        req.message,
+        confidence=1.0,
+        domain=None
+    )
+    
+    print(f"[AGENT-MESSAGE] Agent {agent.get('agent_id')} sent message, stored as response {agent_response.get('response_id') if agent_response else 'FAILED'}")
     
     return {
         "status": "sent",
         "ticket_id": ticket_id,
-        "response_id": str(agent_response.get("response_id")),
+        "response_id": str(agent_response.get("response_id")) if agent_response else None,
         "message": req.message
     }
 
@@ -3182,7 +3726,7 @@ async def get_agent_chat_endpoint(ticket_id: str, agent: dict = Depends(get_curr
     """Get chat messages for a ticket (legacy endpoint)."""
     from supabase_client import get_supabase_client
     
-    ticket = get_ticket(ticket_id)
+    ticket = await asyncio.to_thread(get_ticket, ticket_id)
     if not ticket:
         raise HTTPException(status_code=404, detail="Ticket not found")
     
@@ -3195,66 +3739,20 @@ async def get_agent_chat_endpoint(ticket_id: str, agent: dict = Depends(get_curr
     if not session_id:
         raise HTTPException(status_code=404, detail="Session not found")
     
-    session = get_session(session_id)
+    session = await asyncio.to_thread(get_session, session_id)
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
     
-    # Get ticket's initial response_id to identify RAG vs agent messages
-    ticket_response_id = None
-    if isinstance(ticket.get("response"), dict):
-        ticket_response_id = ticket.get("response").get("response_id")
-    elif isinstance(ticket.get("response"), list) and len(ticket.get("response")) > 0:
-        ticket_response_id = ticket.get("response")[0].get("response_id")
+    user_id = session["user_id"]
     
-    # Get queries and responses for the session
-    supabase = get_supabase_client()
-    queries_result = supabase.table("queries").select("*").eq("session_id", session_id).order("timestamp").execute()
-    responses_result = supabase.table("responses").select("*").eq("session_id", session_id).order("timestamp").execute()
+    # Get all chat history for this user (across all sessions)
+    history = await asyncio.to_thread(get_user_chat_history, user_id)
     
-    queries = queries_result.data or []
-    responses = responses_result.data or []
-    
-    # Combine queries and responses chronologically
-    all_items = []
-    for q in queries:
-        all_items.append({
-            "type": "query",
-            "role": "user",
-            "sender": "user",
-            "content": q.get("content"),
-            "timestamp": q.get("timestamp"),
-            "query_id": str(q.get("query_id"))
-        })
-    
-    for r in responses:
-        response_id = str(r.get("response_id"))
-        # Identify if this is the ticket's initial RAG response or an agent message
-        # Agent messages are responses created after ticket creation with confidence=1.0
-        # and are NOT the ticket's initial response
-        is_agent_message = (
-            ticket_response_id and 
-            response_id != str(ticket_response_id) and 
-            r.get("confidence") == 1.0
-        )
-        
-        sender = "agent" if is_agent_message else "assistant"
-        
-        all_items.append({
-            "type": "response",
-            "role": "assistant" if sender == "assistant" else "agent",
-            "sender": sender,
-            "content": r.get("content"),
-            "timestamp": r.get("timestamp"),
-            "response_id": response_id,
-            "confidence": r.get("confidence"),
-            "domain": r.get("domain")
-        })
-    
-    all_items.sort(key=lambda x: x.get("timestamp", ""))
-    
+    # Convert history to the format expected by the agent dashboard
+    # (The dashboard handles the 'role' and 'sender' fields from get_user_chat_history)
     return {
         "ticket_id": ticket_id,
-        "messages": all_items
+        "messages": history
     }
 
 

@@ -151,7 +151,7 @@ def update_session_activity(session_id, db=None):
 # ============================================================================
 
 def get_user_chat_history(user_id, limit: Optional[int] = None) -> List[Dict]:
-    """Get all chat history for a user across all their sessions."""
+    """Get all chat history for a user across all their sessions. Identifies agent messages."""
     supabase = get_supabase_client()
     user_id = to_uuid(user_id)
     
@@ -160,10 +160,22 @@ def get_user_chat_history(user_id, limit: Optional[int] = None) -> List[Dict]:
         "user_id", user_id
     ).order("last_active", desc=True).execute()
     
-    session_ids = [s["session_id"] for s in (sessions_result.data or [])]
+    session_ids = [str(s["session_id"]) for s in (sessions_result.data or [])]
     
     if not session_ids:
         return []
+    
+    # Get all ticket response IDs for these sessions to identify agent messages
+    ticket_response_ids = set()
+    try:
+        # Fetch tickets associated with any of the user's sessions
+        tickets_result = supabase.table("tickets").select("response_id, responses!inner(session_id)").in_("responses.session_id", session_ids).execute()
+        if tickets_result.data:
+            for ticket in tickets_result.data:
+                if ticket.get("response_id"):
+                    ticket_response_ids.add(str(ticket.get("response_id")))
+    except Exception as _e:
+        print(f"[HISTORY-USER] Ticket lookup failed: {_e}")
     
     # Get all queries (user messages) from all sessions
     queries_result = supabase.table("queries").select(
@@ -185,18 +197,36 @@ def get_user_chat_history(user_id, limit: Optional[int] = None) -> List[Dict]:
             "timestamp": q["timestamp"],
             "session_id": str(q["session_id"]),
             "query_id": str(q["query_id"]),
-            "domain": q.get("domain")
+            "domain": q.get("domain"),
+            "sender": "user"
         })
     
     for r in (responses_result.data or []):
+        response_id = str(r.get("response_id"))
+        content = r.get("content", "")
+        confidence = r.get("confidence")
+        
+        # Identify if this is an agent message or RAG response
+        is_agent_message = False
+        if confidence == 1.0:
+            # Check if it's NOT a ticket's initial response and not a system message
+            if response_id not in ticket_response_ids:
+                if (not content.startswith("User requested") and 
+                    not content.startswith("I am connecting") and
+                    not content.startswith("I don't have enough information")):
+                    is_agent_message = True
+        
+        role = "agent" if is_agent_message else "assistant"
+        
         messages.append({
-            "role": "assistant",
-            "content": r["content"],
+            "role": role,
+            "content": content,
             "timestamp": r["timestamp"],
             "session_id": str(r["session_id"]),
-            "response_id": str(r["response_id"]),
-            "confidence": r.get("confidence"),
-            "domain": r.get("domain")
+            "response_id": response_id,
+            "confidence": confidence,
+            "domain": r.get("domain"),
+            "sender": "agent" if is_agent_message else "assistant"
         })
     
     # Sort by timestamp (ascending - oldest first)
@@ -214,14 +244,17 @@ def get_session_chat_history(session_id, limit: Optional[int] = None) -> List[Di
     supabase = get_supabase_client()
     session_id = to_uuid(session_id)
     
-    # Get ticket's initial response_id to identify RAG vs agent messages
-    # Agent messages are responses with confidence=1.0 that are NOT the ticket's initial response
+    # Get tickets linked to this session only (to identify agent messages)
     ticket_response_ids = set()
-    tickets_result = supabase.table("tickets").select("response_id").execute()
-    if tickets_result.data:
-        for ticket in tickets_result.data:
-            if ticket.get("response_id"):
-                ticket_response_ids.add(str(ticket.get("response_id")))
+    try:
+        # Use a join query to find tickets for this session
+        tickets_result = supabase.table("tickets").select("response_id, responses!inner(session_id)").eq("responses.session_id", str(session_id)).execute()
+        if tickets_result.data:
+            for ticket in tickets_result.data:
+                if ticket.get("response_id"):
+                    ticket_response_ids.add(str(ticket.get("response_id")))
+    except Exception as _e:
+        print(f"[HISTORY-OPT] Session-based ticket lookup failed: {_e}, falling back to empty set")
     
     # Get all queries (user messages) for this session
     queries_result = supabase.table("queries").select(
@@ -489,7 +522,7 @@ def list_tickets(
     """
     supabase = get_supabase_client()
     
-    query = supabase.table("tickets").select("*, responses(content, session_id, domain, confidence)")
+    query = supabase.table("tickets").select("*, responses(content, session_id, domain, confidence, sessions(users(phone_number)))")
     
     if unassigned_only:
         # Show only unassigned tickets (active status, no agent assigned)
@@ -508,6 +541,25 @@ def list_tickets(
     # Format the response
     formatted_tickets = []
     for ticket in tickets:
+        # Extract phone number and user name from the joined data
+        phone_number = "Unknown"
+        user_name = "User"
+        
+        try:
+            response_data = ticket.get("responses")
+            if isinstance(response_data, dict):
+                session = response_data.get("sessions")
+                if session and session.get("users"):
+                    phone_number = session["users"].get("phone_number", "Unknown")
+                    user_name = session["users"].get("name", "User")
+            elif isinstance(response_data, list) and response_data:
+                session = response_data[0].get("sessions")
+                if session and session.get("users"):
+                    phone_number = session["users"].get("phone_number", "Unknown")
+                    user_name = session["users"].get("name", "User")
+        except Exception:
+            pass
+
         formatted = {
             "ticket_id": ticket["ticket_id"],
             "response_id": ticket["response_id"],
@@ -515,8 +567,11 @@ def list_tickets(
             "agent_id": ticket.get("agent_id"),
             "created_at": ticket.get("created_at"),
             "resolved_at": ticket.get("resolved_at"),
+            "domain": ticket.get("domain"),
             "is_assigned": ticket.get("agent_id") is not None,
-            "response": None
+            "response": ticket.get("responses"),
+            "phone_number": phone_number,
+            "user_name": user_name
         }
         
         # Handle response data

@@ -43,7 +43,7 @@ function AgentDashboard() {
   }, []); // No dependencies - stable function reference
 
   // Load chat messages with caching
-  const loadChatMessages = useCallback(async (forceRefresh = false) => {
+  const loadChatMessages = useCallback(async (forceRefresh = false, silent = false) => {
     if (!selectedTicket || loadingRef.current) return;
     
     const ticketId = selectedTicket.ticket_id;
@@ -74,7 +74,7 @@ function AgentDashboard() {
     
     // Fetch from API if not in cache or force refresh
     loadingRef.current = true;
-    setLoadingChat(true);
+    if (!silent) setLoadingChat(true);
     try {
       console.log('[AgentDashboard] Loading chat messages for ticket:', ticketId);
       const chat = await api.getTicketChat(ticketId);
@@ -95,16 +95,62 @@ function AgentDashboard() {
   // WebSocket connection for real-time ticket updates
   const handleWebSocketMessage = useCallback((data) => {
     console.log('[AgentDashboard] WebSocket message received:', data);
-    if (data.type === 'ticket_update') {
+    
+    // 1. Handle Ticket Status Updates (Created, Assigned, Resolved)
+    if (data.type === 'ticket_update' && data.update_type !== 'user_message') {
       // Reload tickets when ticket is created, assigned, or resolved
       loadTickets(true);
       
       // If the updated ticket is currently selected, refresh its chat
       if (selectedTicket && selectedTicket.ticket_id === data.ticket_id) {
-        loadChatMessages(true);
+        loadChatMessages(true, true);
       }
     }
-  }, [loadTickets, selectedTicket, loadChatMessages]);
+    
+    // 2. Handle Real-time User Messages
+    if (data.type === 'new_message' || (data.type === 'ticket_update' && data.update_type === 'user_message')) {
+      const messageData = data.type === 'new_message' ? data.message : data.data.message;
+      const tId = data.ticket_id;
+      
+      if (!messageData) return;
+
+      console.log('[AgentDashboard] Processing real-time message for ticket:', tId);
+      
+      // If the message is for the currently selected ticket, update the chat view
+      if (selectedTicket && selectedTicket.ticket_id === tId) {
+        setChatMessages(draft => {
+          // Prevent duplicates (simple content + timestamp check)
+          const isDuplicate = draft.some(msg => 
+            msg.content === messageData.content && 
+            Math.abs(new Date(msg.timestamp) - new Date(messageData.timestamp)) < 2000
+          );
+          
+          if (!isDuplicate) {
+            draft.push({
+              ...messageData,
+              sender: messageData.sender || 'user',
+              role: messageData.role || 'user'
+            });
+          }
+        });
+      }
+      
+      // Update the ticket list to show the new message as a preview
+      setTickets(prevTickets => 
+        prevTickets.map(ticket => 
+          ticket.ticket_id === tId 
+            ? { 
+                ...ticket, 
+                response: { 
+                  ...ticket.response, 
+                  content: messageData.content 
+                } 
+              } 
+            : ticket
+        )
+      );
+    }
+  }, [loadTickets, selectedTicket, loadChatMessages, setChatMessages, setTickets]);
 
   const handleWebSocketError = useCallback((error) => {
     console.error('[AgentDashboard] WebSocket error:', error);
@@ -331,7 +377,7 @@ function AgentDashboard() {
       // Refresh chat messages after a short delay to get the latest from server
       // This ensures the message is properly stored and synced
       setTimeout(async () => {
-        await loadChatMessages(true);
+        await loadChatMessages(true, true);
       }, 500);
     } catch (err) {
       console.error('Failed to send message:', err);
@@ -422,7 +468,7 @@ function AgentDashboard() {
           </div>
         </div>
 
-        {/* Filter Tabs */}
+        {/* Filter Tabs — Active (left) | Open Ticket | Resolved */}
         <div className='flex border-b border-gray-200'>
           <button
             onClick={() => setFilter('active')}
@@ -438,7 +484,7 @@ function AgentDashboard() {
               filter === 'in_progress' ? 'bg-blue-50 text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 hover:bg-gray-50'
             }`}
           >
-            In Progress ({inProgressTickets.length})
+            Open Ticket ({inProgressTickets.length})
           </button>
           <button
             onClick={() => setFilter('resolved')}
@@ -474,12 +520,17 @@ function AgentDashboard() {
                         ticket.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
                         'bg-green-100 text-green-800'
                       }`}>
-                        {ticket.status}
+                        {ticket.status === 'in_progress' ? 'Open' : ticket.status}
                       </span>
                     </div>
                     <p className='text-xs text-gray-500 mt-1'>
                       {new Date(ticket.created_at).toLocaleString()}
                     </p>
+                    {ticket.phone_number && (
+                      <p className='text-xs text-gray-500 mt-0.5 flex items-center gap-1'>
+                        <span>📞</span> {ticket.phone_number}
+                      </p>
+                    )}
                     {ticket.response?.content && (
                       <p className='text-sm text-gray-700 mt-2 line-clamp-2'>
                         {ticket.response.content}
@@ -501,9 +552,16 @@ function AgentDashboard() {
             <div className='bg-white border-b border-gray-200 p-4 flex items-center justify-between'>
               <div>
                 <h2 className='text-lg font-semibold text-gray-800'>Ticket #{selectedTicket.ticket_id.slice(0, 8)}</h2>
-                <p className='text-sm text-gray-500'>
-                  {selectedTicket.session?.user_id ? `User ID: ${selectedTicket.session.user_id}` : 'Session Info'}
-                </p>
+                <div className='flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-0.5'>
+                  <p className='text-sm text-gray-500'>
+                    {selectedTicket.session?.user_id ? `User: ${selectedTicket.session.user_id.slice(0, 8)}…` : 'Session Info'}
+                  </p>
+                  {selectedTicket.phone_number && (
+                    <p className='text-sm text-gray-600 font-medium flex items-center gap-1'>
+                      <span>📞</span> {selectedTicket.phone_number}
+                    </p>
+                  )}
+                </div>
               </div>
               <div className='flex items-center gap-2'>
                 <span className={`px-3 py-1 text-xs rounded-full ${
@@ -511,7 +569,7 @@ function AgentDashboard() {
                   selectedTicket.status === 'in_progress' ? 'bg-blue-100 text-blue-800' :
                   'bg-green-100 text-green-800'
                 }`}>
-                  {selectedTicket.status}
+                  {selectedTicket.status === 'in_progress' ? 'Open' : selectedTicket.status}
                 </span>
                 {selectedTicket.status !== 'resolved' && (
                 <button
