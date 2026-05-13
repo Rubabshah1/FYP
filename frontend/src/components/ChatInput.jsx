@@ -58,17 +58,23 @@ async function handleSubmit() {
     console.log('✅ FormData text-only');
   }
   
-  // Call parent function
-  await submitNewMessage(formData);
-  
-  // Clear inputs
+  // Clear inputs BEFORE sending so textarea empties immediately
+  const messageCopy = newMessage;
+  const imageCopy = selectedImage;
   setNewMessage('');
   if (imagePreview) {
     URL.revokeObjectURL(imagePreview);
-    setSelectedImage(null);
     setImagePreview(null);
-    fileInputRef.current.value = '';
+    setSelectedImage(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   }
+
+  // Rebuild formData with copies since state is now cleared
+  const finalFormData = new FormData();
+  finalFormData.append('message', messageCopy || '');
+  if (imageCopy) finalFormData.append('image', imageCopy);
+
+  await submitNewMessage(finalFormData);
   console.log('✅ Inputs cleared');
 }
   return (
