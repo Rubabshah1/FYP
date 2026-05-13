@@ -11,7 +11,9 @@ venvpython/
 .DS_Store
 Al Khidmat Knowledge Base/
 
+frontend/.env
+
 # KB update check timestamp (local state)
 .kb_last_check.json
 .deepeval/
-api/fypp-ea6b9-firebase-adminsdk-fbsvc-1f21963d6d.json
+api/fypp-ea6b9-firebase-adminsdk-fbsvc-a3a0760c66.json

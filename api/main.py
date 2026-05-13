@@ -1614,6 +1614,7 @@
 #         print(f"[WS] Error in agent websocket: {e}")
 #         manager.disconnect_agent(websocket, str(agent_id))
 """
+main.py
 FastAPI wrapper to serve the Alkhidmat RAG pipeline using RAG_supabase.py.
 - Authentication endpoints for users (OTP), agents, and admins
 - Chat endpoints with session management
@@ -1656,6 +1657,8 @@ from db_operations import (
 
 # Import RAG_supabase module
 import RAG_supabase as rag_module
+
+import rag_answer_cache
 
 ZIP_PATH = os.getenv("ALKHIDMAT_ZIP_PATH", "Al Khidmat Knowledge Base.zip")
 
@@ -2827,13 +2830,52 @@ async def chat(
 
         # Process with RAG (use Self-RAG if enabled)
         use_selfrag = getattr(rag_module, 'SELFRAG_ENABLE', False)
-        if use_selfrag:
-            # ── Fetch conversation history for memory (Optimized) ──────────────────
-            _conv_history = []
+        # ── Answer cache: check before running the full RAG pipeline ─────────
+        # We embed the English-normalised form of the query (same embedding
+        # the retriever uses) and look for a semantically similar cached answer.
+        #
+        # Cache is skipped when conversation history exists — queries that have
+        # been rewritten by memory are session-specific and must not match
+        # across users.
+        _cache_hit           = None
+        _query_en_for_cache  = None
+        _embedding_for_cache = None
+        _conv_history        = []
+
+        # Cache always operates on the raw user query — never on the
+        # memory-rewritten version. Memory rewrites are for retrieval only.
+        try:
+            from rag_language import build_query_lang_profile
+            from rag_embeddings import get_embedder
+            _lang_profile        = build_query_lang_profile(final_message)
+            _query_en_for_cache  = _lang_profile.query_en
+            _embedder            = get_embedder()
+            _embedding_for_cache = _embedder.encode(
+                [f"query: {_query_en_for_cache}"], normalize_embeddings=True
+            )[0].astype("float32")
+            _cache_hit = rag_answer_cache.lookup(
+                        _query_en_for_cache,
+                        _embedding_for_cache,
+                        input_lang=_lang_profile.input_lang,
+                    )
+        except Exception as _ce:
+            print(f"[ANSWER-CACHE] Lookup error (non-fatal): {_ce}", flush=True)
+
+        if _cache_hit:
+            answer                = _cache_hit["answer"]
+            sources               = _cache_hit["sources"]
+            confidence_scores     = _cache_hit["confidence_scores"]
+            domain_classification = _cache_hit["domain_classification"]
+            selfrag_metrics       = _cache_hit.get("selfrag_metrics", {})
+            input_lang            = _cache_hit.get("input_lang", "en")
+            is_urdu               = input_lang in ("ur", "roman_ur")
+            print(f"[ANSWER-CACHE] ✅ Served from cache for: '{final_message[:60]}'", flush=True)
+ 
+        elif use_selfrag:
+            # ── Fetch conversation history for memory (Optimized) ─────────────
             try:
                 from supabase_client import get_supabase_client as _get_sb
                 _sb = _get_sb()
-                # Fetch queries and responses concurrently to minimize latency
                 _q_task = asyncio.to_thread(
                     lambda: _sb.table("queries")
                     .select("content, timestamp")
@@ -2850,11 +2892,9 @@ async def chat(
                     .limit(5)
                     .execute()
                 )
-                
                 _q_res, _r_res = await asyncio.gather(_q_task, _r_task)
                 _q_rows = _q_res.data or []
                 _r_rows = _r_res.data or []
- 
                 _turns = (
                     [{"role": "user",      "content": r["content"], "ts": r["timestamp"]} for r in _q_rows] +
                     [{"role": "assistant", "content": r["content"], "ts": r["timestamp"]} for r in _r_rows]
@@ -2864,7 +2904,7 @@ async def chat(
                 print(f"[MEMORY] Loaded {len(_conv_history)} history turns for session {db_session_id}")
             except Exception as _e:
                 print(f"[MEMORY] History fetch failed (non-fatal): {_e}")
-            # ──────────────────────────────────────────────────────────
+            # ──────────────────────────────────────────────────────────────────
  
             result = await asyncio.to_thread(
                 rag_module.generate_answer_selfrag,
@@ -2875,11 +2915,31 @@ async def chat(
             )
             answer, _, input_lang, sources, confidence_scores, domain_classification, selfrag_metrics = result
             is_urdu = (input_lang == "ur" or input_lang == "roman_ur")
+ 
+            # ── Store result in answer cache if this was a first-turn query ───
+            # First-turn only: no history rewrite risk, answer is self-contained.
+            # Store against the original query — memory's rewrite is irrelevant here
+            if _embedding_for_cache is not None and _query_en_for_cache:
+                try:
+                    rag_answer_cache.store(
+                        query_en=_query_en_for_cache,
+                        embedding=_embedding_for_cache,
+                        answer=answer,
+                        sources=sources,
+                        confidence_scores=confidence_scores,
+                        domain_classification=domain_classification,
+                        selfrag_metrics=selfrag_metrics,
+                        input_lang=input_lang,
+                    )
+                except Exception as _se:
+                    print(f"[ANSWER-CACHE] Store error (non-fatal): {_se}", flush=True)
+ 
         else:
             # generate_answer returns (answer, query, is_urdu, sources, confidence_scores, domain_classification)
             answer, _, is_urdu, sources, confidence_scores, domain_classification = await asyncio.to_thread(
                 rag_module.generate_answer, final_message, top_k=5, filter_category=None
             )
+            selfrag_metrics = {}
         
         # Use confidence from RAG module (combined confidence score)
         confidence = None
@@ -3654,6 +3714,32 @@ async def get_eval_report_by_language(
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error reading report: {e}")
+
+@app.post("/admin/cache/clear")
+async def clear_answer_cache(admin: dict = Depends(get_current_admin)):
+    """
+    Flush the entire answer cache.
+ 
+    Call this after rebuilding the knowledge base or changing RAG prompts
+    so that stale cached answers are not served to users.
+    """
+    try:
+        cleared = rag_answer_cache.clear()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Cache clear failed: {e}")
+    return {
+        "status": "ok",
+        "cleared_entries": cleared,
+        "message": f"Answer cache cleared. {cleared} entries removed."
+    }
+ 
+ 
+@app.get("/admin/cache/stats")
+async def get_cache_stats(admin: dict = Depends(get_current_admin)):
+    """
+    Return answer cache statistics (total entries, hit count, domain/language breakdown).
+    """
+    return rag_answer_cache.stats()
 
 # ============================================================================
 # LEGACY ENDPOINTS (for backward compatibility)

@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "eventsource-parser": "^3.0.2",
-    "firebase": "^12.12.1",
+    "firebase": "^12.13.0",
     "immer": "^10.1.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
