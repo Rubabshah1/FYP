@@ -2553,28 +2553,35 @@ async def chat(
     # add image_processing step
     final_message = message.strip()
     ocr_text = ""
-    if IMAGE_DEBUG:
-        print(f"[IMAGE-DEBUG] User text: '{message}'")
-        print(f"[IMAGE-DEBUG] Image provided: {image is not None}")
+    image_data_url = None  # stored alongside query for agent display
+
     if image:
         image_bytes = await image.read()
         ocr_text = extract_text_from_image(image_bytes) or ""
-        if IMAGE_DEBUG:
-            print(f"[IMAGE-DEBUG] OCR result length: {len(ocr_text)} chars")
         if ocr_text:
             final_message += (
                 "\n\nText detected in attached image:\n"
                 + ocr_text
             )
+        # Store a compact base64 data URL so the agent dashboard can render the image.
+        # We cap at 800px equivalent by keeping the raw bytes — browsers handle display scaling.
+        try:
+            import base64
+            content_type = image.content_type or "image/jpeg"
+            image_b64 = base64.b64encode(image_bytes).decode("utf-8")
+            image_data_url = f"data:{content_type};base64,{image_b64}"
+        except Exception as _ie:
+            print(f"[IMAGE] Failed to encode image for agent display (non-fatal): {_ie}", flush=True)
 
     
     # Create query record (domain will be updated after RAG processing)
     # Wrapping in to_thread because it involves DB write and possible retries
     query_record = await asyncio.to_thread(
-        _db_write_with_retry, 
-        create_query, 
-        db_session_id, 
-        final_message
+        _db_write_with_retry,
+        create_query,
+        db_session_id,
+        final_message,
+        image_data_url,   # stored for agent dashboard display
     )
     query_id = query_record["query_id"] if query_record else None
     
@@ -2805,7 +2812,8 @@ async def chat(
                         "message": {
                             "role": "user",
                             "sender": "user",
-                            "content": final_message,
+                            "content": message.strip() or "(image)",  # original text only, not OCR-appended
+                            "image_data_url": image_data_url,
                             "timestamp": datetime.now().isoformat(),
                         }
                     }

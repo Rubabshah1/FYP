@@ -12,7 +12,7 @@ venvpython/
 Al Khidmat Knowledge Base/
 
 frontend/.env
-
+ocr_utils.py
 # KB update check timestamp (local state)
 .kb_last_check.json
 .deepeval/

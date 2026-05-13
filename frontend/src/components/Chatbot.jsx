@@ -107,14 +107,17 @@ function Chatbot() {
       if (chatData.chat_history && chatData.chat_history.length > 0) {
         const historyMessages = chatData.chat_history.map(msg => ({
           role: msg.role || msg.sender || 'assistant',
-          content: msg.content,
+          content: (msg.image_url && (msg.role === 'user' || msg.sender === 'user'))
+            ? (msg.content || '').split('\n\nText detected in attached image:')[0].trim()
+            : msg.content,
           timestamp: msg.timestamp,
           sources: (msg.role === 'assistant' || msg.sender === 'assistant') ? [] : undefined,
           ...(msg.confidence && { confidence: msg.confidence }),
           ...(msg.domain && { domain: msg.domain }),
-          ...(msg.sender && { sender: msg.sender })
+          ...(msg.sender && { sender: msg.sender }),
+          ...(msg.image_url && { image_url: msg.image_url }),
         }));
-
+        
         if (checkForNewMessages && historyMessages.length > lastMessageCountRef.current) {
           lastMessageCountRef.current = historyMessages.length;
         } else if (!checkForNewMessages) {
@@ -180,12 +183,15 @@ function Chatbot() {
           if (historyData.messages && historyData.messages.length > 0) {
             const historyMessages = historyData.messages.map(msg => ({
               role: msg.role || msg.sender || 'assistant',
-              content: msg.content,
+              content: (msg.image_url && (msg.role === 'user' || msg.sender === 'user'))
+                ? (msg.content || '').split('\n\nText detected in attached image:')[0].trim()
+                : msg.content,
               timestamp: msg.timestamp,
               sources: (msg.role === 'assistant' || msg.sender === 'assistant') ? [] : undefined,
               ...(msg.confidence && { confidence: msg.confidence }),
               ...(msg.domain && { domain: msg.domain }),
-              ...(msg.sender && { sender: msg.sender })
+              ...(msg.sender && { sender: msg.sender }),
+              ...(msg.image_url && { image_url: msg.image_url }),
             }));
             setMessages(historyMessages);
             lastMessageCountRef.current = historyMessages.length;

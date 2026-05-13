@@ -179,7 +179,7 @@ def get_user_chat_history(user_id, limit: Optional[int] = None) -> List[Dict]:
     
     # Get all queries (user messages) from all sessions
     queries_result = supabase.table("queries").select(
-        "query_id, session_id, content, timestamp, domain"
+        "query_id, session_id, content, timestamp, domain, image_url"
     ).in_("session_id", session_ids).order("timestamp", desc=False).execute()
     
     # Get all responses (assistant messages) from all sessions
@@ -198,6 +198,7 @@ def get_user_chat_history(user_id, limit: Optional[int] = None) -> List[Dict]:
             "session_id": str(q["session_id"]),
             "query_id": str(q["query_id"]),
             "domain": q.get("domain"),
+            "image_url": q.get("image_url"),
             "sender": "user"
         })
     
@@ -258,7 +259,7 @@ def get_session_chat_history(session_id, limit: Optional[int] = None) -> List[Di
     
     # Get all queries (user messages) for this session
     queries_result = supabase.table("queries").select(
-        "query_id, content, timestamp, domain"
+        "query_id, content, timestamp, domain, image_url"
     ).eq("session_id", session_id).order("timestamp", desc=False).execute()
     
     # Get all responses (assistant/agent messages) for this session
@@ -275,7 +276,9 @@ def get_session_chat_history(session_id, limit: Optional[int] = None) -> List[Di
             "content": q["content"],
             "timestamp": q["timestamp"],
             "query_id": str(q["query_id"]),
-            "domain": q.get("domain")
+            "domain": q.get("domain"),
+            "image_url": q.get("image_url"),
+            "sender": "user"
         })
     
     for r in (responses_result.data or []):
@@ -324,7 +327,7 @@ def get_session_chat_history(session_id, limit: Optional[int] = None) -> List[Di
 # QUERY OPERATIONS
 # ============================================================================
 
-def create_query(session_id, content: str, domain: Optional[str] = None, db=None) -> Dict:
+def create_query(session_id, content: str, image_url: Optional[str] = None, domain: Optional[str] = None, db=None) -> Dict:
     """Create a new query."""
     supabase = get_supabase_client()
     session_id = to_uuid(session_id)
@@ -335,6 +338,8 @@ def create_query(session_id, content: str, domain: Optional[str] = None, db=None
     }
     if domain:
         data["domain"] = domain
+    if image_url:
+        data["image_url"] = image_url
     
     result = supabase.table("queries").insert(data).execute()
     return result.data[0] if result.data else None

@@ -622,7 +622,20 @@ function AgentDashboard() {
                           {isAgentMessage && (
                             <span className='text-xs text-gray-500 italic block mb-1'>You</span>
                           )}
-                          <p className='text-sm text-gray-800 whitespace-pre-wrap'>{msg.content}</p>
+                          {(msg.image_url || msg.image_data_url) && (
+                            <div className='mb-2'>
+                              <img
+                                src={msg.image_url || msg.image_data_url}
+                                alt="User uploaded image"
+                                className='max-h-64 max-w-full rounded-lg object-contain'
+                              />
+                            </div>
+                          )}
+                          <p className='text-sm text-gray-800 whitespace-pre-wrap'>
+                            {(msg.image_url || msg.image_data_url)
+                              ? (msg.content || '').split('\n\nText detected in attached image:')[0].trim()
+                              : msg.content}
+                          </p>
                           <p className='text-xs text-gray-500 mt-1'>
                               {msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString() : ''}
                           </p>

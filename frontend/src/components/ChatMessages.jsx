@@ -130,7 +130,7 @@ const MessageItem = memo(({ message }) => {
                 </div>
               )}
               {messageContent}
-              {ocrText && (
+              {ocrText && !msgImageUrl && (
                 <div className="mt-2 text-xs text-gray-600 whitespace-pre-wrap">
                   <div className="font-medium text-gray-700">Text detected in image:</div>
                   <div>{ocrText}</div>

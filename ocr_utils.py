@@ -5,8 +5,8 @@ from PIL import Image
 import io
 
 # Point pytesseract to your Tesseract installation on D:
-if os.path.exists("D:/tesseract/tesseract.exe"):
-    pytesseract.pytesseract.tesseract_cmd = "D:/tesseract/tesseract.exe" #for windows, change accordingly for macos
+if os.path.exists("C:/Program Files/Tesseract-OCR/tesseract.exe"):
+    pytesseract.pytesseract.tesseract_cmd = "C:/Program Files/Tesseract-OCR/tesseract.exe" #for windows, change accordingly for macos
 elif os.path.exists("/opt/homebrew/bin/tesseract"):
     pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract" #for macos, change accordingly for windows
 
