@@ -81,14 +81,19 @@ def lookup(query_en: str, embedding: np.ndarray, input_lang: str = "en") -> Opti
     The embedding must be the L2-normalised float32 vector for query_en
     — the same one you would pass to the document retrieval step.
     """
+    # Non-English embeddings cluster more tightly after translation —
+    # use a stricter threshold to avoid cross-query false positives.
+    effective_threshold = ANSWER_CACHE_SIMILARITY_THRESHOLD
+    if input_lang in ("ur", "roman_ur"):
+        effective_threshold = max(ANSWER_CACHE_SIMILARITY_THRESHOLD, 0.94)
+
     try:
         sb = _get_sb()
-
         result = sb.rpc(
             "match_cached_responses",
             {
                 "query_embedding": embedding.astype("float64").tolist(),
-                "similarity_threshold": ANSWER_CACHE_SIMILARITY_THRESHOLD,
+                "similarity_threshold": effective_threshold,
                 "match_count": 1,
                 "filter_lang": input_lang,
             },
